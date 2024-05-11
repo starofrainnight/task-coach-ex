@@ -42,7 +42,8 @@ def dumpDirectory(path):
         os.path.join(
             "..", "taskcoachlib", "persistence", "xml", "templates.py"
         ),
-        "wb",
+        "w",
+        encoding="utf-8",
     )
     fd.write("#-*- coding: UTF-8\n\n")
     fd.write("from taskcoachlib.i18n import _\n\n")
