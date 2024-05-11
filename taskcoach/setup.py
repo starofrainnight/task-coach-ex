@@ -18,9 +18,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from distutils.core import setup
+from setuptools import setup
 from taskcoachlib import meta
 import platform
+import distro
 import os
 import sys
 
@@ -90,7 +91,7 @@ for language in languages:
 system = platform.system()
 if system == "Linux":
     # Add data files for Debian-based systems:
-    current_dist = [dist.lower() for dist in platform.dist()]
+    current_dist = [dist.lower() for dist in distro.id()]
     if "debian" in current_dist or "ubuntu" in current_dist:
         setupOptions["data_files"] = [
             (
