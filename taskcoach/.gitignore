@@ -10,8 +10,6 @@ taskcoachlib/i18n/[a-z][a-z].py
 taskcoachlib/i18n/[a-z][a-z]_[A-Z][A-Z].py
 taskcoachlib/i18n/nds.py
 taskcoachlib/i18n/pap.py
-taskcoachlib/thirdparty/customtreectrl.py
-taskcoachlib/thirdparty/hypertreelist.py
 taskcoachlib/thirdparty/pybonjour.py
 taskcoachlib/thirdparty/pyparsing.py
 taskcoachlib/thirdparty/wmi.py
