@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import wx
-from wx.lib import hyperlink
+from wx.lib.agw import hyperlink
 from taskcoachlib import meta
 from taskcoachlib.i18n import _
 from wx.lib import sized_controls

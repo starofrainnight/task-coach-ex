@@ -370,7 +370,7 @@ TR_SINGLE = wx.TR_SINGLE                                       # for convenience
 TR_MULTIPLE = wx.TR_MULTIPLE                                   # can select multiple items
 """ Use this style to allow a range of items to be selected. If a second range is selected,""" \
 """ the current range, if any, is deselected. """
-# TR_EXTENDED = wx.TR_EXTENDED                                   # TODO: allow extended selection, deprecated
+# TR_EXTENDED = wx.TR_EXTENDED                                   # TODO: allow extended selection, deprecated, use TR_MULTIPLE instead
 """ Use this style to allow disjoint items to be selected. (Only partially implemented;""" \
 """ may not work in all cases). """
 TR_HAS_VARIABLE_ROW_HEIGHT = wx.TR_HAS_VARIABLE_ROW_HEIGHT     # what it says
