@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import wx
+import wx.adv
 from taskcoachlib import i18n
 
 try:
@@ -30,7 +31,7 @@ except ImportError:  # pragma: no cover
     sys.exit(1)
 
 
-class SplashScreen(wx.SplashScreen):
+class SplashScreen(wx.adv.SplashScreen):
     def __init__(self):
         splash = icons.catalog["splash"]
         if i18n.currentLanguageIsRightToLeft():
