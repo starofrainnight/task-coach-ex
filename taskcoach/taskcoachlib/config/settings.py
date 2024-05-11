@@ -63,11 +63,12 @@ class CachingConfigParser(UnicodeAwareConfigParser):
         return cache[key]
 
 
-class Settings(object, CachingConfigParser):
+class Settings(CachingConfigParser):
     def __init__(self, load=True, iniFile=None, *args, **kwargs):
         # Sigh, ConfigParser.SafeConfigParser is an old-style class, so we
         # have to call the superclass __init__ explicitly:
         CachingConfigParser.__init__(self, *args, **kwargs)
+
         self.initializeWithDefaults()
         self.__loadAndSave = load
         self.__iniFileSpecifiedOnCommandLine = iniFile
