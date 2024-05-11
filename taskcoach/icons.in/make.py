@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -16,9 +16,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import wxversion, sys
+
 wxversion.ensureMinimal("2.8")
 
 import os
@@ -26,44 +27,59 @@ from wx.tools import img2py
 
 
 def extractIcon(iconZipFile, pngFilename, pngZipped):
-    pngFile = file(pngFilename, 'wb')
+    pngFile = file(pngFilename, "wb")
     pngFile.write(iconZipFile.read(pngZipped))
     pngFile.close()
 
+
 def addIcon(pngName, pngFilename, iconPyFile, first):
-    options = ['-F', '-i', '-c', '-a', '-n%s'%pngName, pngFilename, iconPyFile]
+    options = [
+        "-F",
+        "-i",
+        "-c",
+        "-a",
+        "-n%s" % pngName,
+        pngFilename,
+        iconPyFile,
+    ]
     if first:
-        options.remove('-a')
+        options.remove("-a")
     img2py.main(options)
 
+
 def extractAndAddIcon(iconZipFile, iconPyFile, pngName, pngZipped, first):
-    pngFilename = '%s.png'%pngName
+    pngFilename = "%s.png" % pngName
     extractIcon(iconZipFile, pngFilename, pngZipped)
     addIcon(pngName, pngFilename, iconPyFile, first)
     os.remove(pngFilename)
 
+
 def extractAndAddIcons(iconZipFile, iconPyFile):
     import iconmap
+
     first = True
-    for pngName, pngZipped in list(iconmap.icons.items()): 
+    for pngName, pngZipped in list(iconmap.icons.items()):
         extractAndAddIcon(iconZipFile, iconPyFile, pngName, pngZipped, first)
         first = False
+
 
 def makeIconPyFile(iconPyFile):
     if os.path.isfile(iconPyFile):
         os.remove(iconPyFile)
 
     import zipfile
-    iconZipFile = zipfile.ZipFile('nuvola.zip', 'r')
+
+    iconZipFile = zipfile.ZipFile("nuvola.zip", "r")
     extractAndAddIcons(iconZipFile, iconPyFile)
     iconZipFile.close()
 
+
 def makeSplashScreen(iconPyFile):
-    options = ['-F', '-c', '-a', '-nsplash', 'splash.png', iconPyFile]
+    options = ["-F", "-c", "-a", "-nsplash", "splash.png", iconPyFile]
     img2py.main(options)
 
 
-if __name__ == '__main__':
-    iconFileName = '../taskcoachlib/gui/icons.py'
+if __name__ == "__main__":
+    iconFileName = "../taskcoachlib/gui/icons.py"
     makeIconPyFile(iconFileName)
     makeSplashScreen(iconFileName)

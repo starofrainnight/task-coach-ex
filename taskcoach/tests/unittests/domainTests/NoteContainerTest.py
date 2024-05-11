@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
 from taskcoachlib.domain import note, category
@@ -24,19 +24,19 @@ class NoteContainerTest(test.TestCase):
     def setUp(self):
         self.container = note.NoteContainer()
         self.note = note.Note()
-        
+
     def testAddNote(self):
         self.container.append(self.note)
         self.assertEqual([self.note], self.container)
 
     def testAddNoteWithCategory(self):
-        cat = category.Category(subject='Cat')
+        cat = category.Category(subject="Cat")
         self.note.addCategory(cat)
         self.container.append(self.note)
         self.assertTrue(self.note in cat.categorizables())
 
     def testRemoveNoteWithCategory(self):
-        cat = category.Category(subject='Cat')
+        cat = category.Category(subject="Cat")
         self.note.addCategory(cat)
         self.container.append(self.note)
         self.container.remove(self.note)

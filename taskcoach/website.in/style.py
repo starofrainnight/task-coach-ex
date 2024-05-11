@@ -1,6 +1,6 @@
 # -*- coding: ISO-8859-1 -*-
 
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -16,12 +16,13 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import meta
 
 
-header = '''
+header = (
+    """
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD html 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
     <head>
@@ -116,9 +117,12 @@ pageTracker._trackPageview();
     </div>
     <div class="container">
         <div class="content">                
-'''%meta.metaDict
+"""
+    % meta.metaDict
+)
 
-footer = '''        
+footer = (
+    """        
         </div><!-- end of content div -->
         <script type="text/javascript" src="http://apis.google.com/js/plusone.js"></script>
         <footer class="footer">
@@ -145,4 +149,6 @@ footer = '''
         </footer>
     </body>
 </html>
-'''%meta.metaDict
+"""
+    % meta.metaDict
+)

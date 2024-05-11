@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,19 +14,34 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from .taskCommands import *
-from .effortCommands import NewEffortCommand, DeleteEffortCommand, \
-    EditTaskCommand, EditEffortStartDateTimeCommand, \
-    EditEffortStopDateTimeCommand
+from .effortCommands import (
+    NewEffortCommand,
+    DeleteEffortCommand,
+    EditTaskCommand,
+    EditEffortStartDateTimeCommand,
+    EditEffortStopDateTimeCommand,
+)
 from .categoryCommands import *
 from .categorizableCommands import *
 from .noteCommands import *
 from .attachmentCommands import *
-from .base import CopyCommand, DeleteCommand, CutCommand, PasteCommand, \
-    PasteAsSubItemCommand, EditSubjectCommand, \
-    EditDescriptionCommand, EditIconCommand, EditFontCommand, \
-    EditForegroundColorCommand, EditBackgroundColorCommand, \
-    PasteAsSubItemCommand, EditSubjectCommand, EditDescriptionCommand
+from .base import (
+    CopyCommand,
+    DeleteCommand,
+    CutCommand,
+    PasteCommand,
+    PasteAsSubItemCommand,
+    EditSubjectCommand,
+    EditDescriptionCommand,
+    EditIconCommand,
+    EditFontCommand,
+    EditForegroundColorCommand,
+    EditBackgroundColorCommand,
+    PasteAsSubItemCommand,
+    EditSubjectCommand,
+    EditDescriptionCommand,
+)
 from .clipboard import Clipboard

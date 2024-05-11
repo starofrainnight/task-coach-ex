@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import os, fnmatch
 from distutils.command.clean import clean as BaseCleanCommand
@@ -22,27 +22,32 @@ from distutils import log
 
 
 class clean(BaseCleanCommand, object):
-    user_options = BaseCleanCommand.user_options + \
-        [('really-clean', 'r', 'remove even more files')]
-    boolean_options = BaseCleanCommand.boolean_options + ['really-clean']
+    user_options = BaseCleanCommand.user_options + [
+        ("really-clean", "r", "remove even more files")
+    ]
+    boolean_options = BaseCleanCommand.boolean_options + ["really-clean"]
 
     def initialize_options(self):
         super(clean, self).initialize_options()
         # pylint: disable=W0201
         self.really_clean = False
-        self.cleaning_patterns = ['*.pyc']
-        self.really_clean_patterns = ['*.bak']
-                    
+        self.cleaning_patterns = ["*.pyc"]
+        self.really_clean_patterns = ["*.bak"]
+
     def finalize_options(self):
         super(clean, self).finalize_options()
         if self.really_clean:
             self.cleaning_patterns.extend(self.really_clean_patterns)
-                    
+
     def run(self):
         super(clean, self).run()
         if not self.verbose:
-            log.info("recursively removing '" + "', '".join(self.cleaning_patterns) + "'")
-        for root, _, files in os.walk('.'):
+            log.info(
+                "recursively removing '"
+                + "', '".join(self.cleaning_patterns)
+                + "'"
+            )
+        for root, _, files in os.walk("."):
             for pattern in self.cleaning_patterns:
                 for filename in fnmatch.filter(files, pattern):
                     filename = os.path.join(root, filename)
@@ -50,6 +55,6 @@ class clean(BaseCleanCommand, object):
                         if not self.dry_run:
                             os.unlink(filename)
                         if self.verbose:
-                            log.info("removing '%s'"%filename.strip('.\\'))
+                            log.info("removing '%s'" % filename.strip(".\\"))
                     except IOError:
                         pass

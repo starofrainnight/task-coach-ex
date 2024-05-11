@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import wx
 from taskcoachlib.thirdparty import hypertreelist
@@ -22,25 +22,26 @@ from taskcoachlib import operating_system
 
 
 class AutoColumnWidthMixin(object):
-    """ A mix-in class that automatically resizes one column to take up
-        the remaining width of a control with columns (i.e. ListCtrl, 
-        TreeListCtrl).
+    """A mix-in class that automatically resizes one column to take up
+    the remaining width of a control with columns (i.e. ListCtrl,
+    TreeListCtrl).
 
-        This causes the control to automatically take up the full width 
-        available, without either a horizontal scroll bar (unless absolutely
-        necessary) or empty space to the right of the last column.
+    This causes the control to automatically take up the full width
+    available, without either a horizontal scroll bar (unless absolutely
+    necessary) or empty space to the right of the last column.
 
-        NOTE:    When using this mixin with a ListCtrl, make sure the ListCtrl
-                 is in report mode.
+    NOTE:    When using this mixin with a ListCtrl, make sure the ListCtrl
+             is in report mode.
 
-        WARNING: If you override the EVT_SIZE event in your control, make
-                 sure you call event.Skip() to ensure that the mixin's
-                 OnResize method is called.
+    WARNING: If you override the EVT_SIZE event in your control, make
+             sure you call event.Skip() to ensure that the mixin's
+             OnResize method is called.
     """
+
     def __init__(self, *args, **kwargs):
         self.__is_auto_resizing = False
-        self.ResizeColumn = kwargs.pop('resizeableColumn', -1)
-        self.ResizeColumnMinWidth = kwargs.pop('resizeableColumnMinWidth', 50)
+        self.ResizeColumn = kwargs.pop("resizeableColumn", -1)
+        self.ResizeColumnMinWidth = kwargs.pop("resizeableColumnMinWidth", 50)
         super(AutoColumnWidthMixin, self).__init__(*args, **kwargs)
 
     def SetResizeColumn(self, column):
@@ -62,25 +63,28 @@ class AutoColumnWidthMixin(object):
 
     def IsAutoResizing(self):
         return self.__is_auto_resizing
-            
+
     def OnBeginColumnDrag(self, event):
         # pylint: disable=W0201
         if event.Column == self.ResizeColumn:
-            self.__oldResizeColumnWidth = self.GetColumnWidth(self.ResizeColumn)
+            self.__oldResizeColumnWidth = self.GetColumnWidth(
+                self.ResizeColumn
+            )
         # Temporarily unbind the EVT_SIZE to prevent resizing during dragging
         self.Unbind(wx.EVT_SIZE)
-        if operating_system.isWindows(): 
+        if operating_system.isWindows():
             event.Skip()
-        
+
     def OnEndColumnDrag(self, event):
         if event.Column == self.ResizeColumn and self.GetColumnCount() > 1:
-            extra_width = self.__oldResizeColumnWidth - \
-                              self.GetColumnWidth(self.ResizeColumn)
+            extra_width = self.__oldResizeColumnWidth - self.GetColumnWidth(
+                self.ResizeColumn
+            )
             self.DistributeWidthAcrossColumns(extra_width)
         self.Bind(wx.EVT_SIZE, self.OnResize)
         wx.CallAfter(self.DoResize)
         event.Skip()
-        
+
     def OnResize(self, event):
         event.Skip()
         if operating_system.isWindows():
@@ -90,46 +94,53 @@ class AutoColumnWidthMixin(object):
 
     def DoResize(self):
         if not self:
-            return # Avoid a potential PyDeadObject error
+            return  # Avoid a potential PyDeadObject error
         if not self.IsAutoResizing():
             return
         if self.GetSize().height < 32:
-            return # Avoid an endless update bug when the height is small.
+            return  # Avoid an endless update bug when the height is small.
         if self.GetColumnCount() <= self.ResizeColumn:
-            return # Nothing to resize.
+            return  # Nothing to resize.
 
         unused_width = max(self.AvailableWidth - self.NecessaryWidth, 0)
         resize_column_width = self.ResizeColumnMinWidth + unused_width
         self.SetColumnWidth(self.ResizeColumn, resize_column_width)
-        
+
     def DistributeWidthAcrossColumns(self, extra_width):
         # When the user resizes the ResizeColumn distribute the extra available
         # space across the other columns, or get the extra needed space from
-        # the other columns. The other columns are resized proportionally to 
+        # the other columns. The other columns are resized proportionally to
         # their previous width.
-        other_columns = [index for index in range(self.GetColumnCount())
-                         if index != self.ResizeColumn]
-        total_width = float(sum(self.GetColumnWidth(index) for index in 
-                                other_columns))
+        other_columns = [
+            index
+            for index in range(self.GetColumnCount())
+            if index != self.ResizeColumn
+        ]
+        total_width = float(
+            sum(self.GetColumnWidth(index) for index in other_columns)
+        )
         for column_index in other_columns:
             this_column_width = self.GetColumnWidth(column_index)
             this_column_width += this_column_width / total_width * extra_width
             self.SetColumnWidth(column_index, this_column_width)
-        
+
     def GetResizeColumn(self):
         if self.__resize_column == -1:
             return self.GetColumnCount() - 1
         else:
             return self.__resize_column
-        
+
     def SetResizeColumn(self, column_index):
         self.__resize_column = column_index  # pylint: disable=W0201
 
     ResizeColumn = property(GetResizeColumn, SetResizeColumn)
-    
+
     def GetAvailableWidth(self):
         available_width = self.GetClientSize().width
-        if self.__is_scrollbar_visible() and self.__is_scrollbar_included_in_client_size():
+        if (
+            self.__is_scrollbar_visible()
+            and self.__is_scrollbar_included_in_client_size()
+        ):
             scrollbar_width = wx.SystemSettings_GetMetric(wx.SYS_VSCROLL_X)
             available_width -= scrollbar_width
         return available_width
@@ -144,32 +155,38 @@ class AutoColumnWidthMixin(object):
             else:
                 necessary_width += self.GetColumnWidth(column_index)
         return necessary_width
-    
+
     NecessaryWidth = property(GetNecessaryWidth)
-   
+
     # Override all methods that manipulate columns to be able to resize the
-    # columns after any additions or removals. 
-   
+    # columns after any additions or removals.
+
     def InsertColumn(self, *args, **kwargs):
-        ''' Insert the new column and then resize. '''
-        result = super(AutoColumnWidthMixin, self).InsertColumn(*args, **kwargs)
+        """Insert the new column and then resize."""
+        result = super(AutoColumnWidthMixin, self).InsertColumn(
+            *args, **kwargs
+        )
         self.DoResize()
         return result
-        
+
     def DeleteColumn(self, *args, **kwargs):
-        ''' Delete the column and then resize. '''
-        result = super(AutoColumnWidthMixin, self).DeleteColumn(*args, **kwargs)
+        """Delete the column and then resize."""
+        result = super(AutoColumnWidthMixin, self).DeleteColumn(
+            *args, **kwargs
+        )
         self.DoResize()
         return result
-        
+
     def RemoveColumn(self, *args, **kwargs):
-        ''' Remove the column and then resize. '''
-        result = super(AutoColumnWidthMixin, self).RemoveColumn(*args, **kwargs)
+        """Remove the column and then resize."""
+        result = super(AutoColumnWidthMixin, self).RemoveColumn(
+            *args, **kwargs
+        )
         self.DoResize()
         return result
 
     def AddColumn(self, *args, **kwargs):
-        ''' Add the column and then resize. '''
+        """Add the column and then resize."""
         result = super(AutoColumnWidthMixin, self).AddColumn(*args, **kwargs)
         self.DoResize()
         return result
@@ -186,4 +203,3 @@ class AutoColumnWidthMixin(object):
             return isinstance(self, hypertreelist.HyperTreeList)
         else:
             return True
- 

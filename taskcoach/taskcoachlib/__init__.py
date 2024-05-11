@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,11 +14,14 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 # taskcoachlib contains all taskcoach packages
 
 # When thirdparty packages are imported, they may import submodules
 # from the system-wide installation. Doing this in workaround/__init__.py is too late.
 import os, sys
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), 'thirdparty')))
+
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), "thirdparty"))
+)

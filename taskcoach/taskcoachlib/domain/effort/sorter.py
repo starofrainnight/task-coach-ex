@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib.domain import base
 from . import effort
@@ -24,5 +24,5 @@ class EffortSorter(base.Sorter):
     DomainObjectClass = effort.Effort
 
     def __init__(self, *args, **kwargs):
-        kwargs['sortBy'] = ['-period']
+        kwargs["sortBy"] = ["-period"]
         super(EffortSorter, self).__init__(*args, **kwargs)

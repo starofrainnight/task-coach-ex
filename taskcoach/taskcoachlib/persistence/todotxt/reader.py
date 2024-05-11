@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import re, os, codecs
 from taskcoachlib.domain import task, category, date
@@ -32,13 +32,13 @@ class TodoTxtReader(object):
         self.__version = 0
 
     def read(self, filename):
-        metaName = filename + '-meta'
+        metaName = filename + "-meta"
         metaLines = dict()
         if os.path.exists(metaName):
             todoTxtRE = self.compileTodoTxtRE()
             keyValueRE = self.compileKeyValueRE()
-            with codecs.open(metaName, 'r', 'utf-8') as fp:
-                match = re.match(r'VERSION: (\d+)', fp.readline().strip())
+            with codecs.open(metaName, "r", "utf-8") as fp:
+                match = re.match(r"VERSION: (\d+)", fp.readline().strip())
                 if match:
                     self.__version = int(match.group(1))
                 else:
@@ -47,23 +47,36 @@ class TodoTxtReader(object):
                 for line in fp:
                     line = line.strip()
                     try:
-                        taskId, subjects, priority, plannedStartDateTime, completionDateTime, dueDateTime, categories = \
-                          self.__processLine(line, todoTxtRE, keyValueRE, date.Now, None)
+                        (
+                            taskId,
+                            subjects,
+                            priority,
+                            plannedStartDateTime,
+                            completionDateTime,
+                            dueDateTime,
+                            categories,
+                        ) = self.__processLine(
+                            line, todoTxtRE, keyValueRE, date.Now, None
+                        )
                         self.__deletedTasks.add(taskId)
                     except:
-                        pass # Err
-                    metaLines['->'.join(subjects) if self.__version == 0 else taskId] = line
-        with codecs.open(filename, 'r', 'utf-8') as fp:
+                        pass  # Err
+                    metaLines[
+                        "->".join(subjects) if self.__version == 0 else taskId
+                    ] = line
+        with codecs.open(filename, "r", "utf-8") as fp:
             self.readFile(fp, metaLines=metaLines)
 
-    @patterns.eventSource    
+    @patterns.eventSource
     def readFile(self, fp, now=date.Now, event=None, metaLines=None):
         todoTxtRE = self.compileTodoTxtRE()
         keyValueRE = self.compileKeyValueRE()
         for line in fp:
             line = line.strip()
             if line:
-                self.processLine(line, todoTxtRE, keyValueRE, now, event, metaLines)
+                self.processLine(
+                    line, todoTxtRE, keyValueRE, now, event, metaLines
+                )
         if self.__version >= 1:
             for deletedTaskId in self.__deletedTasks:
                 self.__taskList.remove(self.__tasksById[deletedTaskId])
@@ -75,48 +88,75 @@ class TodoTxtReader(object):
         dueDateTime = date.DateTime()
         taskId = None
         for key, value in re.findall(keyValueRE, line):
-            if key == 'due':
+            if key == "due":
                 dueDateTime = self.dateTime(value)
-            elif key == 'tcid':
+            elif key == "tcid":
                 taskId = value
-        line = re.sub(keyValueRE, '', line) # Remove all key:value pairs
-        
-        # Now, process the "official" todo.txt format using a RE that should 
+        line = re.sub(keyValueRE, "", line)  # Remove all key:value pairs
+
+        # Now, process the "official" todo.txt format using a RE that should
         # match the line completely.
         match = todoTxtRE.match(line)
 
-        priority = self.priority(match)    
+        priority = self.priority(match)
         completionDateTime = self.completionDateTime(match, now)
         plannedStartDateTime = self.plannedStartDateTime(match)
         categories = self.categories(match, event)
-       
-        recursiveSubject = match.group('subject')
 
-        subjects = recursiveSubject.split('->')
-        return taskId, subjects, priority, plannedStartDateTime, completionDateTime, dueDateTime, categories
+        recursiveSubject = match.group("subject")
+
+        subjects = recursiveSubject.split("->")
+        return (
+            taskId,
+            subjects,
+            priority,
+            plannedStartDateTime,
+            completionDateTime,
+            dueDateTime,
+            categories,
+        )
 
     def processLine(self, line, todoTxtRE, keyValueRE, now, event, metaLines):
-        taskId, subjects, priority, plannedStartDateTime, completionDateTime, dueDateTime, categories = \
-          self.__processLine(line, todoTxtRE, keyValueRE, now, event)
+        (
+            taskId,
+            subjects,
+            priority,
+            plannedStartDateTime,
+            completionDateTime,
+            dueDateTime,
+            categories,
+        ) = self.__processLine(line, todoTxtRE, keyValueRE, now, event)
 
         if taskId is not None and taskId in self.__deletedTasks:
             self.__deletedTasks.remove(taskId)
 
-        if (self.__version == 0 and metaLines and metaLines.get('->'.join(subjects), None) == line) or \
-          (self.__version == 1 and metaLines and taskId and metaLines.get(taskId, None) == line):
+        if (
+            self.__version == 0
+            and metaLines
+            and metaLines.get("->".join(subjects), None) == line
+        ) or (
+            self.__version == 1
+            and metaLines
+            and taskId
+            and metaLines.get(taskId, None) == line
+        ):
             # Not modified. Don't read it or we'll overwrite local changes
             # in case we're importing just before saving...
             return
 
         if taskId is not None and taskId not in self.__tasksById:
-            return # Deleted on desktop, changed on device. Keep deleted.
+            return  # Deleted on desktop, changed on device. Keep deleted.
 
         if self.__version == 0:
             newTask = None
             for subject in subjects:
-                newTask = self.findOrCreateTask(subject.strip(), newTask, event)
+                newTask = self.findOrCreateTask(
+                    subject.strip(), newTask, event
+                )
         else:
-            newTask = None if taskId is None else self.__tasksById.get(taskId, None)
+            newTask = (
+                None if taskId is None else self.__tasksById.get(taskId, None)
+            )
             if newTask is None:
                 newTask = task.Task(subject=subjects[-1])
                 self.__taskList.append(newTask)
@@ -129,88 +169,123 @@ class TodoTxtReader(object):
         newTask.setDueDateTime(dueDateTime)
         for eachCategory in categories:
             newTask.addCategory(eachCategory, event=event)
-            eachCategory.addCategorizable(newTask, event=event)        
-                
+            eachCategory.addCategorizable(newTask, event=event)
+
     @staticmethod
     def priority(match):
-        priorityText = match.group('priority')
-        return ord(priorityText) + 1 - ord('A') if priorityText else 0
-    
+        priorityText = match.group("priority")
+        return ord(priorityText) + 1 - ord("A") if priorityText else 0
+
     @classmethod
     def completionDateTime(cls, match, now):
-        if match.group('completed'):
-            completionDateText = match.group('completionDate')
-            return cls.dateTime(completionDateText) if completionDateText else now()
+        if match.group("completed"):
+            completionDateText = match.group("completionDate")
+            return (
+                cls.dateTime(completionDateText)
+                if completionDateText
+                else now()
+            )
         else:
             return date.DateTime()
-        
+
     @classmethod
     def plannedStartDateTime(cls, match):
-        startDateText = match.group('startDate')
-        return cls.dateTime(startDateText) if startDateText else date.DateTime()
-    
+        startDateText = match.group("startDate")
+        return (
+            cls.dateTime(startDateText) if startDateText else date.DateTime()
+        )
+
     @staticmethod
     def dateTime(dateText):
-        year, month, day = dateText.split('-')
+        year, month, day = dateText.split("-")
         return date.DateTime(int(year), int(month), int(day), 0, 0, 0)
-      
+
     def categories(self, match, event):
-        ''' Transform both projects and contexts into categories. Since Todo.txt
-            allows multiple projects for one task, but Task Coach does not allow
-            for tasks to have more than one parent task, we cannot transform 
-            projects into parent tasks. '''
+        """Transform both projects and contexts into categories. Since Todo.txt
+        allows multiple projects for one task, but Task Coach does not allow
+        for tasks to have more than one parent task, we cannot transform
+        projects into parent tasks."""
         categories = []
-        contextsAndProjects = match.group('contexts_and_projects_pre') + \
-                              match.group('contexts_and_projects_post')
+        contextsAndProjects = match.group(
+            "contexts_and_projects_pre"
+        ) + match.group("contexts_and_projects_post")
         contextsAndProjects = contextsAndProjects.strip()
-        if contextsAndProjects:        
-            for contextOrProject in contextsAndProjects.split(' '):
+        if contextsAndProjects:
+            for contextOrProject in contextsAndProjects.split(" "):
                 recursiveSubject = contextOrProject.strip()
                 categoryForTask = None
-                for subject in recursiveSubject.split('->'):
-                    categoryForTask = self.findOrCreateCategory(subject, categoryForTask, event)
+                for subject in recursiveSubject.split("->"):
+                    categoryForTask = self.findOrCreateCategory(
+                        subject, categoryForTask, event
+                    )
                 categories.append(categoryForTask)
         return categories
-        
+
     def findOrCreateCategory(self, subject, parent, event):
-        return self.findOrCreateCompositeItem(subject, parent, 
-            self.__categoriesBySubject, self.__categoryList, category.Category, 
-            event)
-        
+        return self.findOrCreateCompositeItem(
+            subject,
+            parent,
+            self.__categoriesBySubject,
+            self.__categoryList,
+            category.Category,
+            event,
+        )
+
     def findOrCreateTask(self, subject, parent, event):
-        return self.findOrCreateCompositeItem(subject, parent, 
-            self.__tasksBySubject, self.__taskList, task.Task, event)
-    
-    def findOrCreateCompositeItem(self, subject, parent, subjectCache, 
-                                  itemContainer, itemClass, event):
+        return self.findOrCreateCompositeItem(
+            subject,
+            parent,
+            self.__tasksBySubject,
+            self.__taskList,
+            task.Task,
+            event,
+        )
+
+    def findOrCreateCompositeItem(
+        self, subject, parent, subjectCache, itemContainer, itemClass, event
+    ):
         if (subject, parent) in subjectCache:
-            return subjectCache[(subject, parent)]           
+            return subjectCache[(subject, parent)]
         newItem = itemClass(subject=subject)
         if parent:
             newItem.setParent(parent)
             parent.addChild(newItem, event=event)
         itemContainer.append(newItem, event=event)
         subjectCache[(subject, parent)] = newItem
-        return newItem        
-    
+        return newItem
+
     @staticmethod
     def compileTodoTxtRE():
-        priorityRE = r'(?:\((?P<priority>[A-Z])\) )?'
-        completedRe = r'(?P<completed>[Xx] )?'
-        completionDateRE = r'(?:(?<=[xX] )(?P<completionDate>\d{4}-\d{1,2}-\d{1,2}) )?'
-        startDateRE = r'(?:(?P<startDate>\d{4}-\d{1,2}-\d{1,2}) )?' 
-        contextsAndProjectsPreRE = r'(?P<contexts_and_projects_pre>(?: ?[@+][^\s]+)*)'
-        subjectRE = r'(?P<subject>.*?)'
-        contextsAndProjectsPostRE = r'(?P<contexts_and_projects_post>(?: [@+][^\s]+)*)'
-        return re.compile('^' + priorityRE + completedRe + completionDateRE + \
-                          startDateRE + contextsAndProjectsPreRE + subjectRE + \
-                          contextsAndProjectsPostRE + '$')
-        
+        priorityRE = r"(?:\((?P<priority>[A-Z])\) )?"
+        completedRe = r"(?P<completed>[Xx] )?"
+        completionDateRE = (
+            r"(?:(?<=[xX] )(?P<completionDate>\d{4}-\d{1,2}-\d{1,2}) )?"
+        )
+        startDateRE = r"(?:(?P<startDate>\d{4}-\d{1,2}-\d{1,2}) )?"
+        contextsAndProjectsPreRE = (
+            r"(?P<contexts_and_projects_pre>(?: ?[@+][^\s]+)*)"
+        )
+        subjectRE = r"(?P<subject>.*?)"
+        contextsAndProjectsPostRE = (
+            r"(?P<contexts_and_projects_post>(?: [@+][^\s]+)*)"
+        )
+        return re.compile(
+            "^"
+            + priorityRE
+            + completedRe
+            + completionDateRE
+            + startDateRE
+            + contextsAndProjectsPreRE
+            + subjectRE
+            + contextsAndProjectsPostRE
+            + "$"
+        )
+
     @staticmethod
     def compileKeyValueRE():
         # The key is non-greedy because IDs may contain ':'
-        return re.compile(' (?P<key>\S+?):(?P<value>\S+)')
-    
+        return re.compile(" (?P<key>\S+?):(?P<value>\S+)")
+
     @staticmethod
     def __createSubjectCache(itemContainer):
         cache = dict()

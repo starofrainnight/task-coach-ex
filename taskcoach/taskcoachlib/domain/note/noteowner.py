@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,11 +14,12 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib.domain import base
 
 
 class NoteOwner(object, metaclass=base.DomainObjectOwnerMetaclass):
-    ''' Mixin class for (other) domain objects that may contain notes. '''
-    __ownedType__ = 'Note'
+    """Mixin class for (other) domain objects that may contain notes."""
+
+    __ownedType__ = "Note"

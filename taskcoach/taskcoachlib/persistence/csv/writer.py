@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,16 +14,17 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import csv, io
 from . import generator
 
 
 class UnicodeCSVWriter:
-    ''' A CSV writer that writes rows to a CSV file encoded in utf-8. 
-        Based on http://docs.python.org/lib/csv-examples.html.
-    '''
+    """A CSV writer that writes rows to a CSV file encoded in utf-8.
+    Based on http://docs.python.org/lib/csv-examples.html.
+    """
+
     def __init__(self, fd, *args, **kwargs):
         # Redirect output to a queue
         self.queue = io.StringIO()
@@ -31,10 +32,10 @@ class UnicodeCSVWriter:
         self.fd = fd
 
     def writerow(self, row):
-        self.writer.writerow([cell.encode('utf-8') for cell in row])
-        # Fetch UTF-8 output from the queue 
+        self.writer.writerow([cell.encode("utf-8") for cell in row])
+        # Fetch UTF-8 output from the queue
         data = self.queue.getvalue()
-        data = data.decode('utf-8')
+        data = data.decode("utf-8")
         self.fd.write(data)
         self.queue.truncate(0)
 
@@ -47,9 +48,16 @@ class CSVWriter(object):
     def __init__(self, fd, filename=None):
         self.__fd = fd
 
-    def write(self, viewer, settings, selectionOnly=False, 
-              separateDateAndTimeColumns=False, columns=None): # pylint: disable=W0613
-        csvRows = generator.viewer2csv(viewer, selectionOnly, 
-                                       separateDateAndTimeColumns, columns)
+    def write(
+        self,
+        viewer,
+        settings,
+        selectionOnly=False,
+        separateDateAndTimeColumns=False,
+        columns=None,
+    ):  # pylint: disable=W0613
+        csvRows = generator.viewer2csv(
+            viewer, selectionOnly, separateDateAndTimeColumns, columns
+        )
         UnicodeCSVWriter(self.__fd).writerows(csvRows)
-        return len(csvRows) - 1 # Don't count header row
+        return len(csvRows) - 1  # Don't count header row

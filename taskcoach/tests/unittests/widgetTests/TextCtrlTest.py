@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
 from taskcoachlib import widgets
@@ -22,17 +22,18 @@ from taskcoachlib import widgets
 
 class BaseTextCtrlTest(test.wxTestCase):
     def testRemoveAnyControlCharactersEnteredByUser(self):
-        textctrl = widgets.textctrl.BaseTextCtrl(self.frame, 
-                                                 'T\x02\x01est\x09')
-        self.assertEqual('Test\t', textctrl.GetValue())    
-    
-    
+        textctrl = widgets.textctrl.BaseTextCtrl(
+            self.frame, "T\x02\x01est\x09"
+        )
+        self.assertEqual("Test\t", textctrl.GetValue())
+
+
 class MultiLineTextCtrlTest(test.wxTestCase):
     def testOpenWebbrowserOnURLClick(self):
         textctrl = widgets.MultiLineTextCtrl(self.frame)
-        textctrl.AppendText('test http://test.com/ test')
+        textctrl.AppendText("test http://test.com/ test")
         # FIXME: simulate a mouseclick on the url
-        
+
     def testSetInsertionPointAtStart(self):
-        textctrl = widgets.MultiLineTextCtrl(self.frame, text='Hiya')
+        textctrl = widgets.MultiLineTextCtrl(self.frame, text="Hiya")
         self.assertEqual(0, textctrl.GetInsertionPoint())

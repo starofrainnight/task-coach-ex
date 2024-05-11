@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib.thirdparty import pybonjour
 from twisted.internet.interfaces import IReadDescriptor
@@ -31,12 +31,14 @@ class BonjourServiceDescriptor(object):
 
     def start(self, fd):
         from twisted.internet import reactor
+
         self.__fd = fd
         reactor.addReader(self)
 
     def stop(self):
         if self.__fd is not None:
             from twisted.internet import reactor
+
             reactor.removeReader(self)
             self.__fd.close()
             self.__fd = None
@@ -49,7 +51,7 @@ class BonjourServiceDescriptor(object):
         return None if self.__fd is None else self.__fd.fileno()
 
     def logPrefix(self):
-        return 'bonjour'
+        return "bonjour"
 
     def connectionLost(self, reason):
         if self.__fd is not None:
@@ -68,14 +70,22 @@ def BonjourServiceRegister(settings, port):
                 d.callback(reader)
             else:
                 reader.stop()
-                d.errback(Failure(RuntimeError('Could not register with Bonjour: %d' % errorCode)))
+                d.errback(
+                    Failure(
+                        RuntimeError(
+                            "Could not register with Bonjour: %d" % errorCode
+                        )
+                    )
+                )
         except AlreadyCalledError:
             pass
 
     # This ID is registered, see http://www.dns-sd.org/ServiceTypes.html
-    sdRef = pybonjour.DNSServiceRegister(name=settings.get('iphone', 'service') or None,
-                                         regtype='_taskcoachsync._tcp',
-                                         port=port,
-                                         callBack=registerCallback)
+    sdRef = pybonjour.DNSServiceRegister(
+        name=settings.get("iphone", "service") or None,
+        regtype="_taskcoachsync._tcp",
+        port=port,
+        callBack=registerCallback,
+    )
     reader.start(sdRef)
     return d

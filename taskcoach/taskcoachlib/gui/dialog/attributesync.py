@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import patterns
 from taskcoachlib.thirdparty.pubsub import pub
@@ -23,15 +23,24 @@ import wx
 
 
 class AttributeSync(object):
-    ''' Class used for keeping an attribute of a domain object synchronized with
-        a control in a dialog. If the user edits the value using the control, 
-        the domain object is changed, using the appropriate command. If the 
-        attribute of the domain object is changed (e.g. in another dialog) the 
-        value of the control is updated. '''
-        
-    def __init__(self, attributeGetterName, entry, currentValue, items, 
-                 commandClass, editedEventType, changedEventType, callback=None, 
-                 **kwargs):
+    """Class used for keeping an attribute of a domain object synchronized with
+    a control in a dialog. If the user edits the value using the control,
+    the domain object is changed, using the appropriate command. If the
+    attribute of the domain object is changed (e.g. in another dialog) the
+    value of the control is updated."""
+
+    def __init__(
+        self,
+        attributeGetterName,
+        entry,
+        currentValue,
+        items,
+        commandClass,
+        editedEventType,
+        changedEventType,
+        callback=None,
+        **kwargs
+    ):
         self._getter = attributeGetterName
         self._entry = entry
         self._currentValue = currentValue
@@ -43,18 +52,20 @@ class AttributeSync(object):
         entry.Bind(editedEventType, self.onAttributeEdited)
         if len(items) == 1:
             self.__start_observing_attribute(changedEventType, items[0])
-        
+
     def onAttributeEdited(self, event):
         event.Skip()
         new_value = self.getValue()
         if new_value != self._currentValue:
             self._currentValue = new_value
             commandKwArgs = self.commandKwArgs(new_value)
-            self._commandClass(None, self._items, **commandKwArgs).do()  # pylint: disable=W0142
+            self._commandClass(
+                None, self._items, **commandKwArgs
+            ).do()  # pylint: disable=W0142
             self.__invokeCallback(new_value)
 
     def onAttributeChanged_Deprecated(self, event):  # pylint: disable=W0613
-        if self._entry: 
+        if self._entry:
             new_value = getattr(self._items[0], self._getter)()
             if new_value != self._currentValue:
                 self._currentValue = new_value
@@ -62,7 +73,7 @@ class AttributeSync(object):
                 self.__invokeCallback(new_value)
         else:
             self.__stop_observing_attribute()
-            
+
     def onAttributeChanged(self, newValue, sender):
         if sender in self._items:
             if self._entry:
@@ -72,14 +83,14 @@ class AttributeSync(object):
                     self.__invokeCallback(newValue)
             else:
                 self.__stop_observing_attribute()
-            
+
     def commandKwArgs(self, new_value):
-        self.__commandKwArgs['newValue'] = new_value
+        self.__commandKwArgs["newValue"] = new_value
         return self.__commandKwArgs
-    
+
     def setValue(self, new_value):
         self._entry.SetValue(new_value)
-            
+
     def getValue(self):
         return self._entry.GetValue()
 
@@ -88,16 +99,18 @@ class AttributeSync(object):
             try:
                 self.__callback(value)
             except Exception as e:
-                wx.MessageBox(str(e), _('Error'), wx.OK)
+                wx.MessageBox(str(e), _("Error"), wx.OK)
 
     def __start_observing_attribute(self, eventType, eventSource):
-        if eventType.startswith('pubsub'):
+        if eventType.startswith("pubsub"):
             pub.subscribe(self.onAttributeChanged, eventType)
         else:
-            patterns.Publisher().registerObserver(self.onAttributeChanged_Deprecated,
-                                                  eventType=eventType,
-                                                  eventSource=eventSource)
-    
+            patterns.Publisher().registerObserver(
+                self.onAttributeChanged_Deprecated,
+                eventType=eventType,
+                eventSource=eventSource,
+            )
+
     def __stop_observing_attribute(self):
         try:
             pub.unsubscribe(self.onAttributeChanged, self.__changedEventType)

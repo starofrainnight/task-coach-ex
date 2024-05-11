@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import wx
 import taskcoachlib.thirdparty.aui as aui
@@ -23,17 +23,20 @@ from taskcoachlib import operating_system
 
 class AuiManagedFrameWithDynamicCenterPane(wx.Frame):
     def __init__(self, *args, **kwargs):
-        super(AuiManagedFrameWithDynamicCenterPane, self).__init__(*args, 
-                                                                   **kwargs)
+        super(AuiManagedFrameWithDynamicCenterPane, self).__init__(
+            *args, **kwargs
+        )
         agwStyle = aui.AUI_MGR_DEFAULT | aui.AUI_MGR_ALLOW_ACTIVE_PANE
         if not operating_system.isWindows():
             # With this style on Windows, you can't dock back floating frames
             agwStyle |= aui.AUI_MGR_USE_NATIVE_MINIFRAMES
         self.manager = aui.AuiManager(self, agwStyle)
-        self.manager.SetAutoNotebookStyle(aui.AUI_NB_TOP | \
-                                          aui.AUI_NB_CLOSE_BUTTON | \
-                                          aui.AUI_NB_SUB_NOTEBOOK | \
-                                          aui.AUI_NB_SCROLL_BUTTONS)
+        self.manager.SetAutoNotebookStyle(
+            aui.AUI_NB_TOP
+            | aui.AUI_NB_CLOSE_BUTTON
+            | aui.AUI_NB_SUB_NOTEBOOK
+            | aui.AUI_NB_SCROLL_BUTTONS
+        )
         self.bindEvents()
 
     def bindEvents(self):
@@ -44,38 +47,50 @@ class AuiManagedFrameWithDynamicCenterPane(wx.Frame):
         pane = event.GetPane()
         dockedPanes = self.dockedPanes()
         if self.isCenterPane(pane) and len(dockedPanes) == 1:
-            event.Veto() 
+            event.Veto()
         else:
-            event.Skip() 
+            event.Skip()
             if self.isCenterPane(pane):
-                if pane in dockedPanes:                
+                if pane in dockedPanes:
                     dockedPanes.remove(pane)
                 dockedPanes[0].Center()
-                
+
     def addPane(self, window, caption, name, floating=False):
         x, y = window.GetPositionTuple()
         x, y = window.ClientToScreenXY(x, y)
         paneInfo = aui.AuiPaneInfo()
-        paneInfo = paneInfo.CloseButton(True).Floatable(True).\
-            Name(name).Caption(caption).Right().\
-            FloatingSize((300, 200)).BestSize((200, 200)).\
-            FloatingPosition((x + 30, y + 30)).\
-            CaptionVisible().MaximizeButton().DestroyOnClose()
+        paneInfo = (
+            paneInfo.CloseButton(True)
+            .Floatable(True)
+            .Name(name)
+            .Caption(caption)
+            .Right()
+            .FloatingSize((300, 200))
+            .BestSize((200, 200))
+            .FloatingPosition((x + 30, y + 30))
+            .CaptionVisible()
+            .MaximizeButton()
+            .DestroyOnClose()
+        )
         if floating:
             paneInfo.Float()
         if not self.dockedPanes():
             paneInfo = paneInfo.Center()
         self.manager.AddPane(window, paneInfo)
         self.manager.Update()
-        
+
     def setPaneTitle(self, window, title):
         self.manager.GetPane(window).Caption(title)
-       
+
     def dockedPanes(self):
-        return [pane for pane in self.manager.GetAllPanes() \
-                if not pane.IsToolbar() and not pane.IsFloating() \
-                and not pane.IsNotebookPage()]
-        
+        return [
+            pane
+            for pane in self.manager.GetAllPanes()
+            if not pane.IsToolbar()
+            and not pane.IsFloating()
+            and not pane.IsNotebookPage()
+        ]
+
     def float(self, window):
         self.manager.GetPane(window).Float()
 

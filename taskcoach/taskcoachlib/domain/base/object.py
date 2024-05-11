@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -16,7 +16,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import patterns
 from taskcoachlib.domain.attribute import icon
@@ -30,30 +30,30 @@ import re
 
 
 class SynchronizedObject(object):
-    STATUS_NONE    = 0
-    STATUS_NEW     = 1
+    STATUS_NONE = 0
+    STATUS_NEW = 1
     STATUS_CHANGED = 2
     STATUS_DELETED = 3
 
     def __init__(self, *args, **kwargs):
-        self.__status = kwargs.pop('status', self.STATUS_NEW)
+        self.__status = kwargs.pop("status", self.STATUS_NEW)
         super(SynchronizedObject, self).__init__(*args, **kwargs)
 
     @classmethod
     def markDeletedEventType(class_):
-        return 'object.markdeleted'
+        return "object.markdeleted"
 
     @classmethod
     def markNotDeletedEventType(class_):
-        return 'object.marknotdeleted'
-        
+        return "object.marknotdeleted"
+
     def __getstate__(self):
         try:
             state = super(SynchronizedObject, self).__getstate__()
         except AttributeError:
             state = dict()
 
-        state['status'] = self.__status
+        state["status"] = self.__status
         return state
 
     @patterns.eventSource
@@ -62,25 +62,26 @@ class SynchronizedObject(object):
             super(SynchronizedObject, self).__setstate__(state, event=event)
         except AttributeError:
             pass
-        if state['status'] != self.__status:
-            if state['status'] == self.STATUS_CHANGED:
+        if state["status"] != self.__status:
+            if state["status"] == self.STATUS_CHANGED:
                 self.markDirty(event=event)
-            elif state['status'] == self.STATUS_DELETED:
+            elif state["status"] == self.STATUS_DELETED:
                 self.markDeleted(event=event)
-            elif state['status'] == self.STATUS_NEW:
+            elif state["status"] == self.STATUS_NEW:
                 self.markNew(event=event)
-            elif state['status'] == self.STATUS_NONE:
+            elif state["status"] == self.STATUS_NONE:
                 self.cleanDirty(event=event)
 
     def getStatus(self):
         return self.__status
-        
+
     @patterns.eventSource
     def markDirty(self, force=False, event=None):
         if not self.setStatusDirty(force):
             return
-        event.addSource(self, self.__status, 
-                        type=self.markNotDeletedEventType())
+        event.addSource(
+            self, self.__status, type=self.markNotDeletedEventType()
+        )
 
     def setStatusDirty(self, force=False):
         oldStatus = self.__status
@@ -94,9 +95,10 @@ class SynchronizedObject(object):
     def markNew(self, event=None):
         if not self.setStatusNew():
             return
-        event.addSource(self, self.__status,
-                        type=self.markNotDeletedEventType())
-            
+        event.addSource(
+            self, self.__status, type=self.markNotDeletedEventType()
+        )
+
     def setStatusNew(self):
         oldStatus = self.__status
         self.__status = self.STATUS_NEW
@@ -114,9 +116,10 @@ class SynchronizedObject(object):
     def cleanDirty(self, event=None):
         if not self.setStatusNone():
             return
-        event.addSource(self, self.__status, 
-                        type=self.markNotDeletedEventType())
-            
+        event.addSource(
+            self, self.__status, type=self.markNotDeletedEventType()
+        )
+
     def setStatusNone(self):
         oldStatus = self.__status
         self.__status = self.STATUS_NONE
@@ -131,9 +134,9 @@ class SynchronizedObject(object):
     def isDeleted(self):
         return self.__status == self.STATUS_DELETED
 
-        
+
 class Object(SynchronizedObject):
-    rx_attributes = re.compile(r'\[(\w+):(.+)\]')
+    rx_attributes = re.compile(r"\[(\w+):(.+)\]")
 
     if sys.version_info.major == 2:
         _long_zero = int(0)
@@ -142,27 +145,39 @@ class Object(SynchronizedObject):
 
     def __init__(self, *args, **kwargs):
         Attribute = attribute.Attribute
-        self.__creationDateTime = kwargs.pop('creationDateTime', None) or Now()
-        self.__modificationDateTime = kwargs.pop('modificationDateTime', 
-                                                 DateTime.min)
-        self.__subject = Attribute(kwargs.pop('subject', ''), self, 
-                                   self.subjectChangedEvent)
-        self.__description = Attribute(kwargs.pop('description', ''), self,
-                                       self.descriptionChangedEvent)
-        self.__fgColor = Attribute(kwargs.pop('fgColor', None), self, 
-                                   self.appearanceChangedEvent)
-        self.__bgColor = Attribute(kwargs.pop('bgColor', None), self,
-                                   self.appearanceChangedEvent)
-        self.__font = Attribute(kwargs.pop('font', None), self,
-                                self.appearanceChangedEvent)
-        self.__icon = Attribute(kwargs.pop('icon', ''), self,
-                                self.appearanceChangedEvent)
-        self.__selectedIcon = Attribute(kwargs.pop('selectedIcon', ''), self,
-                                        self.appearanceChangedEvent)
-        self.__ordering = Attribute(kwargs.pop('ordering', Object._long_zero), self, self.orderingChangedEvent)
-        self.__id = kwargs.pop('id', None) or str(uuid.uuid1())
+        self.__creationDateTime = kwargs.pop("creationDateTime", None) or Now()
+        self.__modificationDateTime = kwargs.pop(
+            "modificationDateTime", DateTime.min
+        )
+        self.__subject = Attribute(
+            kwargs.pop("subject", ""), self, self.subjectChangedEvent
+        )
+        self.__description = Attribute(
+            kwargs.pop("description", ""), self, self.descriptionChangedEvent
+        )
+        self.__fgColor = Attribute(
+            kwargs.pop("fgColor", None), self, self.appearanceChangedEvent
+        )
+        self.__bgColor = Attribute(
+            kwargs.pop("bgColor", None), self, self.appearanceChangedEvent
+        )
+        self.__font = Attribute(
+            kwargs.pop("font", None), self, self.appearanceChangedEvent
+        )
+        self.__icon = Attribute(
+            kwargs.pop("icon", ""), self, self.appearanceChangedEvent
+        )
+        self.__selectedIcon = Attribute(
+            kwargs.pop("selectedIcon", ""), self, self.appearanceChangedEvent
+        )
+        self.__ordering = Attribute(
+            kwargs.pop("ordering", Object._long_zero),
+            self,
+            self.orderingChangedEvent,
+        )
+        self.__id = kwargs.pop("id", None) or str(uuid.uuid1())
         super(Object, self).__init__(*args, **kwargs)
-    
+
     def __repr__(self):
         return self.subject()
 
@@ -171,87 +186,97 @@ class Object(SynchronizedObject):
             state = super(Object, self).__getstate__()
         except AttributeError:
             state = dict()
-        state.update(dict(id=self.__id, 
-                          creationDateTime=self.__creationDateTime,
-                          modificationDateTime=self.__modificationDateTime,
-                          subject=self.__subject.get(), 
-                          description=self.__description.get(),
-                          fgColor=self.__fgColor.get(),
-                          bgColor=self.__bgColor.get(),
-                          font=self.__font.get(),
-                          icon=self.__icon.get(),
-                          ordering=self.__ordering.get(),
-                          selectedIcon=self.__selectedIcon.get()))
+        state.update(
+            dict(
+                id=self.__id,
+                creationDateTime=self.__creationDateTime,
+                modificationDateTime=self.__modificationDateTime,
+                subject=self.__subject.get(),
+                description=self.__description.get(),
+                fgColor=self.__fgColor.get(),
+                bgColor=self.__bgColor.get(),
+                font=self.__font.get(),
+                icon=self.__icon.get(),
+                ordering=self.__ordering.get(),
+                selectedIcon=self.__selectedIcon.get(),
+            )
+        )
         return state
-    
+
     @patterns.eventSource
     def __setstate__(self, state, event=None):
         try:
             super(Object, self).__setstate__(state, event=event)
         except AttributeError:
             pass
-        self.__id = state['id']
-        self.setSubject(state['subject'], event=event)
-        self.setDescription(state['description'], event=event)
-        self.setForegroundColor(state['fgColor'], event=event)
-        self.setBackgroundColor(state['bgColor'], event=event)
-        self.setFont(state['font'], event=event)
-        self.setIcon(state['icon'], event=event)
-        self.setSelectedIcon(state['selectedIcon'], event=event)
-        self.setOrdering(state['ordering'], event=event)
-        self.__creationDateTime = state['creationDateTime']
-        # Set modification date/time last to overwrite changes made by the 
+        self.__id = state["id"]
+        self.setSubject(state["subject"], event=event)
+        self.setDescription(state["description"], event=event)
+        self.setForegroundColor(state["fgColor"], event=event)
+        self.setBackgroundColor(state["bgColor"], event=event)
+        self.setFont(state["font"], event=event)
+        self.setIcon(state["icon"], event=event)
+        self.setSelectedIcon(state["selectedIcon"], event=event)
+        self.setOrdering(state["ordering"], event=event)
+        self.__creationDateTime = state["creationDateTime"]
+        # Set modification date/time last to overwrite changes made by the
         # setters above
-        self.__modificationDateTime = state['modificationDateTime']
+        self.__modificationDateTime = state["modificationDateTime"]
 
     def __getcopystate__(self):
-        ''' Return a dictionary that can be passed to __init__ when creating
-            a copy of the object. 
-            
-            E.g. copy = obj.__class__(**original.__getcopystate__()) '''
+        """Return a dictionary that can be passed to __init__ when creating
+        a copy of the object.
+
+        E.g. copy = obj.__class__(**original.__getcopystate__())"""
         try:
             state = super(Object, self).__getcopystate__()
         except AttributeError:
             state = dict()
-        # Note that we don't put the id and the creation date/time in the state 
+        # Note that we don't put the id and the creation date/time in the state
         # dict, because a copy should get a new id and a new creation date/time
-        state.update(dict(\
-            subject=self.__subject.get(), description=self.__description.get(),
-            fgColor=self.__fgColor.get(), bgColor=self.__bgColor.get(),
-            font=self.__font.get(), icon=self.__icon.get(),
-            selectedIcon=self.__selectedIcon.get(),
-            ordering=self.__ordering.get()))
+        state.update(
+            dict(
+                subject=self.__subject.get(),
+                description=self.__description.get(),
+                fgColor=self.__fgColor.get(),
+                bgColor=self.__bgColor.get(),
+                font=self.__font.get(),
+                icon=self.__icon.get(),
+                selectedIcon=self.__selectedIcon.get(),
+                ordering=self.__ordering.get(),
+            )
+        )
         return state
-    
+
     def copy(self):
         return self.__class__(**self.__getcopystate__())
 
     @classmethod
     def monitoredAttributes(class_):
-        return ['ordering', 'subject', 'description', 'appearance']
- 
+        return ["ordering", "subject", "description", "appearance"]
+
     # Id:
-       
+
     def id(self):
         return self.__id
 
     # Custom attributes
     def customAttributes(self, sectionName):
         attributes = set()
-        for line in self.description().split('\n'):
+        for line in self.description().split("\n"):
             match = self.rx_attributes.match(line.strip())
             if match and match.group(1) == sectionName:
                 attributes.add(match.group(2))
         return attributes
 
     # Editing date/time:
-    
+
     def creationDateTime(self):
         return self.__creationDateTime
-    
+
     def modificationDateTime(self):
         return self.__modificationDateTime
-    
+
     def setModificationDateTime(self, dateTime):
         self.__modificationDateTime = dateTime
 
@@ -264,31 +289,33 @@ class Object(SynchronizedObject):
         return lambda item: item.creationDateTime()
 
     # Subject:
-    
+
     def subject(self):
         return self.__subject.get()
-    
+
     def setSubject(self, subject, event=None):
         self.__subject.set(subject, event=event)
-        
+
     def subjectChangedEvent(self, event):
-        event.addSource(self, self.subject(), type=self.subjectChangedEventType())
-    
-    @classmethod    
+        event.addSource(
+            self, self.subject(), type=self.subjectChangedEventType()
+        )
+
+    @classmethod
     def subjectChangedEventType(class_):
-        return '%s.subject' % class_
-    
+        return "%s.subject" % class_
+
     @staticmethod
     def subjectSortFunction(**kwargs):
-        ''' Function to pass to list.sort when sorting by subject. '''
-        if kwargs.get('sortCaseSensitive', False):
+        """Function to pass to list.sort when sorting by subject."""
+        if kwargs.get("sortCaseSensitive", False):
             return lambda item: item.subject()
         else:
             return lambda item: item.subject().lower()
-        
+
     @classmethod
     def subjectSortEventTypes(class_):
-        ''' The event types that influence the subject sort order. '''
+        """The event types that influence the subject sort order."""
         return (class_.subjectChangedEventType(),)
 
     # Ordering:
@@ -300,11 +327,13 @@ class Object(SynchronizedObject):
         self.__ordering.set(ordering, event=event)
 
     def orderingChangedEvent(self, event):
-        event.addSource(self, self.ordering(), type=self.orderingChangedEventType())
+        event.addSource(
+            self, self.ordering(), type=self.orderingChangedEventType()
+        )
 
     @classmethod
     def orderingChangedEventType(class_):
-        return '%s.ordering'%class_
+        return "%s.ordering" % class_
 
     @staticmethod
     def orderingSortFunction(**kwargs):
@@ -315,40 +344,41 @@ class Object(SynchronizedObject):
         return (class_.orderingChangedEventType(),)
 
     # Description:
-    
+
     def description(self):
         return self.__description.get()
-    
+
     def setDescription(self, description, event=None):
         self.__description.set(description, event=event)
-        
+
     def descriptionChangedEvent(self, event):
-        event.addSource(self, self.description(), 
-                        type=self.descriptionChangedEventType())
-            
-    @classmethod    
+        event.addSource(
+            self, self.description(), type=self.descriptionChangedEventType()
+        )
+
+    @classmethod
     def descriptionChangedEventType(class_):
-        return '%s.description'%class_
+        return "%s.description" % class_
 
     @staticmethod
     def descriptionSortFunction(**kwargs):
-        ''' Function to pass to list.sort when sorting by description. '''
-        if kwargs.get('sortCaseSensitive', False):
+        """Function to pass to list.sort when sorting by description."""
+        if kwargs.get("sortCaseSensitive", False):
             return lambda item: item.description()
         else:
             return lambda item: item.description().lower()
-    
+
     @classmethod
     def descriptionSortEventTypes(class_):
-        ''' The event types that influence the description sort order. '''
+        """The event types that influence the description sort order."""
         return (class_.descriptionChangedEventType(),)
-    
+
     # Color:
-    
+
     def setForegroundColor(self, color, event=None):
         self.__fgColor.set(color, event=event)
-    
-    def foregroundColor(self, recursive=False): # pylint: disable=W0613
+
+    def foregroundColor(self, recursive=False):  # pylint: disable=W0613
         # The 'recursive' argument isn't actually used here, but some
         # code assumes composite objects where there aren't. This is
         # the simplest workaround.
@@ -356,21 +386,21 @@ class Object(SynchronizedObject):
 
     def setBackgroundColor(self, color, event=None):
         self.__bgColor.set(color, event=event)
-        
-    def backgroundColor(self, recursive=False): # pylint: disable=W0613
+
+    def backgroundColor(self, recursive=False):  # pylint: disable=W0613
         # The 'recursive' argument isn't actually used here, but some
         # code assumes composite objects where there aren't. This is
         # the simplest workaround.
         return self.__bgColor.get()
-    
+
     # Font:
-    
-    def font(self, recursive=False): # pylint: disable=W0613
+
+    def font(self, recursive=False):  # pylint: disable=W0613
         # The 'recursive' argument isn't actually used here, but some
         # code assumes composite objects where there aren't. This is
         # the simplest workaround.
         return self.__font.get()
-    
+
     def setFont(self, font, event=None):
         self.__font.set(font, event=event)
 
@@ -387,31 +417,33 @@ class Object(SynchronizedObject):
 
     def setSelectedIcon(self, selectedIcon, event=None):
         self.__selectedIcon.set(selectedIcon, event=event)
-    
+
     # Event types:
-    
+
     @classmethod
     def appearanceChangedEventType(class_):
-        return '%s.appearance'%class_
-    
+        return "%s.appearance" % class_
+
     def appearanceChangedEvent(self, event):
         event.addSource(self, type=self.appearanceChangedEventType())
-    
+
     @classmethod
     def modificationEventTypes(class_):
         try:
             eventTypes = super(Object, class_).modificationEventTypes()
         except AttributeError:
             eventTypes = []
-        return eventTypes + [class_.subjectChangedEventType(),
-                             class_.descriptionChangedEventType(),
-                             class_.appearanceChangedEventType(),
-                             class_.orderingChangedEventType()]
+        return eventTypes + [
+            class_.subjectChangedEventType(),
+            class_.descriptionChangedEventType(),
+            class_.appearanceChangedEventType(),
+            class_.orderingChangedEventType(),
+        ]
 
 
 class CompositeObject(Object, patterns.ObservableComposite):
     def __init__(self, *args, **kwargs):
-        self.__expandedContexts = set(kwargs.pop('expandedContexts', []))
+        self.__expandedContexts = set(kwargs.pop("expandedContexts", []))
         super(CompositeObject, self).__init__(*args, **kwargs)
 
     def __getcopystate__(self):
@@ -421,14 +453,17 @@ class CompositeObject(Object, patterns.ObservableComposite):
 
     @classmethod
     def monitoredAttributes(class_):
-        return Object.monitoredAttributes() + ['expandedContexts']
+        return Object.monitoredAttributes() + ["expandedContexts"]
 
     # Subject:
 
-    def subject(self, recursive=False): # pylint: disable=W0221
+    def subject(self, recursive=False):  # pylint: disable=W0221
         subject = super(CompositeObject, self).subject()
         if recursive and self.parent():
-            subject = '%s -> %s'%(self.parent().subject(recursive=True), subject)
+            subject = "%s -> %s" % (
+                self.parent().subject(recursive=True),
+                subject,
+            )
         return subject
 
     def subjectChangedEvent(self, event):
@@ -438,39 +473,39 @@ class CompositeObject(Object, patterns.ObservableComposite):
 
     @staticmethod
     def subjectSortFunction(**kwargs):
-        ''' Function to pass to list.sort when sorting by subject. '''
-        recursive = kwargs.get('treeMode', False)
-        if kwargs.get('sortCaseSensitive', False):
+        """Function to pass to list.sort when sorting by subject."""
+        recursive = kwargs.get("treeMode", False)
+        if kwargs.get("sortCaseSensitive", False):
             return lambda item: item.subject(recursive=recursive)
         else:
             return lambda item: item.subject(recursive=recursive).lower()
-        
+
     # Description:
-        
-    def description(self, recursive=False): # pylint: disable=W0221,W0613
+
+    def description(self, recursive=False):  # pylint: disable=W0221,W0613
         # Allow for the recursive flag, but ignore it
         return super(CompositeObject, self).description()
-        
+
     # Expansion state:
 
     # Note: expansion state is stored by context. A context is a simple string
     # identifier (without comma's) to distinguish between different contexts,
     # i.e. viewers. A composite object may be expanded in one context and
     # collapsed in another.
-    
-    def isExpanded(self, context='None'):
-        ''' Returns a boolean indicating whether the composite object is 
-            expanded in the specified context. ''' 
+
+    def isExpanded(self, context="None"):
+        """Returns a boolean indicating whether the composite object is
+        expanded in the specified context."""
         return context in self.__expandedContexts
 
     def expandedContexts(self):
-        ''' Returns a list of contexts where this composite object is 
-            expanded. ''' 
+        """Returns a list of contexts where this composite object is
+        expanded."""
         return list(self.__expandedContexts)
-    
-    def expand(self, expand=True, context='None', notify=True):
-        ''' Expands (or collapses) the composite object in the specified 
-            context. ''' 
+
+    def expand(self, expand=True, context="None", notify=True):
+        """Expands (or collapses) the composite object in the specified
+        context."""
         if expand == self.isExpanded(context):
             return
         if expand:
@@ -478,14 +513,15 @@ class CompositeObject(Object, patterns.ObservableComposite):
         else:
             self.__expandedContexts.discard(context)
         if notify:
-            pub.sendMessage(self.expansionChangedEventType(), newValue=expand,
-                            sender=self)
+            pub.sendMessage(
+                self.expansionChangedEventType(), newValue=expand, sender=self
+            )
 
     @classmethod
     def expansionChangedEventType(cls):
-        ''' The event type used for notifying changes in the expansion state
-            of a composite object. '''
-        return 'pubsub.%s.expandedContexts' % cls.__name__.lower()
+        """The event type used for notifying changes in the expansion state
+        of a composite object."""
+        return "pubsub.%s.expandedContexts" % cls.__name__.lower()
 
     def expansionChangedEvent(self, event):
         event.addSource(self, type=self.expansionChangedEventType())
@@ -509,14 +545,14 @@ class CompositeObject(Object, patterns.ObservableComposite):
             return self.parent().foregroundColor(recursive=True)
         else:
             return myFgColor
-                
+
     def backgroundColor(self, recursive=False):
         myBgColor = super(CompositeObject, self).backgroundColor()
         if not myBgColor and recursive and self.parent():
             return self.parent().backgroundColor(recursive=True)
         else:
             return myBgColor
-    
+
     def font(self, recursive=False):
         myFont = super(CompositeObject, self).font()
         if not myFont and recursive and self.parent():
@@ -530,7 +566,9 @@ class CompositeObject(Object, patterns.ObservableComposite):
             return myIcon
         if not myIcon and self.parent():
             myIcon = self.parent().icon(recursive=True)
-        return self.pluralOrSingularIcon(myIcon, native=super(CompositeObject, self).icon() == '')
+        return self.pluralOrSingularIcon(
+            myIcon, native=super(CompositeObject, self).icon() == ""
+        )
 
     def selectedIcon(self, recursive=False):
         myIcon = super(CompositeObject, self).selectedIcon()
@@ -538,23 +576,30 @@ class CompositeObject(Object, patterns.ObservableComposite):
             return myIcon
         if not myIcon and self.parent():
             myIcon = self.parent().selectedIcon(recursive=True)
-        return self.pluralOrSingularIcon(myIcon, native=super(CompositeObject, self).selectedIcon() == '')
+        return self.pluralOrSingularIcon(
+            myIcon, native=super(CompositeObject, self).selectedIcon() == ""
+        )
 
     def pluralOrSingularIcon(self, myIcon, native=True):
-        hasChildren = any(child for child in self.children() if not child.isDeleted())
-        mapping = icon.itemImagePlural if hasChildren else icon.itemImageSingular
+        hasChildren = any(
+            child for child in self.children() if not child.isDeleted()
+        )
+        mapping = (
+            icon.itemImagePlural if hasChildren else icon.itemImageSingular
+        )
         # If the icon comes from the user settings, only pluralize it; this is probably
         # the Way of the Least Astonishment
         if native or hasChildren:
             return mapping.get(myIcon, myIcon)
         return myIcon
-    
+
     # Event types:
 
     @classmethod
     def modificationEventTypes(class_):
-        return super(CompositeObject, class_).modificationEventTypes() + \
-            [class_.expansionChangedEventType()]
+        return super(CompositeObject, class_).modificationEventTypes() + [
+            class_.expansionChangedEventType()
+        ]
 
     # Override SynchronizedObject methods to also mark child objects
 
@@ -576,7 +621,7 @@ class CompositeObject(Object, patterns.ObservableComposite):
         for child in self.children():
             child.markDirty(force, event=event)
 
-    @patterns.eventSource            
+    @patterns.eventSource
     def cleanDirty(self, event=None):
         super(CompositeObject, self).cleanDirty(event=event)
         for child in self.children():

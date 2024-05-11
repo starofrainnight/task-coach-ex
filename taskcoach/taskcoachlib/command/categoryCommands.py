@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import patterns
 from taskcoachlib.i18n import _
@@ -23,46 +23,52 @@ from . import base
 
 
 class NewCategoryCommand(base.NewItemCommand):
-    singular_name = _('New category')
-    
+    singular_name = _("New category")
+
     def __init__(self, *args, **kwargs):
-        subject = kwargs.pop('subject', _('New category'))
-        description = kwargs.pop('description', '')
-        attachments = kwargs.pop('attachments', [])
+        subject = kwargs.pop("subject", _("New category"))
+        description = kwargs.pop("description", "")
+        attachments = kwargs.pop("attachments", [])
         super(NewCategoryCommand, self).__init__(*args, **kwargs)
-        self.items = self.createNewCategories(subject=subject, 
-            description=description, attachments=attachments)
+        self.items = self.createNewCategories(
+            subject=subject, description=description, attachments=attachments
+        )
 
     def createNewCategories(self, **kwargs):
         return [category.Category(**kwargs)]
-        
+
 
 class NewSubCategoryCommand(base.NewSubItemCommand):
-    plural_name = _('New subcategories')
+    plural_name = _("New subcategories")
     singular_name = _('New subcategory of "%s"')
 
     def __init__(self, *args, **kwargs):
-        subject = kwargs.pop('subject', _('New subcategory'))
-        description = kwargs.pop('description', '')
-        attachments = kwargs.pop('attachments', [])
+        subject = kwargs.pop("subject", _("New subcategory"))
+        description = kwargs.pop("description", "")
+        attachments = kwargs.pop("attachments", [])
         super(NewSubCategoryCommand, self).__init__(*args, **kwargs)
-        self.items = self.createNewCategories(subject=subject,
-            description=description, attachments=attachments)
+        self.items = self.createNewCategories(
+            subject=subject, description=description, attachments=attachments
+        )
         self.save_modification_datetimes()
 
     def createNewCategories(self, **kwargs):
         return [parent.newChild(**kwargs) for parent in self.items]
-    
+
 
 class EditExclusiveSubcategoriesCommand(base.BaseCommand):
-    plural_name = _('Edit exclusive subcategories')
+    plural_name = _("Edit exclusive subcategories")
     singular_name = _('Edit exclusive subcategories of "%s"')
 
     def __init__(self, *args, **kwargs):
-        self.__newExclusivity = kwargs.pop('newValue')
-        super(EditExclusiveSubcategoriesCommand, self).__init__(*args, **kwargs)
-        self.__oldExclusivities = [item.hasExclusiveSubcategories() for item in self.items]
-        
+        self.__newExclusivity = kwargs.pop("newValue")
+        super(EditExclusiveSubcategoriesCommand, self).__init__(
+            *args, **kwargs
+        )
+        self.__oldExclusivities = [
+            item.hasExclusiveSubcategories() for item in self.items
+        ]
+
     @patterns.eventSource
     def do_command(self, event=None):
         super(EditExclusiveSubcategoriesCommand, self).do_command()
@@ -80,9 +86,9 @@ class EditExclusiveSubcategoriesCommand(base.BaseCommand):
 
 
 class DeleteCategoryCommand(base.DeleteCommand):
-    plural_name = _('Delete categories')
+    plural_name = _("Delete categories")
     singular_name = _('Delete category "%s"')
-    
-    
+
+
 class DragAndDropCategoryCommand(base.OrderingDragAndDropCommand):
-    plural_name = _('Drag and drop categories')
+    plural_name = _("Drag and drop categories")

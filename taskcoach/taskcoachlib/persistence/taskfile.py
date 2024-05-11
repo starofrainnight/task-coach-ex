@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import os
 from . import xml
@@ -24,18 +24,21 @@ from taskcoachlib.syncml.config import createDefaultSyncConfig
 from taskcoachlib.thirdparty.guid import generate
 from taskcoachlib.thirdparty import lockfile
 from taskcoachlib.changes import ChangeMonitor, ChangeSynchronizer
-from taskcoachlib.filesystem import FilesystemNotifier, FilesystemPollerNotifier
+from taskcoachlib.filesystem import (
+    FilesystemNotifier,
+    FilesystemPollerNotifier,
+)
 from taskcoachlib.thirdparty.pubsub import pub
 
 
 def _isCloud(path):
     path = os.path.abspath(path)
     while True:
-        for name in ['.dropbox.cache', '.csync_journal.db']:
+        for name in [".dropbox.cache", ".csync_journal.db"]:
             if os.path.exists(os.path.join(path, name)):
                 return True
         path, name = os.path.split(path)
-        if name == '':
+        if name == "":
             return False
 
 
@@ -63,10 +66,12 @@ class SafeWriteFile(object):
         if self._isCloud():
             # Ideally we should create a temporary file on the same filesystem (so that
             # os.rename works) but outside the Dropbox folder...
-            self.__fd = file(self.__filename, 'w')
+            self.__fd = file(self.__filename, "w")
         else:
-            self.__tempFilename = self._getTemporaryFileName(os.path.dirname(filename))
-            self.__fd = file(self.__tempFilename, 'w')
+            self.__tempFilename = self._getTemporaryFileName(
+                os.path.dirname(filename)
+            )
+            self.__fd = file(self.__tempFilename, "w")
 
     def write(self, bf):
         self.__fd.write(bf)
@@ -86,7 +91,7 @@ class SafeWriteFile(object):
         index = 1
         while True:
             name, ext = os.path.splitext(filename)
-            newName = '%s (%d)%s' % (name, index, ext)
+            newName = "%s (%d)%s" % (name, index, ext)
             if not os.path.exists(newName):
                 os.rename(filename, newName)
                 break
@@ -101,7 +106,7 @@ class SafeWriteFile(object):
 
         idx = 0
         while True:
-            name = os.path.join(path, 'tmp-%d' % idx)
+            name = os.path.join(path, "tmp-%d" % idx)
             if not os.path.exists(name):
                 return name
             idx += 1
@@ -112,7 +117,7 @@ class SafeWriteFile(object):
 
 class TaskFile(patterns.Observer):
     def __init__(self, *args, **kwargs):
-        self.__filename = self.__lastFilename = ''
+        self.__filename = self.__lastFilename = ""
         self.__needSave = self.__loading = False
         self.__tasks = task.TaskList()
         self.__categories = category.CategoryList()
@@ -124,70 +129,90 @@ class TaskFile(patterns.Observer):
         self.__changes = dict()
         self.__changes[self.__monitor.guid()] = self.__monitor
         self.__changedOnDisk = False
-        if kwargs.pop('poll', True):
+        if kwargs.pop("poll", True):
             self.__notifier = TaskCoachFilesystemPollerNotifier(self)
         else:
             self.__notifier = TaskCoachFilesystemNotifier(self)
         self.__saving = False
         for collection in [self.__tasks, self.__categories, self.__notes]:
             self.__monitor.monitorCollection(collection)
-        for domainClass in [task.Task, category.Category, note.Note, effort.Effort,
-                            attachment.FileAttachment, attachment.URIAttachment,
-                            attachment.MailAttachment]:
+        for domainClass in [
+            task.Task,
+            category.Category,
+            note.Note,
+            effort.Effort,
+            attachment.FileAttachment,
+            attachment.URIAttachment,
+            attachment.MailAttachment,
+        ]:
             self.__monitor.monitorClass(domainClass)
         super(TaskFile, self).__init__(*args, **kwargs)
-        # Register for tasks, categories, efforts and notes being changed so we 
+        # Register for tasks, categories, efforts and notes being changed so we
         # can monitor when the task file needs saving (i.e. is 'dirty'):
         for container in self.tasks(), self.categories(), self.notes():
             for eventType in container.modificationEventTypes():
-                self.registerObserver(self.onDomainObjectAddedOrRemoved,
-                                      eventType, eventSource=container)
-            
-        for eventType in (base.Object.markDeletedEventType(),
-                          base.Object.markNotDeletedEventType()):
+                self.registerObserver(
+                    self.onDomainObjectAddedOrRemoved,
+                    eventType,
+                    eventSource=container,
+                )
+
+        for eventType in (
+            base.Object.markDeletedEventType(),
+            base.Object.markNotDeletedEventType(),
+        ):
             self.registerObserver(self.onDomainObjectAddedOrRemoved, eventType)
-            
+
         for eventType in task.Task.modificationEventTypes():
-            if not eventType.startswith('pubsub'):
+            if not eventType.startswith("pubsub"):
                 self.registerObserver(self.onTaskChanged_Deprecated, eventType)
-        pub.subscribe(self.onTaskChanged, 'pubsub.task')
+        pub.subscribe(self.onTaskChanged, "pubsub.task")
         for eventType in effort.Effort.modificationEventTypes():
             self.registerObserver(self.onEffortChanged, eventType)
         for eventType in note.Note.modificationEventTypes():
-            if not eventType.startswith('pubsub'):
+            if not eventType.startswith("pubsub"):
                 self.registerObserver(self.onNoteChanged_Deprecated, eventType)
-        pub.subscribe(self.onNoteChanged, 'pubsub.note')
+        pub.subscribe(self.onNoteChanged, "pubsub.note")
         for eventType in category.Category.modificationEventTypes():
-            if not eventType.startswith('pubsub'):
-                self.registerObserver(self.onCategoryChanged_Deprecated, 
-                                      eventType)
-        pub.subscribe(self.onCategoryChanged, 'pubsub.category')
-        for eventType in attachment.FileAttachment.modificationEventTypes() + \
-                         attachment.URIAttachment.modificationEventTypes() + \
-                         attachment.MailAttachment.modificationEventTypes():
-            if not eventType.startswith('pubsub'):
-                self.registerObserver(self.onAttachmentChanged_Deprecated, eventType) 
-        pub.subscribe(self.onAttachmentChanged, 'pubsub.attachment')
+            if not eventType.startswith("pubsub"):
+                self.registerObserver(
+                    self.onCategoryChanged_Deprecated, eventType
+                )
+        pub.subscribe(self.onCategoryChanged, "pubsub.category")
+        for eventType in (
+            attachment.FileAttachment.modificationEventTypes()
+            + attachment.URIAttachment.modificationEventTypes()
+            + attachment.MailAttachment.modificationEventTypes()
+        ):
+            if not eventType.startswith("pubsub"):
+                self.registerObserver(
+                    self.onAttachmentChanged_Deprecated, eventType
+                )
+        pub.subscribe(self.onAttachmentChanged, "pubsub.attachment")
 
     def __str__(self):
         return self.filename()
-    
+
     def __contains__(self, item):
-        return item in self.tasks() or item in self.notes() or \
-               item in self.categories() or item in self.efforts()
+        return (
+            item in self.tasks()
+            or item in self.notes()
+            or item in self.categories()
+            or item in self.efforts()
+        )
 
     def monitor(self):
         return self.__monitor
 
     def categories(self):
         return self.__categories
-    
+
     def notes(self):
         return self.__notes
-    
+
     def tasks(self):
         return self.__tasks
-    
+
     def efforts(self):
         return self.__efforts
 
@@ -205,8 +230,13 @@ class TaskFile(patterns.Observer):
         self.markDirty()
 
     def isEmpty(self):
-        return 0 == len(self.categories()) == len(self.tasks()) == len(self.notes())
-            
+        return (
+            0
+            == len(self.categories())
+            == len(self.tasks())
+            == len(self.notes())
+        )
+
     def onDomainObjectAddedOrRemoved(self, event):  # pylint: disable=W0613
         if self.__loading or self.__saving:
             return
@@ -217,85 +247,97 @@ class TaskFile(patterns.Observer):
             return
         if sender in self.tasks():
             self.markDirty()
-                    
+
     def onTaskChanged_Deprecated(self, event):
         if self.__loading:
             return
-        changedTasks = [changedTask for changedTask in event.sources() \
-                        if changedTask in self.tasks()]
+        changedTasks = [
+            changedTask
+            for changedTask in event.sources()
+            if changedTask in self.tasks()
+        ]
         if changedTasks:
             self.markDirty()
             for changedTask in changedTasks:
                 changedTask.markDirty()
-            
+
     def onEffortChanged(self, event):
         if self.__loading or self.__saving:
             return
-        changedEfforts = [changedEffort for changedEffort in event.sources() if \
-                          changedEffort.task() in self.tasks()]
+        changedEfforts = [
+            changedEffort
+            for changedEffort in event.sources()
+            if changedEffort.task() in self.tasks()
+        ]
         if changedEfforts:
             self.markDirty()
             for changedEffort in changedEfforts:
                 changedEffort.markDirty()
-                
+
     def onCategoryChanged_Deprecated(self, event):
         if self.__loading or self.__saving:
             return
-        changedCategories = [changedCategory for changedCategory in event.sources() if \
-                             changedCategory in self.categories()]
+        changedCategories = [
+            changedCategory
+            for changedCategory in event.sources()
+            if changedCategory in self.categories()
+        ]
         if changedCategories:
             self.markDirty()
-            # Mark all categorizables belonging to the changed category dirty; 
-            # this is needed because in SyncML/vcard world, categories are not 
-            # first-class objects. Instead, each task/contact/etc has a 
+            # Mark all categorizables belonging to the changed category dirty;
+            # this is needed because in SyncML/vcard world, categories are not
+            # first-class objects. Instead, each task/contact/etc has a
             # categories property which is a comma-separated list of category
             # names. So, when a category name changes, every associated
             # categorizable changes.
             for changedCategory in changedCategories:
                 for categorizable in changedCategory.categorizables():
                     categorizable.markDirty()
-            
+
     def onCategoryChanged(self, newValue, sender):
         if self.__loading or self.__saving:
             return
-        changedCategories = [changedCategory for changedCategory in [sender] if \
-                             changedCategory in self.categories()]
+        changedCategories = [
+            changedCategory
+            for changedCategory in [sender]
+            if changedCategory in self.categories()
+        ]
         if changedCategories:
             self.markDirty()
-            # Mark all categorizables belonging to the changed category dirty; 
-            # this is needed because in SyncML/vcard world, categories are not 
-            # first-class objects. Instead, each task/contact/etc has a 
+            # Mark all categorizables belonging to the changed category dirty;
+            # this is needed because in SyncML/vcard world, categories are not
+            # first-class objects. Instead, each task/contact/etc has a
             # categories property which is a comma-separated list of category
             # names. So, when a category name changes, every associated
             # categorizable changes.
             for changedCategory in changedCategories:
                 for categorizable in changedCategory.categorizables():
                     categorizable.markDirty()
-            
+
     def onNoteChanged_Deprecated(self, event):
         if self.__loading:
             return
-        # A note may be in self.notes() or it may be a note of another 
+        # A note may be in self.notes() or it may be a note of another
         # domain object.
         self.markDirty()
         for changedNote in event.sources():
             changedNote.markDirty()
-            
+
     def onNoteChanged(self, newValue, sender):
         if self.__loading:
             return
-        # A note may be in self.notes() or it may be a note of another 
+        # A note may be in self.notes() or it may be a note of another
         # domain object.
         self.markDirty()
         sender.markDirty()
-            
+
     def onAttachmentChanged(self, newValue, sender):
         if self.__loading or self.__saving:
             return
         # Attachments don't know their owner, so we can't check whether the
         # attachment is actually in the task file. Assume it is.
         self.markDirty()
-            
+
     def onAttachmentChanged_Deprecated(self, event):
         if self.__loading:
             return
@@ -311,11 +353,11 @@ class TaskFile(patterns.Observer):
         self.__lastFilename = filename or self.__filename
         self.__filename = filename
         self.__notifier.setFilename(filename)
-        pub.sendMessage('taskfile.filenameChanged', filename=filename)
-        
+        pub.sendMessage("taskfile.filenameChanged", filename=filename)
+
     def filename(self):
         return self.__filename
-        
+
     def lastFilename(self):
         return self.__lastFilename
 
@@ -325,22 +367,23 @@ class TaskFile(patterns.Observer):
     def markDirty(self, force=False):
         if force or not self.__needSave:
             self.__needSave = True
-            pub.sendMessage('taskfile.dirty', taskFile=self)
-                
+            pub.sendMessage("taskfile.dirty", taskFile=self)
+
     def markClean(self):
         if self.__needSave:
             self.__needSave = False
-            pub.sendMessage('taskfile.clean', taskFile=self)
+            pub.sendMessage("taskfile.clean", taskFile=self)
 
     def onFileChanged(self):
         if not self.__saving:
-            import wx # Not really clean but we're in another thread...
+            import wx  # Not really clean but we're in another thread...
+
             self.__changedOnDisk = True
-            wx.CallAfter(pub.sendMessage, 'taskfile.changed', taskFile=self)
+            wx.CallAfter(pub.sendMessage, "taskfile.changed", taskFile=self)
 
     @patterns.eventSource
     def clear(self, regenerate=True, event=None):
-        pub.sendMessage('taskfile.aboutToClear', taskFile=self)
+        pub.sendMessage("taskfile.aboutToClear", taskFile=self)
         try:
             self.tasks().clear(event=event)
             self.categories().clear(event=event)
@@ -349,15 +392,17 @@ class TaskFile(patterns.Observer):
                 self.__guid = generate()
                 self.__syncMLConfig = createDefaultSyncConfig(self.__guid)
         finally:
-            pub.sendMessage('taskfile.justCleared', taskFile=self)
+            pub.sendMessage("taskfile.justCleared", taskFile=self)
 
     def close(self):
         if os.path.exists(self.filename()):
-            changes = xml.ChangesXMLReader(self.filename() + '.delta').read()
+            changes = xml.ChangesXMLReader(self.filename() + ".delta").read()
             del changes[self.__monitor.guid()]
-            xml.ChangesXMLWriter(file(self.filename() + '.delta', 'wb')).write(changes)
+            xml.ChangesXMLWriter(file(self.filename() + ".delta", "wb")).write(
+                changes
+            )
 
-        self.setFilename('')
+        self.setFilename("")
         self.__guid = generate()
         self.clear()
         self.__monitor.reset()
@@ -373,14 +418,14 @@ class TaskFile(patterns.Observer):
     def exists(self):
         return os.path.isfile(self.__filename)
 
-    def _openForWrite(self, suffix=''):
+    def _openForWrite(self, suffix=""):
         return SafeWriteFile(self.__filename + suffix)
 
     def _openForRead(self):
-        return file(self.__filename, 'rU')
-    
+        return file(self.__filename, "rU")
+
     def load(self, filename=None):
-        pub.sendMessage('taskfile.aboutToRead', taskFile=self)
+        pub.sendMessage("taskfile.aboutToRead", taskFile=self)
         self.__loading = True
         if filename:
             self.setFilename(filename)
@@ -388,7 +433,9 @@ class TaskFile(patterns.Observer):
             if self.exists():
                 fd = self._openForRead()
                 try:
-                    tasks, categories, notes, syncMLConfig, changes, guid = self._read(fd)
+                    tasks, categories, notes, syncMLConfig, changes, guid = (
+                        self._read(fd)
+                    )
                 finally:
                     fd.close()
             else:
@@ -405,6 +452,7 @@ class TaskFile(patterns.Observer):
             self.categories().extend(categories)
             self.tasks().extend(tasks)
             self.notes().extend(notes)
+
             def registerOtherObjects(objects):
                 for obj in objects:
                     if isinstance(obj, base.CompositeObject):
@@ -415,10 +463,13 @@ class TaskFile(patterns.Observer):
                         registerOtherObjects(obj.attachments())
                     if isinstance(obj, task.Task):
                         registerOtherObjects(obj.efforts())
-                    if isinstance(obj, note.Note) or \
-                           isinstance(obj, attachment.Attachment) or \
-                           isinstance(obj, effort.Effort):
+                    if (
+                        isinstance(obj, note.Note)
+                        or isinstance(obj, attachment.Attachment)
+                        or isinstance(obj, effort.Effort)
+                    ):
                         self.__monitor.setChanges(obj.id(), set())
+
             registerOtherObjects(self.categories().rootItems())
             registerOtherObjects(self.tasks().rootItems())
             registerOtherObjects(self.notes().rootItems())
@@ -428,19 +479,21 @@ class TaskFile(patterns.Observer):
 
             if os.path.exists(self.filename()):
                 # We need to reset the changes on disk because we're up to date.
-                xml.ChangesXMLWriter(file(self.filename() + '.delta', 'wb')).write(self.__changes)
+                xml.ChangesXMLWriter(
+                    file(self.filename() + ".delta", "wb")
+                ).write(self.__changes)
         except:
-            self.setFilename('')
+            self.setFilename("")
             raise
         finally:
             self.__loading = False
             self.markClean()
             self.__changedOnDisk = False
-            pub.sendMessage('taskfile.justRead', taskFile=self)
-        
+            pub.sendMessage("taskfile.justRead", taskFile=self)
+
     def save(self):
         try:
-            pub.sendMessage('taskfile.aboutToSave', taskFile=self)
+            pub.sendMessage("taskfile.aboutToSave", taskFile=self)
         except:
             pass
         # When encountering a problem while saving (disk full,
@@ -454,8 +507,13 @@ class TaskFile(patterns.Observer):
             if self.__needSave or not os.path.exists(self.__filename):
                 fd = self._openForWrite()
                 try:
-                    xml.XMLWriter(fd).write(self.tasks(), self.categories(), self.notes(),
-                                            self.syncMLConfig(), self.guid())
+                    xml.XMLWriter(fd).write(
+                        self.tasks(),
+                        self.categories(),
+                        self.notes(),
+                        self.syncMLConfig(),
+                        self.guid(),
+                    )
                 finally:
                     fd.close()
 
@@ -464,20 +522,29 @@ class TaskFile(patterns.Observer):
             self.__saving = False
             self.__notifier.saved()
             try:
-                pub.sendMessage('taskfile.justSaved', taskFile=self)
+                pub.sendMessage("taskfile.justSaved", taskFile=self)
             except:
                 pass
 
     def mergeDiskChanges(self):
         self.__loading = True
         try:
-            if os.path.exists(self.__filename): # Not using self.exists() because DummyFile.exists returns True
+            if os.path.exists(
+                self.__filename
+            ):  # Not using self.exists() because DummyFile.exists returns True
                 # Instead of writing the content of memory, merge changes
                 # with the on-disk version and save the result.
                 self.__monitor.freeze()
                 try:
                     fd = self._openForRead()
-                    tasks, categories, notes, syncMLConfig, allChanges, guid = self._read(fd)
+                    (
+                        tasks,
+                        categories,
+                        notes,
+                        syncMLConfig,
+                        allChanges,
+                        guid,
+                    ) = self._read(fd)
                     fd.close()
 
                     self.__changes = allChanges
@@ -490,10 +557,15 @@ class TaskFile(patterns.Observer):
                     sync = ChangeSynchronizer(self.__monitor, allChanges)
 
                     sync.sync(
-                        [(self.categories(), category.CategoryList(categories)),
-                         (self.tasks(), task.TaskList(tasks)),
-                         (self.notes(), note.NoteContainer(notes))]
-                        )
+                        [
+                            (
+                                self.categories(),
+                                category.CategoryList(categories),
+                            ),
+                            (self.tasks(), task.TaskList(tasks)),
+                            (self.notes(), note.NoteContainer(notes)),
+                        ]
+                    )
 
                     self.__changes[self.__monitor.guid()] = self.__monitor
                 finally:
@@ -502,7 +574,7 @@ class TaskFile(patterns.Observer):
                 self.__changes = {self.__monitor.guid(): self.__monitor}
 
             self.__monitor.resetAllChanges()
-            fd = self._openForWrite('.delta')
+            fd = self._openForWrite(".delta")
             try:
                 xml.ChangesXMLWriter(fd).write(self.changes())
             finally:
@@ -515,8 +587,8 @@ class TaskFile(patterns.Observer):
     def saveas(self, filename):
         if os.path.exists(filename):
             os.remove(filename)
-        if os.path.exists(filename + '.delta'):
-            os.remove(filename + '.delta')
+        if os.path.exists(filename + ".delta"):
+            os.remove(filename + ".delta")
         self.setFilename(filename)
         self.save()
 
@@ -525,14 +597,19 @@ class TaskFile(patterns.Observer):
         mergeFile.load(filename)
         self.__loading = True
         categoryMap = dict()
-        self.tasks().removeItems(self.objectsToOverwrite(self.tasks(), mergeFile.tasks()))
+        self.tasks().removeItems(
+            self.objectsToOverwrite(self.tasks(), mergeFile.tasks())
+        )
         self.rememberCategoryLinks(categoryMap, self.tasks())
         self.tasks().extend(mergeFile.tasks().rootItems())
-        self.notes().removeItems(self.objectsToOverwrite(self.notes(), mergeFile.notes()))
+        self.notes().removeItems(
+            self.objectsToOverwrite(self.notes(), mergeFile.notes())
+        )
         self.rememberCategoryLinks(categoryMap, self.notes())
         self.notes().extend(mergeFile.notes().rootItems())
-        self.categories().removeItems(self.objectsToOverwrite(self.categories(),
-                                                              mergeFile.categories()))
+        self.categories().removeItems(
+            self.objectsToOverwrite(self.categories(), mergeFile.categories())
+        )
         self.categories().extend(mergeFile.categories().rootItems())
         self.restoreCategoryLinks(categoryMap)
         mergeFile.close()
@@ -543,16 +620,20 @@ class TaskFile(patterns.Observer):
         objectsToOverwrite = []
         for domainObject in objectsToMerge:
             try:
-                objectsToOverwrite.append(originalObjects.getObjectById(domainObject.id()))
+                objectsToOverwrite.append(
+                    originalObjects.getObjectById(domainObject.id())
+                )
             except IndexError:
                 pass
         return objectsToOverwrite
-        
+
     def rememberCategoryLinks(self, categoryMap, categorizables):
         for categorizable in categorizables:
             for categoryToLinkLater in categorizable.categories():
-                categoryMap.setdefault(categoryToLinkLater.id(), []).append(categorizable)
-            
+                categoryMap.setdefault(categoryToLinkLater.id(), []).append(
+                    categorizable
+                )
+
     def restoreCategoryLinks(self, categoryMap):
         categories = self.categories()
         for categoryId, categorizables in categoryMap.items():
@@ -563,7 +644,7 @@ class TaskFile(patterns.Observer):
             for categorizable in categorizables:
                 categorizable.addCategory(categoryToLink)
                 categoryToLink.addCategorizable(categorizable)
-    
+
     def needSave(self):
         return not self.__loading and self.__needSave
 
@@ -596,20 +677,24 @@ class DummyLockFile(object):
 
 
 class LockedTaskFile(TaskFile):
-    ''' LockedTaskFile adds cooperative locking to the TaskFile. '''
-    
+    """LockedTaskFile adds cooperative locking to the TaskFile."""
+
     def __init__(self, *args, **kwargs):
         super(LockedTaskFile, self).__init__(*args, **kwargs)
         self.__lock = None
 
     def __isFuse(self, path):
-        if operating_system.isGTK() and os.path.exists('/proc/mounts'):
-            for line in file('/proc/mounts', 'rb'):
+        if operating_system.isGTK() and os.path.exists("/proc/mounts"):
+            for line in file("/proc/mounts", "rb"):
                 try:
-                    location, mountPoint, fsType, options, a, b = line.strip().split()
+                    location, mountPoint, fsType, options, a, b = (
+                        line.strip().split()
+                    )
                 except:
                     pass
-                if os.path.abspath(path).startswith(mountPoint) and fsType.startswith('fuse.'):
+                if os.path.abspath(path).startswith(
+                    mountPoint
+                ) and fsType.startswith("fuse."):
                     return True
         return False
 
@@ -628,16 +713,16 @@ class LockedTaskFile(TaskFile):
 
     def is_locked_by_me(self):
         return self.is_locked() and self.__lock.i_am_locking()
-    
+
     def release_lock(self):
         if self.is_locked_by_me():
             self.__lock.release()
-            
+
     def acquire_lock(self, filename):
         if not self.is_locked_by_me():
             self.__lock = self.__createLockFile(filename)
             self.__lock.acquire(5)
-            
+
     def break_lock(self, filename):
         self.__lock = self.__createLockFile(filename)
         self.__lock.break_lock()
@@ -650,8 +735,10 @@ class LockedTaskFile(TaskFile):
         finally:
             self.release_lock()
 
-    def load(self, filename=None, lock=True, breakLock=False): # pylint: disable=W0221
-        ''' Lock the file before we load, if not already locked. '''
+    def load(
+        self, filename=None, lock=True, breakLock=False
+    ):  # pylint: disable=W0221
+        """Lock the file before we load, if not already locked."""
         filename = filename or self.filename()
         try:
             if lock and filename:
@@ -661,9 +748,9 @@ class LockedTaskFile(TaskFile):
             return super(LockedTaskFile, self).load(filename)
         finally:
             self.release_lock()
-    
+
     def save(self, **kwargs):
-        ''' Lock the file before we save, if not already locked. '''
+        """Lock the file before we save, if not already locked."""
         self.acquire_lock(self.filename())
         try:
             return super(LockedTaskFile, self).save(**kwargs)

@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,10 +14,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 # This is the csv package. This package contains classes to generate
-# comma separated values (cvs) format for exporting Task Coach data to csv 
+# comma separated values (cvs) format for exporting Task Coach data to csv
 # files.
 
 from .generator import viewer2csv

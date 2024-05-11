@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,10 +14,22 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from distutils.core import setup, Extension
 
-setup(name='_idle',
-      ext_modules=[Extension('_idle', ['main.c'],
-                             extra_link_args=['-framework', 'CoreFoundation', '-framework', 'IOKit'])])
+setup(
+    name="_idle",
+    ext_modules=[
+        Extension(
+            "_idle",
+            ["main.c"],
+            extra_link_args=[
+                "-framework",
+                "CoreFoundation",
+                "-framework",
+                "IOKit",
+            ],
+        )
+    ],
+)

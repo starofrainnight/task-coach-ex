@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,14 +14,15 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
-import time, string, datetime, re, timedelta # pylint: disable=W0402
+import time, string, datetime, re, timedelta  # pylint: disable=W0402
 from taskcoachlib import patterns
 from .fix import StrftimeFix
 
 
 infinite = datetime.date.max
+
 
 class RealDate(StrftimeFix, datetime.date):
     def __add__(self, delta):
@@ -31,15 +32,18 @@ class RealDate(StrftimeFix, datetime.date):
     def __sub__(self, other):
         newdate = super(RealDate, self).__sub__(other)
         if isinstance(newdate, datetime.timedelta):
-            return timedelta.TimeDelta(newdate.days, newdate.seconds, newdate.microseconds)
+            return timedelta.TimeDelta(
+                newdate.days, newdate.seconds, newdate.microseconds
+            )
         else:
             return RealDate(newdate.year, newdate.month, newdate.day)
 
 
 class InfiniteDate(datetime.date, metaclass=patterns.Singleton):
     def __new__(self):
-        return super(InfiniteDate, self).__new__(InfiniteDate, infinite.year,
-            infinite.month, infinite.day)
+        return super(InfiniteDate, self).__new__(
+            InfiniteDate, infinite.year, infinite.month, infinite.day
+        )
 
     def _getyear(self):
         return None
@@ -57,7 +61,7 @@ class InfiniteDate(datetime.date, metaclass=patterns.Singleton):
     day = property(_getday)
 
     def __str__(self):
-        return ''
+        return ""
 
     def __sub__(self, other):
         if isinstance(other, InfiniteDate):
@@ -69,16 +73,19 @@ class InfiniteDate(datetime.date, metaclass=patterns.Singleton):
         # Whatever is added to InfiniteDate, we're still infinite:
         return self
 
+
 # factories:
+
 
 def parseDate(dateString, default=None):
     try:
-        return Date(*[string.atoi(part) for part in dateString.split('-')])
+        return Date(*[string.atoi(part) for part in dateString.split("-")])
     except ValueError:
         if default:
             return default
         else:
             return Date()
+
 
 def Date(year=infinite.year, month=infinite.month, day=infinite.day):
     if (year, month, day) == (infinite.year, infinite.month, infinite.day):

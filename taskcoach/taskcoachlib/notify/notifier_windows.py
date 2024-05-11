@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from .notifier import AbstractNotifier
 import tempfile, os, wx
@@ -23,7 +23,7 @@ from taskcoachlib.thirdparty import snarl
 
 class SnarlNotifier(AbstractNotifier):
     def getName(self):
-        return 'Snarl'
+        return "Snarl"
 
     def isAvailable(self):
         try:
@@ -33,11 +33,15 @@ class SnarlNotifier(AbstractNotifier):
 
     def notify(self, title, summary, bitmap, **kwargs):
         # Hum. Snarl needs a file.
-        fd, filename = tempfile.mkstemp('.png')
+        fd, filename = tempfile.mkstemp(".png")
         os.close(fd)
         bitmap.SaveFile(filename, wx.BITMAP_TYPE_PNG)
         try:
-            snarl.snShowMessage(title.encode('UTF-8'), summary.encode('UTF-8'), iconPath=filename)
+            snarl.snShowMessage(
+                title.encode("UTF-8"),
+                summary.encode("UTF-8"),
+                iconPath=filename,
+            )
         finally:
             os.remove(filename)
 

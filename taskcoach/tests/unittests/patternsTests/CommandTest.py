@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,10 +14,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
-from unittests import asserts 
+from unittests import asserts
 from taskcoachlib import patterns
 
 
@@ -54,19 +54,19 @@ class HistoryTest(test.TestCase, asserts.CommandAssertsMixin):
         self.assertHistoryAndFuture([self.command], [])
 
     def testUndoStr_EmptyHistory(self):
-        self.assertEqual('Undo', self.commands.undostr())
+        self.assertEqual("Undo", self.commands.undostr())
 
     def testUndoStr(self):
         self.command.do()
-        self.assertEqual('Undo %s'%self.command, self.commands.undostr())
+        self.assertEqual("Undo %s" % self.command, self.commands.undostr())
 
     def testRedoStr_EmptyFuture(self):
-        self.assertEqual('Redo', self.commands.redostr())
+        self.assertEqual("Redo", self.commands.redostr())
 
     def testRedoStr(self):
         self.command.do()
         self.commands.undo()
-        self.assertEqual('Redo %s'%self.command, self.commands.redostr())
+        self.assertEqual("Redo %s" % self.command, self.commands.redostr())
 
     def testHasHistory(self):
         self.assertFalse(self.commands.hasHistory())
@@ -82,4 +82,3 @@ class HistoryTest(test.TestCase, asserts.CommandAssertsMixin):
         self.assertTrue(self.commands.hasFuture())
         self.commands.redo()
         self.assertFalse(self.commands.hasFuture())
-

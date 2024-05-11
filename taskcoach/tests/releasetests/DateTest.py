@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,17 +14,21 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
+
 
 class DateTest(test.TestCase):
     def testNoQuestionMarkInMetaDataDate(self):
         from taskcoachlib import meta
-        self.assertFalse('?' in meta.date)
+
+        self.assertFalse("?" in meta.date)
 
     def testNoQuestionMarkInChangeLog(self):
         import sys, os.path
-        sys.path.insert(0, os.path.join(test.projectRoot, 'changes.in'))
-        import changes # pylint: disable=F0401
-        self.assertFalse('?' in changes.releases[0].date)
+
+        sys.path.insert(0, os.path.join(test.projectRoot, "changes.in"))
+        import changes  # pylint: disable=F0401
+
+        self.assertFalse("?" in changes.releases[0].date)

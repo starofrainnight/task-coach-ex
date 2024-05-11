@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
 from taskcoachlib import gui, config, persistence
@@ -28,9 +28,12 @@ class NoteViewerTest(test.wxTestCase):
         self.taskFile = persistence.TaskFile()
         self.note = note.Note()
         self.taskFile.notes().append(self.note)
-        self.viewer = gui.viewer.NoteViewer(self.frame, self.taskFile, 
-                                            self.settings, 
-                                            notesToShow=self.taskFile.notes())
+        self.viewer = gui.viewer.NoteViewer(
+            self.frame,
+            self.taskFile,
+            self.settings,
+            notesToShow=self.taskFile.notes(),
+        )
 
     def tearDown(self):
         super(NoteViewerTest, self).tearDown()
@@ -44,53 +47,58 @@ class NoteViewerTest(test.wxTestCase):
     def firstItemText(self, column=0):
         return self.viewer.widget.GetItemText(self.firstItem(), column)
 
-    def firstItemIcon(self, column=0):    
+    def firstItemIcon(self, column=0):
         return self.viewer.widget.GetItemImage(self.firstItem(), column=column)
 
     def testLocalNoteViewerForItemWithoutNotes(self):
-        localViewer = gui.viewer.NoteViewer(self.frame, self.taskFile, 
-                                            self.settings, 
-                                            notesToShow=note.NoteContainer())
+        localViewer = gui.viewer.NoteViewer(
+            self.frame,
+            self.taskFile,
+            self.settings,
+            notesToShow=note.NoteContainer(),
+        )
         self.assertFalse(localViewer.presentation())
-        
+
     def testShowDescriptionColumn(self):
-        self.note.setDescription('Description')
-        self.viewer.showColumnByName('description')
-        self.assertEqual('Description', self.firstItemText(column=1))
+        self.note.setDescription("Description")
+        self.viewer.showColumnByName("description")
+        self.assertEqual("Description", self.firstItemText(column=1))
 
     def testShowCategoriesColumn(self):
-        newCategory = category.Category('Category')
+        newCategory = category.Category("Category")
         self.taskFile.categories().append(newCategory)
         self.note.addCategory(newCategory)
         newCategory.addCategorizable(self.note)
-        self.viewer.showColumnByName('categories')
-        self.assertEqual('Category', self.firstItemText(column=3))
-        
+        self.viewer.showColumnByName("categories")
+        self.assertEqual("Category", self.firstItemText(column=3))
+
     def testShowAttachmentColumn(self):
-        self.note.addAttachments(attachment.FileAttachment('whatever'))
-        self.assertEqual(self.viewer.imageIndex['paperclip_icon'], 
-                         self.firstItemIcon(column=2))
+        self.note.addAttachments(attachment.FileAttachment("whatever"))
+        self.assertEqual(
+            self.viewer.imageIndex["paperclip_icon"],
+            self.firstItemIcon(column=2),
+        )
 
     def testFilterOnAllCategories(self):
-        cat1 = category.Category('category 1')
-        cat2 = category.Category('category 2')
+        cat1 = category.Category("category 1")
+        cat2 = category.Category("category 2")
         self.note.addCategory(cat1)
         cat1.addCategorizable(self.note)
         self.taskFile.categories().extend([cat1, cat2])
         cat1.setFiltered(True)
         cat2.setFiltered(True)
         self.assertEqual(1, self.viewer.size())
-        self.settings.setboolean('view', 'categoryfiltermatchall', True)
+        self.settings.setboolean("view", "categoryfiltermatchall", True)
         self.assertEqual(0, self.viewer.size())
-        
+
     def testFilterOnAnyCategory(self):
-        cat1 = category.Category('category 1')
-        cat2 = category.Category('category 2')
+        cat1 = category.Category("category 1")
+        cat2 = category.Category("category 2")
         self.note.addCategory(cat1)
         cat1.addCategorizable(self.note)
         self.taskFile.categories().extend([cat1, cat2])
         cat1.setFiltered(True)
         cat2.setFiltered(True)
         self.assertEqual(1, self.viewer.size())
-        self.settings.setboolean('view', 'categoryfiltermatchall', False)
+        self.settings.setboolean("view", "categoryfiltermatchall", False)
         self.assertEqual(1, self.viewer.size())

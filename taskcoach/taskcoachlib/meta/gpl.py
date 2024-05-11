@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,9 +14,9 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
-licenseHTML = '''<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+licenseHTML = """<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
 <html><head>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -712,13 +712,10 @@ Public License instead of this License.  But first, please read
 
 
 </body></html>
-'''
+"""
 
 
-
-
-
-licenseText='''
+licenseText = """
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
@@ -1393,4 +1390,4 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
-'''
+"""

@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,13 +14,14 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 """
 
 Classes for storing Funambol client configuration
 
 """
+
 
 class SyncMLConfigNode(object):
     def __init__(self, name):
@@ -41,7 +42,7 @@ class SyncMLConfigNode(object):
         self.__children.append(child)
 
     def get(self, name):
-        return self.__properties.get(name, '')
+        return self.__properties.get(name, "")
 
     def set(self, name, value):
         self.__properties[name] = value
@@ -54,22 +55,22 @@ class SyncMLConfigNode(object):
 
 
 def createDefaultSyncConfig(uid):
-    cfg = SyncMLConfigNode('root')
-    root = SyncMLConfigNode('TaskCoach-%s' % uid)
+    cfg = SyncMLConfigNode("root")
+    root = SyncMLConfigNode("TaskCoach-%s" % uid)
     cfg.addChild(root)
-    spds = SyncMLConfigNode('spds')
+    spds = SyncMLConfigNode("spds")
     root.addChild(spds)
-    sources = SyncMLConfigNode('sources')
+    sources = SyncMLConfigNode("sources")
     spds.addChild(sources)
-    syncml = SyncMLConfigNode('syncml')
+    syncml = SyncMLConfigNode("syncml")
     spds.addChild(syncml)
-    tasks = SyncMLConfigNode('TaskCoach-%s.Tasks' % uid)
+    tasks = SyncMLConfigNode("TaskCoach-%s.Tasks" % uid)
     sources.addChild(tasks)
-    notes = SyncMLConfigNode('TaskCoach-%s.Notes' % uid)
+    notes = SyncMLConfigNode("TaskCoach-%s.Notes" % uid)
     sources.addChild(notes)
-    auth = SyncMLConfigNode('Auth')
+    auth = SyncMLConfigNode("Auth")
     syncml.addChild(auth)
-    conn = SyncMLConfigNode('Conn')
+    conn = SyncMLConfigNode("Conn")
     syncml.addChild(conn)
 
     return cfg

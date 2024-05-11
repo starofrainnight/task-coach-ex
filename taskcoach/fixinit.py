@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2012 Task Coach developers <developers@taskcoach.org>
 
@@ -14,23 +14,23 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import os
 
 
 def visitDir(arg, dirname, names):
     try:
-        names.remove('.hg')
+        names.remove(".hg")
     except:
         pass
 
     for name in names:
-        if name in ['__init__.py', 'itopicdefnprovider.py']:
+        if name in ["__init__.py", "itopicdefnprovider.py"]:
             fname = os.path.join(dirname, name)
             if os.stat(fname).st_size == 0:
-                file(fname, 'wb').write('# Not empty\n')
+                file(fname, "wb").write("# Not empty\n")
 
 
-if __name__ == '__main__':
-    os.path.walk(os.path.join('taskcoachlib', 'thirdparty'), visitDir, None)
+if __name__ == "__main__":
+    os.path.walk(os.path.join("taskcoachlib", "thirdparty"), visitDir, None)

@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,15 +14,16 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import wx
 from .notifier import AbstractNotifier
 from taskcoachlib import operating_system
 
 
-#==============================================================================
+# ==============================================================================
 # Utils
+
 
 class AnimatedShow(wx.Timer):
     """
@@ -50,7 +51,7 @@ class AnimatedShow(wx.Timer):
         else:
             frame.Show(show)
 
-    def __OnTick(self, event): # pylint: disable=W0613
+    def __OnTick(self, event):  # pylint: disable=W0613
         self.__step += 1
 
         if self.__show:
@@ -90,7 +91,7 @@ class AnimatedMove(wx.Timer):
         self.Start(100)
         wx.EVT_CLOSE(frame, self.__OnClose)
 
-    def __OnTick(self, event): # pylint: disable=W0613
+    def __OnTick(self, event):  # pylint: disable=W0613
         x0, y0 = self.__origin
         x1, y1 = self.__destination
         self.__step += 1
@@ -108,22 +109,29 @@ class AnimatedMove(wx.Timer):
         event.Skip()
 
 
-#==============================================================================
+# ==============================================================================
 # Notifications
 
 if operating_system.isWindows():
+
     class _NotifyBase(wx.MiniFrame):
         pass
-elif operating_system.isGTK():
-    class _NotifyBase(wx.PopupWindow):
-        def __init__(self, parent, id_, title, style=0): # pylint: disable=W0613,E1003
-            super(_NotifyBase, self).__init__(parent, id_) # No style
 
-        def Close(self): # pylint: disable=W0221,E1003
+elif operating_system.isGTK():
+
+    class _NotifyBase(wx.PopupWindow):
+        def __init__(
+            self, parent, id_, title, style=0
+        ):  # pylint: disable=W0613,E1003
+            super(_NotifyBase, self).__init__(parent, id_)  # No style
+
+        def Close(self):  # pylint: disable=W0221,E1003
             # Strange...
             super(_NotifyBase, self).Close()
             self.Destroy()
+
 else:
+
     class _NotifyBase(wx.Frame):
         """FIXME: steals focus..."""
 
@@ -141,8 +149,12 @@ class NotificationFrameBase(_NotifyBase):
     def __init__(self, title, icon=None, parent=None):
         self.title = title
         self.icon = icon
-        style = self.Style() | (wx.STAY_ON_TOP if parent is None else wx.FRAME_FLOAT_ON_PARENT)
-        super(NotificationFrameBase, self).__init__(parent, wx.ID_ANY, '', style=style)
+        style = self.Style() | (
+            wx.STAY_ON_TOP if parent is None else wx.FRAME_FLOAT_ON_PARENT
+        )
+        super(NotificationFrameBase, self).__init__(
+            parent, wx.ID_ANY, "", style=style
+        )
         self.Populate()
 
     def Populate(self):
@@ -152,24 +164,30 @@ class NotificationFrameBase(_NotifyBase):
         hsz = wx.BoxSizer(wx.HORIZONTAL)
 
         if self.icon is not None:
-            hsz.Add(wx.StaticBitmap(panel, wx.ID_ANY, self.icon), 0,
-                    wx.ALL|wx.ALIGN_CENTRE, 2)
+            hsz.Add(
+                wx.StaticBitmap(panel, wx.ID_ANY, self.icon),
+                0,
+                wx.ALL | wx.ALIGN_CENTRE,
+                2,
+            )
 
         # Seems that font copy-on-write does not work sometimes...
-        font = wx.FontFromNativeInfoString(wx.NORMAL_FONT.GetNativeFontInfoDesc())
+        font = wx.FontFromNativeInfoString(
+            wx.NORMAL_FONT.GetNativeFontInfoDesc()
+        )
         font.SetPointSize(8)
         font.SetWeight(wx.FONTWEIGHT_BOLD)
 
         titleCtrl = wx.StaticText(panel, wx.ID_ANY, self.title)
         titleCtrl.SetFont(font)
-        hsz.Add(titleCtrl, 1, wx.ALL|wx.ALIGN_CENTRE, 2)
+        hsz.Add(titleCtrl, 1, wx.ALL | wx.ALIGN_CENTRE, 2)
 
         btn = self.CloseButton(panel)
         if btn is not None:
             hsz.Add(btn, 0, wx.ALL, 2)
             wx.EVT_BUTTON(btn, wx.ID_ANY, self.DoClose)
 
-        vsz.Add(hsz, 0, wx.ALL|wx.EXPAND, 2)
+        vsz.Add(hsz, 0, wx.ALL | wx.EXPAND, 2)
 
         self.AddInnerContent(vsz, panel)
 
@@ -192,10 +210,13 @@ class NotificationFrameBase(_NotifyBase):
         the notification.
         """
 
-        return wx.BitmapButton(panel, wx.ID_ANY,
-                               wx.ArtProvider.GetBitmap('cross_red_icon',
-                                                        wx.ART_FRAME_ICON,
-                                                        (16, 16)))
+        return wx.BitmapButton(
+            panel,
+            wx.ID_ANY,
+            wx.ArtProvider.GetBitmap(
+                "cross_red_icon", wx.ART_FRAME_ICON, (16, 16)
+            ),
+        )
 
     def AddInnerContent(self, sizer, panel):
         """
@@ -209,7 +230,7 @@ class NotificationFrameBase(_NotifyBase):
     def Style(self):
         """Return the frame's style"""
 
-        style = wx.FRAME_NO_TASKBAR|wx.TAB_TRAVERSAL
+        style = wx.FRAME_NO_TASKBAR | wx.TAB_TRAVERSAL
 
         if operating_system.isMac():
             # style |= wx.NO_BORDER|wx.POPUP_WINDOW
@@ -224,10 +245,10 @@ class NotificationFrameBase(_NotifyBase):
 
         return style
 
-    def DoClose(self, event=None): # pylint: disable=W0613
+    def DoClose(self, event=None):  # pylint: disable=W0613
         """Use this method instead of Close. Never use Close directly."""
 
-        NotificationCenter().HideFrame(self) # pylint: disable=E1101
+        NotificationCenter().HideFrame(self)  # pylint: disable=E1101
 
 
 class NotificationFrame(NotificationFrameBase):
@@ -244,7 +265,12 @@ class NotificationFrame(NotificationFrameBase):
         super(NotificationFrame, self).__init__(*args, **kwargs)
 
     def AddInnerContent(self, sizer, panel):
-        sizer.Add(wx.StaticText(panel, wx.ID_ANY, self.message), 1, wx.ALL|wx.EXPAND, 5)
+        sizer.Add(
+            wx.StaticText(panel, wx.ID_ANY, self.message),
+            1,
+            wx.ALL | wx.EXPAND,
+            5,
+        )
 
 
 class _NotificationCenter(wx.EvtHandler):
@@ -295,14 +321,14 @@ class _NotificationCenter(wx.EvtHandler):
                 return
 
         if frm.GetParent():
-            x = min(self.GetDisplayRect()[2] - self.notificationMargin - w,
-                    dx + dw + self.notificationMargin)
+            x = min(
+                self.GetDisplayRect()[2] - self.notificationMargin - w,
+                dx + dw + self.notificationMargin,
+            )
         else:
             x = dx + dw - w - self.notificationMargin
 
-        frm.SetDimensions(x,
-                          bottom - h - self.notificationMargin,
-                          w, h)
+        frm.SetDimensions(x, bottom - h - self.notificationMargin, w, h)
         self.displayedFrames.append((frm, h, timeout))
 
         frm.Layout()
@@ -361,7 +387,7 @@ class _NotificationCenter(wx.EvtHandler):
             return wx.ClientDisplayRect()
         return wx.Display(dpyIndex).GetClientArea()
 
-    def __OnTick(self, event): # pylint: disable=W0613
+    def __OnTick(self, event):  # pylint: disable=W0613
         s = 0
         newList = []
 
@@ -380,15 +406,21 @@ class _NotificationCenter(wx.EvtHandler):
                     s = 1
                     continue
 
-                newList.append((frame, height, tmo - 1 if tmo is not None else None))
+                newList.append(
+                    (frame, height, tmo - 1 if tmo is not None else None)
+                )
                 bottom -= height + self.notificationMargin
             else:
                 if tmo == 1:
                     frame.Close()
                 else:
-                    newList.append((frame, height, tmo - 1 if tmo is not None else None))
+                    newList.append(
+                        (frame, height, tmo - 1 if tmo is not None else None)
+                    )
                     x, y = frame.GetPositionTuple()
-                    AnimatedMove(frame, (x, bottom - height - self.notificationMargin))
+                    AnimatedMove(
+                        frame, (x, bottom - height - self.notificationMargin)
+                    )
                     bottom -= height + self.notificationMargin
 
         self.displayedFrames = newList
@@ -406,61 +438,76 @@ class NotificationCenter(object):
 
 class UniversalNotifier(AbstractNotifier):
     def getName(self):
-        return 'Task Coach'
+        return "Task Coach"
 
     def isAvailable(self):
         return True
 
     def notify(self, title, summary, bitmap, **kwargs):
-        NotificationCenter().Notify(title, summary, icon=bitmap) # pylint: disable=E1101
+        NotificationCenter().Notify(
+            title, summary, icon=bitmap
+        )  # pylint: disable=E1101
 
 
 AbstractNotifier.register(UniversalNotifier())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     class TestNotificationFrame(NotificationFrameBase):
         def AddInnerContent(self, sizer, panel):
             choice = wx.Choice(panel, wx.ID_ANY)
-            choice.Append('One')
-            choice.Append('Two')
-            choice.Append('Three')
-            sizer.Add(choice, 0, wx.ALL|wx.EXPAND, 5)
+            choice.Append("One")
+            choice.Append("Two")
+            choice.Append("Three")
+            sizer.Add(choice, 0, wx.ALL | wx.EXPAND, 5)
 
             hsz = wx.BoxSizer(wx.HORIZONTAL)
-            hsz.Add(wx.Button(panel, wx.ID_ANY, 'OK'), 1, wx.ALL, 2)
-            hsz.Add(wx.Button(panel, wx.ID_ANY, 'Cancel'), 1, wx.ALL, 2)
-            sizer.Add(hsz, 0, wx.EXPAND|wx.ALL, 5)
+            hsz.Add(wx.Button(panel, wx.ID_ANY, "OK"), 1, wx.ALL, 2)
+            hsz.Add(wx.Button(panel, wx.ID_ANY, "Cancel"), 1, wx.ALL, 2)
+            sizer.Add(hsz, 0, wx.EXPAND | wx.ALL, 5)
 
         def CloseButton(self, panel):
             return None
 
-
     class TestFrame(wx.Frame):
         def __init__(self):
-            super(TestFrame, self).__init__(None, wx.ID_ANY, 'Test frame')
+            super(TestFrame, self).__init__(None, wx.ID_ANY, "Test frame")
             # pylint: disable=E1101
-            NotificationCenter().Notify('Sample title', 'Sample content', timeout=3)
-            NotificationCenter().Notify('Other sample', 'Multi-line sample content\nfor example\nDont try this at home', timeout=3,
-                                        icon=wx.ArtProvider.GetBitmap('taskcoach', wx.ART_FRAME_ICON, (16, 16)))
-            NotificationCenter().Notify('Before last sample', 'Spam!')
-            NotificationCenter().NotifyFrame(TestNotificationFrame('Test custom',
-                                                                   icon=wx.ArtProvider.GetBitmap('taskcoach', wx.ART_FRAME_ICON, (16, 16))))
-            NotificationCenter().Notify('Last sample', 'Foobar!')
+            NotificationCenter().Notify(
+                "Sample title", "Sample content", timeout=3
+            )
+            NotificationCenter().Notify(
+                "Other sample",
+                "Multi-line sample content\nfor example\nDont try this at home",
+                timeout=3,
+                icon=wx.ArtProvider.GetBitmap(
+                    "taskcoach", wx.ART_FRAME_ICON, (16, 16)
+                ),
+            )
+            NotificationCenter().Notify("Before last sample", "Spam!")
+            NotificationCenter().NotifyFrame(
+                TestNotificationFrame(
+                    "Test custom",
+                    icon=wx.ArtProvider.GetBitmap(
+                        "taskcoach", wx.ART_FRAME_ICON, (16, 16)
+                    ),
+                )
+            )
+            NotificationCenter().Notify("Last sample", "Foobar!")
 
             wx.EVT_CLOSE(self, self.OnClose)
 
         def OnClose(self, evt):
-            NotificationCenter().HideAll() # pylint: disable=E1101
+            NotificationCenter().HideAll()  # pylint: disable=E1101
             evt.Skip()
-
 
     class App(wx.App):
         def OnInit(self):
             from taskcoachlib.gui import artprovider
+
             artprovider.init()
             TestFrame().Show()
             return True
-
 
     App(0).MainLoop()

@@ -23,7 +23,6 @@
 # DEALINGS IN THE SOFTWARE.
 
 
-
 ##################################################################################################
 ###   A globally-unique identifier made up of time and ip and 8 digits for a counter:
 ###   each GUID is 40 characters wide
@@ -81,56 +80,64 @@ import time
 import threading
 
 
-
 #############################
 ###   global module variables
 
-#Makes a hex IP from a decimal dot-separated ip (eg: 127.0.0.1)
-make_hexip = lambda ip: ''.join(["%04x" % int(i) for i in ip.split('.')]) # leave space for ip v6 (65K in each sub)
+# Makes a hex IP from a decimal dot-separated ip (eg: 127.0.0.1)
+make_hexip = lambda ip: "".join(
+    ["%04x" % int(i) for i in ip.split(".")]
+)  # leave space for ip v6 (65K in each sub)
 
-MAX_COUNTER = 0xfffffffe
+MAX_COUNTER = 0xFFFFFFFE
 counter = 0
 firstcounter = MAX_COUNTER
 lasttime = 0
-ip = ''
+ip = ""
 lock = threading.RLock()
 try:  # only need to get the IP addresss once
-    ip = socket.getaddrinfo(socket.gethostname(),0)[-1][-1][0]
+    ip = socket.getaddrinfo(socket.gethostname(), 0)[-1][-1][0]
     hexip = make_hexip(ip)
-except: # if we don't have an ip, default to someting in the 10.x.x.x private range
-    ip = '10'
+except:  # if we don't have an ip, default to someting in the 10.x.x.x private range
+    ip = "10"
     rand = random.Random()
     for i in range(3):
-        ip += '.' + str(rand.randrange(1, 0xffff))  # might as well use IPv6 range if we're making it up
+        ip += "." + str(
+            rand.randrange(1, 0xFFFF)
+        )  # might as well use IPv6 range if we're making it up
     hexip = make_hexip(ip)
 
 
 #################################
 ###   Public module functions
 
+
 def generate(ip=None):
-    '''Generates a new guid.  A guid is unique in space and time because it combines
-       the machine IP with the current time in milliseconds.  Be careful about sending in
-       a specified IP address because the ip makes it unique in space.  You could send in
-       the same IP address that is created on another machine.
-    '''
+    """Generates a new guid.  A guid is unique in space and time because it combines
+    the machine IP with the current time in milliseconds.  Be careful about sending in
+    a specified IP address because the ip makes it unique in space.  You could send in
+    the same IP address that is created on another machine.
+    """
     global counter, firstcounter, lasttime
-    lock.acquire() # can't generate two guids at the same time
+    lock.acquire()  # can't generate two guids at the same time
     try:
         parts = []
 
         # do we need to wait for the next millisecond (are we out of counters?)
         now = int(time.time() * 1000)
         while lasttime == now and counter == firstcounter:
-            time.sleep(.01)
+            time.sleep(0.01)
             now = int(time.time() * 1000)
 
         # time part
         parts.append("%016x" % now)
 
         # counter part
-        if lasttime != now:  # time to start counter over since we have a different millisecond
-            firstcounter = int(random.uniform(1, MAX_COUNTER))  # start at random position
+        if (
+            lasttime != now
+        ):  # time to start counter over since we have a different millisecond
+            firstcounter = int(
+                random.uniform(1, MAX_COUNTER)
+            )  # start at random position
             counter = firstcounter
         counter += 1
         if counter > MAX_COUNTER:
@@ -142,42 +149,47 @@ def generate(ip=None):
         parts.append(hexip)
 
         # put them all together
-        return ''.join(parts)
+        return "".join(parts)
     finally:
         lock.release()
 
 
 def extract_time(guid):
-    '''Extracts the time portion out of the guid and returns the
-       number of seconds since the epoch as a float'''
+    """Extracts the time portion out of the guid and returns the
+    number of seconds since the epoch as a float"""
     return float(int(guid[0:16], 16)) / 1000.0
 
 
 def extract_counter(guid):
-    '''Extracts the counter from the guid (returns the bits in decimal)'''
+    """Extracts the counter from the guid (returns the bits in decimal)"""
     return int(guid[16:24], 16)
 
 
 def extract_ip(guid):
-    '''Extracts the ip portion out of the guid and returns it
-       as a string like 10.10.10.10'''
+    """Extracts the ip portion out of the guid and returns it
+    as a string like 10.10.10.10"""
     # there's probably a more elegant way to do this
     thisip = []
     for index in range(24, 40, 4):
-        thisip.append(str(int(guid[index: index + 4], 16)))
-    return '.'.join(thisip)
-
+        thisip.append(str(int(guid[index : index + 4], 16)))
+    return ".".join(thisip)
 
 
 ### TESTING OF GUID CLASS ###
 if __name__ == "__main__":
     guids = []
-    for i in range(10):  # calculate very fast so people can see the counter in action
+    for i in range(
+        10
+    ):  # calculate very fast so people can see the counter in action
         guid = generate()
         guids.append(guid)
     for guid in guids:
         print("GUID:", guid)
         guidtime = extract_time(guid)
-        print("\tTime:   ", time.strftime('%a, %d %b %Y %H:%M:%S', time.localtime(guidtime)), '(millis: ' + str(round(guidtime - int(guidtime), 3)) + ')')
+        print(
+            "\tTime:   ",
+            time.strftime("%a, %d %b %Y %H:%M:%S", time.localtime(guidtime)),
+            "(millis: " + str(round(guidtime - int(guidtime), 3)) + ")",
+        )
         print("\tIP:     ", extract_ip(guid))
         print("\tCounter:", extract_counter(guid))

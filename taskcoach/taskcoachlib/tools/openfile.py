@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,17 +14,18 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib.thirdparty import desktop
 import platform
 import os
 
+
 def openFile(filename):
     try:
         desktop.open(filename)
     except OSError:
-        if platform.system() == 'Linux':
+        if platform.system() == "Linux":
             if os.system('xdg-open "%s"' % filename):
                 raise OSError('Unable to open "%s"')
         else:

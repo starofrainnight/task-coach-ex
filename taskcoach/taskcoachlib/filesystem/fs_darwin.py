@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2011 Task Coach developers <developers@taskcoach.org>
 
@@ -14,59 +14,74 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from ctypes import *
 import os, tempfile, threading
 from taskcoachlib.filesystem import base
 
-_libc = CDLL('libc.dylib')
+_libc = CDLL("libc.dylib")
 
 # Constants
 
-O_EVTONLY       = 0x8000
+O_EVTONLY = 0x8000
 
-EVFILT_VNODE    = -4
+EVFILT_VNODE = -4
 
-EV_ADD          = 0x0001
-EV_ENABLE       = 0x0004
-EV_ONESHOT      = 0x0010
+EV_ADD = 0x0001
+EV_ENABLE = 0x0004
+EV_ONESHOT = 0x0010
 
-NOTE_DELETE     = 0x00000001
-NOTE_EXTEND     = 0x00000004
-NOTE_WRITE      = 0x00000002
-NOTE_ATTRIB     = 0x00000008
-NOTE_LINK       = 0x00000010
-NOTE_RENAME     = 0x00000020
-NOTE_REVOKE     = 0x00000040
+NOTE_DELETE = 0x00000001
+NOTE_EXTEND = 0x00000004
+NOTE_WRITE = 0x00000002
+NOTE_ATTRIB = 0x00000008
+NOTE_LINK = 0x00000010
+NOTE_RENAME = 0x00000020
+NOTE_REVOKE = 0x00000040
 
 # Structures
 
+
 class keventstruct(Structure):
-    _fields_ = [('ident', c_ulong),
-                ('filter', c_int16),
-                ('flags', c_uint16),
-                ('fflags', c_uint32),
-                ('data', c_long),
-                ('udata', c_void_p)]
+    _fields_ = [
+        ("ident", c_ulong),
+        ("filter", c_int16),
+        ("flags", c_uint16),
+        ("fflags", c_uint32),
+        ("data", c_long),
+        ("udata", c_void_p),
+    ]
+
 
 # Functions
 
-opendir  = CFUNCTYPE(c_void_p, c_char_p)(('opendir', _libc))
-closedir = CFUNCTYPE(c_int, c_void_p)(('closedir', _libc))
-open_    = CFUNCTYPE(c_int, c_char_p, c_int)(('open', _libc))
-close    = CFUNCTYPE(c_int, c_int)(('close', _libc))
+opendir = CFUNCTYPE(c_void_p, c_char_p)(("opendir", _libc))
+closedir = CFUNCTYPE(c_int, c_void_p)(("closedir", _libc))
+open_ = CFUNCTYPE(c_int, c_char_p, c_int)(("open", _libc))
+close = CFUNCTYPE(c_int, c_int)(("close", _libc))
 
 # dirfd seems to be defined as a macro. Let's assume the fd field is
 # the first one in the structure.
 
+
 def dirfd(p):
     return cast(p, POINTER(c_int)).contents.value
 
-kqueue = CFUNCTYPE(c_int)(('kqueue', _libc))
-kevent = CFUNCTYPE(c_int, c_int, POINTER(keventstruct), c_int, POINTER(keventstruct), c_int, c_void_p)(('kevent', _libc))
+
+kqueue = CFUNCTYPE(c_int)(("kqueue", _libc))
+kevent = CFUNCTYPE(
+    c_int,
+    c_int,
+    POINTER(keventstruct),
+    c_int,
+    POINTER(keventstruct),
+    c_int,
+    c_void_p,
+)(("kevent", _libc))
 
 # Macros
+
 
 def EV_SET(kev, ident, filter_, flags, fflags, data, udata):
     kev.ident = ident
@@ -76,12 +91,22 @@ def EV_SET(kev, ident, filter_, flags, fflags, data, udata):
     kev.data = data
     kev.udata = udata
 
+
 def traceEvents(fflags):
-    names = ['NOTE_WRITE', 'NOTE_EXTEND', 'NOTE_DELETE', 'NOTE_ATTRIB', 'NOTE_LINK', 'NOTE_RENAME', 'NOTE_REVOKE']
-    return ', '.join([name for name in names if fflags & globals()[name]])
+    names = [
+        "NOTE_WRITE",
+        "NOTE_EXTEND",
+        "NOTE_DELETE",
+        "NOTE_ATTRIB",
+        "NOTE_LINK",
+        "NOTE_RENAME",
+        "NOTE_REVOKE",
+    ]
+    return ", ".join([name for name in names if fflags & globals()[name]])
 
 
 # Higher-evel API
+
 
 class FileMonitor(object):
     def __init__(self, filename, callback):
@@ -90,7 +115,7 @@ class FileMonitor(object):
         self.callback = callback
 
         if isinstance(filename, str):
-            filename = filename.encode('UTF-8') # Not sure...
+            filename = filename.encode("UTF-8")  # Not sure...
 
         self._filename = filename
         path, name = os.path.split(filename)
@@ -120,19 +145,40 @@ class FileMonitor(object):
             event = keventstruct()
             changes = (keventstruct * 2)()
 
-            EV_SET(changes[0], self.dirfd, EVFILT_VNODE, EV_ADD | EV_ENABLE | EV_ONESHOT,
-                   NOTE_WRITE | NOTE_EXTEND, 0, 0)
+            EV_SET(
+                changes[0],
+                self.dirfd,
+                EVFILT_VNODE,
+                EV_ADD | EV_ENABLE | EV_ONESHOT,
+                NOTE_WRITE | NOTE_EXTEND,
+                0,
+                0,
+            )
             if self.fd is not None:
-                EV_SET(changes[1], self.fd, EVFILT_VNODE, EV_ADD | EV_ENABLE | EV_ONESHOT,
-                       NOTE_WRITE | NOTE_EXTEND | NOTE_DELETE | NOTE_ATTRIB | \
-                       NOTE_LINK | NOTE_RENAME | NOTE_REVOKE, 0, 0)
+                EV_SET(
+                    changes[1],
+                    self.fd,
+                    EVFILT_VNODE,
+                    EV_ADD | EV_ENABLE | EV_ONESHOT,
+                    NOTE_WRITE
+                    | NOTE_EXTEND
+                    | NOTE_DELETE
+                    | NOTE_ATTRIB
+                    | NOTE_LINK
+                    | NOTE_RENAME
+                    | NOTE_REVOKE,
+                    0,
+                    0,
+                )
 
             while True:
                 if kevent(kq, changes, self.state, byref(event), 1, None) > 0:
                     if self.cancelled:
                         break
                     if self.state == 2:
-                        if event.ident == self.fd and event.fflags & (NOTE_DELETE | NOTE_RENAME):
+                        if event.ident == self.fd and event.fflags & (
+                            NOTE_DELETE | NOTE_RENAME
+                        ):
                             # File deleted.
                             close(self.fd)
                             self.fd = None
@@ -145,10 +191,24 @@ class FileMonitor(object):
                             # File was re-created
                             self.fd = open_(self._filename, O_EVTONLY)
                             if self.fd < 0:
-                                raise OSError('Could not open "%s"' % self._filename)
-                            EV_SET(changes[1], self.fd, EVFILT_VNODE, EV_ADD | EV_ENABLE | EV_ONESHOT,
-                                   NOTE_WRITE | NOTE_EXTEND | NOTE_DELETE | NOTE_ATTRIB | \
-                                   NOTE_LINK | NOTE_RENAME | NOTE_REVOKE, 0, 0)
+                                raise OSError(
+                                    'Could not open "%s"' % self._filename
+                                )
+                            EV_SET(
+                                changes[1],
+                                self.fd,
+                                EVFILT_VNODE,
+                                EV_ADD | EV_ENABLE | EV_ONESHOT,
+                                NOTE_WRITE
+                                | NOTE_EXTEND
+                                | NOTE_DELETE
+                                | NOTE_ATTRIB
+                                | NOTE_LINK
+                                | NOTE_RENAME
+                                | NOTE_REVOKE,
+                                0,
+                                0,
+                            )
                             self.state = 2
                             self.onFileChanged()
         finally:

@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
 from taskcoachlib.gui import dialog
@@ -35,18 +35,18 @@ class DummyColumn(object):
 
 class DummyViewer(object):
     def __init__(self):
-        self.col1 = DummyColumn('one')
-        self.col2 = DummyColumn('two')
+        self.col1 = DummyColumn("one")
+        self.col2 = DummyColumn("two")
 
     def title(self):
-        return 'viewer'
-    
+        return "viewer"
+
     def hasHideableColumns(self):
         return True
-    
+
     def visibleColumns(self):
         return []
-    
+
     def columns(self):
         return [self.col1, self.col2]
 
@@ -57,7 +57,7 @@ class DummyViewer(object):
 class DummyViewerContainer(object):
     def activeViewer(self):
         return 1
-    
+
     def __getitem__(self, index):
         if index == 0:
             return DummyViewer()
@@ -70,15 +70,15 @@ class ExportDialogTest(test.wxTestCase):
         self.frame.viewer = DummyViewerContainer()
         settings = config.Settings(load=False)
         dialog.export.ExportAsHTMLDialog(self.frame, settings=settings)
-        
-        
+
+
 class ColumnPickerTest(test.wxTestCase):
     def testCreate(self):
         panel = sized_controls.SizedPanel(self.frame)
         dialog.export.ColumnPicker(panel, DummyViewer())
-        
+
     def testOnlySelectableColumns(self):
         panel = sized_controls.SizedPanel(self.frame)
         dlg = dialog.export.ColumnPicker(panel, DummyViewer())
         self.assertEqual(dlg.columnPicker.GetCount(), 1)
-        self.assertEqual(dlg.columnPicker.GetClientData(0).name(), 'two')
+        self.assertEqual(dlg.columnPicker.GetClientData(0).name(), "two")

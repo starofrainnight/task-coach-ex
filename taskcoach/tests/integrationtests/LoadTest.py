@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import os, wx
 import test, mock
@@ -22,9 +22,9 @@ import test, mock
 
 class LoadTest(test.TestCase):
     def setUp(self):
-        self.filename = 'LoadTest.tsk'
-        taskfile = file(self.filename, 'w')
-        taskfile.writelines(['Line 1\n', 'Line 2\n'])
+        self.filename = "LoadTest.tsk"
+        taskfile = file(self.filename, "w")
+        taskfile.writelines(["Line 1\n", "Line 2\n"])
         taskfile.close()
         self.errorDialogCalled = False
         self.mockApp = mock.App()
@@ -43,20 +43,24 @@ class LoadTest(test.TestCase):
         mock.App.deleteInstance()
         super(LoadTest, self).tearDown()
 
-    def mockErrorDialog(self, *args, **kwargs): # pylint: disable=W0613
+    def mockErrorDialog(self, *args, **kwargs):  # pylint: disable=W0613
         self.errorDialogCalled = True
 
     def testLoadInvalidFileDoesNotAffectFile(self):
-        self.mockApp.iocontroller.open(self.filename, showerror=self.mockErrorDialog)
-        lines = file(self.filename, 'r').readlines()
+        self.mockApp.iocontroller.open(
+            self.filename, showerror=self.mockErrorDialog
+        )
+        lines = file(self.filename, "r").readlines()
         self.assertTrue(self.errorDialogCalled)
-        self.assertEqual(2, len(lines)) 
-        self.assertEqual('Line 1\n', lines[0])
-        self.assertEqual('Line 2\n', lines[1])
+        self.assertEqual(2, len(lines))
+        self.assertEqual("Line 1\n", lines[0])
+        self.assertEqual("Line 2\n", lines[1])
 
     def testLoadNonExistingFileGivesErrorMessage(self):
-        self.mockApp.iocontroller.open("I don't exist.tsk", 
-                             showerror=self.mockErrorDialog,
-                             fileExists=lambda filename: False)
-        wx.GetApp().Yield() # io.open uses wx.CallAfter
+        self.mockApp.iocontroller.open(
+            "I don't exist.tsk",
+            showerror=self.mockErrorDialog,
+            fileExists=lambda filename: False,
+        )
+        wx.GetApp().Yield()  # io.open uses wx.CallAfter
         self.assertTrue(self.errorDialogCalled)

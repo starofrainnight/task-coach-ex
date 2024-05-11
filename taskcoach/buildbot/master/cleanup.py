@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -16,12 +16,13 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 # Cleanup the htdocs subdirectory where the buildbot stores the
 # distribution files (only keep 2 latest versions). Run from cron.
 
 import os, re
+
 
 def cleanup(path, rx):
     files = []
@@ -41,9 +42,10 @@ def cleanup(path, rx):
 
 
 def main(path):
-    for suffix in [r'-win32\.exe', r'\.dmg', r'\.tar\.gz', r'\.zip']:
-        cleanup(path, re.compile(r'^TaskCoach-r(\d+)' + suffix + '$'))
-    cleanup(path, re.compile(r'taskcoach_r(\d+)-1_all\.deb'))
+    for suffix in [r"-win32\.exe", r"\.dmg", r"\.tar\.gz", r"\.zip"]:
+        cleanup(path, re.compile(r"^TaskCoach-r(\d+)" + suffix + "$"))
+    cleanup(path, re.compile(r"taskcoach_r(\d+)-1_all\.deb"))
 
-if __name__ == '__main__':
-    main('/var/www/htdocs/TaskCoach-packages')
+
+if __name__ == "__main__":
+    main("/var/www/htdocs/TaskCoach-packages")

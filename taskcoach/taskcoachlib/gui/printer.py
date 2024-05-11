@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 Copyright (C) 2008 Rob McMullen <rob.mcmullen@gmail.com>
@@ -15,7 +15,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import persistence, patterns, operating_system
 from taskcoachlib.i18n import _
@@ -36,7 +36,7 @@ import wx
 
 
 class PrinterSettings(object, metaclass=patterns.Singleton):
-    edges = ('top', 'left', 'bottom', 'right')
+    edges = ("top", "left", "bottom", "right")
 
     def __init__(self, settings):
         self.settings = settings
@@ -52,7 +52,7 @@ class PrinterSettings(object, metaclass=patterns.Singleton):
     def __update_print_data(self, printData):
         self.printData = wx.PrintData(printData)
         self.pageSetupData.SetPrintData(self.printData)
- 
+
     def __getattr__(self, attr):
         try:
             return getattr(self.pageSetupData, attr)
@@ -60,71 +60,75 @@ class PrinterSettings(object, metaclass=patterns.Singleton):
             return getattr(self.printData, attr)
 
     def __initialize_from_settings(self):
-        ''' Load the printer settings from the user settings. '''
+        """Load the printer settings from the user settings."""
         margin = dict()
         for edge in self.edges:
-            margin[edge] = self.__get_setting('margin_' + edge)
-        top_left = wx.Point(margin['left'], margin['top'])
-        bottom_right = wx.Point(margin['right'], margin['bottom'])
+            margin[edge] = self.__get_setting("margin_" + edge)
+        top_left = wx.Point(margin["left"], margin["top"])
+        bottom_right = wx.Point(margin["right"], margin["bottom"])
         self.SetMarginTopLeft(top_left)
         self.SetMarginBottomRight(bottom_right)
-        self.SetPaperId(self.__get_setting('paper_id'))
-        self.SetOrientation(self.__get_setting('orientation'))
+        self.SetPaperId(self.__get_setting("paper_id"))
+        self.SetOrientation(self.__get_setting("orientation"))
 
     def __save_to_settings(self):
-        ''' Save the printer settings to the user settings. '''
+        """Save the printer settings to the user settings."""
         margin = dict()
-        margin['left'], margin['top'] = self.GetMarginTopLeft()  
-        margin['right'], margin['bottom'] = self.GetMarginBottomRight()  
+        margin["left"], margin["top"] = self.GetMarginTopLeft()
+        margin["right"], margin["bottom"] = self.GetMarginBottomRight()
         for edge in self.edges:
-            self.__set_setting('margin_'+edge, margin[edge])
-        self.__set_setting('paper_id', self.GetPaperId())
-        self.__set_setting('orientation', self.GetOrientation())
+            self.__set_setting("margin_" + edge, margin[edge])
+        self.__set_setting("paper_id", self.GetPaperId())
+        self.__set_setting("orientation", self.GetOrientation())
 
     def __get_setting(self, option):
-        return self.settings.getint('printer', option)
+        return self.settings.getint("printer", option)
 
     def __set_setting(self, option, value):
-        self.settings.set('printer', option, str(value))
+        self.settings.set("printer", option, str(value))
 
 
 class HTMLPrintout(wx.html.HtmlPrintout):
     def __init__(self, html_text, settings):
         super(HTMLPrintout, self).__init__()
         self.SetHtmlText(html_text)
-        self.SetFooter(_('Page') + ' @PAGENUM@/@PAGESCNT@', wx.html.PAGE_ALL)
-        self.SetFonts('Arial', 'Courier')
+        self.SetFooter(_("Page") + " @PAGENUM@/@PAGESCNT@", wx.html.PAGE_ALL)
+        self.SetFonts("Arial", "Courier")
         printer_settings = PrinterSettings(settings)
         left, top = printer_settings.pageSetupData.GetMarginTopLeft()
         right, bottom = printer_settings.pageSetupData.GetMarginBottomRight()
         self.SetMargins(top, bottom, left, right)
 
-                
+
 class DCPrintout(wx.Printout):
     def __init__(self, widget):
         self.widget = widget
         super(DCPrintout, self).__init__()
-        
+
     def OnPrintPage(self, page):  # pylint: disable=W0613
         self.widget.Draw(self.GetDC())
-        
+
     def GetPageInfo(self):  # pylint: disable=W0221
         return (1, 1, 1, 1)
 
-        
-def Printout(viewer, settings, printSelectionOnly=False, 
-             twoPrintouts=False):
+
+def Printout(viewer, settings, printSelectionOnly=False, twoPrintouts=False):
     widget = viewer.getWidget()
-    if hasattr(widget, 'GetPrintout'):
+    if hasattr(widget, "GetPrintout"):
         _printout = widget.GetPrintout
-    elif hasattr(widget, 'Draw'):
+    elif hasattr(widget, "Draw"):
+
         def _printout(settings):
             return DCPrintout(widget)
+
     else:
-        html_text = persistence.viewer2html(viewer, settings, 
-                                           selectionOnly=printSelectionOnly)[0]
+        html_text = persistence.viewer2html(
+            viewer, settings, selectionOnly=printSelectionOnly
+        )[0]
+
         def _printout(settings):
             return HTMLPrintout(html_text, settings)
+
     result = _printout(PrinterSettings(settings))
     if twoPrintouts:
         result = (result, _printout(PrinterSettings(settings)))

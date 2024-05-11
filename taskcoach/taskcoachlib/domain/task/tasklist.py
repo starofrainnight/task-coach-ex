@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 Copyright (C) 2008 João Alexandre de Toledo <jtoledo@griffo.com.br>
@@ -17,7 +17,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib.i18n import _
 from taskcoachlib.domain import categorizable
@@ -27,40 +27,46 @@ from . import task
 
 class TaskListQueryMixin(object):
     def nrOfTasksPerStatus(self):
-        statuses = [eachTask.status() for eachTask in self if not eachTask.isDeleted()]
+        statuses = [
+            eachTask.status() for eachTask in self if not eachTask.isDeleted()
+        ]
         count = dict()
         for status in task.Task.possibleStatuses():
             count[status] = statuses.count(status)
         return count
-    
-    
+
+
 class TaskList(TaskListQueryMixin, categorizable.CategorizableContainer):
     # FIXME: TaskList should be called TaskCollection or TaskSet
 
-    newItemMenuText = _('&New task...') + ('\tINSERT' if not operating_system.isMac() else '\tCtrl+N')
+    newItemMenuText = _("&New task...") + (
+        "\tINSERT" if not operating_system.isMac() else "\tCtrl+N"
+    )
     newItemHelpText = help.taskNew
-       
+
     def nrBeingTracked(self):
         return len(self.tasksBeingTracked())
-    
+
     def tasksBeingTracked(self):
-        return [eachTask for eachTask in self if eachTask.isBeingTracked()]    
+        return [eachTask for eachTask in self if eachTask.isBeingTracked()]
 
     def efforts(self):
         result = []
         for task in self:  # pylint: disable=W0621
             result.extend(task.efforts())
         return result
-        
+
     def originalLength(self):
-        ''' Provide a way for bypassing the __len__ method of decorators. '''
+        """Provide a way for bypassing the __len__ method of decorators."""
         return len([t for t in self if not t.isDeleted()])
-    
+
     def minPriority(self):
         return min(self.__allPriorities())
-        
+
     def maxPriority(self):
         return max(self.__allPriorities())
-        
+
     def __allPriorities(self):
-        return [task.priority() for task in self if not task.isDeleted()] or (0,)  # pylint: disable=W0621
+        return [task.priority() for task in self if not task.isDeleted()] or (
+            0,
+        )  # pylint: disable=W0621

@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2011 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib.domain.category import Category
 from taskcoachlib.domain.date import DateTime, TimeDelta
@@ -32,30 +32,38 @@ class CSVReader(object):
     def __init__(self, taskList, categoryList):
         self.taskList = taskList
         self.categoryList = categoryList
-        
+
     def createReader(self, fp, dialect, hasHeaders):
         reader = csv.reader(fp, dialect=dialect)
         if hasHeaders:
             next(reader)
         return reader
-        
+
     def read(self, **kwargs):
         fp = tempfile.TemporaryFile()
-        fp.write(file(kwargs['filename'], 'rU').read().decode(kwargs['encoding']).encode('UTF-8'))
+        fp.write(
+            file(kwargs["filename"], "rU")
+            .read()
+            .decode(kwargs["encoding"])
+            .encode("UTF-8")
+        )
         fp.seek(0)
-        
-        rx1 = re.compile(r'^(\d+):(\d+)$')
-        rx2 = re.compile(r'^(\d+):(\d+):(\d+)$')
 
-        reader = self.createReader(fp, kwargs['dialect'], kwargs['hasHeaders'])
-        dayfirst = kwargs['dayfirst']
+        rx1 = re.compile(r"^(\d+):(\d+)$")
+        rx2 = re.compile(r"^(\d+):(\d+):(\d+)$")
+
+        reader = self.createReader(fp, kwargs["dialect"], kwargs["hasHeaders"])
+        dayfirst = kwargs["dayfirst"]
         tasksById = dict()
         tasks = []
 
         for index, line in enumerate(reader):
-            if kwargs['importSelectedRowsOnly'] and index not in kwargs['selectedRows']:
+            if (
+                kwargs["importSelectedRowsOnly"]
+                and index not in kwargs["selectedRows"]
+            ):
                 continue
-            subject = _('No subject')
+            subject = _("No subject")
             id_ = None
             description = io.StringIO()
             categories = []
@@ -71,78 +79,100 @@ class CSVReader(object):
             percentComplete = 0
 
             for idx, fieldValue in enumerate(line):
-                if kwargs['mappings'][idx] == _('ID'):
-                    id_ = fieldValue.decode('UTF-8')
-                elif kwargs['mappings'][idx] == _('Subject'):
-                    subject = fieldValue.decode('UTF-8')
-                elif kwargs['mappings'][idx] == _('Description'):
-                    description.write(fieldValue.decode('UTF-8'))
-                    description.write('\n')
-                elif kwargs['mappings'][idx] == _('Category') and fieldValue:
-                    name = fieldValue.decode('UTF-8')
-                    if name.startswith('(') and name.endswith(')'):
+                if kwargs["mappings"][idx] == _("ID"):
+                    id_ = fieldValue.decode("UTF-8")
+                elif kwargs["mappings"][idx] == _("Subject"):
+                    subject = fieldValue.decode("UTF-8")
+                elif kwargs["mappings"][idx] == _("Description"):
+                    description.write(fieldValue.decode("UTF-8"))
+                    description.write("\n")
+                elif kwargs["mappings"][idx] == _("Category") and fieldValue:
+                    name = fieldValue.decode("UTF-8")
+                    if name.startswith("(") and name.endswith(")"):
                         continue  # Skip categories of subitems
                     cat = self.categoryList.findCategoryByName(name)
                     if not cat:
                         cat = self.createCategory(name)
                     categories.append(cat)
-                elif kwargs['mappings'][idx] == _('Priority'):
+                elif kwargs["mappings"][idx] == _("Priority"):
                     try:
                         priority = int(fieldValue)
                     except ValueError:
                         pass
-                elif kwargs['mappings'][idx] == _('Actual start date'):
-                    actualStartDateTime = self.parseDateTime(fieldValue, dayfirst=dayfirst)
-                elif kwargs['mappings'][idx] == _('Planned start date'):
-                    plannedStartDateTime = self.parseDateTime(fieldValue, dayfirst=dayfirst)
-                elif kwargs['mappings'][idx] == _('Due date'):
-                    dueDateTime = self.parseDateTime(fieldValue, 23, 59, 59, dayfirst=dayfirst) 
-                elif kwargs['mappings'][idx] == _('Completion date'):
-                    completionDateTime = self.parseDateTime(fieldValue, 12, 0, 0, dayfirst=dayfirst) 
-                elif kwargs['mappings'][idx] == _('Reminder date'):
-                    reminderDateTime = self.parseDateTime(fieldValue, dayfirst=dayfirst)
-                elif kwargs['mappings'][idx] == _('Budget'):
+                elif kwargs["mappings"][idx] == _("Actual start date"):
+                    actualStartDateTime = self.parseDateTime(
+                        fieldValue, dayfirst=dayfirst
+                    )
+                elif kwargs["mappings"][idx] == _("Planned start date"):
+                    plannedStartDateTime = self.parseDateTime(
+                        fieldValue, dayfirst=dayfirst
+                    )
+                elif kwargs["mappings"][idx] == _("Due date"):
+                    dueDateTime = self.parseDateTime(
+                        fieldValue, 23, 59, 59, dayfirst=dayfirst
+                    )
+                elif kwargs["mappings"][idx] == _("Completion date"):
+                    completionDateTime = self.parseDateTime(
+                        fieldValue, 12, 0, 0, dayfirst=dayfirst
+                    )
+                elif kwargs["mappings"][idx] == _("Reminder date"):
+                    reminderDateTime = self.parseDateTime(
+                        fieldValue, dayfirst=dayfirst
+                    )
+                elif kwargs["mappings"][idx] == _("Budget"):
                     try:
                         value = float(fieldValue)
                         hours = int(math.floor(value))
                         minutes = int(60 * (value - hours))
-                        budget = TimeDelta(hours=hours, minutes=minutes, seconds=0)
+                        budget = TimeDelta(
+                            hours=hours, minutes=minutes, seconds=0
+                        )
                     except ValueError:
                         mt = rx1.search(fieldValue)
                         if mt:
-                            budget = TimeDelta(hours=int(mt.group(1)), minutes=int(mt.group(2)), seconds=0)
+                            budget = TimeDelta(
+                                hours=int(mt.group(1)),
+                                minutes=int(mt.group(2)),
+                                seconds=0,
+                            )
                         else:
                             mt = rx2.search(fieldValue)
                             if mt:
-                                budget = TimeDelta(hours=int(mt.group(1)), minutes=int(mt.group(2)), seconds=int(mt.group(3)))
-                elif kwargs['mappings'][idx] == _('Fixed fee'):
+                                budget = TimeDelta(
+                                    hours=int(mt.group(1)),
+                                    minutes=int(mt.group(2)),
+                                    seconds=int(mt.group(3)),
+                                )
+                elif kwargs["mappings"][idx] == _("Fixed fee"):
                     try:
                         fixedFee = float(fieldValue)
                     except ValueError:
                         pass
-                elif kwargs['mappings'][idx] == _('Hourly fee'):
+                elif kwargs["mappings"][idx] == _("Hourly fee"):
                     try:
                         hourlyFee = float(fieldValue)
                     except ValueError:
                         pass
-                elif kwargs['mappings'][idx] == _('Percent complete'):
+                elif kwargs["mappings"][idx] == _("Percent complete"):
                     try:
                         percentComplete = max(0, min(100, int(fieldValue)))
                     except ValueError:
                         pass
 
-            task = Task(subject=subject,
-                        description=description.getvalue(),
-                        priority=priority,
-                        actualStartDateTime=actualStartDateTime,
-                        plannedStartDateTime=plannedStartDateTime,
-                        dueDateTime=dueDateTime,
-                        completionDateTime=completionDateTime,
-                        reminder=reminderDateTime,
-                        budget=budget,
-                        fixedFee=fixedFee,
-                        hourlyFee=hourlyFee,
-                        percentageComplete=percentComplete)
+            task = Task(
+                subject=subject,
+                description=description.getvalue(),
+                priority=priority,
+                actualStartDateTime=actualStartDateTime,
+                plannedStartDateTime=plannedStartDateTime,
+                dueDateTime=dueDateTime,
+                completionDateTime=completionDateTime,
+                reminder=reminderDateTime,
+                budget=budget,
+                fixedFee=fixedFee,
+                hourlyFee=hourlyFee,
+                percentageComplete=percentComplete,
+            )
 
             if id_ is not None:
                 tasksById[id_] = task
@@ -159,7 +189,7 @@ class CSVReader(object):
             ids = []
             for id_, task in list(tasksById.items()):
                 try:
-                    ids.append(tuple(map(int, id_.split('.'))))
+                    ids.append(tuple(map(int, id_.split("."))))
                 except ValueError:
                     self.taskList.append(task)
 
@@ -167,9 +197,9 @@ class CSVReader(object):
             ids.reverse()
 
             for id_ in ids:
-                sid = '.'.join(map(str, id_))
+                sid = ".".join(map(str, id_))
                 if len(id_) >= 2:
-                    pid = '.'.join(map(str, id_[:-1]))
+                    pid = ".".join(map(str, id_[:-1]))
                     if pid in tasksById:
                         tasksById[pid].addChild(tasksById[sid])
                 else:
@@ -178,8 +208,8 @@ class CSVReader(object):
             self.taskList.extend(tasks)
 
     def createCategory(self, name):
-        if ' -> ' in name:
-            parentName, childName = name.rsplit(' -> ', 1)
+        if " -> " in name:
+            parentName, childName = name.rsplit(" -> ", 1)
             parent = self.categoryList.findCategoryByName(parentName)
             if not parent:
                 parent = self.createCategory(parentName)
@@ -191,19 +221,36 @@ class CSVReader(object):
         self.categoryList.append(newCategory)
         return newCategory
 
-    def parseDateTime(self, fieldValue, defaultHour=0, defaultMinute=0, 
-                      defaultSecond=0, dayfirst=False):
+    def parseDateTime(
+        self,
+        fieldValue,
+        defaultHour=0,
+        defaultMinute=0,
+        defaultSecond=0,
+        dayfirst=False,
+    ):
         if not fieldValue:
             return None
         try:
-            dateTime = dparser.parse(fieldValue.decode('UTF-8'), 
-                                     dayfirst=dayfirst, fuzzy=True).replace(tzinfo=None)
-            hour, minute, second = dateTime.hour, dateTime.minute, dateTime.second
+            dateTime = dparser.parse(
+                fieldValue.decode("UTF-8"), dayfirst=dayfirst, fuzzy=True
+            ).replace(tzinfo=None)
+            hour, minute, second = (
+                dateTime.hour,
+                dateTime.minute,
+                dateTime.second,
+            )
             if 0 == hour == minute == second:
                 hour = defaultHour
                 minute = defaultMinute
                 second = defaultSecond
-            return DateTime(dateTime.year, dateTime.month, dateTime.day,
-                            hour, minute, second)
+            return DateTime(
+                dateTime.year,
+                dateTime.month,
+                dateTime.day,
+                hour,
+                minute,
+                second,
+            )
         except:  # pylint: disable=W0702
-            return None  
+            return None

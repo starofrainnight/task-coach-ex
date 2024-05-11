@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import wx
 
@@ -32,11 +32,11 @@ class KNotifyNotifier(AbstractNotifier):
         except ImportError:
             pass
         else:
-            if pydcop.anyAppCalled('knotify') is not None:
+            if pydcop.anyAppCalled("knotify") is not None:
                 self.__factory = pydcop.anyAppCalled
 
     def getName(self):
-        return 'KNotify'
+        return "KNotify"
 
     def isAvailable(self):
         return self.__factory is not None
@@ -46,12 +46,17 @@ class KNotifyNotifier(AbstractNotifier):
 
         coding = wx.Locale_GetSystemEncodingName()
 
-        kn = self.__factory('knotify')
-        kn.default.notify('reminder',
-                          title.encode(coding),
-                          summary.encode(coding),
-                          '', '',
-                          16, 0, kwargs.get('windowId', 0))
+        kn = self.__factory("knotify")
+        kn.default.notify(
+            "reminder",
+            title.encode(coding),
+            summary.encode(coding),
+            "",
+            "",
+            16,
+            0,
+            kwargs.get("windowId", 0),
+        )
 
 
 AbstractNotifier.register(KNotifyNotifier())

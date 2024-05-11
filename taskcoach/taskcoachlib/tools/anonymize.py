@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2011 Task Coach developers <developers@taskcoach.org>
 
@@ -14,50 +14,54 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from xml.etree import ElementTree as ET
 import os
 
 
 def anonymize(filename):
-    ''' Anonymize the file specified by the filename by reading its contents,
-        replacing the contents with X's and saving the anonymized contents to 
-        a copy of the file. '''
-    
+    """Anonymize the file specified by the filename by reading its contents,
+    replacing the contents with X's and saving the anonymized contents to
+    a copy of the file."""
+
     def anonymize_string(string):
-        ''' Return an anonymized version of the string. '''
-        return 'X' * len(string)
-    
+        """Return an anonymized version of the string."""
+        return "X" * len(string)
+
     def anonymize_text(text):
-        ''' Return an anonymized version of the text, keeping the line 
-            breaks. '''
-        return '\n'.join([anonymize_string(line) for line in text.split('\n')])
+        """Return an anonymized version of the text, keeping the line
+        breaks."""
+        return "\n".join([anonymize_string(line) for line in text.split("\n")])
 
     def anonymize_node(node):
-        ''' Recursively anonymize the node and all of its child nodes. '''
+        """Recursively anonymize the node and all of its child nodes."""
         for child in node:
             anonymize_node(child)
 
-        if 'subject' in node.attrib:
-            node.attrib['subject'] = anonymize_string(node.attrib['subject'])
+        if "subject" in node.attrib:
+            node.attrib["subject"] = anonymize_string(node.attrib["subject"])
 
-        if node.tag in ('description', 'data') and node.text:
+        if node.tag in ("description", "data") and node.text:
             node.text = anonymize_text(node.text)
-            if node.tag == 'data':
-                node.attrib['extension'] = \
-                    anonymize_string(node.attrib['extension'])
+            if node.tag == "data":
+                node.attrib["extension"] = anonymize_string(
+                    node.attrib["extension"]
+                )
 
-        if node.tag == 'property' and 'name' in node.attrib and \
-           node.attrib['name'] == 'username':
-            node.text = 'XXX'  # pylint: disable=W0511
+        if (
+            node.tag == "property"
+            and "name" in node.attrib
+            and node.attrib["name"] == "username"
+        ):
+            node.text = "XXX"  # pylint: disable=W0511
 
-        if node.tag == 'attachment' and 'location' in node.attrib:
-            node.attrib['location'] = anonymize_string(node.attrib['location'])
-            
-    tree = ET.parse(file(filename, 'rb'))
+        if node.tag == "attachment" and "location" in node.attrib:
+            node.attrib["location"] = anonymize_string(node.attrib["location"])
+
+    tree = ET.parse(file(filename, "rb"))
     anonymize_node(tree.getroot())
     name, ext = os.path.splitext(filename)
-    anonymized_filename = name + '.anonymized' + ext
+    anonymized_filename = name + ".anonymized" + ext
     tree.write(anonymized_filename)
     return anonymized_filename

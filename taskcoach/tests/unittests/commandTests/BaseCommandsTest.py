@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,32 +14,35 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import patterns, command
 from taskcoachlib.domain import task, date
 from .CommandTestCase import CommandTestCase
 
 
-    
 class DeleteCommandTest(CommandTestCase):
     def setUp(self):
         super(DeleteCommandTest, self).setUp()
         self.item = task.Task()
         self.items = patterns.List([self.item])
-        
+
     def deleteItem(self, items=None):
         delete = command.DeleteCommand(self.items, items or [])
         delete.do()
-        
+
     def testDeleteItem_WithoutSelection(self):
         self.deleteItem()
-        self.assertDoUndoRedo(lambda: self.assertEqual([self.item], self.items))
-        
+        self.assertDoUndoRedo(
+            lambda: self.assertEqual([self.item], self.items)
+        )
+
     def testDeleteItem_WithSelection(self):
         self.deleteItem([self.item])
-        self.assertDoUndoRedo(lambda: self.assertEqual([], self.items),
-                              lambda: self.assertEqual([self.item], self.items))
+        self.assertDoUndoRedo(
+            lambda: self.assertEqual([], self.items),
+            lambda: self.assertEqual([self.item], self.items),
+        )
 
     def testItemsAreNotNew(self):
         self.assertFalse(command.DeleteCommand(self.items, []).items_are_new())
@@ -48,73 +51,105 @@ class DeleteCommandTest(CommandTestCase):
 class EditSubjectTestCase(CommandTestCase):
     ItemClass = task.Task
     ContainerClass = task.TaskList
-    
+
     def setUp(self):
         super(EditSubjectTestCase, self).setUp()
-        self.item1 = self.ItemClass(subject='item1')
-        self.item2 = self.ItemClass(subject='item2')
+        self.item1 = self.ItemClass(subject="item1")
+        self.item2 = self.ItemClass(subject="item2")
         self.container = self.ContainerClass([self.item1, self.item2])
-        
+
     def editSubject(self, newSubject, *items):
-        editSubjectCommand = command.EditSubjectCommand(self.container, 
-                                                        items, 
-                                                        newValue=newSubject)
+        editSubjectCommand = command.EditSubjectCommand(
+            self.container, items, newValue=newSubject
+        )
         editSubjectCommand.do()
-        
+
     def testEditSubject(self):
-        self.editSubject('new', self.item1)
-        self.assertDoUndoRedo(lambda: self.assertEqual('new', self.item1.subject()),
-                              lambda: self.assertEqual('item1', self.item1.subject()))
-        
+        self.editSubject("new", self.item1)
+        self.assertDoUndoRedo(
+            lambda: self.assertEqual("new", self.item1.subject()),
+            lambda: self.assertEqual("item1", self.item1.subject()),
+        )
+
     def testEditMultipleSubjects(self):
-        self.editSubject('new', self.item1, self.item2)
-        self.assertDoUndoRedo(lambda: self.assertEqual('newnew', 
-                                      self.item1.subject() + self.item2.subject()),
-                              lambda: self.assertEqual('item1item2', 
-                                      self.item1.subject() + self.item2.subject()))
+        self.editSubject("new", self.item1, self.item2)
+        self.assertDoUndoRedo(
+            lambda: self.assertEqual(
+                "newnew", self.item1.subject() + self.item2.subject()
+            ),
+            lambda: self.assertEqual(
+                "item1item2", self.item1.subject() + self.item2.subject()
+            ),
+        )
 
     def testItemsAreNotNew(self):
-        self.assertFalse(command.EditSubjectCommand(self.container, [], 
-                    newValue='New subject').items_are_new())
+        self.assertFalse(
+            command.EditSubjectCommand(
+                self.container, [], newValue="New subject"
+            ).items_are_new()
+        )
 
     def testModificationDateTime(self):
-        self.editSubject('new', self.item1)
-        self.assertDoUndoRedo(lambda: self.assertTrue(self.item1.modificationDateTime() > date.DateTime.min),
-                              lambda: self.assertEqual(date.DateTime.min, self.item1.modificationDateTime()))
+        self.editSubject("new", self.item1)
+        self.assertDoUndoRedo(
+            lambda: self.assertTrue(
+                self.item1.modificationDateTime() > date.DateTime.min
+            ),
+            lambda: self.assertEqual(
+                date.DateTime.min, self.item1.modificationDateTime()
+            ),
+        )
 
 
 class EditDescriptionTestCase(CommandTestCase):
     ItemClass = task.Task
     ContainerClass = task.TaskList
-    
+
     def setUp(self):
         super(EditDescriptionTestCase, self).setUp()
-        self.item1 = self.ItemClass(description='item1')
-        self.item2 = self.ItemClass(description='item2')
+        self.item1 = self.ItemClass(description="item1")
+        self.item2 = self.ItemClass(description="item2")
         self.container = self.ContainerClass([self.item1, self.item2])
-        
+
     def edit_description(self, new_description, *items):
-        edit_subject = command.EditDescriptionCommand(self.container, items, 
-                                                      newValue=new_description)
+        edit_subject = command.EditDescriptionCommand(
+            self.container, items, newValue=new_description
+        )
         edit_subject.do()
-        
+
     def testEditSubject(self):
-        self.edit_description('new', self.item1)
-        self.assertDoUndoRedo(lambda: self.assertEqual('new', self.item1.description()),
-                              lambda: self.assertEqual('item1', self.item1.description()))
-        
+        self.edit_description("new", self.item1)
+        self.assertDoUndoRedo(
+            lambda: self.assertEqual("new", self.item1.description()),
+            lambda: self.assertEqual("item1", self.item1.description()),
+        )
+
     def testEditMultipleDescriptions(self):
-        self.edit_description('new', self.item1, self.item2)
-        self.assertDoUndoRedo(lambda: self.assertEqual('newnew', 
-                                      self.item1.description() + self.item2.description()),
-                              lambda: self.assertEqual('item1item2', 
-                                      self.item1.description() + self.item2.description()))
+        self.edit_description("new", self.item1, self.item2)
+        self.assertDoUndoRedo(
+            lambda: self.assertEqual(
+                "newnew", self.item1.description() + self.item2.description()
+            ),
+            lambda: self.assertEqual(
+                "item1item2",
+                self.item1.description() + self.item2.description(),
+            ),
+        )
 
     def testItemsAreNotNew(self):
-        self.assertFalse(command.EditDescriptionCommand(self.container, [], 
-                    newValue='New description').items_are_new())
+        self.assertFalse(
+            command.EditDescriptionCommand(
+                self.container, [], newValue="New description"
+            ).items_are_new()
+        )
 
     def testModificationDateTime(self):
-        self.edit_description('new', self.item1)
-        self.assertDoUndoRedo(lambda: self.assertTrue(self.item1.modificationDateTime() > date.DateTime.min),
-                              lambda: self.assertEqual(date.DateTime.min, self.item1.modificationDateTime()))
+        self.edit_description("new", self.item1)
+        self.assertDoUndoRedo(
+            lambda: self.assertTrue(
+                self.item1.modificationDateTime() > date.DateTime.min
+            ),
+            lambda: self.assertEqual(
+                date.DateTime.min, self.item1.modificationDateTime()
+            ),
+        )

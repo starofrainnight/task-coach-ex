@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2012 Task Coach developers <developers@taskcoach.org>
 
@@ -14,18 +14,28 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib.widgets import balloontip
 import wx
 
 
 class BalloonTipManager(balloontip.BalloonTipManager):
-    def AddBalloonTip(self, settings, name, target, message=None, title=None, getRect=None):
-        if settings.getboolean('balloontips', name):
-            super(BalloonTipManager, self).AddBalloonTip(target, message=message, title=title,
-                        bitmap=wx.ArtProvider.GetBitmap('lamp_icon', wx.ART_MENU, (16, 16)),
-                        getRect=getRect, name=name, settings=settings)
+    def AddBalloonTip(
+        self, settings, name, target, message=None, title=None, getRect=None
+    ):
+        if settings.getboolean("balloontips", name):
+            super(BalloonTipManager, self).AddBalloonTip(
+                target,
+                message=message,
+                title=title,
+                bitmap=wx.ArtProvider.GetBitmap(
+                    "lamp_icon", wx.ART_MENU, (16, 16)
+                ),
+                getRect=getRect,
+                name=name,
+                settings=settings,
+            )
 
     def OnBalloonTipShow(self, name=None, settings=None):
-        settings.setboolean('balloontips', name, False)
+        settings.setboolean("balloontips", name, False)

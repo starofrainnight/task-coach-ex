@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2014 Task Coach developers <developers@taskcoach.org>
 
@@ -14,16 +14,19 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import operating_system
 import re
+
 
 class StrftimeFix(object):
     """Mixin class to fix strftime() so that it works with years < 1900"""
 
     def strftime(self, *args):
         if self.year >= 1900:
-            return operating_system.decodeSystemString(super(StrftimeFix, self).strftime(*args))
+            return operating_system.decodeSystemString(
+                super(StrftimeFix, self).strftime(*args)
+            )
         result = self.replace(year=self.year + 1900).strftime(*args)
         return re.sub(str(self.year + 1900), str(self.year), result)

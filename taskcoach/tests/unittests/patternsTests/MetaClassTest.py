@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
 from taskcoachlib import patterns
@@ -23,30 +23,30 @@ from taskcoachlib import patterns
 class Numbered(object, metaclass=patterns.NumberedInstances):
     def __init__(self, instanceNumber=-1):
         self.instanceNumber = instanceNumber
-    
+
 
 class SubclassOfNumbered(Numbered):
     pass
 
 
 class NumberedInstancesTestsMixin(object):
-    ''' The tests below should work for a class with NumberedInstances as 
-        metaclass as well as for a subclass of a class with NumberedInstances
-        as metaclass. '''
-        
+    """The tests below should work for a class with NumberedInstances as
+    metaclass as well as for a subclass of a class with NumberedInstances
+    as metaclass."""
+
     def testCounterIncreasesAfterEachInstantation(self):
         instances = []
         for count in range(3):
             instance = self.classUnderTest()
             self.assertEqual(count, instance.instanceNumber)
             instances.append(instance)
-        
+
     def testInstanceNumbersAreReusedWhenFreed(self):
         instance1 = self.classUnderTest()
         del instance1
         instance2 = self.classUnderTest()
         self.assertEqual(0, instance2.instanceNumber)
-        
+
     def testInstanceNumbersAreTheLowestFreeNumber(self):
         instance1 = self.classUnderTest()
         instance2 = self.classUnderTest()
@@ -54,7 +54,7 @@ class NumberedInstancesTestsMixin(object):
         del instance2
         instance3 = self.classUnderTest()
         self.assertEqual(instance3.instanceNumber, instance2Number)
-        
+
     def testInstanceNumbersFillTheGap(self):
         instances = []
         for count in range(10):
@@ -66,15 +66,15 @@ class NumberedInstancesTestsMixin(object):
         self.assertEqual(5, instance5.instanceNumber)
         instance10 = self.classUnderTest()
         self.assertEqual(10, instance10.instanceNumber)
-        
-        
-class NumberedInstancesTest(NumberedInstancesTestsMixin, 
-                            test.TestCase):
+
+
+class NumberedInstancesTest(NumberedInstancesTestsMixin, test.TestCase):
     classUnderTest = Numbered
 
 
-class SubclassOfNumberedInstancesTest(NumberedInstancesTestsMixin, 
-                                      test.TestCase):
+class SubclassOfNumberedInstancesTest(
+    NumberedInstancesTestsMixin, test.TestCase
+):
     classUnderTest = SubclassOfNumbered
 
     def testSubclassInstancesHaveTheirOwnNumbers(self):
@@ -82,5 +82,3 @@ class SubclassOfNumberedInstancesTest(NumberedInstancesTestsMixin,
         subclassOfNumberedInstance = SubclassOfNumbered()
         self.assertEqual(0, numberedInstance.instanceNumber)
         self.assertEqual(0, subclassOfNumberedInstance.instanceNumber)
-
-

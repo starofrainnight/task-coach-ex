@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,11 +14,17 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
-
+"""
 
 from distutils.core import setup, Extension
 
-setup(name='sendinput',
-      ext_modules=[Extension('sendinput', ['sendinput.c'],
-                             define_macros=[('_WIN32_WINNT', '0x0502')])])
+setup(
+    name="sendinput",
+    ext_modules=[
+        Extension(
+            "sendinput",
+            ["sendinput.c"],
+            define_macros=[("_WIN32_WINNT", "0x0502")],
+        )
+    ],
+)

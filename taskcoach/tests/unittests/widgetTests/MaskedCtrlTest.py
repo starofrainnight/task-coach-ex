@@ -1,5 +1,5 @@
 # -*- coding: UTF-8 -*-
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -15,18 +15,22 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
 from taskcoachlib.widgets import masked
 
 
 class LocalConv(dict):
-    def __init__(self, decimal_point='.', thousands_sep=',', grouping=None):
+    def __init__(self, decimal_point=".", thousands_sep=",", grouping=None):
         super(LocalConv, self).__init__()
-        self.update(dict(decimal_point=decimal_point,
-                         thousands_sep=thousands_sep,
-                         grouping=grouping or []))
+        self.update(
+            dict(
+                decimal_point=decimal_point,
+                thousands_sep=thousands_sep,
+                grouping=grouping or [],
+            )
+        )
 
 
 class AmountCtrlTest(test.wxTestCase):
@@ -45,42 +49,55 @@ class AmountCtrlTest(test.wxTestCase):
         masked.AmountCtrl(self.frame, locale_conventions=LocalConv())
 
     def testCommaAsDecimalSepAndNoGrouping(self):
-        masked.AmountCtrl(self.frame, 
-                          locale_conventions=LocalConv(decimal_point=','))
+        masked.AmountCtrl(
+            self.frame, locale_conventions=LocalConv(decimal_point=",")
+        )
 
     def testCommaAsDecimalSepAndGrouping(self):
-        masked.AmountCtrl(self.frame, 
-                          locale_conventions=LocalConv(decimal_point=',',
-                                                       grouping=[3,3,3]))
+        masked.AmountCtrl(
+            self.frame,
+            locale_conventions=LocalConv(
+                decimal_point=",", grouping=[3, 3, 3]
+            ),
+        )
 
     def testCommaAsBothDecimalSepAndThousandsSepButNoGrouping(self):
-        masked.AmountCtrl(self.frame, 
-                          locale_conventions=LocalConv(decimal_point=',',
-                                                       thousands_sep=','))
+        masked.AmountCtrl(
+            self.frame,
+            locale_conventions=LocalConv(decimal_point=",", thousands_sep=","),
+        )
 
     def testCommaAsBothDecimalSepAndThousandsSepAndGrouping(self):
-        masked.AmountCtrl(self.frame, 
-                          locale_conventions=LocalConv(decimal_point=',',
-                                                       thousands_sep=',', 
-                                                       grouping=[3,3,3]))
+        masked.AmountCtrl(
+            self.frame,
+            locale_conventions=LocalConv(
+                decimal_point=",", thousands_sep=",", grouping=[3, 3, 3]
+            ),
+        )
 
     def testSpaceIsNotAllowedAsDecimalPoint(self):
         try:
-            masked.AmountCtrl(self.frame, 
-                              locale_conventions=LocalConv(decimal_point=' '))
-            self.fail('Expected ValueError') # pragma: no cover
+            masked.AmountCtrl(
+                self.frame, locale_conventions=LocalConv(decimal_point=" ")
+            )
+            self.fail("Expected ValueError")  # pragma: no cover
         except ValueError:
             pass
 
     def testNonAsciiDecimalPoint(self):
-        masked.AmountCtrl(self.frame, 
-                          locale_conventions=LocalConv(decimal_point='�'))
-        
+        masked.AmountCtrl(
+            self.frame, locale_conventions=LocalConv(decimal_point="�")
+        )
+
     def testNonAsciiThousandsSeparator(self):
-        masked.AmountCtrl(self.frame, 
-                          locale_conventions=LocalConv(thousands_sep='�', 
-                                                       grouping=[3,3,3]))
+        masked.AmountCtrl(
+            self.frame,
+            locale_conventions=LocalConv(
+                thousands_sep="�", grouping=[3, 3, 3]
+            ),
+        )
 
     def testMultiCharThousandsSeparator(self):
-        masked.AmountCtrl(self.frame, 
-                          locale_conventions=LocalConv(thousands_sep='..'))
+        masked.AmountCtrl(
+            self.frame, locale_conventions=LocalConv(thousands_sep="..")
+        )

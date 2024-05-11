@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import operating_system
 
@@ -55,19 +55,23 @@ class AbstractNotifier(object):
 
         if klass._enabled:
             if operating_system.isMac():
-                return klass.get('Growl') or klass.get('Task Coach')
+                return klass.get("Growl") or klass.get("Task Coach")
             elif operating_system.isWindows():
-                return klass.get('Snarl') or klass.get('Task Coach')
+                return klass.get("Snarl") or klass.get("Task Coach")
             else:
-                return klass.get('Task Coach')
+                return klass.get("Task Coach")
         else:
+
             class DummyNotifier(AbstractNotifier):
                 def getName(self):
-                    return 'Dummy'
+                    return "Dummy"
+
                 def isAvailable(self):
                     return True
+
                 def notify(self, title, summary, bitmap, **kwargs):
                     pass
+
             return DummyNotifier()
 
     @classmethod

@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2011 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test, wx
 from taskcoachlib.changes import ChangeMonitor
@@ -32,7 +32,7 @@ class MonitorBaseTest(test.TestCase):
 
         self.list = self.listClass()
         self.monitor.monitorCollection(self.list)
-        self.obj = self.klass(subject='New object')
+        self.obj = self.klass(subject="New object")
         self.list.append(self.obj)
 
     def tearDown(self):
@@ -41,66 +41,86 @@ class MonitorBaseTest(test.TestCase):
 
 
 class MonitorObjectTest(MonitorBaseTest):
-    def doTestAttributeChanged(self, name, value, initialValue, methodName=None):
+    def doTestAttributeChanged(
+        self, name, value, initialValue, methodName=None
+    ):
         if methodName is None:
             methodName = name
-        getattr(self.obj, 'set' + methodName[:1].upper() + methodName[1:])(initialValue)
+        getattr(self.obj, "set" + methodName[:1].upper() + methodName[1:])(
+            initialValue
+        )
         self.monitor.resetChanges(self.obj)
-        getattr(self.obj, 'set' + methodName[:1].upper() + methodName[1:])(value)
+        getattr(self.obj, "set" + methodName[:1].upper() + methodName[1:])(
+            value
+        )
         self.assertEqual(self.monitor.getChanges(self.obj), set([name]))
 
     def doTestAttributeDidNotChange(self, name, initialValue, methodName=None):
         if methodName is None:
             methodName = name
-        getattr(self.obj, 'set' + methodName[:1].upper() + methodName[1:])(initialValue)
+        getattr(self.obj, "set" + methodName[:1].upper() + methodName[1:])(
+            initialValue
+        )
         self.monitor.resetChanges(self.obj)
-        getattr(self.obj, 'set' + methodName[:1].upper() + methodName[1:])(getattr(self.obj, methodName)())
+        getattr(self.obj, "set" + methodName[:1].upper() + methodName[1:])(
+            getattr(self.obj, methodName)()
+        )
         self.assertEqual(self.monitor.getChanges(self.obj), set())
 
     def testSubjectChanged(self):
-        self.doTestAttributeChanged('subject', 'New subject', 'Old subject')
+        self.doTestAttributeChanged("subject", "New subject", "Old subject")
 
     def testSubjectDidNotChange(self):
-        self.doTestAttributeDidNotChange('subject', 'Subject')
+        self.doTestAttributeDidNotChange("subject", "Subject")
 
     def testDescriptionChanged(self):
-        self.doTestAttributeChanged('description', 'New description', 'Old description')
+        self.doTestAttributeChanged(
+            "description", "New description", "Old description"
+        )
 
     def testDescriptionDidNotChange(self):
-        self.doTestAttributeDidNotChange('description', 'Description')
+        self.doTestAttributeDidNotChange("description", "Description")
 
     def testForegroundColorChanged(self):
-        self.doTestAttributeChanged('appearance', (128, 128, 128), (64, 64, 64), 'foregroundColor')
+        self.doTestAttributeChanged(
+            "appearance", (128, 128, 128), (64, 64, 64), "foregroundColor"
+        )
 
     def testForegroundColorDidNotChange(self):
-        self.doTestAttributeDidNotChange('appearance', (128, 128, 128), 'backgroundColor')
+        self.doTestAttributeDidNotChange(
+            "appearance", (128, 128, 128), "backgroundColor"
+        )
 
     def testBackgroundColorChanged(self):
-        self.doTestAttributeChanged('appearance', (128, 128, 128), (64, 64, 64), 'backgroundColor')
+        self.doTestAttributeChanged(
+            "appearance", (128, 128, 128), (64, 64, 64), "backgroundColor"
+        )
 
     def testBackgroundColorDidNotChange(self):
-        self.doTestAttributeDidNotChange('appearance', (128, 128, 128), 'backgroundColor')
+        self.doTestAttributeDidNotChange(
+            "appearance", (128, 128, 128), "backgroundColor"
+        )
 
     def testFontChanged(self):
-        self.doTestAttributeChanged('appearance', 'dummy1', 'dummy2', 'font')
+        self.doTestAttributeChanged("appearance", "dummy1", "dummy2", "font")
 
     def testFontDidNotChange(self):
-        self.doTestAttributeDidNotChange('appearance', 'dummy', 'font')
+        self.doTestAttributeDidNotChange("appearance", "dummy", "font")
 
     def testIconChanged(self):
-        self.doTestAttributeChanged('appearance', 'foo', 'bar', 'icon')
+        self.doTestAttributeChanged("appearance", "foo", "bar", "icon")
 
     def testIconDidNotChange(self):
-        self.doTestAttributeDidNotChange('appearance', 'foo', 'icon')
+        self.doTestAttributeDidNotChange("appearance", "foo", "icon")
 
     def testSelectedIconChanged(self):
-        self.doTestAttributeChanged('appearance', 'foo', 'bar', 'selectedIcon')
+        self.doTestAttributeChanged("appearance", "foo", "bar", "selectedIcon")
 
     def testSelectedIconDidNotChange(self):
-        self.doTestAttributeDidNotChange('appearance', 'foo', 'selectedIcon')
+        self.doTestAttributeDidNotChange("appearance", "foo", "selectedIcon")
 
     def testNewObject(self):
-        obj = self.klass(subject='New')
+        obj = self.klass(subject="New")
         self.list.append(obj)
         self.assertEqual(self.monitor.getChanges(obj), None)
 
@@ -111,11 +131,13 @@ class MonitorObjectTest(MonitorBaseTest):
 
     def testRemoveAdd(self):
         self.monitor.resetChanges(self.obj)
-        self.obj.setSubject('Foo')
+        self.obj.setSubject("Foo")
         self.list.remove(self.obj)
-        self.assertEqual(self.monitor.getChanges(self.obj), set(['subject', '__del__']))
+        self.assertEqual(
+            self.monitor.getChanges(self.obj), set(["subject", "__del__"])
+        )
         self.list.append(self.obj)
-        self.assertEqual(self.monitor.getChanges(self.obj), set(['subject']))
+        self.assertEqual(self.monitor.getChanges(self.obj), set(["subject"]))
         self.assertFalse(self.monitor.isRemoved(self.obj))
 
 
@@ -125,31 +147,33 @@ class MonitorCompositeObjectTest(MonitorObjectTest):
     def setUp(self):
         super(MonitorCompositeObjectTest, self).setUp()
 
-        self.child = self.klass(subject='Child')
+        self.child = self.klass(subject="Child")
         self.obj.addChild(self.child)
 
     def testNewChild(self):
-        child = self.obj.newChild(subject='Child')
+        child = self.obj.newChild(subject="Child")
         self.assertEqual(self.monitor.getChanges(child), None)
 
     def testChangeChildSubject1(self):
         self.monitor.resetChanges(self.obj)
-        self.child.setSubject('Child subject')
+        self.child.setSubject("Child subject")
         self.assertEqual(self.monitor.getChanges(self.obj), set())
 
     def testChangeChildSubject2(self):
         self.monitor.resetChanges(self.child)
-        self.child.setSubject('Child subject')
-        self.assertEqual(self.monitor.getChanges(self.child), set(['subject']))
+        self.child.setSubject("Child subject")
+        self.assertEqual(self.monitor.getChanges(self.child), set(["subject"]))
 
     def testExpansionChanged(self):
         self.monitor.resetChanges(self.obj)
         self.obj.expand()
-        self.assertEqual(self.monitor.getChanges(self.obj), set(['expandedContexts']))
+        self.assertEqual(
+            self.monitor.getChanges(self.obj), set(["expandedContexts"])
+        )
 
     def testAddChild(self):
-        child = self.klass(subject='Child')
+        child = self.klass(subject="Child")
         self.list.append(child)
         self.monitor.resetChanges(child)
         self.obj.addChild(child)
-        self.assertEqual(self.monitor.getChanges(child), set(['__parent__']))
+        self.assertEqual(self.monitor.getChanges(child), set(["__parent__"]))

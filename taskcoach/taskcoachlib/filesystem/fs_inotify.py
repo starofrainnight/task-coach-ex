@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2011 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 # inotify wrapper from this recipe: http://code.activestate.com/recipes/576375-low-level-inotify-wrapper/
 # Slightly modified to handle timeout and use select(); cleanup error handling
@@ -38,7 +38,9 @@ class FilesystemNotifier(base.NotifierBase):
             self.notifier.ignore(FilePath(self._path))
         super(FilesystemNotifier, self).setFilename(filename)
         if self._path is not None:
-            self.notifier.watch(FilePath(self._path), callbacks=[self.__notify])
+            self.notifier.watch(
+                FilePath(self._path), callbacks=[self.__notify]
+            )
 
     def stop(self):
         if self.notifier is not None:

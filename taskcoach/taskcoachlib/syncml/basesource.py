@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import wx
 from taskcoachlib.syncml.core import *
@@ -30,30 +30,54 @@ class BaseSource(SyncSource):
 
         self.allObjectsList = [obj for obj in objectList]
         self.newObjectsList = [obj for obj in objectList if obj.isNew()]
-        self.changedObjectsList = [obj for obj in objectList if obj.isModified()]
-        self.deletedObjectsList = [obj for obj in objectList if obj.isDeleted()]
+        self.changedObjectsList = [
+            obj for obj in objectList if obj.isModified()
+        ]
+        self.deletedObjectsList = [
+            obj for obj in objectList if obj.isDeleted()
+        ]
 
     def beginSync(self):
-        if self.syncMode in [REFRESH_FROM_SERVER,
-                             REFRESH_FROM_SERVER_BY_SERVER]:
+        if self.syncMode in [
+            REFRESH_FROM_SERVER,
+            REFRESH_FROM_SERVER_BY_SERVER,
+        ]:
             if self.objectList:
-                if wx.MessageBox(_('The synchronization for source %s') % self.name + \
-                                 _('will be a refresh from server. All local items will\n' \
-                                   'be deleted. Do you wish to continue?'),
-                                 _('Refresh from server'), wx.YES_NO) != wx.YES:
-                    return 514 # Not sure of this
+                if (
+                    wx.MessageBox(
+                        _("The synchronization for source %s") % self.name
+                        + _(
+                            "will be a refresh from server. All local items will\n"
+                            "be deleted. Do you wish to continue?"
+                        ),
+                        _("Refresh from server"),
+                        wx.YES_NO,
+                    )
+                    != wx.YES
+                ):
+                    return 514  # Not sure of this
                 self.objectList.clear()
                 self.allObjectsList = []
                 self.newObjectsList = []
                 self.changedObjectsList = []
                 self.deletedObjectsList = []
-        elif self.syncMode in [REFRESH_FROM_CLIENT,
-                               REFRESH_FROM_CLIENT_BY_SERVER]:
-            if wx.MessageBox(_('The synchronization for source %s') % self.name + \
-                             _('will be a refresh from client. All remote items will\n' \
-                               'be deleted. Do you wish to continue?'),
-                             _('Refresh from server'), wx.YES_NO) != wx.YES:
-                return 514 # Not sure of this
+        elif self.syncMode in [
+            REFRESH_FROM_CLIENT,
+            REFRESH_FROM_CLIENT_BY_SERVER,
+        ]:
+            if (
+                wx.MessageBox(
+                    _("The synchronization for source %s") % self.name
+                    + _(
+                        "will be a refresh from client. All remote items will\n"
+                        "be deleted. Do you wish to continue?"
+                    ),
+                    _("Refresh from server"),
+                    wx.YES_NO,
+                )
+                != wx.YES
+            ):
+                return 514  # Not sure of this
 
     def endSync(self):
         pass
@@ -65,7 +89,7 @@ class BaseSource(SyncSource):
         for obj in self.allObjectsList:
             if obj.id() == key:
                 return obj
-        raise KeyError('No such object: %s' % key)
+        raise KeyError("No such object: %s" % key)
 
     def _getItem(self, ls):
         """Returns a SyncItem instance representing the first domain
@@ -160,7 +184,7 @@ class BaseSource(SyncSource):
         obj = self._parseObject(item)
         obj.cleanDirty()
         self.objectList.append(obj)
-        item.key = obj.id().encode('UTF-8')
+        item.key = obj.id().encode("UTF-8")
 
         return self.doAddItem(obj)
 
@@ -217,6 +241,6 @@ class BaseSource(SyncSource):
 
             return 200
 
-        print('UNHANDLED ITEM STATUS %s %d' % (key, status))
+        print("UNHANDLED ITEM STATUS %s %d" % (key, status))
 
         return 501

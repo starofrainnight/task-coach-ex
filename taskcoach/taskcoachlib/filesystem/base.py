@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2011 Task Coach developers <developers@taskcoach.org>
 
@@ -14,8 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
-
+"""
 
 import os, atexit
 
@@ -34,13 +33,14 @@ class NotifierBase(object):
         self.stop()
 
     def stop(self):
-        pass # Should be overloaded if needed
+        pass  # Should be overloaded if needed
 
     def _check(self, filename):
-        return self.stamp is None or \
-               (filename and \
-                os.path.exists(filename) and \
-                os.stat(filename).st_mtime > self.stamp)
+        return self.stamp is None or (
+            filename
+            and os.path.exists(filename)
+            and os.stat(filename).st_mtime > self.stamp
+        )
 
     def setFilename(self, filename):
         self._filename = filename

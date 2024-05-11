@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,16 +14,27 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import textwrap
 
+
 class Release:
-    def __init__(self, number, date, bugsFixed=None, featuresAdded=None,
-            featuresRemoved=None, featuresChanged=None, 
-            dependenciesChanged=None, implementationChanged=None,
-            websiteChanges=None, distributionsChanged=None, teamChanges=None,
-            summary=''):
+    def __init__(
+        self,
+        number,
+        date,
+        bugsFixed=None,
+        featuresAdded=None,
+        featuresRemoved=None,
+        featuresChanged=None,
+        dependenciesChanged=None,
+        implementationChanged=None,
+        websiteChanges=None,
+        distributionsChanged=None,
+        teamChanges=None,
+        summary="",
+    ):
         self.number = number
         self.date = date
         self.summary = summary
@@ -72,6 +83,7 @@ class Website(Change):
     def __init__(self, description, url, *changeIds):
         super(Website, self).__init__(description, *changeIds)
         self.url = url
+
 
 class Team(Change):
     pass

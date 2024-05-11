@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import config
 from taskcoachlib.domain import task, effort, date
@@ -28,27 +28,36 @@ class CompositeEffortPerPeriodTest(test.TestCase):
         task.Task.settings = config.Settings(load=False)
         self.taskList = task.TaskList()
         self.effortList = effort.EffortList(self.taskList)
-        self.task = task.Task(subject='task')
+        self.task = task.Task(subject="task")
         self.taskList.append(self.task)
-        self.effort1 = effort.Effort(self.task, 
-            date.DateTime(2004, 1, 1, 11, 0, 0), 
-            date.DateTime(2004, 1, 1, 12, 0, 0))
-        self.effort2 = effort.Effort(self.task, 
-            date.DateTime(2004, 1, 1, 13, 0, 0), 
-            date.DateTime(2004, 1, 1, 14, 0, 0))
-        self.effort3 = effort.Effort(self.task, 
-            date.DateTime(2004, 1, 11, 13, 0, 0), 
-            date.DateTime(2004, 1, 11, 14, 0, 0))
-        self.trackedEffort = effort.Effort(self.task, 
-            date.DateTime(2004, 1, 1, 9, 0, 0))
-        self.composite = effort.CompositeEffortPerPeriod(\
-            date.DateTime(2004, 1, 1, 0, 0, 0), 
-            date.DateTime(2004, 1, 1, 23, 59, 59), self.taskList)
+        self.effort1 = effort.Effort(
+            self.task,
+            date.DateTime(2004, 1, 1, 11, 0, 0),
+            date.DateTime(2004, 1, 1, 12, 0, 0),
+        )
+        self.effort2 = effort.Effort(
+            self.task,
+            date.DateTime(2004, 1, 1, 13, 0, 0),
+            date.DateTime(2004, 1, 1, 14, 0, 0),
+        )
+        self.effort3 = effort.Effort(
+            self.task,
+            date.DateTime(2004, 1, 11, 13, 0, 0),
+            date.DateTime(2004, 1, 11, 14, 0, 0),
+        )
+        self.trackedEffort = effort.Effort(
+            self.task, date.DateTime(2004, 1, 1, 9, 0, 0)
+        )
+        self.composite = effort.CompositeEffortPerPeriod(
+            date.DateTime(2004, 1, 1, 0, 0, 0),
+            date.DateTime(2004, 1, 1, 23, 59, 59),
+            self.taskList,
+        )
         self.reducer = EffortCompositeTest.FakeEffortAggregator(self.composite)
-        
+
     def testInitialLength(self):
         self.assertEqual(0, len(self.composite))
-        
+
     def testInitialDuration(self):
         self.assertEqual(date.TimeDelta(), self.composite.duration())
 
@@ -57,9 +66,12 @@ class CompositeEffortPerPeriodTest(test.TestCase):
 
     def testInitialTrackingStateWhenTaskIsTracked(self):
         self.task.addEffort(self.trackedEffort)
-        composite = effort.CompositeEffortPerPeriod( 
-            self.composite.getStart(), self.composite.getStop(),
-            self.taskList, self.trackedEffort)
+        composite = effort.CompositeEffortPerPeriod(
+            self.composite.getStart(),
+            self.composite.getStop(),
+            self.taskList,
+            self.trackedEffort,
+        )
         self.assertTrue(composite.isBeingTracked())
 
     def testDurationForSingleEffort(self):
@@ -67,27 +79,35 @@ class CompositeEffortPerPeriodTest(test.TestCase):
         self.assertEqual(self.effort1.duration(), self.composite.duration())
 
     def testAddEffortOutsidePeriodToTask(self):
-        effortOutsidePeriod = effort.Effort(self.task, 
-            date.DateTime(2004, 1, 11, 13, 0, 0), 
-            date.DateTime(2004, 1, 11, 14, 0, 0))
+        effortOutsidePeriod = effort.Effort(
+            self.task,
+            date.DateTime(2004, 1, 11, 13, 0, 0),
+            date.DateTime(2004, 1, 11, 14, 0, 0),
+        )
         self.task.addEffort(effortOutsidePeriod)
         self.assertEqual(date.TimeDelta(), self.composite.duration())
 
     def testAddEffortWithStartTimeEqualToStartOfPeriodToTask(self):
-        effortSameStartTime = effort.Effort(self.task, 
-            date.DateTime(2004, 1, 1, 0, 0, 0), 
-            date.DateTime(2004, 1, 1, 14, 0, 0))
+        effortSameStartTime = effort.Effort(
+            self.task,
+            date.DateTime(2004, 1, 1, 0, 0, 0),
+            date.DateTime(2004, 1, 1, 14, 0, 0),
+        )
         self.task.addEffort(effortSameStartTime)
-        self.assertEqual(effortSameStartTime.duration(), 
-            self.composite.duration())
+        self.assertEqual(
+            effortSameStartTime.duration(), self.composite.duration()
+        )
 
     def testAddEffortWithStartTimeEqualToEndOfPeriodToTask(self):
-        effortSameStopTime = effort.Effort(self.task, 
-            date.DateTime(2004, 1, 1, 23, 59, 59), 
-            date.DateTime(2004, 1, 2, 1, 0, 0))
+        effortSameStopTime = effort.Effort(
+            self.task,
+            date.DateTime(2004, 1, 1, 23, 59, 59),
+            date.DateTime(2004, 1, 2, 1, 0, 0),
+        )
         self.task.addEffort(effortSameStopTime)
-        self.assertEqual(effortSameStopTime.duration(), 
-            self.composite.duration())
+        self.assertEqual(
+            effortSameStopTime.duration(), self.composite.duration()
+        )
 
     def testRemoveEffortFromTask(self):
         self.task.addEffort(self.effort1)
@@ -96,23 +116,27 @@ class CompositeEffortPerPeriodTest(test.TestCase):
 
     def testRemoveMultipleEffortsFromSamePeriodFromTask(self):
         events = []
-        
+
         def onEvent(sender):
             events.append(sender)
-            
-        pub.subscribe(onEvent, effort.CompositeEffort.compositeEmptyEventType())
+
+        pub.subscribe(
+            onEvent, effort.CompositeEffort.compositeEmptyEventType()
+        )
         self.task.addEffort(self.effort1)
         self.task.addEffort(self.effort2)
         self.task.setEfforts([])
         self.assertTrue(events)
-        
+
     def testRemoveMultipleEffortsFromDifferentPeriodsFromTask(self):
         events = []
-        
+
         def onEvent(sender):
             events.append(sender)
-            
-        pub.subscribe(onEvent, effort.CompositeEffort.compositeEmptyEventType())
+
+        pub.subscribe(
+            onEvent, effort.CompositeEffort.compositeEmptyEventType()
+        )
         self.task.addEffort(self.effort3)
         self.task.addEffort(self.effort1)
         self.task.setEfforts([])

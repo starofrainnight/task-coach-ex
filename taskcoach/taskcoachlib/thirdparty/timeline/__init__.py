@@ -1,2 +1,1 @@
-''' Timeline widget for wxPython '''
-
+""" Timeline widget for wxPython """

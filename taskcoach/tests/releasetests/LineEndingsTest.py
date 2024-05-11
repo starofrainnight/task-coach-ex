@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import os, test
 
@@ -22,17 +22,22 @@ import os, test
 # root folder to be the current dir. Work around that by changing
 # the current dir while importing setup.py:
 cwd = os.path.realpath(os.path.curdir)
-os.chdir('..')
+os.chdir("..")
 import setup
+
 os.chdir(cwd)
 
 
 class LineEndingsTest(test.TestCase):
     def testNoDOSLineEndingsInPythonScripts(self):
-        ''' On Linux, scripts won't work if they have DOS line endings. '''
-        scripts = [os.path.join(test.projectRoot, script) \
-                   for script in setup.setupOptions['scripts'] \
-                   if script.endswith('.py')]
+        """On Linux, scripts won't work if they have DOS line endings."""
+        scripts = [
+            os.path.join(test.projectRoot, script)
+            for script in setup.setupOptions["scripts"]
+            if script.endswith(".py")
+        ]
         for script in scripts:
-            self.assertFalse('\r\n' in file(script, 'rb').read(), 
-                        '%s contains DOS line endings'%script)
+            self.assertFalse(
+                "\r\n" in file(script, "rb").read(),
+                "%s contains DOS line endings" % script,
+            )

@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import os
 import struct
@@ -32,7 +32,9 @@ class GrowlNotifier(AbstractNotifier):
         super(GrowlNotifier, self).__init__()
         try:
             # pylint: disable=E1101
-            self._notifier = Growl.GrowlNotifier(applicationName=meta.name, notifications=['Reminder'])
+            self._notifier = Growl.GrowlNotifier(
+                applicationName=meta.name, notifications=["Reminder"]
+            )
             self._notifier.register()
         except:
             self._available = False  # pylint: disable=W0702
@@ -40,19 +42,24 @@ class GrowlNotifier(AbstractNotifier):
             self._available = True
 
     def getName(self):
-        return 'Growl'
+        return "Growl"
 
     def isAvailable(self):
         return self._available
 
     def notify(self, title, summary, bitmap, **kwargs):
         # Not really efficient...
-        fd, filename = tempfile.mkstemp('.png')
+        fd, filename = tempfile.mkstemp(".png")
         os.close(fd)
         try:
             bitmap.SaveFile(filename, wx.BITMAP_TYPE_PNG)
-            self._notifier.notify(noteType='Reminder', icon=file(filename, 'rb').read(), title=title, description=summary,
-                                  sticky=True)
+            self._notifier.notify(
+                noteType="Reminder",
+                icon=file(filename, "rb").read(),
+                title=title,
+                description=summary,
+                sticky=True,
+            )
         finally:
             os.remove(filename)
 

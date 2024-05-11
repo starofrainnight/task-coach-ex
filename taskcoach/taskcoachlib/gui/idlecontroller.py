@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2011 Task Coach developers <developers@taskcoach.org>
 
@@ -14,9 +14,12 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
-from taskcoachlib.command import NewEffortCommand, EditEffortStopDateTimeCommand
+from taskcoachlib.command import (
+    NewEffortCommand,
+    EditEffortStopDateTimeCommand,
+)
 from taskcoachlib.domain import effort, date
 from taskcoachlib.i18n import _
 from taskcoachlib.notify import NotificationFrameBase, NotificationCenter
@@ -37,15 +40,29 @@ class WakeFromIdleFrame(NotificationFrameBase):
 
     def AddInnerContent(self, sizer, panel):
         idleTimeFormatted = render.dateTime(self._idleTime)
-        sizer.Add(wx.StaticText(panel, wx.ID_ANY,
-            _('No user input since %s. The following task was\nbeing tracked:') % \
-                                idleTimeFormatted))
-        sizer.Add(wx.StaticText(panel, wx.ID_ANY,
-            self._effort.task().subject()))
+        sizer.Add(
+            wx.StaticText(
+                panel,
+                wx.ID_ANY,
+                _(
+                    "No user input since %s. The following task was\nbeing tracked:"
+                )
+                % idleTimeFormatted,
+            )
+        )
+        sizer.Add(
+            wx.StaticText(panel, wx.ID_ANY, self._effort.task().subject())
+        )
 
-        btnNothing = wx.Button(panel, wx.ID_ANY, _('Do nothing'))
-        btnStopAt = wx.Button(panel, wx.ID_ANY, _('Stop it at %s') % idleTimeFormatted)
-        btnStopResume = wx.Button(panel, wx.ID_ANY, _('Stop it at %s and resume now') % idleTimeFormatted)
+        btnNothing = wx.Button(panel, wx.ID_ANY, _("Do nothing"))
+        btnStopAt = wx.Button(
+            panel, wx.ID_ANY, _("Stop it at %s") % idleTimeFormatted
+        )
+        btnStopResume = wx.Button(
+            panel,
+            wx.ID_ANY,
+            _("Stop it at %s and resume now") % idleTimeFormatted,
+        )
 
         sizer.Add(btnNothing, 0, wx.EXPAND | wx.ALL, 1)
         sizer.Add(btnStopAt, 0, wx.EXPAND | wx.ALL, 1)
@@ -64,12 +81,16 @@ class WakeFromIdleFrame(NotificationFrameBase):
 
     def DoStopAt(self, event):
         self._displayed.remove(self._effort)
-        EditEffortStopDateTimeCommand(newValue=self._idleTime, items=[self._effort]).do()
+        EditEffortStopDateTimeCommand(
+            newValue=self._idleTime, items=[self._effort]
+        ).do()
         self.DoClose()
 
     def DoStopResume(self, event):
         self._displayed.remove(self._effort)
-        EditEffortStopDateTimeCommand(newValue=self._idleTime, items=[self._effort]).do()
+        EditEffortStopDateTimeCommand(
+            newValue=self._idleTime, items=[self._effort]
+        ).do()
         NewEffortCommand(items=[self._effort.task()]).do()
         self.DoClose()
 
@@ -84,10 +105,10 @@ class IdleController(Observer, IdleNotifier):
         super(IdleController, self).__init__()
 
         self.__tracker = effort.EffortListTracker(self._effortList)
-        self.__tracker.subscribe(self.__onTrackedChanged, 'effortlisttracker')
+        self.__tracker.subscribe(self.__onTrackedChanged, "effortlisttracker")
 
-        pub.subscribe(self.poweroff, 'powermgt.off')
-        pub.subscribe(self.poweron, 'powermgt.on')
+        pub.subscribe(self.poweroff, "powermgt.off")
+        pub.subscribe(self.poweron, "powermgt.on")
 
     def __onTrackedChanged(self, efforts):
         if len(efforts):
@@ -96,7 +117,7 @@ class IdleController(Observer, IdleNotifier):
             self.pause()
 
     def getMinIdleTime(self):
-        return self._settings.getint('feature', 'minidletime') * 60
+        return self._settings.getint("feature", "minidletime") * 60
 
     def wake(self, timestamp):
         self._lastActivity = timestamp
@@ -106,6 +127,13 @@ class IdleController(Observer, IdleNotifier):
         for effort in self.__tracker.trackedEfforts():
             if effort not in self._displayed:
                 self._displayed.add(effort)
-                frm = WakeFromIdleFrame(date.DateTime.fromtimestamp(self._lastActivity), effort, self._displayed, _('Notification'),
-                                        icon=wx.ArtProvider.GetBitmap('taskcoach', wx.ART_FRAME_ICON, (16, 16)))
+                frm = WakeFromIdleFrame(
+                    date.DateTime.fromtimestamp(self._lastActivity),
+                    effort,
+                    self._displayed,
+                    _("Notification"),
+                    icon=wx.ArtProvider.GetBitmap(
+                        "taskcoach", wx.ART_FRAME_ICON, (16, 16)
+                    ),
+                )
                 NotificationCenter().NotifyFrame(frm)

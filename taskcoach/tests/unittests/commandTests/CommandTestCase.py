@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
 from unittests import asserts
@@ -24,11 +24,11 @@ from taskcoachlib.domain import task
 
 class CommandTestCase(test.wxTestCase, asserts.CommandAssertsMixin):
     list = []
-    
+
     def setUp(self):
         super(CommandTestCase, self).setUp()
         task.Task.settings = config.Settings(load=False)
-    
+
     def tearDown(self):
         super(CommandTestCase, self).tearDown()
         patterns.CommandHistory().clear()
@@ -40,9 +40,9 @@ class CommandTestCase(test.wxTestCase, asserts.CommandAssertsMixin):
         patterns.CommandHistory().redo()
 
     def cut(self, items=None):
-        if items == 'all':
+        if items == "all":
             items = list(self.list)
         command.CutCommand(self.list, items or []).do()
 
-    def paste(self):        
+    def paste(self):
         command.PasteCommand(self.list).do()

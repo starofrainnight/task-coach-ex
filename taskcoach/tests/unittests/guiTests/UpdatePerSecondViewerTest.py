@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import gui, config, persistence
 from taskcoachlib.domain import base, task, effort, category, date
@@ -24,26 +24,28 @@ import test
 class MockWidget(object):
     def __init__(self):
         self.refreshedItems = set()
-        
+
     def RefreshItems(self, *items):
         self.refreshedItems.update(set(items))
-        
+
     def ToggleAutoResizing(self, *args, **kwargs):
         pass
-    
+
     def curselection(self):
         return []
-    
+
 
 class UpdatePerSecondViewerTestsMixin(object):
     def setUp(self):
         super(UpdatePerSecondViewerTestsMixin, self).setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
-        self.settings.set('taskviewer', 'columns', "['timeSpent']")
+        self.settings.set("taskviewer", "columns", "['timeSpent']")
         self.taskFile = persistence.TaskFile()
-        self.taskList = task.sorter.Sorter(self.taskFile.tasks(), sortBy='dueDateTime')
+        self.taskList = task.sorter.Sorter(
+            self.taskFile.tasks(), sortBy="dueDateTime"
+        )
         self.updateViewer = self.createUpdateViewer()
-        self.trackedTask = task.Task(subject='tracked')
+        self.trackedTask = task.Task(subject="tracked")
         self.trackedEffort = effort.Effort(self.trackedTask)
         self.trackedTask.addEffort(self.trackedEffort)
         self.taskList.append(self.trackedTask)
@@ -58,64 +60,84 @@ class UpdatePerSecondViewerTestsMixin(object):
 
     def testClockNotificationResultsInRefreshedItem(self):
         self.updateViewer.widget = MockWidget()
-        self.updateViewer.secondRefresher.refreshItems(self.updateViewer.secondRefresher.currentlyTrackedItems())
+        self.updateViewer.secondRefresher.refreshItems(
+            self.updateViewer.secondRefresher.currentlyTrackedItems()
+        )
         usingTaskViewer = self.ListViewerClass != gui.viewer.EffortViewer
         expected = self.trackedTask if usingTaskViewer else self.trackedEffort
-        self.assertEqual(set([expected]), self.updateViewer.widget.refreshedItems)
+        self.assertEqual(
+            set([expected]), self.updateViewer.widget.refreshedItems
+        )
 
     def testClockNotificationResultsInRefreshedItem_OnlyForTrackedItems(self):
-        self.taskList.append(task.Task('not tracked'))
+        self.taskList.append(task.Task("not tracked"))
         self.updateViewer.widget = MockWidget()
-        self.updateViewer.secondRefresher.refreshItems(self.updateViewer.secondRefresher.currentlyTrackedItems())
+        self.updateViewer.secondRefresher.refreshItems(
+            self.updateViewer.secondRefresher.currentlyTrackedItems()
+        )
         self.assertEqual(1, len(self.updateViewer.widget.refreshedItems))
 
     def testStopTrackingRemovesViewerFromClockObservers(self):
         self.trackedTask.stopTracking()
-        self.assertFalse(date.Scheduler().is_scheduled(self.updateViewer.secondRefresher.onEverySecond))
-        
+        self.assertFalse(
+            date.Scheduler().is_scheduled(
+                self.updateViewer.secondRefresher.onEverySecond
+            )
+        )
+
     def testStopTrackingRefreshesTrackedItems(self):
         self.updateViewer.widget = MockWidget()
         self.trackedTask.stopTracking()
         self.assertEqual(1, len(self.updateViewer.widget.refreshedItems))
-            
+
     def testRemoveTrackedChildAndParentRemovesViewerFromClockObservers(self):
         parent = task.Task()
         self.taskList.append(parent)
         parent.addChild(self.trackedTask)
         self.taskList.remove(parent)
-        self.assertFalse(date.Scheduler().is_scheduled(self.updateViewer.secondRefresher.onEverySecond))
-        
+        self.assertFalse(
+            date.Scheduler().is_scheduled(
+                self.updateViewer.secondRefresher.onEverySecond
+            )
+        )
+
     def testCreateViewerWithTrackedItemsStartsTheClock(self):
         self.createUpdateViewer()
         self.assertTrue(self.updateViewer.secondRefresher.isClockStarted())
-        
+
     def testViewerDoesNotReactToAddEventsFromOtherContainers(self):
         categories = base.filter.SearchFilter(category.CategoryList())
         try:
-            categories.append(category.Category('Test'))
+            categories.append(category.Category("Test"))
         except AttributeError:  # pragma: no cover
-            self.fail("Adding a category shouldn't affect the UpdatePerSecondViewer.")
+            self.fail(
+                "Adding a category shouldn't affect the UpdatePerSecondViewer."
+            )
 
     def testViewerDoesNotReactToRemoveEventsFromOtherContainers(self):
         categories = base.filter.SearchFilter(category.CategoryList())
-        categories.append(category.Category('Test'))
+        categories.append(category.Category("Test"))
         try:
             categories.clear()
-        except AttributeError: # pragma: no cover
-            self.fail("Removing a category shouldn't affect the UpdatePerSecondViewer.")
-            
+        except AttributeError:  # pragma: no cover
+            self.fail(
+                "Removing a category shouldn't affect the UpdatePerSecondViewer."
+            )
 
-class TaskListViewerUpdatePerSecondViewerTest(UpdatePerSecondViewerTestsMixin, 
-        test.wxTestCase):
+
+class TaskListViewerUpdatePerSecondViewerTest(
+    UpdatePerSecondViewerTestsMixin, test.wxTestCase
+):
     ListViewerClass = gui.viewer.TaskViewer
 
 
-class SquareTaskViewerUpdatePerSecondViewerTest(UpdatePerSecondViewerTestsMixin, 
-        test.wxTestCase):
+class SquareTaskViewerUpdatePerSecondViewerTest(
+    UpdatePerSecondViewerTestsMixin, test.wxTestCase
+):
     ListViewerClass = gui.viewer.SquareTaskViewer
 
 
-class EffortListViewerUpdatePerSecondTest(UpdatePerSecondViewerTestsMixin, 
-        test.wxTestCase):
+class EffortListViewerUpdatePerSecondTest(
+    UpdatePerSecondViewerTestsMixin, test.wxTestCase
+):
     ListViewerClass = gui.viewer.EffortViewer
-

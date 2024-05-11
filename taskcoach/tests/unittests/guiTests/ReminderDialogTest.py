@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
 from taskcoachlib.gui import dialog
@@ -31,53 +31,58 @@ class ReminderDialogTest(test.TestCase):
     def setUp(self):
         self.settings = config.Settings(load=False)
         task.Task.settings = self.settings
-        self.aTask = task.Task('subject')
+        self.aTask = task.Task("subject")
         self.taskList = task.TaskList([self.aTask])
         self.effortList = effort.EffortList(self.taskList)
 
     def createReminderDialog(self):
-        return dialog.reminder.ReminderDialog(self.aTask,
-            self.taskList, self.effortList, self.settings, None)
+        return dialog.reminder.ReminderDialog(
+            self.aTask, self.taskList, self.effortList, self.settings, None
+        )
 
-    @test.skipOnPlatform('__WXGTK__') # Causes SIGSEGV
+    @test.skipOnPlatform("__WXGTK__")  # Causes SIGSEGV
     def testRememberZeroSnoozeTime(self):
         reminderDialog = self.createReminderDialog()
         reminderDialog.snoozeOptions.SetSelection(0)
         reminderDialog.onClose(DummyEvent())
-        self.assertEqual(0, self.settings.getint('view', 'defaultsnoozetime'))
+        self.assertEqual(0, self.settings.getint("view", "defaultsnoozetime"))
 
-    @test.skipOnPlatform('__WXGTK__') # Causes SIGSEGV
+    @test.skipOnPlatform("__WXGTK__")  # Causes SIGSEGV
     def testRememberSnoozeTime(self):
         reminderDialog = self.createReminderDialog()
         reminderDialog.snoozeOptions.SetSelection(2)
         reminderDialog.onClose(DummyEvent())
-        self.assertEqual(10, self.settings.getint('view', 'defaultsnoozetime'))
+        self.assertEqual(10, self.settings.getint("view", "defaultsnoozetime"))
 
-    @test.skipOnPlatform('__WXGTK__') # Causes SIGSEGV
+    @test.skipOnPlatform("__WXGTK__")  # Causes SIGSEGV
     def testUseDefaultSnoozeTime(self):
-        self.settings.set('view', 'defaultsnoozetime', '15')
+        self.settings.set("view", "defaultsnoozetime", "15")
         reminderDialog = self.createReminderDialog()
-        self.assertEqual('15 minutes',
-                         reminderDialog.snoozeOptions.GetStringSelection())
+        self.assertEqual(
+            "15 minutes", reminderDialog.snoozeOptions.GetStringSelection()
+        )
 
-    @test.skipOnPlatform('__WXGTK__') # Causes SIGSEGV
+    @test.skipOnPlatform("__WXGTK__")  # Causes SIGSEGV
     def testDontUseDefaultSnoozeTimeWhenItsNotInTheListOfOptions(self):
-        self.settings.set('view', 'defaultsnoozetime', '17')
+        self.settings.set("view", "defaultsnoozetime", "17")
         reminderDialog = self.createReminderDialog()
-        self.assertEqual('5 minutes',
-                         reminderDialog.snoozeOptions.GetStringSelection())
+        self.assertEqual(
+            "5 minutes", reminderDialog.snoozeOptions.GetStringSelection()
+        )
 
-    @test.skipOnPlatform('__WXGTK__') # Causes SIGSEGV
+    @test.skipOnPlatform("__WXGTK__")  # Causes SIGSEGV
     def testRememberReminderReplaceDefaultSnoozeTime(self):
         reminderDialog = self.createReminderDialog()
         reminderDialog.replaceDefaultSnoozeTime.SetValue(False)
         reminderDialog.onClose(DummyEvent())
-        self.assertEqual(False, self.settings.getboolean('view',
-                                'replacedefaultsnoozetime'))
+        self.assertEqual(
+            False, self.settings.getboolean("view", "replacedefaultsnoozetime")
+        )
 
-    @test.skipOnPlatform('__WXGTK__') # Causes SIGSEGV
+    @test.skipOnPlatform("__WXGTK__")  # Causes SIGSEGV
     def testUseReminderReplaceDefaultSnoozeTime(self):
-        self.settings.setboolean('view', 'replacedefaultsnoozetime', False)
+        self.settings.setboolean("view", "replacedefaultsnoozetime", False)
         reminderDialog = self.createReminderDialog()
-        self.assertEqual(False,
-                         reminderDialog.replaceDefaultSnoozeTime.GetValue())
+        self.assertEqual(
+            False, reminderDialog.replaceDefaultSnoozeTime.GetValue()
+        )

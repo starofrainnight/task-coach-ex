@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 Copyright (C) 2008 Rob McMullen <rob.mcmullen@gmail.com>
@@ -18,11 +18,11 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import wx
 from taskcoachlib import command, widgets
-from taskcoachlib.domain import category 
+from taskcoachlib.domain import category
 from taskcoachlib.i18n import _
 from taskcoachlib.gui import uicommand, dialog
 import taskcoachlib.gui.menu
@@ -31,146 +31,232 @@ from . import mixin
 from . import inplace_editor
 
 
-class BaseCategoryViewer(mixin.AttachmentDropTargetMixin,  # pylint: disable=W0223
-                         mixin.FilterableViewerMixin,
-                         mixin.SortableViewerForCategoriesMixin, 
-                         mixin.SearchableViewerMixin, 
-                         base.WithAttachmentsViewerMixin,
-                         mixin.NoteColumnMixin, mixin.AttachmentColumnMixin,
-                         base.SortableViewerWithColumns, base.TreeViewer):
+class BaseCategoryViewer(
+    mixin.AttachmentDropTargetMixin,  # pylint: disable=W0223
+    mixin.FilterableViewerMixin,
+    mixin.SortableViewerForCategoriesMixin,
+    mixin.SearchableViewerMixin,
+    base.WithAttachmentsViewerMixin,
+    mixin.NoteColumnMixin,
+    mixin.AttachmentColumnMixin,
+    base.SortableViewerWithColumns,
+    base.TreeViewer,
+):
     SorterClass = category.CategorySorter
-    defaultTitle = _('Categories')
-    defaultBitmap = 'folder_blue_arrow_icon'
-    
+    defaultTitle = _("Categories")
+    defaultBitmap = "folder_blue_arrow_icon"
+
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('settingsSection', 'categoryviewer')
+        kwargs.setdefault("settingsSection", "categoryviewer")
         super(BaseCategoryViewer, self).__init__(*args, **kwargs)
-        for eventType in [category.Category.subjectChangedEventType(),
-                          category.Category.appearanceChangedEventType(),
-                          category.Category.exclusiveSubcategoriesChangedEventType(),
-                          category.Category.filterChangedEventType()]:
-            self.registerObserver(self.onAttributeChanged_Deprecated, 
-                eventType)
+        for eventType in [
+            category.Category.subjectChangedEventType(),
+            category.Category.appearanceChangedEventType(),
+            category.Category.exclusiveSubcategoriesChangedEventType(),
+            category.Category.filterChangedEventType(),
+        ]:
+            self.registerObserver(
+                self.onAttributeChanged_Deprecated, eventType
+            )
 
     def domainObjectsToView(self):
         return self.taskFile.categories()
-    
+
     def curselectionIsInstanceOf(self, class_):
         return class_ == category.Category
-    
+
     def createWidget(self):
         imageList = self.createImageList()  # Has side-effects
         self._columns = self._createColumns()
         itemPopupMenu = self.createCategoryPopupMenu()
         columnPopupMenu = taskcoachlib.gui.menu.ColumnPopupMenu(self)
         self._popupMenus.extend([itemPopupMenu, columnPopupMenu])
-        widget = widgets.CheckTreeCtrl(self, self._columns,
-            self.onSelect, self.onCheck,
+        widget = widgets.CheckTreeCtrl(
+            self,
+            self._columns,
+            self.onSelect,
+            self.onCheck,
             uicommand.Edit(viewer=self),
-            uicommand.CategoryDragAndDrop(viewer=self, categories=self.presentation()),
-            itemPopupMenu, columnPopupMenu,
+            uicommand.CategoryDragAndDrop(
+                viewer=self, categories=self.presentation()
+            ),
+            itemPopupMenu,
+            columnPopupMenu,
             resizeableColumn=1 if self.hasOrderingColumn() else 0,
             validateDrag=self.validateDrag,
-            **self.widgetCreationKeywordArguments())
+            **self.widgetCreationKeywordArguments()
+        )
         if self.hasOrderingColumn():
             widget.SetMainColumn(1)
         widget.AssignImageList(imageList)  # pylint: disable=E1101
         return widget
 
     def createCategoryPopupMenu(self, localOnly=False):
-        return taskcoachlib.gui.menu.CategoryPopupMenu(self.parent, self.settings, self.taskFile,
-                                      self, localOnly)
+        return taskcoachlib.gui.menu.CategoryPopupMenu(
+            self.parent, self.settings, self.taskFile, self, localOnly
+        )
 
     def _createColumns(self):
         # pylint: disable=W0142,E1101
         kwargs = dict(resizeCallback=self.onResizeColumn)
-        columns = [widgets.Column('ordering', '',
-                       category.Category.orderingChangedEventType(),
-                       sortCallback=uicommand.ViewerSortByCommand(viewer=self,
-                           value='ordering'),
-                       imageIndicesCallback=self.orderingImageIndices,
-                       renderCallback=lambda category: '',
-                       width=self.getColumnWidth('ordering')),
-                   widgets.Column('subject', _('Subject'), 
-                       category.Category.subjectChangedEventType(),  
-                       sortCallback=uicommand.ViewerSortByCommand(viewer=self,
-                           value='subject'),
-                       imageIndicesCallback=self.subjectImageIndices,
-                       width=self.getColumnWidth('subject'),
-                       editCallback=self.onEditSubject, 
-                       editControl=inplace_editor.SubjectCtrl, **kwargs),
-                   widgets.Column('description', _('Description'), 
-                       category.Category.descriptionChangedEventType(), 
-                       sortCallback=uicommand.ViewerSortByCommand(viewer=self,
-                           value='description'),
-                       renderCallback=lambda category: category.description(), 
-                       width=self.getColumnWidth('description'), 
-                       editCallback=self.onEditDescription,
-                       editControl=inplace_editor.DescriptionCtrl, **kwargs),
-                   widgets.Column('attachments', '', 
-                       category.Category.attachmentsChangedEventType(),  # pylint: disable=E1101
-                       width=self.getColumnWidth('attachments'),
-                       alignment=wx.LIST_FORMAT_LEFT,
-                       imageIndicesCallback=self.attachmentImageIndices,
-                       headerImageIndex=self.imageIndex['paperclip_icon'],
-                       renderCallback=lambda category: '', **kwargs)]
-        columns.append(widgets.Column('notes', '', 
-                       category.Category.notesChangedEventType(),  # pylint: disable=E1101
-                       width=self.getColumnWidth('notes'),
-                       alignment=wx.LIST_FORMAT_LEFT,
-                       imageIndicesCallback=self.noteImageIndices,
-                       headerImageIndex=self.imageIndex['note_icon'],
-                       renderCallback=lambda category: '', **kwargs))
-        columns.append(widgets.Column('creationDateTime', _('Creation date'),
-                       width=self.getColumnWidth('creationDateTime'),
-                       renderCallback=self.renderCreationDateTime,
-                       sortCallback=uicommand.ViewerSortByCommand(viewer=self,
-                                                                  value='creationDateTime'),
-                       **kwargs))
-        columns.append(widgets.Column('modificationDateTime', _('Modification date'),
-                       width=self.getColumnWidth('modificationDateTime'),
-                       renderCallback=self.renderModificationDateTime,
-                       sortCallback=uicommand.ViewerSortByCommand(viewer=self,
-                                                                  value='modificationDateTime'),
-                       *category.Category.modificationEventTypes(), **kwargs))
+        columns = [
+            widgets.Column(
+                "ordering",
+                "",
+                category.Category.orderingChangedEventType(),
+                sortCallback=uicommand.ViewerSortByCommand(
+                    viewer=self, value="ordering"
+                ),
+                imageIndicesCallback=self.orderingImageIndices,
+                renderCallback=lambda category: "",
+                width=self.getColumnWidth("ordering"),
+            ),
+            widgets.Column(
+                "subject",
+                _("Subject"),
+                category.Category.subjectChangedEventType(),
+                sortCallback=uicommand.ViewerSortByCommand(
+                    viewer=self, value="subject"
+                ),
+                imageIndicesCallback=self.subjectImageIndices,
+                width=self.getColumnWidth("subject"),
+                editCallback=self.onEditSubject,
+                editControl=inplace_editor.SubjectCtrl,
+                **kwargs
+            ),
+            widgets.Column(
+                "description",
+                _("Description"),
+                category.Category.descriptionChangedEventType(),
+                sortCallback=uicommand.ViewerSortByCommand(
+                    viewer=self, value="description"
+                ),
+                renderCallback=lambda category: category.description(),
+                width=self.getColumnWidth("description"),
+                editCallback=self.onEditDescription,
+                editControl=inplace_editor.DescriptionCtrl,
+                **kwargs
+            ),
+            widgets.Column(
+                "attachments",
+                "",
+                category.Category.attachmentsChangedEventType(),  # pylint: disable=E1101
+                width=self.getColumnWidth("attachments"),
+                alignment=wx.LIST_FORMAT_LEFT,
+                imageIndicesCallback=self.attachmentImageIndices,
+                headerImageIndex=self.imageIndex["paperclip_icon"],
+                renderCallback=lambda category: "",
+                **kwargs
+            ),
+        ]
+        columns.append(
+            widgets.Column(
+                "notes",
+                "",
+                category.Category.notesChangedEventType(),  # pylint: disable=E1101
+                width=self.getColumnWidth("notes"),
+                alignment=wx.LIST_FORMAT_LEFT,
+                imageIndicesCallback=self.noteImageIndices,
+                headerImageIndex=self.imageIndex["note_icon"],
+                renderCallback=lambda category: "",
+                **kwargs
+            )
+        )
+        columns.append(
+            widgets.Column(
+                "creationDateTime",
+                _("Creation date"),
+                width=self.getColumnWidth("creationDateTime"),
+                renderCallback=self.renderCreationDateTime,
+                sortCallback=uicommand.ViewerSortByCommand(
+                    viewer=self, value="creationDateTime"
+                ),
+                **kwargs
+            )
+        )
+        columns.append(
+            widgets.Column(
+                "modificationDateTime",
+                _("Modification date"),
+                width=self.getColumnWidth("modificationDateTime"),
+                renderCallback=self.renderModificationDateTime,
+                sortCallback=uicommand.ViewerSortByCommand(
+                    viewer=self, value="modificationDateTime"
+                ),
+                *category.Category.modificationEventTypes(),
+                **kwargs
+            )
+        )
         return columns
-    
+
     def createCreationToolBarUICommands(self):
-        return (uicommand.CategoryNew(categories=self.presentation(),
-                                      settings=self.settings),
-                uicommand.NewSubItem(viewer=self))
+        return (
+            uicommand.CategoryNew(
+                categories=self.presentation(), settings=self.settings
+            ),
+            uicommand.NewSubItem(viewer=self),
+        )
 
     def createColumnUICommands(self):
-        commands = [\
-            uicommand.ToggleAutoColumnResizing(viewer=self,
-                                               settings=self.settings),
+        commands = [
+            uicommand.ToggleAutoColumnResizing(
+                viewer=self, settings=self.settings
+            ),
             None,
-            uicommand.ViewColumn(menuText=_('&Manual ordering'),
-                helpText=_('Show/hide the manual ordering column'),
-                setting='ordering', viewer=self),
-            uicommand.ViewColumn(menuText=_('&Description'),
-                helpText=_('Show/hide description column'),
-                setting='description', viewer=self),
-            uicommand.ViewColumn(menuText=_('&Attachments'),
-                helpText=_('Show/hide attachments column'),
-                setting='attachments', viewer=self)]
-        commands.append(uicommand.ViewColumn(menuText=_('&Notes'),
-            helpText=_('Show/hide notes column'),
-            setting='notes', viewer=self))
-        commands.append(uicommand.ViewColumn(menuText=_('&Creation date'),
-            helpText=_('Show/hide creation date column'), 
-            setting='creationDateTime', viewer=self))
-        commands.append(uicommand.ViewColumn(menuText=_('&Modification date'),
-            helpText=_('Show/hide last modification date column'), 
-            setting='modificationDateTime', viewer=self))
+            uicommand.ViewColumn(
+                menuText=_("&Manual ordering"),
+                helpText=_("Show/hide the manual ordering column"),
+                setting="ordering",
+                viewer=self,
+            ),
+            uicommand.ViewColumn(
+                menuText=_("&Description"),
+                helpText=_("Show/hide description column"),
+                setting="description",
+                viewer=self,
+            ),
+            uicommand.ViewColumn(
+                menuText=_("&Attachments"),
+                helpText=_("Show/hide attachments column"),
+                setting="attachments",
+                viewer=self,
+            ),
+        ]
+        commands.append(
+            uicommand.ViewColumn(
+                menuText=_("&Notes"),
+                helpText=_("Show/hide notes column"),
+                setting="notes",
+                viewer=self,
+            )
+        )
+        commands.append(
+            uicommand.ViewColumn(
+                menuText=_("&Creation date"),
+                helpText=_("Show/hide creation date column"),
+                setting="creationDateTime",
+                viewer=self,
+            )
+        )
+        commands.append(
+            uicommand.ViewColumn(
+                menuText=_("&Modification date"),
+                helpText=_("Show/hide last modification date column"),
+                setting="modificationDateTime",
+                viewer=self,
+            )
+        )
         return commands
 
     def onAttributeChanged(self, newValue, sender):
         super(BaseCategoryViewer, self).onAttributeChanged(newValue, sender)
-            
+
     def onAttributeChanged_Deprecated(self, event):
-        if category.Category.exclusiveSubcategoriesChangedEventType() in event.types():
-            # We need to refresh the children of the changed item as well 
+        if (
+            category.Category.exclusiveSubcategoriesChangedEventType()
+            in event.types()
+        ):
+            # We need to refresh the children of the changed item as well
             # because they have to use radio buttons instead of checkboxes, or
             # vice versa:
             items = event.sources()
@@ -178,13 +264,15 @@ class BaseCategoryViewer(mixin.AttachmentDropTargetMixin,  # pylint: disable=W02
                 items |= set(item.children())
             self.widget.RefreshItems(*items)  # pylint: disable=W0142
         else:
-            super(BaseCategoryViewer, self).onAttributeChanged_Deprecated(event)
-        
+            super(BaseCategoryViewer, self).onAttributeChanged_Deprecated(
+                event
+            )
+
     def onCheck(self, event, final):
         categoryToFilter = self.widget.GetItemPyData(event.GetItem())
         categoryToFilter.setFiltered(event.GetItem().IsChecked())
         self.sendViewerStatusEvent()  # Notify status observers like the status bar
-        
+
     def getIsItemChecked(self, item):
         if isinstance(item, category.Category):
             return item.isFiltered()
@@ -193,39 +281,44 @@ class BaseCategoryViewer(mixin.AttachmentDropTargetMixin,  # pylint: disable=W02
     def getItemParentHasExclusiveChildren(self, item):
         parent = item.parent()
         return parent and parent.hasExclusiveSubcategories()
-    
+
     def isShowingCategories(self):
         return True
 
     def statusMessages(self):
-        status1 = _('Categories: %d selected, %d total') % \
-            (len(self.curselection()), len(self.presentation()))
+        status1 = _("Categories: %d selected, %d total") % (
+            len(self.curselection()),
+            len(self.presentation()),
+        )
         filteredCategories = self.presentation().filteredCategories()
-        status2 = _('Status: %d filtered') % len(filteredCategories)
+        status2 = _("Status: %d filtered") % len(filteredCategories)
         return status1, status2
-        
+
     def itemEditorClass(self):
         return dialog.editor.CategoryEditor
 
     def newItemCommandClass(self):
         return command.NewCategoryCommand
-    
+
     def newSubItemCommandClass(self):
         return command.NewSubCategoryCommand
 
     def deleteItemCommandClass(self):
         return command.DeleteCategoryCommand
-    
 
-class CategoryViewer(BaseCategoryViewer):  # pylint: disable=W0223 
+
+class CategoryViewer(BaseCategoryViewer):  # pylint: disable=W0223
     def __init__(self, *args, **kwargs):
         super(CategoryViewer, self).__init__(*args, **kwargs)
-        self.filterUICommand.setChoice(self.settings.getboolean('view',
-            'categoryfiltermatchall'))
+        self.filterUICommand.setChoice(
+            self.settings.getboolean("view", "categoryfiltermatchall")
+        )
 
     def createModeToolBarUICommands(self):
         # pylint: disable=W0201
-        self.filterUICommand = \
-            uicommand.CategoryViewerFilterChoice(settings=self.settings)
-        return super(CategoryViewer, self).createModeToolBarUICommands() + \
-            (self.filterUICommand,)
+        self.filterUICommand = uicommand.CategoryViewerFilterChoice(
+            settings=self.settings
+        )
+        return super(CategoryViewer, self).createModeToolBarUICommands() + (
+            self.filterUICommand,
+        )

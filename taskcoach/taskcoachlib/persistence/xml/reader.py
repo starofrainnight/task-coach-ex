@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -16,14 +16,26 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from .. import sessiontempfile  # pylint: disable=F0401
 from taskcoachlib import meta, patterns
 from taskcoachlib.changes import ChangeMonitor
-from taskcoachlib.domain import base, date, effort, task, category, categorizable, note, attachment
+from taskcoachlib.domain import (
+    base,
+    date,
+    effort,
+    task,
+    category,
+    categorizable,
+    note,
+    attachment,
+)
 from taskcoachlib.i18n import translate
-from taskcoachlib.syncml.config import SyncMLConfigNode, createDefaultSyncConfig
+from taskcoachlib.syncml.config import (
+    SyncMLConfigNode,
+    createDefaultSyncConfig,
+)
 from taskcoachlib.thirdparty.deltaTime import nlTimeExpression
 from taskcoachlib.thirdparty.guid import generate
 import io
@@ -36,24 +48,33 @@ import xml.etree.ElementTree as ET
 
 def parseAndAdjustDateTime(string, *timeDefaults):
     dateTime = date.parseDateTime(string, *timeDefaults)
-    if dateTime != date.DateTime() and dateTime is not None and \
-        dateTime.time() == date.Time(23, 59, 0, 0):
-        dateTime = date.DateTime(year=dateTime.year,
-                                 month=dateTime.month,
-                                 day=dateTime.day,
-                                 hour=23, minute=59, second=59, microsecond=999999)
+    if (
+        dateTime != date.DateTime()
+        and dateTime is not None
+        and dateTime.time() == date.Time(23, 59, 0, 0)
+    ):
+        dateTime = date.DateTime(
+            year=dateTime.year,
+            month=dateTime.month,
+            day=dateTime.day,
+            hour=23,
+            minute=59,
+            second=59,
+            microsecond=999999,
+        )
     return dateTime
 
 
 class PIParser(ET.XMLTreeBuilder):
     """See http://effbot.org/zone/element-pi.htm"""
+
     def __init__(self):
         ET.XMLTreeBuilder.__init__(self)
         self._parser.ProcessingInstructionHandler = self.handle_pi
         self.tskversion = meta.data.tskversion
 
     def handle_pi(self, target, data):
-        if target == 'taskcoach':
+        if target == "taskcoach":
             match_object = re.search('tskversion="(\d+)"', data)
             self.tskversion = int(match_object.group(1))
 
@@ -63,26 +84,29 @@ class XMLReaderTooNewException(Exception):
 
 
 class XMLReader(object):
-    ''' Class for reading task files in the default XML task file format. '''
+    """Class for reading task files in the default XML task file format."""
+
     defaultStartTime = (0, 0, 0, 0)
     defaultEndTime = (23, 59, 59, 999999)
 
     def __init__(self, fd):
         self.__fd = fd
-        self.__default_font_size = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT).GetPointSize()
+        self.__default_font_size = wx.SystemSettings.GetFont(
+            wx.SYS_DEFAULT_GUI_FONT
+        ).GetPointSize()
         self.__modification_datetimes = {}
         self.__prerequisites = {}
         self.__categorizables = {}
 
     def tskversion(self):
-        ''' Return the version of the current task file. Note that this is not
-            the version of the application. The task file has its own version
-            numbering (a number that is increasing on every change). '''
+        """Return the version of the current task file. Note that this is not
+        the version of the application. The task file has its own version
+        numbering (a number that is increasing on every change)."""
         return self.__tskversion
 
     def read(self):
-        ''' Read the task file and return the tasks, categories, notes, SyncML
-            configuration and GUID. '''
+        """Read the task file and return the tasks, categories, notes, SyncML
+        configuration and GUID."""
         if self.__has_broken_lines():
             self.__fix_broken_lines()
         parser = PIParser()
@@ -101,69 +125,78 @@ class XMLReader(object):
             categories = self.__parse_category_nodes(root)
         self.__resolve_categories(categories, tasks, notes)
 
-        guid = self.__parse_guid_node(root.find('guid'))
+        guid = self.__parse_guid_node(root.find("guid"))
         syncml_config = self.__parse_syncml_node(root, guid)
-        
-        for object, modification_datetime in self.__modification_datetimes.items():
+
+        for (
+            object,
+            modification_datetime,
+        ) in self.__modification_datetimes.items():
             object.setModificationDateTime(modification_datetime)
 
-        changesName = self.__fd.name + '.delta'
+        changesName = self.__fd.name + ".delta"
         if os.path.exists(changesName):
-            changes = ChangesXMLReader(file(self.__fd.name + '.delta', 'rU')).read()
+            changes = ChangesXMLReader(
+                file(self.__fd.name + ".delta", "rU")
+            ).read()
         else:
             changes = dict()
 
         return tasks, categories, notes, syncml_config, changes, guid
 
     def __has_broken_lines(self):
-        ''' tskversion 24 may contain newlines in element tags. '''
-        has_broken_lines = '><spds><sources><TaskCoach-\n' in self.__fd.read()
+        """tskversion 24 may contain newlines in element tags."""
+        has_broken_lines = "><spds><sources><TaskCoach-\n" in self.__fd.read()
         self.__fd.seek(0)
         return has_broken_lines
-    
+
     def __fix_broken_lines(self):
-        ''' Remove spurious newlines from element tags. '''
+        """Remove spurious newlines from element tags."""
         self.__origFd = self.__fd  # pylint: disable=W0201
         self.__fd = io.StringIO()
         self.__fd.name = self.__origFd.name
         lines = self.__origFd.readlines()
         for index in range(len(lines)):
-            if lines[index].endswith('<TaskCoach-\n') or \
-               lines[index].endswith('</TaskCoach-\n'):
+            if lines[index].endswith("<TaskCoach-\n") or lines[index].endswith(
+                "</TaskCoach-\n"
+            ):
                 lines[index] = lines[index][:-1]  # Remove newline
                 lines[index + 1] = lines[index + 1][:-1]  # Remove newline
-        self.__fd.write(''.join(lines))
+        self.__fd.write("".join(lines))
         self.__fd.seek(0)
 
     def __parse_task_nodes(self, node):
-        ''' Recursively parse all tasks from the node and return a list of
-            task instances. '''
-        return [self._parse_task_node(child) for child in node.findall('task')]
-                
+        """Recursively parse all tasks from the node and return a list of
+        task instances."""
+        return [self._parse_task_node(child) for child in node.findall("task")]
+
     def __resolve_prerequisites_and_dependencies(self, tasks):
-        ''' Replace all prerequisites with the actual task instances
-            and set the dependencies. '''
+        """Replace all prerequisites with the actual task instances
+        and set the dependencies."""
         tasks_by_id = dict()
-        
+
         def collect_ids(tasks):
-            ''' Create a mapping from task ids to task instances. '''
+            """Create a mapping from task ids to task instances."""
             for each_task in tasks:
                 tasks_by_id[each_task.id()] = each_task
                 collect_ids(each_task.children())
-        
+
         def resolve_ids(tasks):
-            ''' Replace all prerequisites ids with actual task instances and 
-                set the dependencies. '''
+            """Replace all prerequisites ids with actual task instances and
+            set the dependencies."""
             for each_task in tasks:
                 if each_task.isDeleted():
                     # Don't restore prerequisites and dependencies for deleted
                     # tasks
-                    for deleted_task in [each_task] + \
-                                        each_task.children(recursive=True):
+                    for deleted_task in [each_task] + each_task.children(
+                        recursive=True
+                    ):
                         deleted_task.setPrerequisites([])
                     continue
                 prerequisites = set()
-                for prerequisiteId in self.__prerequisites.get(each_task.id(), []):
+                for prerequisiteId in self.__prerequisites.get(
+                    each_task.id(), []
+                ):
                     try:
                         prerequisites.add(tasks_by_id[prerequisiteId])
                     except KeyError:
@@ -174,7 +207,7 @@ class XMLReader(object):
                 for prerequisite in prerequisites:
                     prerequisite.addDependencies([each_task])
                 resolve_ids(each_task.children())
-                
+
         collect_ids(tasks)
         resolve_ids(tasks)
 
@@ -204,7 +237,9 @@ class XMLReader(object):
             mapCategorizables(theNote, categorizableMap, categoryMap)
 
         event = patterns.Event()
-        for categoryId, categorizableIds in list(self.__categorizables.items()):
+        for categoryId, categorizableIds in list(
+            self.__categorizables.items()
+        ):
             theCategory = categoryMap[categoryId]
             for categorizableId in categorizableIds:
                 if categorizableId in categorizableMap:
@@ -214,39 +249,54 @@ class XMLReader(object):
         event.send()
 
     def __parse_category_nodes(self, node):
-        return [self.__parse_category_node(child) \
-                for child in node.findall('category')]
-        
+        return [
+            self.__parse_category_node(child)
+            for child in node.findall("category")
+        ]
+
     def __parse_note_nodes(self, node):
-        return [self.__parse_note_node(child) for child in node.findall('note')]
+        return [
+            self.__parse_note_node(child) for child in node.findall("note")
+        ]
 
     def __parse_category_node(self, category_node):
-        ''' Recursively parse the categories from the node and return a 
-            category instance. '''
-        kwargs = self.__parse_base_composite_attributes(category_node, 
-            self.__parse_category_nodes)
+        """Recursively parse the categories from the node and return a
+        category instance."""
+        kwargs = self.__parse_base_composite_attributes(
+            category_node, self.__parse_category_nodes
+        )
         notes = self.__parse_note_nodes(category_node)
-        filtered = self.__parse_boolean(category_node.attrib.get('filtered', 
-                                                                 'False'))
-        exclusive = self.__parse_boolean(category_node.attrib.get(\
-                                         'exclusiveSubcategories', 'False'))
-        kwargs.update(dict(notes=notes, filtered=filtered,
-                           exclusiveSubcategories=exclusive))
+        filtered = self.__parse_boolean(
+            category_node.attrib.get("filtered", "False")
+        )
+        exclusive = self.__parse_boolean(
+            category_node.attrib.get("exclusiveSubcategories", "False")
+        )
+        kwargs.update(
+            dict(
+                notes=notes,
+                filtered=filtered,
+                exclusiveSubcategories=exclusive,
+            )
+        )
         if self.__tskversion < 19:
-            categorizable_ids = category_node.attrib.get('tasks', '')
+            categorizable_ids = category_node.attrib.get("tasks", "")
         else:
-            categorizable_ids = category_node.attrib.get('categorizables', '')
+            categorizable_ids = category_node.attrib.get("categorizables", "")
         if self.__tskversion > 20:
-            kwargs['attachments'] = self.__parse_attachments(category_node)
-        theCategory = category.Category(**kwargs) # pylint: disable=W0142
-        self.__categorizables.setdefault(theCategory.id(), list()).extend(categorizable_ids.split(' '))
+            kwargs["attachments"] = self.__parse_attachments(category_node)
+        theCategory = category.Category(**kwargs)  # pylint: disable=W0142
+        self.__categorizables.setdefault(theCategory.id(), list()).extend(
+            categorizable_ids.split(" ")
+        )
         return self.__save_modification_datetime(theCategory)
-                      
+
     def __parse_category_nodes_from_task_nodes(self, root):
-        ''' In tskversion <=13 category nodes were subnodes of task nodes. '''
-        task_nodes = root.findall('.//task')
-        category_mapping = \
-            self.__parse_category_nodes_within_task_nodes(task_nodes)
+        """In tskversion <=13 category nodes were subnodes of task nodes."""
+        task_nodes = root.findall(".//task")
+        category_mapping = self.__parse_category_nodes_within_task_nodes(
+            task_nodes
+        )
         subject_category_mapping = {}
         for task_id, categories in list(category_mapping.items()):
             for subject in categories:
@@ -255,201 +305,272 @@ class XMLReader(object):
                 else:
                     cat = category.Category(subject)
                     subject_category_mapping[subject] = cat
-                self.__categorizables.setdefault(cat.id(), list()).append(task_id)
+                self.__categorizables.setdefault(cat.id(), list()).append(
+                    task_id
+                )
         return list(subject_category_mapping.values())
-    
+
     def __parse_category_nodes_within_task_nodes(self, task_nodes):
-        ''' In tskversion <=13 category nodes were subnodes of task nodes. '''
+        """In tskversion <=13 category nodes were subnodes of task nodes."""
         category_mapping = {}
         for node in task_nodes:
-            task_id = node.attrib['id']
-            categories = [child.text for child in node.findall('category')]
+            task_id = node.attrib["id"]
+            categories = [child.text for child in node.findall("category")]
             category_mapping.setdefault(task_id, []).extend(categories)
         return category_mapping
-        
+
     def _parse_task_node(self, task_node):
-        '''Recursively parse the node and return a task instance. '''
-            
-        planned_start_datetime_attribute_name = 'startdate' if self.tskversion() <= 33 else 'plannedstartdate'
-        kwargs = self.__parse_base_composite_attributes(task_node,
-                                                        self.__parse_task_nodes)
-        kwargs.update(dict(
-            plannedStartDateTime=date.parseDateTime(task_node.attrib.get(planned_start_datetime_attribute_name, ''), 
-                                                    *self.defaultStartTime),
-            dueDateTime=parseAndAdjustDateTime(task_node.attrib.get('duedate', ''), 
-                                           *self.defaultEndTime),
-            actualStartDateTime=date.parseDateTime(task_node.attrib.get('actualstartdate', ''),
-                                                   *self.defaultStartTime),
-            completionDateTime=date.parseDateTime(task_node.attrib.get('completiondate', ''), 
-                                                  *self.defaultEndTime),
-            percentageComplete=self.__parse_int_attribute(task_node, 
-                                                       'percentageComplete'),
-            budget=date.parseTimeDelta(task_node.attrib.get('budget', '')),
-            priority=self.__parse_int_attribute(task_node, 'priority'),
-            hourlyFee=float(task_node.attrib.get('hourlyFee', '0')),
-            fixedFee=float(task_node.attrib.get('fixedFee', '0')),
-            reminder=self.__parse_datetime(task_node.attrib.get('reminder', '')),
-            reminderBeforeSnooze=self.__parse_datetime(task_node.attrib.get('reminderBeforeSnooze', '')),
-            # Ignore prerequisites for now, they'll be resolved later
-            prerequisites=[],
-            shouldMarkCompletedWhenAllChildrenCompleted=self.__parse_boolean(task_node.attrib.get('shouldMarkCompletedWhenAllChildrenCompleted', '')),
-            efforts=self.__parse_effort_nodes(task_node),
-            notes=self.__parse_note_nodes(task_node),
-            recurrence=self.__parse_recurrence(task_node)))
-        self.__prerequisites[kwargs['id']] = [id_ for id_ in task_node.attrib.get('prerequisites', '').split(' ') if id_]
+        """Recursively parse the node and return a task instance."""
+
+        planned_start_datetime_attribute_name = (
+            "startdate" if self.tskversion() <= 33 else "plannedstartdate"
+        )
+        kwargs = self.__parse_base_composite_attributes(
+            task_node, self.__parse_task_nodes
+        )
+        kwargs.update(
+            dict(
+                plannedStartDateTime=date.parseDateTime(
+                    task_node.attrib.get(
+                        planned_start_datetime_attribute_name, ""
+                    ),
+                    *self.defaultStartTime
+                ),
+                dueDateTime=parseAndAdjustDateTime(
+                    task_node.attrib.get("duedate", ""), *self.defaultEndTime
+                ),
+                actualStartDateTime=date.parseDateTime(
+                    task_node.attrib.get("actualstartdate", ""),
+                    *self.defaultStartTime
+                ),
+                completionDateTime=date.parseDateTime(
+                    task_node.attrib.get("completiondate", ""),
+                    *self.defaultEndTime
+                ),
+                percentageComplete=self.__parse_int_attribute(
+                    task_node, "percentageComplete"
+                ),
+                budget=date.parseTimeDelta(task_node.attrib.get("budget", "")),
+                priority=self.__parse_int_attribute(task_node, "priority"),
+                hourlyFee=float(task_node.attrib.get("hourlyFee", "0")),
+                fixedFee=float(task_node.attrib.get("fixedFee", "0")),
+                reminder=self.__parse_datetime(
+                    task_node.attrib.get("reminder", "")
+                ),
+                reminderBeforeSnooze=self.__parse_datetime(
+                    task_node.attrib.get("reminderBeforeSnooze", "")
+                ),
+                # Ignore prerequisites for now, they'll be resolved later
+                prerequisites=[],
+                shouldMarkCompletedWhenAllChildrenCompleted=self.__parse_boolean(
+                    task_node.attrib.get(
+                        "shouldMarkCompletedWhenAllChildrenCompleted", ""
+                    )
+                ),
+                efforts=self.__parse_effort_nodes(task_node),
+                notes=self.__parse_note_nodes(task_node),
+                recurrence=self.__parse_recurrence(task_node),
+            )
+        )
+        self.__prerequisites[kwargs["id"]] = [
+            id_
+            for id_ in task_node.attrib.get("prerequisites", "").split(" ")
+            if id_
+        ]
         if self.__tskversion > 20:
-            kwargs['attachments'] = self.__parse_attachments(task_node)
-        return self.__save_modification_datetime(task.Task(**kwargs))  # pylint: disable=W0142
-        
+            kwargs["attachments"] = self.__parse_attachments(task_node)
+        return self.__save_modification_datetime(
+            task.Task(**kwargs)
+        )  # pylint: disable=W0142
+
     def __parse_recurrence(self, task_node):
-        ''' Parse the recurrence from the node and return a recurrence 
-            instance. '''
+        """Parse the recurrence from the node and return a recurrence
+        instance."""
         if self.__tskversion <= 19:
             parse_kwargs = self.__parse_recurrence_attributes_from_task_node
         else:
             parse_kwargs = self.__parse_recurrence_node
         return date.Recurrence(**parse_kwargs(task_node))
-    
+
     def __parse_recurrence_node(self, task_node):
-        ''' Since tskversion >= 20, recurrence information is stored in a 
-            separate node. '''
-        kwargs = dict(unit='', amount=1, count=0, maximum=0, stop_datetime=None,
-                      sameWeekday=False)
-        node = task_node.find('recurrence')
+        """Since tskversion >= 20, recurrence information is stored in a
+        separate node."""
+        kwargs = dict(
+            unit="",
+            amount=1,
+            count=0,
+            maximum=0,
+            stop_datetime=None,
+            sameWeekday=False,
+        )
+        node = task_node.find("recurrence")
         if node is not None:
-            kwargs = dict(unit=node.attrib.get('unit', ''),
-                amount=int(node.attrib.get('amount', '1')),
-                count=int(node.attrib.get('count', '0')),
-                maximum=int(node.attrib.get('max', '0')),
-                stop_datetime=self.__parse_datetime(node.attrib.get('stop_datetime', '')),
-                sameWeekday=self.__parse_boolean(node.attrib.get('sameWeekday', 
-                                                                 'False')),
-                recurBasedOnCompletion=self.__parse_boolean(node.attrib.get('recurBasedOnCompletion', 'False')))
+            kwargs = dict(
+                unit=node.attrib.get("unit", ""),
+                amount=int(node.attrib.get("amount", "1")),
+                count=int(node.attrib.get("count", "0")),
+                maximum=int(node.attrib.get("max", "0")),
+                stop_datetime=self.__parse_datetime(
+                    node.attrib.get("stop_datetime", "")
+                ),
+                sameWeekday=self.__parse_boolean(
+                    node.attrib.get("sameWeekday", "False")
+                ),
+                recurBasedOnCompletion=self.__parse_boolean(
+                    node.attrib.get("recurBasedOnCompletion", "False")
+                ),
+            )
         return kwargs
-    
-    @staticmethod                           
+
+    @staticmethod
     def __parse_recurrence_attributes_from_task_node(task_node):
-        ''' In tskversion <= 19 recurrence information was stored as attributes
-            of task nodes. '''
-        return dict(unit=task_node.attrib.get('recurrence', ''),
-            count=int(task_node.attrib.get('recurrenceCount', '0')),
-            amount=int(task_node.attrib.get('recurrenceFrequency', '1')),
-            maximum=int(task_node.attrib.get('maxRecurrenceCount', '0')))
-    
+        """In tskversion <= 19 recurrence information was stored as attributes
+        of task nodes."""
+        return dict(
+            unit=task_node.attrib.get("recurrence", ""),
+            count=int(task_node.attrib.get("recurrenceCount", "0")),
+            amount=int(task_node.attrib.get("recurrenceFrequency", "1")),
+            maximum=int(task_node.attrib.get("maxRecurrenceCount", "0")),
+        )
+
     def __parse_note_node(self, note_node):
-        ''' Parse the attributes and child notes from the noteNode. '''
-        kwargs = self.__parse_base_composite_attributes(note_node, 
-                                                    self.__parse_note_nodes)
+        """Parse the attributes and child notes from the noteNode."""
+        kwargs = self.__parse_base_composite_attributes(
+            note_node, self.__parse_note_nodes
+        )
         if self.__tskversion > 20:
-            kwargs['attachments'] = self.__parse_attachments(note_node)
-        return self.__save_modification_datetime(note.Note(**kwargs))  # pylint: disable=W0142
-    
+            kwargs["attachments"] = self.__parse_attachments(note_node)
+        return self.__save_modification_datetime(
+            note.Note(**kwargs)
+        )  # pylint: disable=W0142
+
     def __parse_base_attributes(self, node):
-        ''' Parse the attributes all composite domain objects share, such as
-            id, subject, description, and return them as a 
-            keyword arguments dictionary that can be passed to the domain 
-            object constructor. '''
-        bg_color_attribute = 'color' if self.__tskversion <= 27 else 'bgColor'
-        attributes = dict(id=node.attrib.get('id', ''),
-            creationDateTime=self.__parse_datetime(node.attrib.get('creationDateTime', 
-                                                                   '1-1-1 0:0')),
-            modificationDateTime=self.__parse_datetime(node.attrib.get('modificationDateTime',
-                                                                       '1-1-1 0:0')),
-            subject=node.attrib.get('subject', ''),
+        """Parse the attributes all composite domain objects share, such as
+        id, subject, description, and return them as a
+        keyword arguments dictionary that can be passed to the domain
+        object constructor."""
+        bg_color_attribute = "color" if self.__tskversion <= 27 else "bgColor"
+        attributes = dict(
+            id=node.attrib.get("id", ""),
+            creationDateTime=self.__parse_datetime(
+                node.attrib.get("creationDateTime", "1-1-1 0:0")
+            ),
+            modificationDateTime=self.__parse_datetime(
+                node.attrib.get("modificationDateTime", "1-1-1 0:0")
+            ),
+            subject=node.attrib.get("subject", ""),
             description=self.__parse_description(node),
-            fgColor=self.__parse_tuple(node.attrib.get('fgColor', ''), None),
-            bgColor=self.__parse_tuple(node.attrib.get(bg_color_attribute, ''), 
-                                     None),
-            font=self.__parse_font_description(node.attrib.get('font', '')),
-            icon=self.__parse_icon(node.attrib.get('icon', '')),
-            selectedIcon=self.__parse_icon(node.attrib.get('selectedIcon', '')),
-            ordering=int(node.attrib.get('ordering', '0L')))
+            fgColor=self.__parse_tuple(node.attrib.get("fgColor", ""), None),
+            bgColor=self.__parse_tuple(
+                node.attrib.get(bg_color_attribute, ""), None
+            ),
+            font=self.__parse_font_description(node.attrib.get("font", "")),
+            icon=self.__parse_icon(node.attrib.get("icon", "")),
+            selectedIcon=self.__parse_icon(
+                node.attrib.get("selectedIcon", "")
+            ),
+            ordering=int(node.attrib.get("ordering", "0L")),
+        )
 
         if self.__tskversion <= 20:
-            attributes['attachments'] = \
+            attributes["attachments"] = (
                 self.__parse_attachments_before_version21(node)
+            )
         if self.__tskversion >= 22:
-            attributes['status'] = int(node.attrib.get('status', '1'))
+            attributes["status"] = int(node.attrib.get("status", "1"))
 
         return attributes
-    
-    def __parse_base_composite_attributes(self, node, parse_children, 
-                                          *parse_children_args):
-        ''' Same as __parse_base_attributes, but also parse children and 
-            expandedContexts. '''
+
+    def __parse_base_composite_attributes(
+        self, node, parse_children, *parse_children_args
+    ):
+        """Same as __parse_base_attributes, but also parse children and
+        expandedContexts."""
         kwargs = self.__parse_base_attributes(node)
-        kwargs['children'] = parse_children(node, *parse_children_args)
-        expanded_contexts = node.attrib.get('expandedContexts', '')
-        kwargs['expandedContexts'] = self.__parse_tuple(expanded_contexts, [])
+        kwargs["children"] = parse_children(node, *parse_children_args)
+        expanded_contexts = node.attrib.get("expandedContexts", "")
+        kwargs["expandedContexts"] = self.__parse_tuple(expanded_contexts, [])
         return kwargs
 
     def __parse_attachments_before_version21(self, parent):
-        ''' Parse the attachments from the node and return the attachment 
-            instances. '''
-        path, name = os.path.split(os.path.abspath(self.__fd.name))  # pylint: disable=E1103
+        """Parse the attachments from the node and return the attachment
+        instances."""
+        path, name = os.path.split(
+            os.path.abspath(self.__fd.name)
+        )  # pylint: disable=E1103
         name = os.path.splitext(name)[0]
-        attdir = os.path.normpath(os.path.join(path, name + '_attachments'))
+        attdir = os.path.normpath(os.path.join(path, name + "_attachments"))
 
         attachments = []
-        for node in parent.findall('attachment'):
+        for node in parent.findall("attachment"):
             if self.__tskversion <= 16:
                 args = (node.text,)
                 kwargs = dict()
             else:
-                args = (os.path.join(attdir, node.find('data').text), 
-                        node.attrib['type'])
+                args = (
+                    os.path.join(attdir, node.find("data").text),
+                    node.attrib["type"],
+                )
                 description = self.__parse_description(node)
-                kwargs = dict(subject=description,
-                              description=description)
+                kwargs = dict(subject=description, description=description)
             try:
                 # pylint: disable=W0142
-                attachments.append(attachment.AttachmentFactory(*args, 
-                                                                **kwargs))  
+                attachments.append(
+                    attachment.AttachmentFactory(*args, **kwargs)
+                )
             except IOError:
                 # Mail attachment, file doesn't exist. Ignore this.
                 pass
         return attachments
 
     def __parse_effort_nodes(self, node):
-        ''' Parse all effort records from the node. '''
-        return [self.__parse_effort_node(effort_node) \
-                for effort_node in node.findall('effort')]
+        """Parse all effort records from the node."""
+        return [
+            self.__parse_effort_node(effort_node)
+            for effort_node in node.findall("effort")
+        ]
 
     def __parse_effort_node(self, node):
-        ''' Parse an effort record from the node. '''
+        """Parse an effort record from the node."""
         kwargs = {}
         if self.__tskversion >= 22:
-            kwargs['status'] = int(node.attrib.get('status', '1'))
+            kwargs["status"] = int(node.attrib.get("status", "1"))
         if self.__tskversion >= 29:
-            kwargs['id'] = node.attrib['id']
-        start = node.attrib.get('start', '')
-        stop = node.attrib.get('stop', '')
+            kwargs["id"] = node.attrib["id"]
+        start = node.attrib.get("start", "")
+        stop = node.attrib.get("stop", "")
         description = self.__parse_description(node)
         # task=None because it is set when the effort is actually added to the
         # task by the task itself. This way no events are sent for changing the
         # effort owner, which is good.
-        # pylint: disable=W0142 
-        return effort.Effort(task=None, start=date.parseDateTime(start),
-            stop=date.parseDateTime(stop), description=description, **kwargs)
+        # pylint: disable=W0142
+        return effort.Effort(
+            task=None,
+            start=date.parseDateTime(start),
+            stop=date.parseDateTime(stop),
+            description=description,
+            **kwargs
+        )
 
     def __parse_syncml_node(self, nodes, guid):
-        ''' Parse the SyncML node from the nodes. '''
+        """Parse the SyncML node from the nodes."""
         syncml_config = createDefaultSyncConfig(guid)
 
-        node_name = 'syncmlconfig'
+        node_name = "syncmlconfig"
         if self.__tskversion < 25:
-            node_name = 'syncml'
+            node_name = "syncml"
 
         for node in nodes.findall(node_name):
             self.__parse_syncml_nodes(node, syncml_config)
         return syncml_config
 
     def __parse_syncml_nodes(self, node, config_node):
-        ''' Parse the SyncML nodes from the node. '''
+        """Parse the SyncML nodes from the node."""
         for child_node in node:
-            if child_node.tag == 'property':
-                config_node.set(child_node.attrib['name'], 
-                                self.__parse_text(child_node))
+            if child_node.tag == "property":
+                config_node.set(
+                    child_node.attrib["name"], self.__parse_text(child_node)
+                )
             else:
                 for child_config_node in config_node.children():
                     if child_config_node.name == child_node.tag:
@@ -458,17 +579,17 @@ class XMLReader(object):
                     tag = child_node.tag
                     child_config_node = SyncMLConfigNode(tag)
                     config_node.addChild(child_config_node)
-                self.__parse_syncml_nodes(child_node, child_config_node) 
+                self.__parse_syncml_nodes(child_node, child_config_node)
 
     def __parse_guid_node(self, node):
-        ''' Parse the GUID from the node. '''
+        """Parse the GUID from the node."""
         guid = self.__parse_text(node).strip()
         return guid if guid else generate()
-        
+
     def __parse_attachments(self, node):
-        ''' Parse the attachments from the node. '''
+        """Parse the attachments from the node."""
         attachments = []
-        for child_node in node.findall('attachment'):
+        for child_node in node.findall("attachment"):
             try:
                 attachments.append(self.__parse_attachment(child_node))
             except IOError:
@@ -476,72 +597,82 @@ class XMLReader(object):
         return attachments
 
     def __parse_attachment(self, node):
-        ''' Parse the attachment from the node. '''
+        """Parse the attachment from the node."""
         kwargs = self.__parse_base_attributes(node)
-        kwargs['notes'] = self.__parse_note_nodes(node)
+        kwargs["notes"] = self.__parse_note_nodes(node)
 
         if self.__tskversion <= 22:
-            path, name = os.path.split(os.path.abspath(\
-                                       self.__fd.name))  # pylint: disable=E1103
+            path, name = os.path.split(
+                os.path.abspath(self.__fd.name)
+            )  # pylint: disable=E1103
             name, ext = os.path.splitext(name)
-            attdir = os.path.normpath(os.path.join(path, name + '_attachments'))
-            location = os.path.join(attdir, node.attrib['location'])
+            attdir = os.path.normpath(
+                os.path.join(path, name + "_attachments")
+            )
+            location = os.path.join(attdir, node.attrib["location"])
         else:
-            if 'location' in node.attrib:
-                location = node.attrib['location']
+            if "location" in node.attrib:
+                location = node.attrib["location"]
             else:
-                data_node = node.find('data')
+                data_node = node.find("data")
 
                 if data_node is None:
-                    raise ValueError('Neither location or data are defined '
-                                     'for this attachment.')
+                    raise ValueError(
+                        "Neither location or data are defined "
+                        "for this attachment."
+                    )
 
                 data = self.__parse_text(data_node)
-                ext = data_node.attrib['extension']
+                ext = data_node.attrib["extension"]
 
                 location = sessiontempfile.get_temp_file(suffix=ext)
-                file(location, 'wb').write(data.decode('base64'))
+                file(location, "wb").write(data.decode("base64"))
 
-                if os.name == 'nt':
+                if os.name == "nt":
                     os.chmod(location, stat.S_IREAD)
 
-        return self.__save_modification_datetime(attachment.AttachmentFactory(location,  # pylint: disable=W0142
-                                                                              node.attrib['type'], **kwargs))
+        return self.__save_modification_datetime(
+            attachment.AttachmentFactory(
+                location,  # pylint: disable=W0142
+                node.attrib["type"],
+                **kwargs
+            )
+        )
 
     def __parse_description(self, node):
-        ''' Parse the description from the node. '''
+        """Parse the description from the node."""
         if self.__tskversion <= 6:
-            description = node.attrib.get('description', '')
+            description = node.attrib.get("description", "")
         else:
-            description = self.__parse_text(node.find('description'))
+            description = self.__parse_text(node.find("description"))
         return description
-    
+
     def __parse_text(self, node):
-        ''' Parse the text from a node. '''
-        text = '' if node is None else node.text or ''
+        """Parse the text from a node."""
+        text = "" if node is None else node.text or ""
         if self.__tskversion >= 24:
             # Strip newlines
-            if text.startswith('\n'):
+            if text.startswith("\n"):
                 text = text[1:]
-            if text.endswith('\n'):
+            if text.endswith("\n"):
                 text = text[:-1]
         return text
-                    
+
     @classmethod
     def __parse_int_attribute(cls, node, attribute_name, default_value=0):
-        ''' Parse the integer attribute with the specified name from the 
-            node. In case of failure, return the default value. '''
-        text = node.attrib.get(attribute_name, '0')
+        """Parse the integer attribute with the specified name from the
+        node. In case of failure, return the default value."""
+        text = node.attrib.get(attribute_name, "0")
         return cls.__parse(text, int, default_value)
-        
+
     @classmethod
     def __parse_datetime(cls, text):
-        ''' Parse a datetime from the text. '''
+        """Parse a datetime from the text."""
         return cls.__parse(text, date.parseDateTime, None)
-    
+
     def __parse_font_description(self, text, default_value=None):
-        ''' Parse a font from the text. In case of failure, return the default
-            value. '''
+        """Parse a font from the text. In case of failure, return the default
+        value."""
         if text:
             font = wx.FontFromNativeInfoString(text)
             if font and font.IsOk():
@@ -549,46 +680,48 @@ class XMLReader(object):
                     font.SetPointSize(self.__default_font_size)
                 return font
         return default_value
-    
+
     @staticmethod
     def __parse_icon(text):
-        ''' Parse an icon name from the text. '''
+        """Parse an icon name from the text."""
         # Parse is a big word, we just need to fix one particular icon
-        return 'clock_alarm_icon' if text == 'clock_alarm' else text
-    
+        return "clock_alarm_icon" if text == "clock_alarm" else text
+
     @classmethod
     def __parse_boolean(cls, text, default_value=None):
-        ''' Parse a boolean from the text. In case of failure, return the
-            default value. '''
+        """Parse a boolean from the text. In case of failure, return the
+        default value."""
+
         def text_to_boolean(text):
-            ''' Transform 'True' to True and 'False' to False, raise a 
-                ValueError for any other text. '''
-            if text in ('True', 'False'):
-                return text == 'True'
+            """Transform 'True' to True and 'False' to False, raise a
+            ValueError for any other text."""
+            if text in ("True", "False"):
+                return text == "True"
             else:
                 raise ValueError("Expected 'True' or 'False', got '%s'" % text)
+
         return cls.__parse(text, text_to_boolean, default_value)
-        
+
     @classmethod
     def __parse_tuple(cls, text, default_value=None):
-        ''' Parse a tuple from the text. In case of failure, return the default
-            value. '''
-        if text.startswith('(') and text.endswith(')'):
+        """Parse a tuple from the text. In case of failure, return the default
+        value."""
+        if text.startswith("(") and text.endswith(")"):
             return cls.__parse(text, eval, default_value)
         else:
             return default_value
-    
+
     @staticmethod
     def __parse(text, parse_function, default_value):
-        ''' Parse the text using the parse function. In case of failure, return
-            the default value. '''
+        """Parse the text using the parse function. In case of failure, return
+        the default value."""
         try:
             return parse_function(text)
         except ValueError:
             return default_value
-        
+
     def __save_modification_datetime(self, item):
-        ''' Save the modification date time of the item for later restore. '''
+        """Save the modification date time of the item for later restore."""
         self.__modification_datetimes[item] = item.modificationDateTime()
         return item
 
@@ -600,15 +733,15 @@ class ChangesXMLReader(object):
     def read(self):
         allChanges = dict()
         tree = ET.parse(self.__fd)
-        for devNode in tree.getroot().findall('device'):
-            id_ = devNode.attrib['guid']
+        for devNode in tree.getroot().findall("device"):
+            id_ = devNode.attrib["guid"]
             mon = ChangeMonitor(id_)
-            for objNode in devNode.findall('obj'):
+            for objNode in devNode.findall("obj"):
                 if objNode.text:
-                    changes = set(objNode.text.split(','))
+                    changes = set(objNode.text.split(","))
                 else:
                     changes = set()
-                mon.setChanges(objNode.attrib['id'], changes)
+                mon.setChanges(objNode.attrib["id"], changes)
             allChanges[id_] = mon
         return allChanges
 
@@ -619,45 +752,61 @@ class TemplateXMLReader(XMLReader):
 
     def _parse_task_node(self, task_node):
         attrs = dict()
-        attribute_renames = dict(startdate='plannedstartdate')
-        for name in ['startdate', 'plannedstartdate', 'duedate', 
-                     'completiondate', 'reminder']:
+        attribute_renames = dict(startdate="plannedstartdate")
+        for name in [
+            "startdate",
+            "plannedstartdate",
+            "duedate",
+            "completiondate",
+            "reminder",
+        ]:
             new_name = attribute_renames.get(name, name)
-            template_name = name + 'tmpl'
+            template_name = name + "tmpl"
             if template_name in task_node.attrib:
                 if self.tskversion() < 32:
-                    value = TemplateXMLReader.convert_old_format(task_node.attrib[template_name])
+                    value = TemplateXMLReader.convert_old_format(
+                        task_node.attrib[template_name]
+                    )
                 else:
                     value = task_node.attrib[template_name]
                 attrs[new_name] = value
-                task_node.attrib[new_name] = str(nlTimeExpression.parseString(value).calculatedTime)
+                task_node.attrib[new_name] = str(
+                    nlTimeExpression.parseString(value).calculatedTime
+                )
             elif new_name not in attrs:
                 attrs[new_name] = None
-        if 'subject' in task_node.attrib:
-            task_node.attrib['subject'] = translate(task_node.attrib['subject'])
-        parsed_task = super(TemplateXMLReader, self)._parse_task_node(task_node)
+        if "subject" in task_node.attrib:
+            task_node.attrib["subject"] = translate(
+                task_node.attrib["subject"]
+            )
+        parsed_task = super(TemplateXMLReader, self)._parse_task_node(
+            task_node
+        )
         for name, value in list(attrs.items()):
-            setattr(parsed_task, name + 'tmpl', value)
+            setattr(parsed_task, name + "tmpl", value)
         return parsed_task
 
     @staticmethod
     def convert_old_format(expr, now=date.Now):
         # Built-in templates:
-        built_in_templates = {'Now()': 'now', 
-                              'Now().endOfDay()': '11:59 PM today',
-                              'Now().endOfDay() + oneDay': '11:59 PM tomorrow',
-                              'Today()': '00:00 AM today',
-                              'Tomorrow()': '11:59 PM tomorrow'}
+        built_in_templates = {
+            "Now()": "now",
+            "Now().endOfDay()": "11:59 PM today",
+            "Now().endOfDay() + oneDay": "11:59 PM tomorrow",
+            "Today()": "00:00 AM today",
+            "Tomorrow()": "11:59 PM tomorrow",
+        }
         if expr in built_in_templates:
             return built_in_templates[expr]
         # Not a built in template:
         new_datetime = eval(expr, date.__dict__)
         if isinstance(new_datetime, date.date.RealDate):
-            new_datetime = date.DateTime(new_datetime.year, new_datetime.month, 
-                                        new_datetime.day)
+            new_datetime = date.DateTime(
+                new_datetime.year, new_datetime.month, new_datetime.day
+            )
         delta = new_datetime - now()
         minutes = delta.minutes()
         if minutes < 0:
-            return '%d minutes ago' % (-minutes)
+            return "%d minutes ago" % (-minutes)
         else:
-            return '%d minutes from now' % minutes
+            return "%d minutes from now" % minutes

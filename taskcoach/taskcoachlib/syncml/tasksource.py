@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import inspect
 from taskcoachlib.syncml import basesource
@@ -29,18 +29,26 @@ class TaskSource(basesource.BaseSource):
         self.categoryList = categoryList
 
     def updateItemProperties(self, item, task):
-        item.data = 'BEGIN:VCALENDAR\r\nVERSION: 1.0\r\n' + \
-                    ical.VCalFromTask(task, doFold=False).encode('UTF-8') + \
-                    'END:VCALENDAR'
-        item.dataType = 'text/calendar'
+        item.data = (
+            "BEGIN:VCALENDAR\r\nVERSION: 1.0\r\n"
+            + ical.VCalFromTask(task, doFold=False).encode("UTF-8")
+            + "END:VCALENDAR"
+        )
+        item.dataType = "text/calendar"
 
     def _parseObject(self, item):
         parser = ical.VCalendarParser()
-        parser.parse([x.rstrip('\r') for x in item.data.split('\n')])
+        parser.parse([x.rstrip("\r") for x in item.data.split("\n")])
 
-        categories = parser.tasks[0].pop('categories', [])
+        categories = parser.tasks[0].pop("categories", [])
 
-        kwargs = dict([(k, v) for k, v in list(parser.tasks[0].items()) if k in inspect.getargspec(Task.__init__)[0]])
+        kwargs = dict(
+            [
+                (k, v)
+                for k, v in list(parser.tasks[0].items())
+                if k in inspect.getargspec(Task.__init__)[0]
+            ]
+        )
         task = Task(**kwargs)
 
         for category in categories:
@@ -76,4 +84,4 @@ class TaskSource(basesource.BaseSource):
 
         super(TaskSource, self).doUpdateItem(task, local)
 
-        return 200 # FIXME
+        return 200  # FIXME

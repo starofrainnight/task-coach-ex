@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,8 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
-
+"""
 
 import test, tempfile
 from taskcoachlib.thirdparty import lockfile
@@ -25,18 +24,18 @@ class LockFileTest(test.TestCase):
     def setUp(self):
         self.tmpfile = tempfile.NamedTemporaryFile()
         self.lock = lockfile.FileLock(self.tmpfile.name)
-        
+
     def tearDown(self):
         super(LockFileTest, self).tearDown()
-        self.tmpfile.close() # Temp files are deleted when closed
-        
+        self.tmpfile.close()  # Temp files are deleted when closed
+
     def testFileIsNotLockedInitially(self):
         self.assertFalse(self.lock.is_locked())
-        
+
     def testFileIsLockedAfterLocking(self):
         self.lock.acquire()
         self.assertTrue(self.lock.is_locked())
-        
+
     def testLockingWithContextManager(self):
         with self.lock:
             self.assertTrue(self.lock.is_locked())

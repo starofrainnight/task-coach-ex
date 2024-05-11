@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,23 +14,24 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
 from taskcoachlib import gui, config, persistence
 from taskcoachlib.domain import task
 
-       
+
 class TreeViewerTest(test.wxTestCase):
     def setUp(self):
         super(TreeViewerTest, self).setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
-        self.viewer = gui.viewer.TaskViewer(self.frame, self.taskFile,
-            self.settings)
+        self.viewer = gui.viewer.TaskViewer(
+            self.frame, self.taskFile, self.settings
+        )
         self.expansionContext = self.viewer.settingsSection()
-        self.parent = task.Task('parent')
-        self.child = task.Task('child')
+        self.parent = task.Task("parent")
+        self.child = task.Task("child")
         self.parent.addChild(self.child)
         self.child.setParent(self.parent)
         self.taskFile.tasks().extend([self.parent, self.child])
@@ -45,20 +46,20 @@ class TreeViewerTest(test.wxTestCase):
     def firstItem(self):
         root = self.widget.GetRootItem()
         return self.widget.GetFirstChild(root)[0]
-                
+
     def testWidgetDoesNotDisplayChildItemBeforeItsParentIsExpanded(self):
         self.assertEqual(1, self.viewer.widget.GetItemCount())
-        
+
     def testExpand(self):
         self.widget.Expand(self.firstItem())
         self.assertTrue(self.parent.isExpanded(context=self.expansionContext))
-        
+
     def testCollapse(self):
         firstVisibleItem = self.firstItem()
         self.widget.Expand(firstVisibleItem)
         self.widget.Collapse(firstVisibleItem)
         self.assertFalse(self.parent.isExpanded(context=self.expansionContext))
-        
+
     def testExpandall(self):
         self.viewer.expandAll()
         self.assertTrue(self.parent.isExpanded(context=self.expansionContext))

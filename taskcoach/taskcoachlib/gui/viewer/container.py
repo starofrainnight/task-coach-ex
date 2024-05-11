@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import operating_system
 import taskcoachlib.gui.menu
@@ -24,14 +24,14 @@ import wx
 
 
 class ViewerContainer(object):
-    ''' ViewerContainer is a container of viewers. It has a containerWidget
-        that displays the viewers. The containerWidget is assumed to be 
-        an AUI managed frame. The ViewerContainer knows which of its viewers
-        is active and dispatches method calls to the active viewer or to the
-        first viewer that can handle the method. This allows other GUI 
-        components, e.g. menu's, to talk to the ViewerContainer as were
-        it a regular viewer. '''
-        
+    """ViewerContainer is a container of viewers. It has a containerWidget
+    that displays the viewers. The containerWidget is assumed to be
+    an AUI managed frame. The ViewerContainer knows which of its viewers
+    is active and dispatches method calls to the active viewer or to the
+    first viewer that can handle the method. This allows other GUI
+    components, e.g. menu's, to talk to the ViewerContainer as were
+    it a regular viewer."""
+
     def __init__(self, containerWidget, settings, *args, **kwargs):
         self.containerWidget = containerWidget
         self._notifyActiveViewer = False
@@ -44,58 +44,69 @@ class ViewerContainer(object):
         self._notifyActiveViewer = True
 
     def advanceSelection(self, forward):
-        ''' Activate the next viewer if forward is true else the previous 
-            viewer. '''
+        """Activate the next viewer if forward is true else the previous
+        viewer."""
         if len(self.viewers) <= 1:
             return  # Not enough viewers to advance selection
         active_viewer = self.activeViewer()
-        current_index = self.viewers.index(active_viewer) if active_viewer else 0
+        current_index = (
+            self.viewers.index(active_viewer) if active_viewer else 0
+        )
         minimum_index, maximum_index = 0, len(self.viewers) - 1
         if forward:
-            new_index = current_index + 1 if minimum_index <= current_index < maximum_index else minimum_index
+            new_index = (
+                current_index + 1
+                if minimum_index <= current_index < maximum_index
+                else minimum_index
+            )
         else:
-            new_index = current_index - 1 if minimum_index < current_index <= maximum_index else maximum_index
+            new_index = (
+                current_index - 1
+                if minimum_index < current_index <= maximum_index
+                else maximum_index
+            )
         self.activateViewer(self.viewers[new_index])
-        
+
     def isViewerContainer(self):
-        ''' Return whether this is a viewer container or an actual viewer. '''
+        """Return whether this is a viewer container or an actual viewer."""
         return True
 
     def __bind_event_handlers(self):
-        ''' Register for pane closing, activating and floating events. '''
+        """Register for pane closing, activating and floating events."""
         self.containerWidget.Bind(aui.EVT_AUI_PANE_CLOSE, self.onPageClosed)
-        self.containerWidget.Bind(aui.EVT_AUI_PANE_ACTIVATED, 
-                                  self.onPageChanged)
+        self.containerWidget.Bind(
+            aui.EVT_AUI_PANE_ACTIVATED, self.onPageChanged
+        )
         self.containerWidget.Bind(aui.EVT_AUI_PANE_FLOATED, self.onPageFloated)
-    
+
     def __getitem__(self, index):
         return self.viewers[index]
-    
+
     def __len__(self):
         return len(self.viewers)
 
     def addViewer(self, viewer, floating=False):
-        ''' Add a new pane with the specified viewer. '''
+        """Add a new pane with the specified viewer."""
         self.containerWidget.addPane(viewer, viewer.title(), floating=floating)
         self.viewers.append(viewer)
         if len(self.viewers) == 1:
             self.activateViewer(viewer)
         pub.subscribe(self.onStatusChanged, viewer.viewerStatusEventType())
-        
+
     def closeViewer(self, viewer):
-        ''' Close the specified viewer. ''' 
+        """Close the specified viewer."""
         if viewer == self.activeViewer():
             self.advanceSelection(False)
         pane = self.containerWidget.manager.GetPane(viewer)
         self.containerWidget.manager.ClosePane(pane)
-    
+
     def __getattr__(self, attribute):
-        ''' Forward unknown attributes to the active viewer or the first
-            viewer if there is no active viewer. '''
+        """Forward unknown attributes to the active viewer or the first
+        viewer if there is no active viewer."""
         return getattr(self.activeViewer() or self.viewers[0], attribute)
 
     def activeViewer(self):
-        ''' Return the active (selected) viewer. '''
+        """Return the active (selected) viewer."""
         all_panes = self.containerWidget.manager.GetAllPanes()
         for pane in all_panes:
             if pane.IsToolbar():
@@ -107,9 +118,9 @@ class ViewerContainer(object):
                 else:
                     return pane.window
         return None
-        
+
     def activateViewer(self, viewer_to_activate):
-        ''' Activate (select) the specified viewer. '''
+        """Activate (select) the specified viewer."""
         self.containerWidget.manager.ActivatePane(viewer_to_activate)
         paneInfo = self.containerWidget.manager.GetPane(viewer_to_activate)
         if paneInfo.IsNotebookPage():
@@ -118,11 +129,11 @@ class ViewerContainer(object):
 
     def __del__(self):
         pass  # Don't forward del to one of the viewers.
-    
+
     def onStatusChanged(self, viewer):
         if self.activeViewer() == viewer:
             self.sendViewerStatusEvent()
-        pub.sendMessage('all.viewer.status', viewer=viewer)
+        pub.sendMessage("all.viewer.status", viewer=viewer)
 
     def onPageChanged(self, event):
         self.__ensure_active_viewer_has_focus()
@@ -130,9 +141,9 @@ class ViewerContainer(object):
         if self._notifyActiveViewer and self.activeViewer() is not None:
             self.activeViewer().activate()
         event.Skip()
-    
+
     def sendViewerStatusEvent(self):
-        pub.sendMessage('viewer.status')
+        pub.sendMessage("viewer.status")
 
     def __ensure_active_viewer_has_focus(self):
         if not self.activeViewer():
@@ -156,7 +167,7 @@ class ViewerContainer(object):
         if event.GetPane().IsToolbar():
             return
         window = event.GetPane().window
-        if hasattr(window, 'GetPage'):
+        if hasattr(window, "GetPage"):
             # Window is a notebook, close each of its pages
             for pageIndex in range(window.GetPageCount()):
                 self.__close_viewer(window.GetPage(pageIndex))
@@ -167,23 +178,33 @@ class ViewerContainer(object):
         if not self.activeViewer():
             self.activateViewer(self.viewers[0])
         event.Skip()
-        
+
     def __close_viewer(self, viewer):
-        ''' Close the specified viewer and unsubscribe all its event 
-            handlers. '''
-        # When closing an AUI managed frame, we get two close events, 
+        """Close the specified viewer and unsubscribe all its event
+        handlers."""
+        # When closing an AUI managed frame, we get two close events,
         # be prepared:
         if viewer in self.viewers:
             self.viewers.remove(viewer)
             viewer.detach()
-        
+
     @staticmethod
     def onPageFloated(event):
-        ''' Give floating pane accelerator keys for activating next and previous
-            viewer. '''
+        """Give floating pane accelerator keys for activating next and previous
+        viewer."""
         viewer = event.GetPane().window
-        table = wx.AcceleratorTable([(wx.ACCEL_CTRL, wx.WXK_PAGEDOWN, 
-                                      taskcoachlib.gui.menu.activateNextViewerId),
-                                     (wx.ACCEL_CTRL, wx.WXK_PAGEUP, 
-                                      taskcoachlib.gui.menu.activatePreviousViewerId)])
+        table = wx.AcceleratorTable(
+            [
+                (
+                    wx.ACCEL_CTRL,
+                    wx.WXK_PAGEDOWN,
+                    taskcoachlib.gui.menu.activateNextViewerId,
+                ),
+                (
+                    wx.ACCEL_CTRL,
+                    wx.WXK_PAGEUP,
+                    taskcoachlib.gui.menu.activatePreviousViewerId,
+                ),
+            ]
+        )
         viewer.SetAcceleratorTable(table)

@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test, wx
 from taskcoachlib.gui import splash, icons
@@ -31,7 +31,7 @@ class SplashTest(test.wxTestCase):
         super(SplashTest, self).tearDown()
 
     def assertCorrectBitmap(self):
-        expectedBitmap = icons.catalog['splash'].getBitmap()
+        expectedBitmap = icons.catalog["splash"].getBitmap()
         actualBitmap = self.splashScreen.GetSplashWindow().GetBitmap()
         bitmapData = lambda bitmap: bitmap.ConvertToImage().GetData()
         self.assertEqual(bitmapData(expectedBitmap), bitmapData(actualBitmap))
@@ -46,5 +46,6 @@ class SplashTest(test.wxTestCase):
         class FakeModule(object):
             def currentLanguageIsRightToLeft(self):
                 return True
+
         splash.i18n = FakeModule()
         self.assertCorrectBitmap()

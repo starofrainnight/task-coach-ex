@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2011 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from win32file import *
 from win32con import *
@@ -24,37 +24,47 @@ from taskcoachlib.filesystem import base
 
 
 class DirectoryWatcher(object):
-    ADDED       = 1
-    REMOVED     = 2
-    MODIFIED    = 3
+    ADDED = 1
+    REMOVED = 2
+    MODIFIED = 3
     RENAMED_OLD = 4
     RENAMED_NEW = 5
 
     def __init__(self, path):
         super(DirectoryWatcher, self).__init__()
 
-        self.dirHandle = CreateFile(path,
-                                    GENERIC_READ,
-                                    FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,
-                                    None,
-                                    OPEN_EXISTING,
-                                    FILE_FLAG_BACKUP_SEMANTICS|FILE_FLAG_OVERLAPPED,
-                                    0)
+        self.dirHandle = CreateFile(
+            path,
+            GENERIC_READ,
+            FILE_SHARE_READ | FILE_SHARE_DELETE | FILE_SHARE_WRITE,
+            None,
+            OPEN_EXISTING,
+            FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OVERLAPPED,
+            0,
+        )
         self.buffer = AllocateReadBuffer(8192)
         self.overlapped = OVERLAPPED()
         self.overlapped.hEvent = CreateEvent(None, False, False, None)
 
     def wait(self, recurse=False, timeout=INFINITE):
-        ReadDirectoryChangesW(self.dirHandle, self.buffer, recurse,
-                              FILE_NOTIFY_CHANGE_FILE_NAME | FILE_NOTIFY_CHANGE_DIR_NAME | \
-                              FILE_NOTIFY_CHANGE_ATTRIBUTES | FILE_NOTIFY_CHANGE_SIZE | \
-                              FILE_NOTIFY_CHANGE_LAST_WRITE,
-                              self.overlapped)
+        ReadDirectoryChangesW(
+            self.dirHandle,
+            self.buffer,
+            recurse,
+            FILE_NOTIFY_CHANGE_FILE_NAME
+            | FILE_NOTIFY_CHANGE_DIR_NAME
+            | FILE_NOTIFY_CHANGE_ATTRIBUTES
+            | FILE_NOTIFY_CHANGE_SIZE
+            | FILE_NOTIFY_CHANGE_LAST_WRITE,
+            self.overlapped,
+        )
 
         rc = WaitForSingleObject(self.overlapped.hEvent, timeout)
         if rc == WAIT_OBJECT_0:
             try:
-                size = GetOverlappedResult(self.dirHandle, self.overlapped, True)
+                size = GetOverlappedResult(
+                    self.dirHandle, self.overlapped, True
+                )
             except Exception as e:
                 if e.args[0] == 995:
                     return None

@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 Copyright (C) 2008 Thomas Sonne Olesen <tpo@sonnet.dk>
@@ -15,7 +15,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib.thirdparty.pubsub import pub
 import weakref
@@ -27,13 +27,13 @@ class BaseEffort(object):
         self._start = start
         self._stop = stop
         super(BaseEffort, self).__init__(*args, **kwargs)
-      
+
     def task(self):
         return None if self._task is None else self._task()
-    
+
     def parent(self):
-        # Efforts don't have real parents since they are not composite. 
-        # However, we pretend the parent of an effort is its task for the 
+        # Efforts don't have real parents since they are not composite.
+        # However, we pretend the parent of an effort is its task for the
         # benefit of the search filter.
         return self.task()
 
@@ -51,16 +51,16 @@ class BaseEffort(object):
 
     def foregroundColor(self, recursive=False):
         return self.task().foregroundColor(recursive)
-    
+
     def backgroundColor(self, recursive=False):
         return self.task().backgroundColor(recursive)
-    
+
     def font(self, recursive=False):
         return self.task().font(recursive)
-    
+
     def duration(self, recursive=False):
         raise NotImplementedError  # pragma: no cover
-    
+
     def revenue(self, recursive=False):
         raise NotImplementedError  # pragma: no cover
 
@@ -69,20 +69,26 @@ class BaseEffort(object):
 
     @classmethod
     def trackingChangedEventType(class_):
-        return 'pubsub.effort.track'
+        return "pubsub.effort.track"
 
     def sendDurationChangedMessage(self):
-        pub.sendMessage(self.durationChangedEventType(), 
-                        newValue=self.duration(), sender=self)
-        
+        pub.sendMessage(
+            self.durationChangedEventType(),
+            newValue=self.duration(),
+            sender=self,
+        )
+
     @classmethod
     def durationChangedEventType(class_):
-        return 'pubsub.effort.duration'
-    
+        return "pubsub.effort.duration"
+
     def sendRevenueChangedMessage(self):
-        pub.sendMessage(self.revenueChangedEventType(), 
-                        newValue=self.revenue(), sender=self)
+        pub.sendMessage(
+            self.revenueChangedEventType(),
+            newValue=self.revenue(),
+            sender=self,
+        )
 
     @classmethod
     def revenueChangedEventType(class_):
-        return 'pubsub.effort.revenue'
+        return "pubsub.effort.revenue"

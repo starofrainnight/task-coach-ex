@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import time, os
 import test, mock
@@ -26,16 +26,23 @@ from taskcoachlib.syncml.config import createDefaultSyncConfig
 class PerformanceTest(test.TestCase):
     def createTestFile(self):
         task.Task.settings = config.Settings(load=False)
-        taskList = task.TaskList([task.Task('test') for _ in range(self.nrTasks)])
-        taskfile = file(self.taskfilename, 'w')
+        taskList = task.TaskList(
+            [task.Task("test") for _ in range(self.nrTasks)]
+        )
+        taskfile = file(self.taskfilename, "w")
         taskWriter = persistence.XMLWriter(taskfile)
-        taskWriter.write(taskList, category.CategoryList(), note.NoteContainer(),
-                         createDefaultSyncConfig('fake'), 'fake')
+        taskWriter.write(
+            taskList,
+            category.CategoryList(),
+            note.NoteContainer(),
+            createDefaultSyncConfig("fake"),
+            "fake",
+        )
         taskfile.close()
 
     def setUp(self):
         self.nrTasks = 100
-        self.taskfilename = 'performanceTest.tsk'
+        self.taskfilename = "performanceTest.tsk"
         self.createTestFile()
 
     def tearDown(self):
@@ -48,5 +55,5 @@ class PerformanceTest(test.TestCase):
         mockApp.iocontroller.open(self.taskfilename)
         end = time.time()
         self.assertEqual(self.nrTasks, len(mockApp.taskFile.tasks()))
-        self.assertTrue(end-start < self.nrTasks/10)
+        self.assertTrue(end - start < self.nrTasks / 10)
         mockApp.quitApplication()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: UTF-8 -*-
 
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -17,20 +17,23 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import os, sys, glob, shutil, wx
-sys.path.insert(0, '..')
+
+sys.path.insert(0, "..")
 from taskcoachlib import meta
 import style
+
 try:
     import md5digests
+
     md5digests = md5digests.md5digests
 except ImportError:
     md5digests = dict()
 
 
-one_ad = '''
+one_ad = """
                     <div class="well">
                         <p>
                             <script type="text/javascript"><!--
@@ -45,9 +48,9 @@ google_ad_height = 240;
 src="https://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
                         </p>   
-                    </div>'''
+                    </div>"""
 
-ads = '''
+ads = """
                     <div class="well">
                         <p>
                             <script type="text/javascript"><!--
@@ -62,10 +65,11 @@ google_ad_height = 600;
 src="https://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
                         </p>   
-                    </div>'''
+                    </div>"""
 
 pages = {}
-pages['index'] = '''          
+pages["index"] = (
+    """          
             <div class="row">
                 <div class="span10">
                     <p><img src="images/banner.png" alt="Banner image"></p>
@@ -108,12 +112,17 @@ pages['index'] = '''
                         </div>
                     </div>
                 </div>
-                <div class="span2">''' + ads + '''
+                <div class="span2">"""
+    + ads
+    + """
                 </div>
             </div>
-        '''
+        """
+)
 
-pages['getsupport'] = '''
+pages[
+    "getsupport"
+] = """
             <div class="page-header">
                 <h1>Get support</h1>
             </div>
@@ -189,9 +198,11 @@ pages['getsupport'] = '''
                     <p><a class="btn" href="%(feature_request_url)s" 
                           title="Browse requested features, vote for your favorite features and request new features">Request a feature</a></p>
                 </div>
-            </div>'''
+            </div>"""
 
-pages['givesupport'] = '''
+pages[
+    "givesupport"
+] = """
             <div class="page-header">
                 <h1>Give support</h1>
             </div>
@@ -265,57 +276,72 @@ pages['givesupport'] = '''
                     </iframe></p>
                     <p><g:plusone size="medium"></g:plusone></p>
                 </div>
-            </div>'''
+            </div>"""
 
 
-pages['changes'] = '''
+pages["changes"] = (
+    """
             <div class="page-header">
                 <h1>Change history <small>Recent releases</small></h1>
             </div>
             <div class="row">
-                <div class="span10">''' + file('changes.html').read().decode('UTF-8') + '''
+                <div class="span10">"""
+    + file("changes.html").read().decode("UTF-8")
+    + """
                     <p><a class="btn" href="all_changes.html">View complete change history &raquo;</a></p>
                 </div>
-                <div class="span2">''' + ads + '''
+                <div class="span2">"""
+    + ads
+    + """
                 </div>
-            </div>'''
-                    
-pages['all_changes'] = '''
+            </div>"""
+)
+
+pages["all_changes"] = (
+    """
             <div class="page-header">
                 <h1>Change history <small>All releases</small></h1>
             </div>
             <div class="row">
-                <div class="span10">''' + file('all_changes.html').read().decode('UTF-8') + '''
+                <div class="span10">"""
+    + file("all_changes.html").read().decode("UTF-8")
+    + """
                 </div>
-                <div class="span2">''' + ads + '''
+                <div class="span2">"""
+    + ads
+    + """
                 </div>
-            </div>'''
+            </div>"""
+)
 
-prerequisites = '''
+prerequisites = """
               <a href="https://www.python.org/download/">Python</a> 
               <strong>%(pythonversion)s</strong> and 
               <a href="https://www.wxpython.org/download.php">wxPython</a>
-              <strong>%(wxpythonversion)s</strong> (or newer)'''
+              <strong>%(wxpythonversion)s</strong> (or newer)"""
 
-prerequisites26 = prerequisites%dict(pythonversion='2.6', 
-                                     wxpythonversion='%(wxpythonversion)s')
+prerequisites26 = prerequisites % dict(
+    pythonversion="2.6", wxpythonversion="%(wxpythonversion)s"
+)
 
-prerequisites27 = prerequisites%dict(pythonversion='2.7', 
-                                     wxpythonversion='%(wxpythonversion)s')
+prerequisites27 = prerequisites % dict(
+    pythonversion="2.7", wxpythonversion="%(wxpythonversion)s"
+)
+
 
 def download_header(platform=None, release=None, warning=None):
-    title = 'Download %(name)s'
+    title = "Download %(name)s"
     if release:
-        title += ' release %s'%release
+        title += " release %s" % release
     if platform:
-        title += ' for %s'%platform
+        title += " for %s" % platform
     if not warning:
-        warning = '''%(name)s is actively developed. New features are added
+        warning = """%(name)s is actively developed. New features are added
           on a regular basis. This means that %(name)s contains bugs. We do 
           our best to prevent bugs and fix them as soon as possible. Still, 
           we <strong>strongly</strong> advise you to make backups of your 
-          work on a regular basis, and especially before upgrading.'''
-    return '''        
+          work on a regular basis, and especially before upgrading."""
+    return """        
             <div class="page-header">
                 <h1>%s</h1>
             </div>
@@ -323,42 +349,63 @@ def download_header(platform=None, release=None, warning=None):
                 <div class="span10">
                     <p>
                         <span class="label label-warning">Warning</span> %s
-                    </p>'''%(title, warning)
+                    </p>""" % (
+        title,
+        warning,
+    )
+
 
 def download_footer(ads=ads):
-    return '''
+    return (
+        """
                 </div>
-                <div class="span2">''' + ads + '''
+                <div class="span2">"""
+        + ads
+        + """
                 </div>
-            </div>'''
+            </div>"""
+    )
+
 
 def download_table(**kwargs):
-    filename = list(kwargs['download_urls'].values())[0].split('/')[-1]%meta.metaDict
-    md5 = md5digests.get(filename, '')
-    kwargs['rows'] = 5 if md5 else 4
-    kwargs['md5'] = '\n            <dt>MD5 digest</dt><dd>%s.</dd>'%md5 if md5 else ''
+    filename = (
+        list(kwargs["download_urls"].values())[0].split("/")[-1]
+        % meta.metaDict
+    )
+    md5 = md5digests.get(filename, "")
+    kwargs["rows"] = 5 if md5 else 4
+    kwargs["md5"] = (
+        "\n            <dt>MD5 digest</dt><dd>%s.</dd>" % md5 if md5 else ""
+    )
     # Deal with platforms that are not a name but 'all platforms':
-    if 'prerequisites' not in kwargs:
-        kwargs['prerequisites'] = 'None'
-    if 'action' not in kwargs:
-        kwargs['action'] = 'Download'
-    if 'platform' in kwargs:
+    if "prerequisites" not in kwargs:
+        kwargs["prerequisites"] = "None"
+    if "action" not in kwargs:
+        kwargs["action"] = "Download"
+    if "platform" in kwargs:
         download_url_template = '%(action)s <a href="%(url)s">%(package_type)s</a> for %(platform)s from %(source)s'
-        platform = kwargs['platform']
-        kwargs['platform_versions'] = 'Platforms' if platform == 'all platforms' else platform + ' versions'
+        platform = kwargs["platform"]
+        kwargs["platform_versions"] = (
+            "Platforms"
+            if platform == "all platforms"
+            else platform + " versions"
+        )
     else:
-        download_url_template = '%(action)s <a href="%(url)s">%(package_type)s</a> from %(source)s'
-        kwargs['platform_versions'] = 'Platforms' 
+        download_url_template = (
+            '%(action)s <a href="%(url)s">%(package_type)s</a> from %(source)s'
+        )
+        kwargs["platform_versions"] = "Platforms"
     urls = []
-    for source, url in list(kwargs['download_urls'].items()):
-        parameters = kwargs.copy() 
-        parameters['url'] = url
-        parameters['source'] = source
+    for source, url in list(kwargs["download_urls"].items()):
+        parameters = kwargs.copy()
+        parameters["url"] = url
+        parameters["source"] = source
         urls.append((source, download_url_template % parameters))
     urls.sort()
     urls = [url[1] for url in urls]
-    kwargs['download_urls'] = '<br>\n'.join(urls)
-    return '''        <p>
+    kwargs["download_urls"] = "<br>\n".join(urls)
+    return (
+        """        <p>
           <table width="100%%%%" class="table table-striped">
             <tbody>
             <tr>
@@ -377,270 +424,438 @@ def download_table(**kwargs):
             <dt>Installation</dt><dd>%(installation)s.</dd>%(md5)s</dl></td></tr>
             </tbody>
           </table>
-        </p>'''%kwargs
+        </p>"""
+        % kwargs
+    )
 
 
-windowsOptions = dict(platform_lower='windows',
-    platform_versions_supported='Windows 2000, XP, Vista, Windows 7, Windows 8')
+windowsOptions = dict(
+    platform_lower="windows",
+    platform_versions_supported="Windows 2000, XP, Vista, Windows 7, Windows 8",
+)
 
-bestsoft_url = 'https://www.fosshub.com/Task-Coach.html'
+bestsoft_url = "https://www.fosshub.com/Task-Coach.html"
 
-windowsInstaller = download_table(image='windows',
-    download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename)s-%(version)s-win32.exe',
-                       FossHub=bestsoft_url),
-    package_type='%(name)s Installer',
-    installation='Run the installer; it will guide you through the installation process',
-    **windowsOptions)
- 
-windowsPortableApp = download_table(image='portableApps',
-    download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename)sPortable_%(version)s.paf.exe',
-                       FossHub=bestsoft_url),
-    package_type='%(name)s in PortableApps Format',
-    installation='Run the installer; it will guide you through the installation process',
-    **windowsOptions)
+windowsInstaller = download_table(
+    image="windows",
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename)s-%(version)s-win32.exe",
+        FossHub=bestsoft_url,
+    ),
+    package_type="%(name)s Installer",
+    installation="Run the installer; it will guide you through the installation process",
+    **windowsOptions
+)
 
-windowsPenPack = download_table(image='winPenPack',
-    download_urls=dict(Sourceforge='%(dist_download_prefix)s/X-%(filename)s_%(version)s_rev1.zip',
-                       FossHub=bestsoft_url),
-    package_type='%(name)s in winPenPack Format',
-    installation='Unzip the archive contents in the location where you want %(name)s to be installed',
-    **windowsOptions) 
-  
-sep = '\n'
+windowsPortableApp = download_table(
+    image="portableApps",
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename)sPortable_%(version)s.paf.exe",
+        FossHub=bestsoft_url,
+    ),
+    package_type="%(name)s in PortableApps Format",
+    installation="Run the installer; it will guide you through the installation process",
+    **windowsOptions
+)
 
-pages['download_for_windows'] = sep.join([download_header(platform='Microsoft Windows', 
-                                          release='%(version)s'), 
-                                          windowsInstaller, windowsPortableApp, 
-                                          windowsPenPack,
-                                          download_footer()]) 
+windowsPenPack = download_table(
+    image="winPenPack",
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/X-%(filename)s_%(version)s_rev1.zip",
+        FossHub=bestsoft_url,
+    ),
+    package_type="%(name)s in winPenPack Format",
+    installation="Unzip the archive contents in the location where you want %(name)s to be installed",
+    **windowsOptions
+)
+
+sep = "\n"
+
+pages["download_for_windows"] = sep.join(
+    [
+        download_header(platform="Microsoft Windows", release="%(version)s"),
+        windowsInstaller,
+        windowsPortableApp,
+        windowsPenPack,
+        download_footer(),
+    ]
+)
 
 
-macDMG = download_table(image='mac',
-                        download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename)s-%(version)s.dmg'),
-                        package_type='Disk image (dmg)',
-                        platform_lower='macosx',
-                        platform_versions_supported='Mac OS X Leopard/10.5 (Universal) and newer',
-                        installation='Double click the package and drop the %(name)s application in your Applications folder')
+macDMG = download_table(
+    image="mac",
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename)s-%(version)s.dmg"
+    ),
+    package_type="Disk image (dmg)",
+    platform_lower="macosx",
+    platform_versions_supported="Mac OS X Leopard/10.5 (Universal) and newer",
+    installation="Double click the package and drop the %(name)s application in your Applications folder",
+)
 
-pages['download_for_mac'] = sep.join([download_header(platform='Mac OS X',
-                                                      release='%(version)s'), 
-                                                      macDMG,
-                                                      download_footer(one_ad)])
+pages["download_for_mac"] = sep.join(
+    [
+        download_header(platform="Mac OS X", release="%(version)s"),
+        macDMG,
+        download_footer(one_ad),
+    ]
+)
 
 
-debian = download_table(image='debian', 
-                        download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename_lower)s_%(version)s-1.deb'),
-                        package_type='Debian package (deb)',
-                        platform='Debian', platform_lower='debian',
-                        platform_versions_supported='Debian GNU/Linux 6.0 ("squeeze") and newer',
-                        prerequisites=prerequisites26 + '''. If your Debian 
+debian = download_table(
+    image="debian",
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename_lower)s_%(version)s-1.deb"
+    ),
+    package_type="Debian package (deb)",
+    platform="Debian",
+    platform_lower="debian",
+    platform_versions_supported='Debian GNU/Linux 6.0 ("squeeze") and newer',
+    prerequisites=prerequisites26
+    + """. If your Debian 
               installation does not have the minimally required wxPython version 
               you will need to install it yourself following 
               <a href="https://wiki.wxpython.org/InstallingOnUbuntuOrDebian">these 
-              instructions</a>''',
-                        installation='Double click the package to start the installer')
+              instructions</a>""",
+    installation="Double click the package to start the installer",
+)
 
 
-ubuntu_ppa = download_table(image='ubuntu',
-                            download_urls=dict(Launchpad='https://launchpad.net/~taskcoach-developers/+archive/ppa'),
-                            package_type='PPA',
-                            platform='Ubuntu', platform_lower='ubuntu',
-                            platform_versions_supported='Ubuntu 10.04 LTS ("Lucid Lynx") and newer',
-                            prerequisites=prerequisites27,
-                            installation='''Add ppa:taskcoach-developers/ppa to your Software Sources.''')
+ubuntu_ppa = download_table(
+    image="ubuntu",
+    download_urls=dict(
+        Launchpad="https://launchpad.net/~taskcoach-developers/+archive/ppa"
+    ),
+    package_type="PPA",
+    platform="Ubuntu",
+    platform_lower="ubuntu",
+    platform_versions_supported='Ubuntu 10.04 LTS ("Lucid Lynx") and newer',
+    prerequisites=prerequisites27,
+    installation="""Add ppa:taskcoach-developers/ppa to your Software Sources.""",
+)
 
 
-ubuntu = download_table(image='ubuntu',
-                        download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename_lower)s_%(version)s-1.deb'),
-                        package_type='Debian package (deb)',
-                        platform='Ubuntu', platform_lower='ubuntu',
-                        platform_versions_supported='Ubuntu 10.04 LTS ("Lucid Lynx") and newer',
-                        prerequisites=prerequisites26,
-                        installation='''Double click the package to start the 
-installer. You can also use the PPA (<a href="https://answers.launchpad.net/taskcoach/+faq/1615">see the FAQ</a>)''')
+ubuntu = download_table(
+    image="ubuntu",
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename_lower)s_%(version)s-1.deb"
+    ),
+    package_type="Debian package (deb)",
+    platform="Ubuntu",
+    platform_lower="ubuntu",
+    platform_versions_supported='Ubuntu 10.04 LTS ("Lucid Lynx") and newer',
+    prerequisites=prerequisites26,
+    installation="""Double click the package to start the 
+installer. You can also use the PPA (<a href="https://answers.launchpad.net/taskcoach/+faq/1615">see the FAQ</a>)""",
+)
 
-gentoo = download_table(image='gentoo', action='Install',
-                        download_urls={'Gentoo.org': 'https://packages.gentoo.org/package/app-office/taskcoach'},
-                        package_type='Ebuild',
-                        platform='Gentoo', platform_lower='gentoo',
-                        platform_versions_supported='Gentoo 2008.0 and newer',
-                        prerequisites=prerequisites,
-                        installation='%(name)s is included in Gentoo Portage. Install with emerge: <tt>$ emerge taskcoach</tt>')
+gentoo = download_table(
+    image="gentoo",
+    action="Install",
+    download_urls={
+        "Gentoo.org": "https://packages.gentoo.org/package/app-office/taskcoach"
+    },
+    package_type="Ebuild",
+    platform="Gentoo",
+    platform_lower="gentoo",
+    platform_versions_supported="Gentoo 2008.0 and newer",
+    prerequisites=prerequisites,
+    installation="%(name)s is included in Gentoo Portage. Install with emerge: <tt>$ emerge taskcoach</tt>",
+)
 
-opensuse = download_table(image='opensuse',
-                          download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename_lower)s-%(version)s-1.opensuse.i386.rpm'),
-                          package_type='RPM package',
-                          platform='OpenSuse', platform_lower='opensuse',
-                          platform_versions_supported='OpenSuse 11.4 and newer',
-                          prerequisites=prerequisites,
-                          installation='Double click the package to start the installer. Alternatively, you can find RPMs for various Suse versions on <a href="https://software.opensuse.org/package/TaskCoach">software.opensuse.org</a>.')
+opensuse = download_table(
+    image="opensuse",
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename_lower)s-%(version)s-1.opensuse.i386.rpm"
+    ),
+    package_type="RPM package",
+    platform="OpenSuse",
+    platform_lower="opensuse",
+    platform_versions_supported="OpenSuse 11.4 and newer",
+    prerequisites=prerequisites,
+    installation='Double click the package to start the installer. Alternatively, you can find RPMs for various Suse versions on <a href="https://software.opensuse.org/package/TaskCoach">software.opensuse.org</a>.',
+)
 
-fedora14 = download_table(image='fedora',
-                          download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename_lower)s-%(version)s-1.fc14.noarch.rpm'),
-                          package_type='RPM package',
-                          platform='Fedora', platform_lower='fedora',
-                          platform_versions_supported='Fedora 14 and newer',
-                          prerequisites=prerequisites27,
-                          installation='<code>sudo yum install --nogpgcheck %(filename_lower)s-%(version)s-1.fc*.noarch.rpm</code>')
+fedora14 = download_table(
+    image="fedora",
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename_lower)s-%(version)s-1.fc14.noarch.rpm"
+    ),
+    package_type="RPM package",
+    platform="Fedora",
+    platform_lower="fedora",
+    platform_versions_supported="Fedora 14 and newer",
+    prerequisites=prerequisites27,
+    installation="<code>sudo yum install --nogpgcheck %(filename_lower)s-%(version)s-1.fc*.noarch.rpm</code>",
+)
 
-archlinux = download_table(image='archlinux', action='Install', 
-                           download_urls={'ArchLinux.org': 'https://aur.archlinux.org/packages/taskcoach'},
-                           package_type='ArchLinux package',
-                           platform='Arch', platform_lower='arch',
-                           platform_versions_supported='Not applicable (Arch uses a rolling release)',
-                           prerequisites=prerequisites26,
-                           installation='''%(name)s is included in the Arch 
+archlinux = download_table(
+    image="archlinux",
+    action="Install",
+    download_urls={
+        "ArchLinux.org": "https://aur.archlinux.org/packages/taskcoach"
+    },
+    package_type="ArchLinux package",
+    platform="Arch",
+    platform_lower="arch",
+    platform_versions_supported="Not applicable (Arch uses a rolling release)",
+    prerequisites=prerequisites26,
+    installation="""%(name)s is included in the Arch 
 User Repository. See the 
 <a href="https://wiki.archlinux.org/index.php/AUR_User_Guidelines">AUR user 
-guidelines</a>''')
+guidelines</a>""",
+)
 
-redhat_el4and5 = download_table(image='redhat',
-                                download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename)s-%(version)s.tar.gz'),
-                                package_type='Source tar archive',
-                                platform='Red Hat Enterprise Linux', platform_lower='redhat',
-                                platform_versions_supported='Red Hat Enterprise Linux 4 and 5',
-                                prerequisites=prerequisites,
-                                installation='''Follow the instructions on
+redhat_el4and5 = download_table(
+    image="redhat",
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename)s-%(version)s.tar.gz"
+    ),
+    package_type="Source tar archive",
+    platform="Red Hat Enterprise Linux",
+    platform_lower="redhat",
+    platform_versions_supported="Red Hat Enterprise Linux 4 and 5",
+    prerequisites=prerequisites,
+    installation="""Follow the instructions on
 <a href='https://warped.org/blog/2010/04/02/ch0wned-installing-taskcoach-and-all-its-depenencies-in-home-for-el4/'>
-Max Baker's blog</a>''')
-                            
-linux = download_table(image='linux',
-                       download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename)s-%(version)s-1.noarch.rpm'),
-                       package_type='RPM package',
-                       platform='Linux', platform_lower='rpm',
-                       platform_versions_supported='All Linux versions that support RPM and the prerequisites',
-                       prerequisites=prerequisites,
-                       installation='Use your package manager to install the package')
+Max Baker's blog</a>""",
+)
 
-syncml = download_table(image='linux',
-                        download_urls={'taskcoach.org': 'downloads/python2.7-syncml_0.3-1_amd64.deb'},
-                        package_type='SyncML module',
-                        platform='Debian', platform_lower='debian',
-                        platform_versions_supported='64 bits Debian-based distribution',
-                        prerequisites='',
-                        installation='Use your package manager to install the package')
+linux = download_table(
+    image="linux",
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename)s-%(version)s-1.noarch.rpm"
+    ),
+    package_type="RPM package",
+    platform="Linux",
+    platform_lower="rpm",
+    platform_versions_supported="All Linux versions that support RPM and the prerequisites",
+    prerequisites=prerequisites,
+    installation="Use your package manager to install the package",
+)
 
-pages['download_for_linux'] = sep.join([download_header(platform='Linux',
-                                                        release='%(version)s'), 
-                                        ubuntu_ppa, ubuntu, debian, fedora14, gentoo, 
-                                        opensuse, redhat_el4and5, archlinux,
-                                        linux, syncml, download_footer()])
+syncml = download_table(
+    image="linux",
+    download_urls={
+        "taskcoach.org": "downloads/python2.7-syncml_0.3-1_amd64.deb"
+    },
+    package_type="SyncML module",
+    platform="Debian",
+    platform_lower="debian",
+    platform_versions_supported="64 bits Debian-based distribution",
+    prerequisites="",
+    installation="Use your package manager to install the package",
+)
+
+pages["download_for_linux"] = sep.join(
+    [
+        download_header(platform="Linux", release="%(version)s"),
+        ubuntu_ppa,
+        ubuntu,
+        debian,
+        fedora14,
+        gentoo,
+        opensuse,
+        redhat_el4and5,
+        archlinux,
+        linux,
+        syncml,
+        download_footer(),
+    ]
+)
 
 
-freeBSD = download_table(image='freebsd', action='Install', 
-                        download_urls={'FreeBSD.org': 'https://www.freebsd.org/cgi/cvsweb.cgi/ports/deskutils/taskcoach/'},
-                        package_type='%(name)s Port',
-                        platform='FreeBSD', platform_lower='freebsd',
-                        platform_versions_supported='FreeBSD 8.2 and newer',
-                        installation='Update your ports collection and then run: <code>cd /usr/ports/deskutils/taskcoach &amp;&amp; make install clean</code>')
+freeBSD = download_table(
+    image="freebsd",
+    action="Install",
+    download_urls={
+        "FreeBSD.org": "https://www.freebsd.org/cgi/cvsweb.cgi/ports/deskutils/taskcoach/"
+    },
+    package_type="%(name)s Port",
+    platform="FreeBSD",
+    platform_lower="freebsd",
+    platform_versions_supported="FreeBSD 8.2 and newer",
+    installation="Update your ports collection and then run: <code>cd /usr/ports/deskutils/taskcoach &amp;&amp; make install clean</code>",
+)
 
-pages['download_for_bsd'] = sep.join([download_header(platform='FreeBSD',
-                                                      release='%(version)s'), 
-                                                      freeBSD, 
-                                                      download_footer(one_ad)])
+pages["download_for_bsd"] = sep.join(
+    [
+        download_header(platform="FreeBSD", release="%(version)s"),
+        freeBSD,
+        download_footer(one_ad),
+    ]
+)
 
 
-android = download_table(image='logoandroid', action='Install',
-                         download_urls={"Ajiget's site": 'https://sites.google.com/site/ajiget/programs/android-programs/taskcoach-for-android'},
-                         package_type='Android app',
-                         platform='Android', platform_lower='android',
-                         platform_versions_supported='Android 2.2 or newer',
-                         installation='Follow the link to Google Play from the site.')
+android = download_table(
+    image="logoandroid",
+    action="Install",
+    download_urls={
+        "Ajiget's site": "https://sites.google.com/site/ajiget/programs/android-programs/taskcoach-for-android"
+    },
+    package_type="Android app",
+    platform="Android",
+    platform_lower="android",
+    platform_versions_supported="Android 2.2 or newer",
+    installation="Follow the link to Google Play from the site.",
+)
 
-pages['download_for_android'] = sep.join([download_header(platform='Android', release='0.25'),
-                                          android,
-                                          download_footer(one_ad)])
+pages["download_for_android"] = sep.join(
+    [
+        download_header(platform="Android", release="0.25"),
+        android,
+        download_footer(one_ad),
+    ]
+)
 
-sourceOptions = dict(image='source', prerequisites=prerequisites,
-                     installation='''Decompress the archive and run <code>python 
+sourceOptions = dict(
+    image="source",
+    prerequisites=prerequisites,
+    installation="""Decompress the archive and run <code>python 
               setup.py install</code>. If you have a previous version of %(name)s 
               installed, you may need to force old files to be overwritten: 
-              <code>python setup.py install --force</code>''')
+              <code>python setup.py install --force</code>""",
+)
 
-source_rpm = download_table(download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename)s-%(version)s-1.src.rpm'),
-                            package_type='Source RPM package',
-                            platform='Linux', platform_lower='source_rpm',
-                            platform_versions_supported='All Linux platforms that support RPM and the prerequisites',
-                            **sourceOptions)
+source_rpm = download_table(
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename)s-%(version)s-1.src.rpm"
+    ),
+    package_type="Source RPM package",
+    platform="Linux",
+    platform_lower="source_rpm",
+    platform_versions_supported="All Linux platforms that support RPM and the prerequisites",
+    **sourceOptions
+)
 
-source_tgz = download_table(download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename)s-%(version)s.tar.gz'),
-                            package_type='Source tar archive',
-                            platform='Linux', platform_lower='source_gz',
-                            platform_versions_supported='All Linux platforms that support the prerequisites',
-                            **sourceOptions)
+source_tgz = download_table(
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename)s-%(version)s.tar.gz"
+    ),
+    package_type="Source tar archive",
+    platform="Linux",
+    platform_lower="source_gz",
+    platform_versions_supported="All Linux platforms that support the prerequisites",
+    **sourceOptions
+)
 
-source_raw = download_table(download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename)s-%(version)s-raw.tar.gz'),
-                            package_type='Raw source tar archive',
-                            platform='Linux', platform_lower='source_raw',
-                            platform_versions_supported='All Linux platforms that support the prerequisites',
-                            image='source', prerequisites=prerequisites + ', GNU make and patch',
-                            installation='''Decompress the archive, run <code>make prepare</code> and then
+source_raw = download_table(
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename)s-%(version)s-raw.tar.gz"
+    ),
+    package_type="Raw source tar archive",
+    platform="Linux",
+    platform_lower="source_raw",
+    platform_versions_supported="All Linux platforms that support the prerequisites",
+    image="source",
+    prerequisites=prerequisites + ", GNU make and patch",
+    installation="""Decompress the archive, run <code>make prepare</code> and then
                <code>python setup.py install</code>. If you have a previous version of %(name)s 
                installed, you may need to force old files to be overwritten: 
-               <code>python setup.py install --force</code>''')
+               <code>python setup.py install --force</code>""",
+)
 
-source_zip = download_table(download_urls=dict(Sourceforge='%(dist_download_prefix)s/%(filename)s-%(version)s.zip'),
-                            package_type='Source zip archive',
-                            platform='Windows', platform_lower='source_zip',
-                            platform_versions_supported='All Windows platforms that support the prerequisites',
-                            **sourceOptions)
+source_zip = download_table(
+    download_urls=dict(
+        Sourceforge="%(dist_download_prefix)s/%(filename)s-%(version)s.zip"
+    ),
+    package_type="Source zip archive",
+    platform="Windows",
+    platform_lower="source_zip",
+    platform_versions_supported="All Windows platforms that support the prerequisites",
+    **sourceOptions
+)
 
-mercurial = download_table(image='sources',
-                           download_urls=dict(Sourceforge='https://sourceforge.net/projects/taskcoach/develop'),
-                           package_type='Sources from Mercurial',
-                           platform='all platforms', platform_lower='mercurial',
-                           platform_versions_supported='All platforms that support the prerequisites',
-                           prerequisites=prerequisites,
-                           installation='''Run <code>make prepare</code> to generate 
+mercurial = download_table(
+    image="sources",
+    download_urls=dict(
+        Sourceforge="https://sourceforge.net/projects/taskcoach/develop"
+    ),
+    package_type="Sources from Mercurial",
+    platform="all platforms",
+    platform_lower="mercurial",
+    platform_versions_supported="All platforms that support the prerequisites",
+    prerequisites=prerequisites,
+    installation="""Run <code>make prepare</code> to generate 
               the icons and language files and then <code>python taskcoach.py</code> 
-              to start the application''')
+              to start the application""",
+)
 
 
-pages['download_sources'] = sep.join([download_header(release='%(version)s'), 
-                                      source_rpm, source_zip, 
-                                      source_tgz, source_raw, mercurial,
-                                      download_footer()])
+pages["download_sources"] = sep.join(
+    [
+        download_header(release="%(version)s"),
+        source_rpm,
+        source_zip,
+        source_tgz,
+        source_raw,
+        mercurial,
+        download_footer(),
+    ]
+)
 
 
-buildbotOptions = dict(platform='all platforms', 
-                       platform_versions_supported='See the different download sections',
-                       prerequisites='See the different download sections',
-                       installation='See the different download sections')
+buildbotOptions = dict(
+    platform="all platforms",
+    platform_versions_supported="See the different download sections",
+    prerequisites="See the different download sections",
+    installation="See the different download sections",
+)
 
-latest_bugfixes = download_table(image='bug',
-                                 download_urls=dict(Buildbot='http://jeromelaheurte.net/TaskCoach-packages/latest_bugfixes.py'),
-                                 package_type='Latest bugfixes',
-                                 platform_lower='latest_bugfixes',
-                                 **buildbotOptions)
+latest_bugfixes = download_table(
+    image="bug",
+    download_urls=dict(
+        Buildbot="http://jeromelaheurte.net/TaskCoach-packages/latest_bugfixes.py"
+    ),
+    package_type="Latest bugfixes",
+    platform_lower="latest_bugfixes",
+    **buildbotOptions
+)
 
-latest_features = download_table(image='latest_features', 
-                                 download_urls=dict(Buildbot='http://jeromelaheurte.net/TaskCoach-packages/latest_features.py'),
-                                 package_type='Latest features',
-                                 platform_lower='latest_features',
-                                 **buildbotOptions)
+latest_features = download_table(
+    image="latest_features",
+    download_urls=dict(
+        Buildbot="http://jeromelaheurte.net/TaskCoach-packages/latest_features.py"
+    ),
+    package_type="Latest features",
+    platform_lower="latest_features",
+    **buildbotOptions
+)
 
-warning = '''          These packages are automatically generated by our <a
+warning = """          These packages are automatically generated by our <a
         href="http://jeromelaheurte.net:8010/waterfall">buildbot</a> each
         time a change is checked in the source tree. This is bleeding
-        edge, use at your own risk.'''
-        
-pages['download_daily_build'] = sep.join([download_header(warning=warning), 
-                                          latest_bugfixes, latest_features,
-                                          download_footer(one_ad)])
+        edge, use at your own risk."""
 
-old_releases = download_table(image='archive',
-                              download_urls=dict(Sourceforge='https://sourceforge.net/projects/taskcoach/files/taskcoach/'),
-                              package_type='Old releases',
-                              platform='all platforms', platform_lower='old_releases',
-                              platform_versions_supported='See the different download sections',
-                              prerequisites='See the different download sections',
-                              installation='See the different download sections')
-                            
-pages['download_old_releases'] = sep.join([download_header(), old_releases,
-                                           download_footer(one_ad)]) 
+pages["download_daily_build"] = sep.join(
+    [
+        download_header(warning=warning),
+        latest_bugfixes,
+        latest_features,
+        download_footer(one_ad),
+    ]
+)
 
-        
-pages['download'] = ''' 
+old_releases = download_table(
+    image="archive",
+    download_urls=dict(
+        Sourceforge="https://sourceforge.net/projects/taskcoach/files/taskcoach/"
+    ),
+    package_type="Old releases",
+    platform="all platforms",
+    platform_lower="old_releases",
+    platform_versions_supported="See the different download sections",
+    prerequisites="See the different download sections",
+    installation="See the different download sections",
+)
+
+pages["download_old_releases"] = sep.join(
+    [download_header(), old_releases, download_footer(one_ad)]
+)
+
+
+pages["download"] = (
+    """ 
             <div class="page-header">
                 <h1>Download %(name)s</h1>
             </div>
@@ -687,12 +902,16 @@ pages['download'] = '''
                         </tbody>
                     </table>
                 </div>
-                <div class="span2">''' + one_ad + '''
+                <div class="span2">"""
+    + one_ad
+    + """
                 </div>
-            </div>'''
+            </div>"""
+)
 
 
-pages['features'] = '''        
+pages["features"] = (
+    """        
             <div class="page-header">
                 <h1>Features</h1>
             </div>
@@ -743,77 +962,123 @@ pages['features'] = '''
                     <p>The Android version is separately developed; we don't support it ourselves. See the developer's site for
                     details.</p>
                 </div>
-                <div class="span2">''' + ads + '''
+                <div class="span2">"""
+    + ads
+    + """
                 </div>
-            </div>'''
+            </div>"""
+)
 
 
 def thumbnails(indent):
-    systems = reversed([path for path in os.listdir('screenshots') \
-                            if os.path.isdir(os.path.join('screenshots', path)) and \
-                            not path.startswith('.')])
-    thumbnails = ''
+    systems = reversed(
+        [
+            path
+            for path in os.listdir("screenshots")
+            if os.path.isdir(os.path.join("screenshots", path))
+            and not path.startswith(".")
+        ]
+    )
+    thumbnails = ""
     for system in systems:
         images = []
 
-        for filename in list(reversed(glob.glob(os.path.join('screenshots', system, '*.png')))):
+        for filename in list(
+            reversed(glob.glob(os.path.join("screenshots", system, "*.png")))
+        ):
             basename = os.path.basename(filename)
-            thumbnailFilename = os.path.join('screenshots', system, 'Thumb-%s' % basename)
-            release, platform, description = basename.split('-')
-            platform = platform.replace('_', ' ')
-            description = description[:-len('.png')].replace('_', ' ')
-            caption = '%s (release %s on %s)' % (description, release, platform)
-            images.append((caption, thumbnailFilename, filename.replace('\\', '/')))
-        
+            thumbnailFilename = os.path.join(
+                "screenshots", system, "Thumb-%s" % basename
+            )
+            release, platform, description = basename.split("-")
+            platform = platform.replace("_", " ")
+            description = description[: -len(".png")].replace("_", " ")
+            caption = "%s (release %s on %s)" % (
+                description,
+                release,
+                platform,
+            )
+            images.append(
+                (caption, thumbnailFilename, filename.replace("\\", "/"))
+            )
+
         if not images:
             continue
 
-        thumbnails += ' ' * indent + '<h2>%s</h2>\n'%system
-        thumbnails += ' ' * indent + '<ul class="thumbnails">\n'
+        thumbnails += " " * indent + "<h2>%s</h2>\n" % system
+        thumbnails += " " * indent + '<ul class="thumbnails">\n'
         for caption, thumbnailFilename, filename in images:
-            thumbnails += ' ' * (indent + 4) + '<li><a class="lightbox" title="%s" href="%s"><img src="%s" alt="%s"/></a></li>\n'% (caption, 
-                        filename.replace('\\', '/'), thumbnailFilename.replace('\\', '/'), caption)
-        thumbnails += ' ' * indent + '</ul>'
+            thumbnails += " " * (
+                indent + 4
+            ) + '<li><a class="lightbox" title="%s" href="%s"><img src="%s" alt="%s"/></a></li>\n' % (
+                caption,
+                filename.replace("\\", "/"),
+                thumbnailFilename.replace("\\", "/"),
+                caption,
+            )
+        thumbnails += " " * indent + "</ul>"
     return thumbnails
 
 
-pages['screenshots'] = '''
+pages["screenshots"] = (
+    """
             <div class="page-header">
                 <h1>Screenshots <small>Click thumbnails to see full size screenshots</small></h1>
             </div>
             <div class="row">
                 <div class="span10">
-''' + thumbnails(indent=20) + '''
+"""
+    + thumbnails(indent=20)
+    + """
                 </div>
-                <div class="span2">''' + ads + '''
+                <div class="span2">"""
+    + ads
+    + """
                 </div>
-            </div>'''
+            </div>"""
+)
 
-pages['license'] = '''
+pages["license"] = (
+    """
             <div class="page-header">
                 <h1>License</h1>
             </div>
             <div class="row">
-                <div class="span10">''' + meta.licenseHTML + '''
+                <div class="span10">"""
+    + meta.licenseHTML
+    + """
                 </div>
-                <div class="span2">''' + ads + '''
+                <div class="span2">"""
+    + ads
+    + """
                 </div>
-            </div>'''
+            </div>"""
+)
 
 
 def languages(nr_columns=9):
     link = '<a href="https://translations.launchpad.net/taskcoach/1.4/+pots/i18n.in/%s/+details">%s</a>'
     languages = sorted(meta.languages.keys())
-    languages = [link%(meta.languages[language][0], language) for language in languages if meta.languages[language][0] is not None]
-    while len(languages)%nr_columns:
-        languages.append('')
-    nr_of_rows = len(languages)/nr_columns
+    languages = [
+        link % (meta.languages[language][0], language)
+        for language in languages
+        if meta.languages[language][0] is not None
+    ]
+    while len(languages) % nr_columns:
+        languages.append("")
+    nr_of_rows = len(languages) / nr_columns
     rows = []
     for row_index in range(nr_of_rows):
-        rows.append(languages[row_index*nr_columns:(row_index+1)*nr_columns])
-    return '</tr><tr>'.join([('<td>%s</td>'*nr_columns)%tuple(row) for row in rows])
+        rows.append(
+            languages[row_index * nr_columns : (row_index + 1) * nr_columns]
+        )
+    return "</tr><tr>".join(
+        [("<td>%s</td>" * nr_columns) % tuple(row) for row in rows]
+    )
 
-pages['i18n'] = '''
+
+pages["i18n"] = (
+    """
             <div class="page-header">
                 <h1>Internationalization</h1>
             </div>
@@ -828,7 +1093,9 @@ pages['i18n'] = '''
                     <table class="table table-bordered">
                         <tbody>
                             <tr>
-''' + languages() + '''
+"""
+    + languages()
+    + """
                             </tr>
                         </tbody>
                     </table>
@@ -880,12 +1147,16 @@ pages['i18n'] = '''
                         command line option.</li> 
                     </ol>
                 </div>
-                <div class="span2">''' + ads + '''
+                <div class="span2">"""
+    + ads
+    + """
                 </div>
-            </div>'''
+            </div>"""
+)
 
 
-pages['devinfo'] = '''
+pages["devinfo"] = (
+    """
             <div class="page-header">
                 <h1>Information for developers</h1>
             </div>
@@ -1026,80 +1297,97 @@ pages['devinfo'] = '''
                     <a href="https://taskcoach.blogspot.com">blog</a> about
                     lessons learned from developing %(name)s.</p>
                 </div>
-                <div class="span2">''' + ads + '''
+                <div class="span2">"""
+    + ads
+    + """
                 </div>
-            </div>'''
- 
+            </div>"""
+)
+
 
 def ensureFolderExists(folder):
     if not os.path.exists(folder):
         os.makedirs(folder)
 
+
 def writeFile(folder, filename, contents):
     ensureFolderExists(folder)
     filename = os.path.join(folder, filename)
-    print('Creating %s'%filename)
-    fd = file(filename, 'w')
-    fd.write(contents.encode('UTF-8'))
+    print("Creating %s" % filename)
+    fd = file(filename, "w")
+    fd.write(contents.encode("UTF-8"))
     fd.close()
-    
+
+
 def expandPatterns(*patterns):
     for pattern in patterns:
         for filename in glob.glob(pattern):
             yield filename
 
+
 def copyFiles(folder, *patterns):
     ensureFolderExists(folder)
     for source in expandPatterns(*patterns):
         target = os.path.join(folder, os.path.basename(source))
-        print('Copying %s to %s'%(source, target))
+        print("Copying %s to %s" % (source, target))
         shutil.copyfile(source, target)
 
-def copyDir(targetFolder, subFolder, files='*'):
+
+def copyDir(targetFolder, subFolder, files="*"):
     targetFolder = os.path.join(targetFolder, subFolder)
     files = os.path.join(subFolder, files)
     copyFiles(targetFolder, files)
 
-def createPAD(folder, filename='pad.xml'):
-    padTemplate = file(filename).read()
-    writeFile(folder, filename, padTemplate%meta.metaDict)
 
-def createVersionFile(folder, filename='version.txt'):
+def createPAD(folder, filename="pad.xml"):
+    padTemplate = file(filename).read()
+    writeFile(folder, filename, padTemplate % meta.metaDict)
+
+
+def createVersionFile(folder, filename="version.txt"):
     textTemplate = file(filename).read()
-    writeFile(folder, filename, textTemplate%meta.metaDict)
-    
-def createHTMLPages(targetFolder, pages):    
+    writeFile(folder, filename, textTemplate % meta.metaDict)
+
+
+def createHTMLPages(targetFolder, pages):
     for title, text in list(pages.items()):
         footer = style.footer
-        contents = style.header + text%meta.metaDict + footer
-        writeFile(targetFolder, '%s.html'%title, contents)
+        contents = style.header + text % meta.metaDict + footer
+        writeFile(targetFolder, "%s.html" % title, contents)
 
-def createThumbnail(srcFilename, targetFolder, bitmapType=wx.BITMAP_TYPE_PNG,
-                    thumbnailWidth=200.):
-    if os.path.basename(srcFilename).startswith('Thumb'):
+
+def createThumbnail(
+    srcFilename,
+    targetFolder,
+    bitmapType=wx.BITMAP_TYPE_PNG,
+    thumbnailWidth=200.0,
+):
+    if os.path.basename(srcFilename).startswith("Thumb"):
         return
     image = wx.Image(srcFilename, bitmapType)
     scaleFactor = thumbnailWidth / image.Width
     thumbnailHeight = int(image.Height * scaleFactor)
     image.Rescale(thumbnailWidth, thumbnailHeight)
-    thumbFilename = os.path.join(targetFolder, 
-                                 'Thumb-' + os.path.basename(srcFilename))
-    print('Creating %s'%thumbFilename)
+    thumbFilename = os.path.join(
+        targetFolder, "Thumb-" + os.path.basename(srcFilename)
+    )
+    print("Creating %s" % thumbFilename)
     image.SaveFile(thumbFilename, bitmapType)
 
-def createThumbnails(targetFolder):
-    for source in expandPatterns(os.path.join(targetFolder, '*.png')):
-        createThumbnail(source, targetFolder)
-    
 
-websiteFolder = os.path.join('..', 'website.out')            
+def createThumbnails(targetFolder):
+    for source in expandPatterns(os.path.join(targetFolder, "*.png")):
+        createThumbnail(source, targetFolder)
+
+
+websiteFolder = os.path.join("..", "website.out")
 createHTMLPages(websiteFolder, pages)
 createPAD(websiteFolder)
 createVersionFile(websiteFolder)
-copyFiles(websiteFolder, 'messages.txt', 'robots.txt', '*.ico')
-for subFolder in 'images', 'js', 'css', 'downloads':
+copyFiles(websiteFolder, "messages.txt", "robots.txt", "*.ico")
+for subFolder in "images", "js", "css", "downloads":
     copyDir(websiteFolder, subFolder)
-for subFolder in os.listdir('screenshots'):
-    if not subFolder.startswith('.'):
-        copyDir(websiteFolder, os.path.join('screenshots', subFolder))
-        createThumbnails(os.path.join(websiteFolder, 'screenshots', subFolder))
+for subFolder in os.listdir("screenshots"):
+    if not subFolder.startswith("."):
+        copyDir(websiteFolder, os.path.join("screenshots", subFolder))
+        createThumbnails(os.path.join(websiteFolder, "screenshots", subFolder))

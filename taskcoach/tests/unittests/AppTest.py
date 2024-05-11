@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import test
 import wx
@@ -24,12 +24,12 @@ from taskcoachlib import meta, application, config
 class DummyOptions(object):
     pofile = None
     language = None
-    
+
 
 class DummyLocale(object):
-    def __init__(self, language='C'):
+    def __init__(self, language="C"):
         self.language = language
-        
+
     def getdefaultlocale(self):
         return self.language, None
 
@@ -42,16 +42,19 @@ class AppTests(test.TestCase):
 
     def testAppProperties(self):
         import locale
-        if locale.getdefaultlocale()[0] != 'en_US':
+
+        if locale.getdefaultlocale()[0] != "en_US":
             # Somehow wx displays an error dialog box if en_US is not installed, when
             # quitApplication() calls ProcessIdle and I don't know how to get rid of it.
             # I don't know how to find out if en_US is installed either, so skip if
             # it's not the default.
-            self.skipTest('Locale is not en_US')
+            self.skipTest("Locale is not en_US")
         else:
             # Normally I prefer one assert per test, but creating the app is
             # expensive, so we do all the queries in one test method.
-            app = application.Application(loadSettings=False, loadTaskFile=False)
+            app = application.Application(
+                loadSettings=False, loadTaskFile=False
+            )
             wxApp = wx.GetApp()
             self.assertEqual(meta.name, wxApp.GetAppName())
             self.assertEqual(meta.author, wxApp.GetVendorName())
@@ -64,32 +67,33 @@ class AppTests(test.TestCase):
         args = [self.options, self.settings]
         if locale:
             args.append(locale)
-        self.assertEqual(expectedLanguage, 
-                         application.Application.determine_language(*args))  # pylint: disable=W0142
-        
+        self.assertEqual(
+            expectedLanguage, application.Application.determine_language(*args)
+        )  # pylint: disable=W0142
+
     def testLanguageViaCommandLineOption(self):
-        self.options.language = 'fi_FI'
-        self.assertLanguage('fi_FI')
-        
+        self.options.language = "fi_FI"
+        self.assertLanguage("fi_FI")
+
     def testLanguageViaCommandLinePoFile(self):
-        self.options.pofile = 'nl_NL'
-        self.assertLanguage('nl_NL')
-        
+        self.options.pofile = "nl_NL"
+        self.assertLanguage("nl_NL")
+
     def testLanguageViaExternallySetLanguage(self):
-        self.settings.set('view', 'language', 'de_DE')
-        self.assertLanguage('de_DE')
-                            
+        self.settings.set("view", "language", "de_DE")
+        self.assertLanguage("de_DE")
+
     def testLanguageSetByUser(self):
-        self.settings.set('view', 'language_set_by_user', 'de_DE')
-        self.assertLanguage('de_DE')
-        
+        self.settings.set("view", "language_set_by_user", "de_DE")
+        self.assertLanguage("de_DE")
+
     def testLanguageSetByUser_OverridesExternallySetLanguage(self):
-        self.settings.set('view', 'language', 'nl_NL')
-        self.settings.set('view', 'language_set_by_user', 'de_DE')
-        self.assertLanguage('de_DE')
-    
+        self.settings.set("view", "language", "nl_NL")
+        self.settings.set("view", "language_set_by_user", "de_DE")
+        self.assertLanguage("de_DE")
+
     def testLanguageViaLocale(self):
-        self.assertLanguage('en_GB', DummyLocale('en_GB'))
-        
+        self.assertLanguage("en_GB", DummyLocale("en_GB"))
+
     def testLanguageViaCLocale(self):
-        self.assertLanguage('en_US', DummyLocale())
+        self.assertLanguage("en_US", DummyLocale())

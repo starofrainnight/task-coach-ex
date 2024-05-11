@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 Copyright (C) 2008 Rob McMullen <rob.mcmullen@gmail.com>
@@ -16,10 +16,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
-''' This module provides classes that implement refreshing strategies for
-    viewers. '''  # pylint: disable=W0105
+""" This module provides classes that implement refreshing strategies for
+    viewers. """  # pylint: disable=W0105
 
 
 from taskcoachlib import patterns
@@ -30,19 +30,19 @@ import wx
 
 
 class MinuteRefresher(object):
-    ''' This class can be used by viewers to refresh themselves every minute
-        to refresh attributes like time left. The user of this class is
-        responsible for calling refresher.startClock() and stopClock(). '''
+    """This class can be used by viewers to refresh themselves every minute
+    to refresh attributes like time left. The user of this class is
+    responsible for calling refresher.startClock() and stopClock()."""
 
     def __init__(self, viewer):
-        self.__viewer = viewer        
-        
+        self.__viewer = viewer
+
     def startClock(self):
         date.Scheduler().schedule_interval(self.onEveryMinute, minutes=1)
-        
+
     def stopClock(self):
         date.Scheduler().unschedule(self.onEveryMinute)
-        
+
     def onEveryMinute(self):
         if self.__viewer:
             self.__viewer.refresh()
@@ -51,8 +51,8 @@ class MinuteRefresher(object):
 
 
 class SecondRefresher(patterns.Observer, wx.EvtHandler):
-    ''' This class can be used by viewers to refresh themselves every second
-        whenever items (tasks, efforts) are being tracked. '''
+    """This class can be used by viewers to refresh themselves every second
+    whenever items (tasks, efforts) are being tracked."""
 
     # APScheduler seems to take a lot of resources in this setup, so we use a wx.Timer
 
@@ -65,12 +65,16 @@ class SecondRefresher(patterns.Observer, wx.EvtHandler):
         self.__timer = wx.Timer(self, id_)
         wx.EVT_TIMER(self, id_, self.onEverySecond)
         pub.subscribe(self.onTrackingChanged, trackingChangedEventType)
-        self.registerObserver(self.onItemAdded, 
-                              eventType=self.__presentation.addItemEventType(),
-                              eventSource=self.__presentation)
-        self.registerObserver(self.onItemRemoved, 
-                              eventType=self.__presentation.removeItemEventType(),
-                              eventSource=self.__presentation)
+        self.registerObserver(
+            self.onItemAdded,
+            eventType=self.__presentation.addItemEventType(),
+            eventSource=self.__presentation,
+        )
+        self.registerObserver(
+            self.onItemRemoved,
+            eventType=self.__presentation.removeItemEventType(),
+            eventSource=self.__presentation,
+        )
         self.setTrackedItems(self.trackedItems(self.__presentation))
 
     def removeInstance(self):
@@ -79,8 +83,8 @@ class SecondRefresher(patterns.Observer, wx.EvtHandler):
 
     def onItemAdded(self, event):
         self.addTrackedItems(self.trackedItems(list(event.values())))
-        
-    def onItemRemoved(self, event): 
+
+    def onItemRemoved(self, event):
         self.removeTrackedItems(self.trackedItems(list(event.values())))
 
     def onTrackingChanged(self, newValue, sender):
@@ -95,7 +99,7 @@ class SecondRefresher(patterns.Observer, wx.EvtHandler):
 
     def onEverySecond(self, event=None):
         self.refreshItems(self.__trackedItems)
-        
+
     def refreshItems(self, items):
         if self.__viewer:
             self.__viewer.refreshItems(*items)  # pylint: disable=W0142
@@ -105,11 +109,11 @@ class SecondRefresher(patterns.Observer, wx.EvtHandler):
     def setTrackedItems(self, items):
         self.__trackedItems = set(items)
         self.startOrStopClock()
-        
+
     def updatePresentation(self):
         self.__presentation = self.__viewer.presentation()
         self.setTrackedItems(self.trackedItems(self.__presentation))
-        
+
     def addTrackedItems(self, items):
         if items:
             self.__trackedItems.update(items)
@@ -125,14 +129,14 @@ class SecondRefresher(patterns.Observer, wx.EvtHandler):
             self.startClock()
         else:
             self.stopClock()
-            
+
     def startClock(self):
         self.__timer.Start(1000, False)
 
     def stopClock(self):
         self.__timer.Stop()
 
-    def isClockStarted(self): # Unit tests
+    def isClockStarted(self):  # Unit tests
         return self.__timer.IsRunning()
 
     def currentlyTrackedItems(self):

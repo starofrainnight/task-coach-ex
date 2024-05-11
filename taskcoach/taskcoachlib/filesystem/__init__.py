@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2011 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import platform
 
@@ -23,12 +23,13 @@ from .fs_poller import *
 
 
 _system = platform.system()
-if _system == 'Linux':
+if _system == "Linux":
     from .fs_inotify import *
-elif _system == 'Windows':
+elif _system == "Windows":
     from .fs_win32 import *
-elif _system == 'Darwin':
+elif _system == "Darwin":
     from .fs_darwin import *
 else:
+
     class FilesystemNotifier(FilesystemPollerNotifier):
         pass

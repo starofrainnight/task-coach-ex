@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import os
 import test
@@ -23,26 +23,32 @@ import test
 # root folder to be the current dir. Work around that by changing
 # the current dir while importing setup.py:
 cwd = os.path.realpath(os.path.curdir)
-os.chdir('..')
+os.chdir("..")
 import setup
+
 os.chdir(cwd)
 
 
 class EmptFileTest(test.TestCase):
     def emptyPyFiles(self, *folders):
         empty = []
-        for root, dirs, files in os.walk(os.path.join(test.projectRoot, *folders)):
-            pyfiles = [os.path.join(root, filename) for filename in files 
-                       if filename.endswith('.py')]
+        for root, dirs, files in os.walk(
+            os.path.join(test.projectRoot, *folders)
+        ):
+            pyfiles = [
+                os.path.join(root, filename)
+                for filename in files
+                if filename.endswith(".py")
+            ]
             for filename in pyfiles:
                 if os.stat(filename).st_size == 0:
                     empty.append(filename)
         return empty
 
     def testNoSourcePyFilesAreEmpty(self):
-        self.assertEqual([], self.emptyPyFiles('taskcoachlib'))
+        self.assertEqual([], self.emptyPyFiles("taskcoachlib"))
 
-    '''
+    """
     def testAllUnittestPyFilesAreInManifest(self):
         self.assertEqual([], self.missingPyFiles('tests', 'unittests'))
     
@@ -51,4 +57,4 @@ class EmptFileTest(test.TestCase):
 
     def testAllIntegrationtestPyFilesAreInManifest(self):
         self.assertEqual([], self.missingPyFiles('tests', 'integrationtests'))
-    '''
+    """

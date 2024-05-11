@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import os
 import test, mock
@@ -22,8 +22,8 @@ import test, mock
 
 class SaveTest(test.TestCase):
     def setUp(self):
-        self.filename = 'SaveTest.tsk'
-        self.filename2 = 'SaveTest2.tsk'
+        self.filename = "SaveTest.tsk"
+        self.filename2 = "SaveTest2.tsk"
         self.mockApp = mock.App()
         self.mockApp.addTasks()
 
@@ -35,10 +35,10 @@ class SaveTest(test.TestCase):
                 os.remove(filename)
         mock.App.deleteInstance()
         super(SaveTest, self).tearDown()
-        
+
     def assertTasksLoaded(self, nrTasks):
         self.assertEqual(nrTasks, len(self.mockApp.taskFile.tasks()))
-        
+
     def testSave(self):
         self.mockApp.iocontroller.saveas(self.filename)
         self.mockApp.iocontroller.open(self.filename)
@@ -46,18 +46,22 @@ class SaveTest(test.TestCase):
 
     def testSaveSelection_Child(self):
         self.mockApp.iocontroller.saveas(self.filename)
-        self.mockApp.iocontroller.saveselection([self.mockApp.child], self.filename2)
+        self.mockApp.iocontroller.saveselection(
+            [self.mockApp.child], self.filename2
+        )
         self.mockApp.iocontroller.close()
         self.mockApp.iocontroller.open(self.filename2)
         self.assertTasksLoaded(1)
 
     def testSaveSelection_Parent(self):
         self.mockApp.iocontroller.saveas(self.filename)
-        self.mockApp.iocontroller.saveselection([self.mockApp.parent], self.filename2)
+        self.mockApp.iocontroller.saveselection(
+            [self.mockApp.parent], self.filename2
+        )
         self.mockApp.iocontroller.close()
         self.mockApp.iocontroller.open(self.filename2)
         self.assertTasksLoaded(2)
-        
+
     def testSaveAndMerge(self):
         mockApp2 = mock.App()
         mockApp2.addTasks()

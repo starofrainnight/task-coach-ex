@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2012 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 # Not using agw.balloontip because it doesn't position properly and
 # lacks events
@@ -27,13 +27,27 @@ class BalloonTip(wx.Frame):
     ARROWSIZE = 16
     MAXWIDTH = 300
 
-    def __init__(self, parent, target, message=None, title=None, bitmap=None, getRect=None):
+    def __init__(
+        self,
+        parent,
+        target,
+        message=None,
+        title=None,
+        bitmap=None,
+        getRect=None,
+    ):
         """Baloon tip."""
 
-        super(BalloonTip, self).__init__(parent,
-            style=wx.NO_BORDER|wx.FRAME_FLOAT_ON_PARENT|wx.FRAME_NO_TASKBAR|wx.FRAME_SHAPED|wx.POPUP_WINDOW)
+        super(BalloonTip, self).__init__(
+            parent,
+            style=wx.NO_BORDER
+            | wx.FRAME_FLOAT_ON_PARENT
+            | wx.FRAME_NO_TASKBAR
+            | wx.FRAME_SHAPED
+            | wx.POPUP_WINDOW,
+        )
 
-        wheat = wx.ColourDatabase().Find('WHEAT')
+        wheat = wx.ColourDatabase().Find("WHEAT")
         self.SetBackgroundColour(wheat)
 
         self._target = target
@@ -44,16 +58,21 @@ class BalloonTip(wx.Frame):
         vsizer = wx.BoxSizer(wx.VERTICAL)
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
         if bitmap is not None:
-            hsizer.Add(wx.StaticBitmap(self._interior, wx.ID_ANY, bitmap), 0, wx.ALIGN_CENTRE|wx.ALL, 3)
+            hsizer.Add(
+                wx.StaticBitmap(self._interior, wx.ID_ANY, bitmap),
+                0,
+                wx.ALIGN_CENTRE | wx.ALL,
+                3,
+            )
         if title is not None:
             titleCtrl = wx.StaticText(self._interior, wx.ID_ANY, title)
-            hsizer.Add(titleCtrl, 1, wx.ALL|wx.ALIGN_CENTRE, 3)
+            hsizer.Add(titleCtrl, 1, wx.ALL | wx.ALIGN_CENTRE, 3)
             titleCtrl.Bind(wx.EVT_LEFT_DOWN, self.DoClose)
         vsizer.Add(hsizer, 0, wx.EXPAND)
         if message is not None:
             msg = wx.StaticText(self._interior, wx.ID_ANY, message)
             msg.Wrap(self.MAXWIDTH)
-            vsizer.Add(msg, 1, wx.EXPAND|wx.ALL, 3)
+            vsizer.Add(msg, 1, wx.EXPAND | wx.ALL, 3)
             msg.Bind(wx.EVT_LEFT_DOWN, self.DoClose)
 
         self._interior.SetSizer(vsizer)
@@ -74,12 +93,12 @@ class BalloonTip(wx.Frame):
                 return wx.Size(w, h + self._offset)
 
             def RecalcSizes(self):
-                if self._direction == 'bottom':
+                if self._direction == "bottom":
                     self._interior.SetPosition((0, 0))
                 else:
                     self._interior.SetPosition((0, self._offset))
 
-        self._sizer = Sizer(self._interior, 'bottom', self.ARROWSIZE)
+        self._sizer = Sizer(self._interior, "bottom", self.ARROWSIZE)
         self.SetSizer(self._sizer)
         self.Position()
         self.Show()
@@ -112,12 +131,14 @@ class BalloonTip(wx.Frame):
         dpyIndex = max(0, wx.Display.GetFromPoint(wx.Point(tx, ty)) or 0)
         rect = wx.Display(dpyIndex).GetClientArea()
 
-        x = max(rect.GetLeft(), min(rect.GetRight() - w, int(tx + tw / 2 - w / 2)))
+        x = max(
+            rect.GetLeft(), min(rect.GetRight() - w, int(tx + tw / 2 - w / 2))
+        )
         y = ty - h
-        direction = 'bottom'
+        direction = "bottom"
         if y < rect.GetTop():
             y = ty + th
-            direction = 'top'
+            direction = "top"
 
         mask = wx.EmptyBitmap(w, h)
         memDC = wx.MemoryDC()
@@ -129,22 +150,42 @@ class BalloonTip(wx.Frame):
 
             memDC.SetBrush(wx.WHITE_BRUSH)
             memDC.SetPen(wx.WHITE_PEN)
-            if direction == 'bottom':
-                memDC.DrawPolygon([(0, 0),
-                                   (w, 0),
-                                   (w, h - self.ARROWSIZE),
-                                   (tx + int(tw / 2) - x + int(self.ARROWSIZE / 2), h - self.ARROWSIZE),
-                                   (tx + int(tw / 2) - x, h),
-                                   (tx + int(tw / 2) - x - int(self.ARROWSIZE / 2), h - self.ARROWSIZE),
-                                   (0, h - self.ARROWSIZE)])
+            if direction == "bottom":
+                memDC.DrawPolygon(
+                    [
+                        (0, 0),
+                        (w, 0),
+                        (w, h - self.ARROWSIZE),
+                        (
+                            tx + int(tw / 2) - x + int(self.ARROWSIZE / 2),
+                            h - self.ARROWSIZE,
+                        ),
+                        (tx + int(tw / 2) - x, h),
+                        (
+                            tx + int(tw / 2) - x - int(self.ARROWSIZE / 2),
+                            h - self.ARROWSIZE,
+                        ),
+                        (0, h - self.ARROWSIZE),
+                    ]
+                )
             else:
-                memDC.DrawPolygon([(0, self.ARROWSIZE),
-                                   (tx + int(tw / 2) - x - int(self.ARROWSIZE / 2), self.ARROWSIZE),
-                                   (tx + int(tw / 2) - x, 0),
-                                   (tx + int(tw / 2) - x + int(self.ARROWSIZE / 2), self.ARROWSIZE),
-                                   (w, self.ARROWSIZE),
-                                   (w, h),
-                                   (0, h)])
+                memDC.DrawPolygon(
+                    [
+                        (0, self.ARROWSIZE),
+                        (
+                            tx + int(tw / 2) - x - int(self.ARROWSIZE / 2),
+                            self.ARROWSIZE,
+                        ),
+                        (tx + int(tw / 2) - x, 0),
+                        (
+                            tx + int(tw / 2) - x + int(self.ARROWSIZE / 2),
+                            self.ARROWSIZE,
+                        ),
+                        (w, self.ARROWSIZE),
+                        (w, h),
+                        (0, h),
+                    ]
+                )
             self._sizer.SetDirection(direction)
         finally:
             memDC.SelectObject(wx.NullBitmap)
@@ -168,7 +209,15 @@ class BalloonTipManager(object):
 
         self.Bind(wx.EVT_CLOSE, self.__OnClose)
 
-    def AddBalloonTip(self, target, message=None, title=None, bitmap=None, getRect=None, **kwargs):
+    def AddBalloonTip(
+        self,
+        target,
+        message=None,
+        title=None,
+        bitmap=None,
+        getRect=None,
+        **kwargs
+    ):
         """Schedules a tip. Extra keyword arguments will be passed to L{OnBalloonTipShow} and L{OnBalloonTipClosed}."""
         for eTarget, eMessage, eTitle, eBitmap, eGetRect, eArgs in self.__tips:
             if (eTitle, eMessage) == (title, message):
@@ -178,8 +227,17 @@ class BalloonTipManager(object):
 
     def __Try(self):
         if self.__tips and not self.__shutdown and self.__displaying is None:
-            target, message, title, bitmap, getRect, kwargs = self.__tips.pop(0)
-            tip = BalloonTip(self, target, message=message, title=title, bitmap=bitmap, getRect=getRect)
+            target, message, title, bitmap, getRect, kwargs = self.__tips.pop(
+                0
+            )
+            tip = BalloonTip(
+                self,
+                target,
+                message=message,
+                title=title,
+                bitmap=bitmap,
+                getRect=getRect,
+            )
             self.__displaying = tip
             self.OnBalloonTipShow(**kwargs)
             self.__kwargs = kwargs
@@ -202,12 +260,13 @@ class BalloonTipManager(object):
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
+
     class Frame(wx.Frame):
         def __init__(self):
-            super(Frame, self).__init__(None, wx.ID_ANY, 'Test')
+            super(Frame, self).__init__(None, wx.ID_ANY, "Test")
 
-            self.btn = wx.Button(self, wx.ID_ANY, 'Show balloon')
+            self.btn = wx.Button(self, wx.ID_ANY, "Show balloon")
             wx.EVT_BUTTON(self.btn, wx.ID_ANY, self.OnClick)
             s = wx.BoxSizer()
             s.Add(self.btn, 1, wx.EXPAND)
@@ -215,7 +274,15 @@ if __name__ == '__main__':
             self.Fit()
 
         def OnClick(self, event):
-            BalloonTip(self, self.btn, '''Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses differently than mine. You don't get sick, I do. That's also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on the same curve, just on opposite ends.''', title='Title', bitmap=wx.ArtProvider.GetBitmap(wx.ART_TIP, wx.ART_MENU, (16, 16)))
+            BalloonTip(
+                self,
+                self.btn,
+                """Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses differently than mine. You don't get sick, I do. That's also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on the same curve, just on opposite ends.""",
+                title="Title",
+                bitmap=wx.ArtProvider.GetBitmap(
+                    wx.ART_TIP, wx.ART_MENU, (16, 16)
+                ),
+            )
 
     class App(wx.App):
         def OnInit(self):

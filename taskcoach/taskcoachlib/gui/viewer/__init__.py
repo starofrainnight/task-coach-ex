@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,10 +14,17 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
-from .task import TaskViewer, TaskStatsViewer, CheckableTaskViewer, \
-    SquareTaskViewer, TimelineViewer, CalendarViewer, HierarchicalCalendarViewer
+from .task import (
+    TaskViewer,
+    TaskStatsViewer,
+    CheckableTaskViewer,
+    SquareTaskViewer,
+    TimelineViewer,
+    CalendarViewer,
+    HierarchicalCalendarViewer,
+)
 from .category import CategoryViewer, BaseCategoryViewer
 from .effort import EffortViewer, EffortViewerForSelectedTasks
 from .note import NoteViewer, BaseNoteViewer
@@ -26,6 +33,7 @@ from .container import ViewerContainer
 from .factory import viewerTypes, addViewers, addOneViewer
 
 from taskcoachlib import operating_system
+
 try:
     import igraph
 except ImportError:

@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,15 +14,15 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from . import singleton as patterns
 
 
 class Command(object):
     def __init__(self, *args, **kwargs):
-        super(Command, self).__init__() # object.__init__ takes no arguments
-        
+        super(Command, self).__init__()  # object.__init__ takes no arguments
+
     def do(self):
         CommandHistory().append(self)
 
@@ -33,7 +33,7 @@ class Command(object):
         pass
 
     def __str__(self):
-        return 'command'
+        return "command"
 
 
 class CommandHistory(object, metaclass=patterns.Singleton):
@@ -63,24 +63,24 @@ class CommandHistory(object, metaclass=patterns.Singleton):
 
     def hasHistory(self):
         return self.__history
-        
+
     def getHistory(self):
         return self.__history
-        
+
     def hasFuture(self):
         return self.__future
 
     def getFuture(self):
         return self.__future
-        
+
     def _extendLabel(self, label, commandList):
         if commandList:
-            commandName = ' %s'%commandList[-1]
+            commandName = " %s" % commandList[-1]
             label += commandName.lower()
         return label
 
-    def undostr(self, label='Undo'):
+    def undostr(self, label="Undo"):
         return self._extendLabel(label, self.__history)
 
-    def redostr(self, label='Redo'):
+    def redostr(self, label="Redo"):
         return self._extendLabel(label, self.__future)

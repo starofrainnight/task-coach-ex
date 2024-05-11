@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2015 Task Coach developers <developers@taskcoach.org>
 
@@ -14,23 +14,30 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 import codecs
 
+
 def encalias(oldname, newname):
     old = codecs.lookup(oldname)
-    new = codecs.CodecInfo(old.encode, old.decode, 
-                           streamreader=old.streamreader,
-                           streamwriter=old.streamwriter,
-                           incrementalencoder=old.incrementalencoder,
-                           incrementaldecoder=old.incrementaldecoder,
-                           name=newname)
+    new = codecs.CodecInfo(
+        old.encode,
+        old.decode,
+        streamreader=old.streamreader,
+        streamwriter=old.streamwriter,
+        incrementalencoder=old.incrementalencoder,
+        incrementaldecoder=old.incrementaldecoder,
+        name=newname,
+    )
+
     def searcher(aname):
         if aname == newname:
             return new
         else:
             return None
+
     codecs.register(searcher)
 
-encalias('mac_roman', 'western-(mac-os-roman)')
+
+encalias("mac_roman", "western-(mac-os-roman)")

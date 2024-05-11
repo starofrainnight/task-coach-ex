@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,14 +14,16 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib.domain import categorizable
 from taskcoachlib.domain import attachment
 
 
-class Note(attachment.AttachmentOwner, 
-           categorizable.CategorizableCompositeObject):
-    ''' This class represents notes. Notes consist of a subject, description, 
-        and attachments. In addition, a note may be assigned to categories. '''
+class Note(
+    attachment.AttachmentOwner, categorizable.CategorizableCompositeObject
+):
+    """This class represents notes. Notes consist of a subject, description,
+    and attachments. In addition, a note may be assigned to categories."""
+
     pass

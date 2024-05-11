@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from taskcoachlib import operating_system
 import wx
@@ -26,7 +26,7 @@ class ToolTipMixin(object):
     dynamic tooltip over a control."""
 
     def __init__(self, *args, **kwargs):
-        self.__enabled = kwargs.pop('tooltipsEnabled', True)
+        self.__enabled = kwargs.pop("tooltipsEnabled", True)
         super(ToolTipMixin, self).__init__(*args, **kwargs)
 
         self.__timer = wx.Timer(self, wx.NewId())
@@ -38,7 +38,7 @@ class ToolTipMixin(object):
 
         self.GetMainWindow().Bind(wx.EVT_MOTION, self.__OnMotion)
         self.GetMainWindow().Bind(wx.EVT_LEAVE_WINDOW, self.__OnLeave)
-        self.Bind(wx.EVT_TIMER, self.__OnTimer, id=self.__timer.GetId())        
+        self.Bind(wx.EVT_TIMER, self.__OnTimer, id=self.__timer.GetId())
 
     def SetToolTipsEnabled(self, enabled):
         self.__enabled = enabled
@@ -56,7 +56,9 @@ class ToolTipMixin(object):
 
         if self.__frozen:
             theDisplay = wx.Display(wx.Display.GetFromPoint(wx.Point(x, y)))
-            displayX, displayY, displayWidth, displayHeight = theDisplay.GetClientArea()
+            displayX, displayY, displayWidth, displayHeight = (
+                theDisplay.GetClientArea()
+            )
             tipWidth, tipHeight = self.__tip.GetSizeTuple()
 
             if tipHeight > displayHeight:
@@ -123,22 +125,30 @@ class ToolTipMixin(object):
 
 
 if operating_system.isWindows():
+
     class ToolTipBase(wx.MiniFrame):
         def __init__(self, parent):
-            style = wx.FRAME_NO_TASKBAR | wx.FRAME_FLOAT_ON_PARENT | wx.NO_BORDER
-            super(ToolTipBase, self).__init__(parent, wx.ID_ANY, 'Tooltip',
-                                              style=style)
+            style = (
+                wx.FRAME_NO_TASKBAR | wx.FRAME_FLOAT_ON_PARENT | wx.NO_BORDER
+            )
+            super(ToolTipBase, self).__init__(
+                parent, wx.ID_ANY, "Tooltip", style=style
+            )
 
         def Show(self, x, y, w, h):  # pylint: disable=W0221
             self.SetDimensions(x, y, w, h)
             super(ToolTipBase, self).Show()
 
 elif operating_system.isMac():
+
     class ToolTipBase(wx.Frame):
         def __init__(self, parent):  # pylint: disable=E1003
-            style = wx.FRAME_NO_TASKBAR | wx.FRAME_FLOAT_ON_PARENT | wx.NO_BORDER
-            super(ToolTipBase, self).__init__(parent, wx.ID_ANY, 'ToolTip',
-                                              style=style)
+            style = (
+                wx.FRAME_NO_TASKBAR | wx.FRAME_FLOAT_ON_PARENT | wx.NO_BORDER
+            )
+            super(ToolTipBase, self).__init__(
+                parent, wx.ID_ANY, "ToolTip", style=style
+            )
 
             # There are some subtleties on Mac regarding multi-monitor
             # displays...
@@ -159,6 +169,7 @@ elif operating_system.isMac():
             self.MoveXY(self.__maxWidth, self.__maxHeight)
 
 else:
+
     class ToolTipBase(wx.PopupWindow):
         def Show(self, x, y, width, height):  # pylint: disable=E1003,W0221
             self.SetDimensions(x, y, width, height)
@@ -175,27 +186,29 @@ class SimpleToolTip(ToolTipBase):
         self.data = self._wrapLongLines(data)
         self.SetSize(self._calculateSize())
         self.Refresh()  # Needed on Mac OS X
-        
+
     def _wrapLongLines(self, data):
         wrappedData = []
         wrapper = textwrap.TextWrapper(width=78)
         for icon, lines in data:
             wrappedLines = []
             for line in lines:
-                wrappedLines.extend(wrapper.fill(line).split('\n'))
+                wrappedLines.extend(wrapper.fill(line).split("\n"))
             wrappedData.append((icon, wrappedLines))
         return wrappedData
-        
+
     def _calculateSize(self):
         dc = wx.ClientDC(self)
         self._setFontBrushAndPen(dc)
         width, height = 0, 0
         for sectionIndex in range(len(self.data)):
-            sectionWidth, sectionHeight = self._calculateSectionSize(dc, sectionIndex)
+            sectionWidth, sectionHeight = self._calculateSectionSize(
+                dc, sectionIndex
+            )
             width = max(width, sectionWidth)
             height += sectionHeight
         return wx.Size(width + 6, height + 6)
-    
+
     def _calculateSectionSize(self, dc, sectionIndex):
         icon, lines = self.data[sectionIndex]
         sectionWidth, sectionHeight = 0, 0
@@ -208,7 +221,7 @@ class SimpleToolTip(ToolTipBase):
         if icon:
             sectionWidth += 24  # Reserve width for icon(s)
         return sectionWidth, sectionHeight
-    
+
     def _calculateLineSize(self, dc, line):
         return dc.GetTextExtent(line)
 
@@ -221,7 +234,7 @@ class SimpleToolTip(ToolTipBase):
             self._drawSections(dc)
         finally:
             dc.EndDrawing()
-            
+
     def _setFontBrushAndPen(self, dc):
         font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         textColour = wx.SystemSettings_GetColour(wx.SYS_COLOUR_INFOTEXT)
@@ -230,16 +243,16 @@ class SimpleToolTip(ToolTipBase):
         dc.SetTextForeground(textColour)
         dc.SetBrush(wx.Brush(backgroundColour))
         dc.SetPen(wx.Pen(textColour))
-        
+
     def _drawBorder(self, dc):
         width, height = self.GetClientSizeTuple()
         dc.DrawRectangle(0, 0, width, height)
-        
+
     def _drawSections(self, dc):
         y = 3
         for sectionIndex in range(len(self.data)):
             y = self._drawSection(dc, y, sectionIndex)
-                    
+
     def _drawSection(self, dc, y, sectionIndex):
         icon, lines = self.data[sectionIndex]
         if not lines:
@@ -254,31 +267,31 @@ class SimpleToolTip(ToolTipBase):
         if icon:
             self._drawIconSeparator(dc, x - 2, topOfSection, bottomOfSection)
         return bottomOfSection
-    
+
     def _drawSectionSeparator(self, dc, x, y):
         y += 1
         width = self.GetClientSizeTuple()[0]
         dc.DrawLine(x, y, width - x, y)
         return y + 2
-        
+
     def _drawIcon(self, dc, icon, x, y):
         bitmap = wx.ArtProvider.GetBitmap(icon, wx.ART_FRAME_ICON, (16, 16))
         dc.DrawBitmap(bitmap, x, y, True)
         return 23  # New x
-        
+
     def _drawTextLines(self, dc, textLines, x, y):
         for textLine in textLines:
             y = self._drawTextLine(dc, textLine, x, y)
         return y
-        
+
     def _drawTextLine(self, dc, textLine, x, y):
         try:
             dc.DrawText(textLine, x, y)
         except:
-            raise RuntimeError('Could not draw text %s' % repr(textLine))
+            raise RuntimeError("Could not draw text %s" % repr(textLine))
         textHeight = dc.GetTextExtent(textLine)[1]
         return y + textHeight + 1
-    
+
     def _drawIconSeparator(self, dc, x, top, bottom):
-        ''' Draw a vertical line between the icon and the text. '''
+        """Draw a vertical line between the icon and the text."""
         dc.DrawLine(x, top, x, bottom)

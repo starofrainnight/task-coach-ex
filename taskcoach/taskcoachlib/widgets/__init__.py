@@ -1,4 +1,4 @@
-'''
+"""
 Task Coach - Your friendly task manager
 Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
 
@@ -14,7 +14,7 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
 from .notebook import Notebook, BookPage
 from .frame import AuiManagedFrameWithDynamicCenterPane
@@ -26,7 +26,11 @@ from .treectrl import CheckTreeCtrl, TreeListCtrl
 from .squaremap import SquareMap
 from .timeline import Timeline
 from .datectrl import DateTimeCtrl, TimeEntry
-from .textctrl import SingleLineTextCtrl, MultiLineTextCtrl, StaticTextWithToolTip
+from .textctrl import (
+    SingleLineTextCtrl,
+    MultiLineTextCtrl,
+    StaticTextWithToolTip,
+)
 from .panel import PanelWithBoxSizer, BoxWithFlexGridSizer, BoxWithBoxSizer
 from .searchctrl import SearchCtrl
 from .spinctrl import SpinCtrl
