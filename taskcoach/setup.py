@@ -49,6 +49,12 @@ def majorAndMinorPythonVersion():
         return info[0], info[1]
 
 
+install_requires = ["wxversion"]
+
+setup_requires = ["distro"]
+
+tests_requires = []
+
 setupOptions = {
     "name": meta.filename,
     "author": meta.author,
@@ -59,6 +65,9 @@ setupOptions = {
     "url": meta.url,
     "license": meta.license,
     "download_url": meta.download,
+    "install_requires": install_requires,
+    "tests_require": tests_requires,
+    "setup_requires": setup_requires,
     "packages": findPackages("taskcoachlib") + findPackages("buildlib"),
     "scripts": ["taskcoach.py"],
     "classifiers": [
