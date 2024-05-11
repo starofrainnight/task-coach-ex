@@ -1085,7 +1085,7 @@ class TaskFileMonitorTestBase(TaskFileTestCase):
 
     def _loadChangesFromFile(self, filename):
         return persistence.ChangesXMLReader(
-            file(filename + ".delta", "rU")
+            open(filename + ".delta", "r")
         ).read()
 
     def testGUIDPresentAfterLoad(self):

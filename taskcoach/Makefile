@@ -28,12 +28,12 @@ DOT="dot"       # dot should be on the path
 ifeq "$(shell uname -s)" "Darwin"
 BITS=$(shell python -c "import struct; print len(struct.pack('L', 0))")
 ifeq "$(BITS)" "8"
-    PYTHON?="python-32"
+    PYTHON?="python3-32"
 else
-    PYTHON?="python"
+    PYTHON?="python3"
 endif
 else
-    PYTHON?="python"
+    PYTHON?="python3"
 endif
 
 ifeq (CYGWIN_NT,$(findstring CYGWIN_NT,$(shell uname)))

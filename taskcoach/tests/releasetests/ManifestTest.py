@@ -22,7 +22,7 @@ import test
 
 class ManifestTest(test.TestCase):
     def setUp(self):
-        manifestFile = file(os.path.join(test.projectRoot, "MANIFEST"))
+        manifestFile = open(os.path.join(test.projectRoot, "MANIFEST"))
         manifestLines = manifestFile.readlines()
         manifestFile.close()
         self.manifest = [

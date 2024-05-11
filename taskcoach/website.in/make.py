@@ -286,7 +286,7 @@ pages["changes"] = (
             </div>
             <div class="row">
                 <div class="span10">"""
-    + file("changes.html").read().decode("UTF-8")
+    + open("changes.html").read().decode("UTF-8")
     + """
                     <p><a class="btn" href="all_changes.html">View complete change history &raquo;</a></p>
                 </div>
@@ -304,7 +304,7 @@ pages["all_changes"] = (
             </div>
             <div class="row">
                 <div class="span10">"""
-    + file("all_changes.html").read().decode("UTF-8")
+    + open("all_changes.html").read().decode("UTF-8")
     + """
                 </div>
                 <div class="span2">"""
@@ -1314,7 +1314,7 @@ def writeFile(folder, filename, contents):
     ensureFolderExists(folder)
     filename = os.path.join(folder, filename)
     print("Creating %s" % filename)
-    fd = file(filename, "w")
+    fd = open(filename, "w")
     fd.write(contents.encode("UTF-8"))
     fd.close()
 
@@ -1340,12 +1340,12 @@ def copyDir(targetFolder, subFolder, files="*"):
 
 
 def createPAD(folder, filename="pad.xml"):
-    padTemplate = file(filename).read()
+    padTemplate = open(filename).read()
     writeFile(folder, filename, padTemplate % meta.metaDict)
 
 
 def createVersionFile(folder, filename="version.txt"):
-    textTemplate = file(filename).read()
+    textTemplate = open(filename).read()
     writeFile(folder, filename, textTemplate % meta.metaDict)
 
 

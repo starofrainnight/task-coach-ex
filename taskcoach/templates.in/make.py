@@ -29,16 +29,16 @@ def dumpTemplate(filename, fd):
     if ext == ".tsktmpl":
         fd.write(
             "    templates.append((%s, %s))\n"
-            % (repr(name), repr(file(filename, "rb").read()))
+            % (repr(name), repr(open(filename, "rb").read()))
         )
-        tree = ET.parse(file(filename, "rb"))
+        tree = ET.parse(open(filename, "rb"))
         root = tree.getroot()
         subject = root.find("task").attrib["subject"]
         fd.write("    _(%s)\n" % repr(subject.encode("UTF-8")))
 
 
 def dumpDirectory(path):
-    fd = file(
+    fd = open(
         os.path.join(
             "..", "taskcoachlib", "persistence", "xml", "templates.py"
         ),

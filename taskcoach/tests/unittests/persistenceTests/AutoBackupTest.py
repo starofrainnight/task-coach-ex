@@ -135,7 +135,7 @@ class AutoBackupTest(test.TestCase):
     def testBackupMigrationManifest(self):
         self.taskFile.setFilename("test.tsk")
         self.backup.onTaskFileRead(self.taskFile)
-        with file(
+        with open(
             os.path.join(self.settings.pathToBackupsDir(), "backups.xml"), "rb"
         ) as fp:
             content = fp.read()
@@ -146,7 +146,7 @@ class AutoBackupTest(test.TestCase):
 
     def testBackupMigration(self):
         self.taskFile.setFilename("test.tsk")
-        with file("test.20140715-010203.tsk.bak", "wb") as fp:
+        with open("test.20140715-010203.tsk.bak", "wb") as fp:
             fp.write("Hello, world")
         self.backup.onTaskFileRead(self.taskFile)
         self.assertFalse(os.path.exists("test.20140715-010203.tsk.bak"))

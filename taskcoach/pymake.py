@@ -167,7 +167,7 @@ To be done.
 def writeFile(filename, text, directory="."):  # pylint: disable=W0621
     if not os.path.exists(directory):
         os.mkdir(directory)
-    with file(os.path.join(directory, filename), "w") as textFile:
+    with open(os.path.join(directory, filename), "w") as textFile:
         textFile.write(text)
 
 
@@ -178,12 +178,12 @@ def createDocumentation():
 
 
 def createInnoSetupScript():
-    script = file("build.in/windows/taskcoach.iss").read()
+    script = open("build.in/windows/taskcoach.iss").read()
     writeFile("taskcoach.iss", script % meta.metaDict, builddir)
 
 
 def createDebianChangelog():
-    changelog = file("build.in/debian/changelog").read()
+    changelog = open("build.in/debian/changelog").read()
     writeFile(
         "changelog",
         changelog % meta.metaDict,
@@ -299,7 +299,7 @@ elif sys.argv[1] == "py2app":
 elif sys.argv[1] == "bdist_rpm_fedora":
     from distutils.core import setup
 
-    spec_file = file("build.in/fedora/taskcoach.spec").read() % meta.metaDict
+    spec_file = open("build.in/fedora/taskcoach.spec").read() % meta.metaDict
     spec_file = spec_file.split("\n")
     setupOptions.update(
         dict(
@@ -319,7 +319,7 @@ elif sys.argv[1] == "bdist_rpm_fedora":
 elif sys.argv[1] == "bdist_rpm_opensuse":
     from distutils.core import setup
 
-    spec_file = file("build.in/opensuse/taskcoach.spec").read() % meta.metaDict
+    spec_file = open("build.in/opensuse/taskcoach.spec").read() % meta.metaDict
     spec_file = spec_file.split("\n")
     setupOptions.update(
         dict(
@@ -354,7 +354,7 @@ elif sys.argv[1] in ["bdist_deb", "bdist_ubuntu"]:
         subsection="Office",
         url=meta.data.url,
         command="/usr/bin/taskcoach.py",
-        changelog_content=file("changelog_content", "rb").read().rstrip(),
+        changelog_content=open("changelog_content", "rb").read().rstrip(),
         sdist_exclude="buildlib",
     )
 

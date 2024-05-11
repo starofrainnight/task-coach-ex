@@ -37,7 +37,7 @@ class TemplateList(object):
 
     def _readTemplate(self, filename, TemplateReader, openFile):
         try:
-            fd = openFile(os.path.join(self._path, filename), "rU")
+            fd = openFile(os.path.join(self._path, filename), "r")
         except IOError:
             return
         try:
@@ -59,7 +59,7 @@ class TemplateList(object):
         listName = os.path.join(self._path, "list.pickle")
         if os.path.exists(listName):
             try:
-                filenames = pickle.load(file(listName, "rb"))
+                filenames = pickle.load(open(listName, "rb"))
             except:
                 pass
         return filenames
@@ -67,11 +67,11 @@ class TemplateList(object):
     def save(self):
         pickle.dump(
             [name for task, name in self._templates],
-            file(os.path.join(self._path, "list.pickle"), "wb"),
+            open(os.path.join(self._path, "list.pickle"), "wb"),
         )
 
         for task, name in self._templates:
-            templateFile = file(os.path.join(self._path, name), "w")
+            templateFile = open(os.path.join(self._path, name), "w")
             writer = TemplateXMLWriter(templateFile)
             writer.write(task)
             templateFile.close()
@@ -84,11 +84,11 @@ class TemplateList(object):
     def addTemplate(self, task):
         handle, filename = tempfile.mkstemp(".tsktmpl", dir=self._path)
         os.close(handle)
-        templateFile = file(filename, "w")
+        templateFile = open(filename, "w")
         writer = TemplateXMLWriter(templateFile)
         writer.write(task.copy())
         templateFile.close()
-        theTask = TemplateXMLReader(file(filename, "rU")).read()
+        theTask = TemplateXMLReader(open(filename, "r")).read()
         self._templates.append((theTask, os.path.split(filename)[-1]))
         return theTask
 

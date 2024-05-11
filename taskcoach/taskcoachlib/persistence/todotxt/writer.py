@@ -53,9 +53,9 @@ class TodoTxtWriter(object):
             os.remove(metaName)
         if os.path.exists(self.__filename):  # Unit tests
             self.__fd.close()
-            with file(metaName, "wb") as dst:
+            with open(metaName, "wb") as dst:
                 dst.write("VERSION: %d\n" % self.VERSION)
-                with file(self.__filename, "rb") as src:
+                with open(self.__filename, "rb") as src:
                     shutil.copyfileobj(src, dst)
         return count
 

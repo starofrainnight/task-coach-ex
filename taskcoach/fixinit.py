@@ -29,8 +29,8 @@ def visitDir(arg, dirname, names):
         if name in ["__init__.py", "itopicdefnprovider.py"]:
             fname = os.path.join(dirname, name)
             if os.stat(fname).st_size == 0:
-                file(fname, "wb").write("# Not empty\n")
+                open(fname, "wb").write("# Not empty\n")
 
 
 if __name__ == "__main__":
-    os.path.walk(os.path.join("taskcoachlib", "thirdparty"), visitDir, None)
+    os.walk(os.path.join("taskcoachlib", "thirdparty"), visitDir, None)

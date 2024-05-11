@@ -71,7 +71,7 @@ class TestWithTaskFile(base.Win32TestCase):
         if os.path.exists(self.logfilename):
             self.fail(
                 "Exception occurred while saving:\n"
-                + file(self.logfilename, "rb").read()
+                + open(self.logfilename, "rb").read()
             )
 
         # This fails for a yet unknown reason when launched through the buildbot. Seems

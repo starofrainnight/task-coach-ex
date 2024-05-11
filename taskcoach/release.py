@@ -123,7 +123,7 @@ class Settings(configparser.SafeConfigParser, object):
             get_input = getpass.getpass if option == 'password' else raw_input
             value = get_input('%s %s: ' % (section, option)).strip()
             self.set(section, option, value)
-            self.write(file(self.filename, 'w'))
+            self.write(open(self.filename, 'w'))
         return value
 
 
@@ -317,7 +317,7 @@ def building_packages(settings, options):
         shutil.rmtree('dist')
     os.mkdir('dist')
 
-    shutil.copyfileobj(urllib.request.urlopen(zipurl), file(os.path.join('dist', 'release.zip'), 'wb'))
+    shutil.copyfileobj(urllib.request.urlopen(zipurl), open(os.path.join('dist', 'release.zip'), 'wb'))
 
     try:
         zipFile = zipfile.ZipFile(os.path.join('dist', 'release.zip'), 'r')
@@ -326,7 +326,7 @@ def building_packages(settings, options):
                 if options.verbose:
                     print('Extracting "%s"' % info.filename)
                 shutil.copyfileobj(zipFile.open(info, 'r'),
-                                   file(os.path.join('dist', info.filename), 'wb'))
+                                   open(os.path.join('dist', info.filename), 'wb'))
         finally:
             zipFile.close()
     finally:
@@ -438,7 +438,7 @@ def generating_MD5_digests(settings, options):
     contents = '''md5digests = {\n'''
     for filename in glob.glob(os.path.join('dist', '*')):
         
-        md5digest = hashlib.md5(file(filename, 'rb').read())  # pylint: disable=E1101
+        md5digest = hashlib.md5(open(filename, 'rb').read())  # pylint: disable=E1101
         filename = os.path.basename(filename)
         hexdigest = md5digest.hexdigest()
         contents += '''    "%s": "%s",\n''' % (filename, hexdigest)
@@ -446,7 +446,7 @@ def generating_MD5_digests(settings, options):
             print('%40s -> %s' % (filename, hexdigest))
     contents += '}\n'
     
-    md5digests_file = file(os.path.join('website.in', 'md5digests.py'), 'w')
+    md5digests_file = open(os.path.join('website.in', 'md5digests.py'), 'w')
     md5digests_file.write(contents)
     md5digests_file.close()
 
@@ -491,12 +491,12 @@ class SimpleFTP(ftplib.FTP, object):
                 print('Store %s' % os.path.join(root, filename))
                 try:
                     self.storbinary('STOR %s' % filename, 
-                                    file(os.path.join(root, filename), 'rb'))
+                                    open(os.path.join(root, filename), 'rb'))
                 except ftplib.error_perm as info:
                     if str(info).endswith('Overwrite permission denied'):
                         self.delete(filename)
                         self.storbinary('STOR %s' % filename, 
-                                        file(os.path.join(root, filename), 
+                                        open(os.path.join(root, filename), 
                                              'rb'))
                     else:
                         raise

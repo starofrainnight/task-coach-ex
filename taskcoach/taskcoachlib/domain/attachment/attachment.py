@@ -195,7 +195,7 @@ class MailAttachment(Attachment):
 
     def data(self):
         try:
-            return file(self.location(), "rb").read()
+            return open(self.location(), "rb").read()
         except IOError:
             return None
 

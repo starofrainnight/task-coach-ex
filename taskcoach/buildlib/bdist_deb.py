@@ -243,7 +243,7 @@ class bdist_deb(Command, object):
         filename = os.path.join(self.debian_dir, filename)
         if self.verbose:
             log.info("writing %s" % filename)
-        fd = file(filename, "w")
+        fd = open(filename, "w")
         fd.write(contents)
         fd.close()
         os.chmod(filename, 0o755)

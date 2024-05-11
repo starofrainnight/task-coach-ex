@@ -55,7 +55,7 @@ class AutoExporterTestCase(test.TestCase):
         autosaver.on_idle(dummy.Event())
         self.assertEqual(
             "Some task tcid:%s\n" % theTask.id(),
-            file(self.txtFilename, "r").read(),
+            open(self.txtFilename, "r").read(),
         )
 
     def testAddOneTaskAndSaveManually(self):
@@ -65,12 +65,12 @@ class AutoExporterTestCase(test.TestCase):
         self.taskFile.save()
         self.assertEqual(
             "Whatever tcid:%s\n" % theTask.id(),
-            file(self.txtFilename, "r").read(),
+            open(self.txtFilename, "r").read(),
         )
 
     def testImportOneTaskWhenSavingManually(self):
         self.settings.set("file", "autoimport", '["Todo.txt"]')
-        with file(self.txtFilename, "w") as todoTxtFile:
+        with open(self.txtFilename, "w") as todoTxtFile:
             todoTxtFile.write("Imported task\n")
         self.taskFile.save()
         self.assertEqual(
@@ -81,7 +81,7 @@ class AutoExporterTestCase(test.TestCase):
         self.settings.set("file", "autoimport", '["Todo.txt"]')
         self.settings.set("file", "autosave", "True")
         autosaver = persistence.AutoSaver(self.settings)
-        with file(self.txtFilename, "w") as todoTxtFile:
+        with open(self.txtFilename, "w") as todoTxtFile:
             todoTxtFile.write("Imported task\n")
         self.taskFile.tasks().append(task.Task(subject="Some task"))
         autosaver.on_idle(dummy.Event())
@@ -90,7 +90,7 @@ class AutoExporterTestCase(test.TestCase):
     def testImportAfterReadingTaskFile(self):
         self.taskFile.save()
         self.settings.set("file", "autoimport", '["Todo.txt"]')
-        with file(self.txtFilename, "w") as todoTxtFile:
+        with open(self.txtFilename, "w") as todoTxtFile:
             todoTxtFile.write("Imported task\n")
         self.taskFile.load()
         self.assertEqual(

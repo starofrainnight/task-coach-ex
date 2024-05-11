@@ -29,7 +29,7 @@ class PerformanceTest(test.TestCase):
         taskList = task.TaskList(
             [task.Task("test") for _ in range(self.nrTasks)]
         )
-        taskfile = file(self.taskfilename, "w")
+        taskfile = open(self.taskfilename, "w")
         taskWriter = persistence.XMLWriter(taskfile)
         taskWriter.write(
             taskList,

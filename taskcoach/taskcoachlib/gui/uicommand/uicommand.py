@@ -584,7 +584,7 @@ class FileImportCSV(IOCommand):
         while True:
             filename = wx.FileSelector(_("Import CSV"), wildcard="*.csv")
             if filename:
-                if len(file(filename, "rb").read()) == 0:
+                if len(open(filename, "rb").read()) == 0:
                     wx.MessageBox(
                         _(
                             "The selected file is empty. "
@@ -1551,9 +1551,7 @@ class TaskNewFromTemplate(TaskNew):
         )  # pylint: disable=E1103
 
     def __readTemplate(self):
-        return persistence.TemplateXMLReader(
-            file(self.__filename, "rU")
-        ).read()
+        return persistence.TemplateXMLReader(open(self.__filename, "r")).read()
 
     def doCommand(self, event, show=True):  # pylint: disable=W0221
         # The task template is read every time because it's the

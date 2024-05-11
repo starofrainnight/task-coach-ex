@@ -42,7 +42,7 @@ class CSVReader(object):
     def read(self, **kwargs):
         fp = tempfile.TemporaryFile()
         fp.write(
-            file(kwargs["filename"], "rU")
+            open(kwargs["filename"], "r")
             .read()
             .decode(kwargs["encoding"])
             .encode("UTF-8")

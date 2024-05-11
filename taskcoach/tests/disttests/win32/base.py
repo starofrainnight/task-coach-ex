@@ -169,7 +169,7 @@ class Win32TestCase(unittest.TestCase):
             window.close()
             self.fail(
                 "Errors occurred. The log content was:\n"
-                + file(self.logfilename, "rb").read()
+                + open(self.logfilename, "rb").read()
             )
 
         window = self.findWindow(r"^Tip of the day$")

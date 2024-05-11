@@ -137,7 +137,7 @@ class XMLReader(object):
         changesName = self.__fd.name + ".delta"
         if os.path.exists(changesName):
             changes = ChangesXMLReader(
-                file(self.__fd.name + ".delta", "rU")
+                open(self.__fd.name + ".delta", "r")
             ).read()
         else:
             changes = dict()
@@ -626,7 +626,7 @@ class XMLReader(object):
                 ext = data_node.attrib["extension"]
 
                 location = sessiontempfile.get_temp_file(suffix=ext)
-                file(location, "wb").write(data.decode("base64"))
+                open(location, "wb").write(data.decode("base64"))
 
                 if os.name == "nt":
                     os.chmod(location, stat.S_IREAD)

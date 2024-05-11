@@ -23,7 +23,7 @@ import test, mock
 class LoadTest(test.TestCase):
     def setUp(self):
         self.filename = "LoadTest.tsk"
-        taskfile = file(self.filename, "w")
+        taskfile = open(self.filename, "w")
         taskfile.writelines(["Line 1\n", "Line 2\n"])
         taskfile.close()
         self.errorDialogCalled = False
@@ -50,7 +50,7 @@ class LoadTest(test.TestCase):
         self.mockApp.iocontroller.open(
             self.filename, showerror=self.mockErrorDialog
         )
-        lines = file(self.filename, "r").readlines()
+        lines = open(self.filename, "r").readlines()
         self.assertTrue(self.errorDialogCalled)
         self.assertEqual(2, len(lines))
         self.assertEqual("Line 1\n", lines[0])

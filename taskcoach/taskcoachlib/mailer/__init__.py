@@ -25,7 +25,7 @@ from taskcoachlib import operating_system
 
 
 def readMail(filename, readContent=True):
-    with file(filename, "r") as fd:
+    with open(filename, "r") as fd:
         message = email.message_from_file(fd)
     subject = getSubject(message)
     content = getContent(message) if readContent else ""
@@ -81,7 +81,7 @@ def getContent(message):
 
 def openMailWithOutlook(filename):
     id_ = None
-    for line in file(filename, "r"):
+    for line in open(filename, "r"):
         if line.startswith("X-Outlook-ID:"):
             id_ = line[13:].strip()
             break

@@ -332,7 +332,7 @@ class Settings(CachingConfigParser):
             path = self.path()
             if not os.path.exists(path):
                 os.mkdir(path)
-            tmpFile = file(self.filename() + ".tmp", "w")
+            tmpFile = open(self.filename() + ".tmp", "w")
             self.write(tmpFile)
             tmpFile.close()
             if os.path.exists(self.filename()):

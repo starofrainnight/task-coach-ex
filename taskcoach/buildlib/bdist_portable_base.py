@@ -44,11 +44,11 @@ class bdist_portable_base(Command, object):
 
     def copy_and_expand(self, src_filename, dest_dir):
         log.info("copying and expanding %s to %s" % (src_filename, dest_dir))
-        src_file = file(src_filename, "rb")
+        src_file = open(src_filename, "rb")
         contents = src_file.read()
         src_file.close()
         contents = contents % self.__dict__
         dest_filename = os.path.join(dest_dir, os.path.basename(src_filename))
-        dest_file = file(dest_filename, "wb")
+        dest_file = open(dest_filename, "wb")
         dest_file.write(contents)
         dest_file.close()

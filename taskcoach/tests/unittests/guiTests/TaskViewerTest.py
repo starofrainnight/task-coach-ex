@@ -699,7 +699,7 @@ class CommonTestsMixin(object):
         )
 
     def testOnDropMail(self):
-        file("test.mail", "wb").write("Subject: foo\r\n\r\nBody\r\n")
+        open("test.mail", "wb").write("Subject: foo\r\n\r\nBody\r\n")
         aTask = task.Task()
         self.taskList.append(aTask)
         self.viewer.onDropMail(aTask, "test.mail")

@@ -30,7 +30,7 @@ def stripmodule(classname):
 print('digraph G {\nrankdir="LR"')
 
 for filename in glob.glob(os.path.join(sys.argv[1], "*.py")):
-    contents = file(filename).read()
+    contents = open(filename).read()
     matches = classdef.findall(contents)
     if not matches:
         continue

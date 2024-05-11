@@ -38,6 +38,6 @@ class LineEndingsTest(test.TestCase):
         ]
         for script in scripts:
             self.assertFalse(
-                "\r\n" in file(script, "rb").read(),
+                "\r\n" in open(script, "rb").read(),
                 "%s contains DOS line endings" % script,
             )

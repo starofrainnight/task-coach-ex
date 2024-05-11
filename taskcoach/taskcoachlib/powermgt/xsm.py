@@ -458,7 +458,7 @@ if __name__ == "__main__":
             print("Client ID:", self.clientID)
 
         def log(self, msg):
-            file("session.txt", "a+").write("==== %s\n" % msg)
+            open("session.txt", "a+").write("==== %s\n" % msg)
             print(msg)
 
         def saveYourself(self, save_type, shutdown, interact_style, fast):

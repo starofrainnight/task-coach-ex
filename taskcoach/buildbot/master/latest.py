@@ -49,7 +49,7 @@ def listPath(path):
     changelog = os.path.join(path, "changelog_content")
     if os.path.exists(changelog):
         print('<tr><td colspan="2"><pre>')
-        print(file(changelog, "rb").read())
+        print(open(changelog, "rb").read())
         print("</td></tr></pre>")
 
     print('<tr><th colspan="2"><h2>Sources</h2></th></tr>')

@@ -151,7 +151,7 @@ class CSVImportOptionsPage(wiz.WizardPageSimple):
         self.headers = None
 
         self.filename = filename
-        self.encoding = chardet.detect(file(filename, "rb").read())["encoding"]
+        self.encoding = chardet.detect(open(filename, "rb").read())["encoding"]
         self.OnOptionChanged(None)
 
         wx.EVT_CHOICE(self.delimiter, wx.ID_ANY, self.OnOptionChanged)
@@ -192,7 +192,7 @@ class CSVImportOptionsPage(wiz.WizardPageSimple):
             fp = tempfile.TemporaryFile()
             try:
                 fp.write(
-                    file(self.filename, "rU")
+                    open(self.filename, "r")
                     .read()
                     .decode(self.encoding)
                     .encode("UTF-8")

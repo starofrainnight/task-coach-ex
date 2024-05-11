@@ -32,7 +32,7 @@ def SHA(filename):
 
 
 def compressFile(srcName, dstName):
-    with file(srcName, "rb") as src:
+    with open(srcName, "rb") as src:
         dst = bz2.BZ2File(dstName, "w")
         try:
             shutil.copyfileobj(src, dst)
@@ -46,7 +46,7 @@ class BackupManifest(object):
 
         xmlName = os.path.join(settings.pathToBackupsDir(), "backups.xml")
         if os.path.exists(xmlName):
-            with file(xmlName, "rb") as fp:
+            with open(xmlName, "rb") as fp:
                 root = ET.parse(fp).getroot()
                 self.__files = dict(
                     [
@@ -63,7 +63,7 @@ class BackupManifest(object):
             node = ET.SubElement(root, "file")
             node.attrib["sha"] = sha
             node.text = filename
-        with file(
+        with open(
             os.path.join(self.__settings.pathToBackupsDir(), "backups.xml"),
             "wb",
         ) as fp:
@@ -124,7 +124,7 @@ class BackupManifest(object):
             "r",
         )
         try:
-            with file(dstName, "wb") as dst:
+            with open(dstName, "wb") as dst:
                 shutil.copyfileobj(src, dst)
         finally:
             src.close()
@@ -183,7 +183,7 @@ class AutoBackup(object):
                 )
                 if os.path.exists(dstName):
                     os.remove(dstName)
-                with file(srcName, "rb") as src:
+                with open(srcName, "rb") as src:
                     dst = bz2.BZ2File(dstName, "w")
                     try:
                         shutil.copyfileobj(src, dst)

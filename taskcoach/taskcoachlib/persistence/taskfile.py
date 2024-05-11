@@ -66,12 +66,12 @@ class SafeWriteFile(object):
         if self._isCloud():
             # Ideally we should create a temporary file on the same filesystem (so that
             # os.rename works) but outside the Dropbox folder...
-            self.__fd = file(self.__filename, "w")
+            self.__fd = open(self.__filename, "w")
         else:
             self.__tempFilename = self._getTemporaryFileName(
                 os.path.dirname(filename)
             )
-            self.__fd = file(self.__tempFilename, "w")
+            self.__fd = open(self.__tempFilename, "w")
 
     def write(self, bf):
         self.__fd.write(bf)
@@ -398,7 +398,7 @@ class TaskFile(patterns.Observer):
         if os.path.exists(self.filename()):
             changes = xml.ChangesXMLReader(self.filename() + ".delta").read()
             del changes[self.__monitor.guid()]
-            xml.ChangesXMLWriter(file(self.filename() + ".delta", "wb")).write(
+            xml.ChangesXMLWriter(open(self.filename() + ".delta", "wb")).write(
                 changes
             )
 
@@ -422,7 +422,7 @@ class TaskFile(patterns.Observer):
         return SafeWriteFile(self.__filename + suffix)
 
     def _openForRead(self):
-        return file(self.__filename, "rU")
+        return open(self.__filename, "r")
 
     def load(self, filename=None):
         pub.sendMessage("taskfile.aboutToRead", taskFile=self)
@@ -480,7 +480,7 @@ class TaskFile(patterns.Observer):
             if os.path.exists(self.filename()):
                 # We need to reset the changes on disk because we're up to date.
                 xml.ChangesXMLWriter(
-                    file(self.filename() + ".delta", "wb")
+                    open(self.filename() + ".delta", "wb")
                 ).write(self.__changes)
         except:
             self.setFilename("")
@@ -685,7 +685,7 @@ class LockedTaskFile(TaskFile):
 
     def __isFuse(self, path):
         if operating_system.isGTK() and os.path.exists("/proc/mounts"):
-            for line in file("/proc/mounts", "rb"):
+            for line in open("/proc/mounts", "rb"):
                 try:
                     location, mountPoint, fsType, options, a, b = (
                         line.strip().split()

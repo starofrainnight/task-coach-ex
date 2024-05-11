@@ -55,7 +55,7 @@ class GrowlNotifier(AbstractNotifier):
             bitmap.SaveFile(filename, wx.BITMAP_TYPE_PNG)
             self._notifier.notify(
                 noteType="Reminder",
-                icon=file(filename, "rb").read(),
+                icon=open(filename, "rb").read(),
                 title=title,
                 description=summary,
                 sticky=True,
