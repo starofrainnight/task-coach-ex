@@ -314,7 +314,7 @@ class Settings(object, CachingConfigParser):
             return evaluate(defaultValue)
 
     def save(
-        self, showerror=wx.MessageBox, file=file
+        self, showerror=wx.MessageBox, file=open
     ):  # pylint: disable=W0622
         self.set("version", "python", sys.version)
         self.set(
