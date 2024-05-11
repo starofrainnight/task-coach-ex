@@ -193,9 +193,11 @@ portableapps: py2exe
 	$(PORTABLEAPPSINSTALLER) $(TCPORTABLE)
 	mv build/TaskCoachPortable_$(TCVERSION).paf.exe dist
 
-icons: taskcoachlib/gui/icons.py
+icons: icons.in/iconmap.py icons.in/nuvola.zip icons.in/splash.png
+	cd icons.in; $(PYTHON) make.py
 
-templates: taskcoachlib/persistence/xml/templates.py
+templates: 
+	cd templates.in; $(PYTHON) make.py
 
 thirdpartymodules:
 	cd thirdparty; tar xzf python-dateutil-1.5.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty python-dateutil-1.5/dateutil
@@ -220,12 +222,6 @@ thirdpartymodules:
 	cd taskcoachlib/thirdparty; patch -p1 < ../../thirdparty/patches/hypertreelist.diff
 	cd taskcoachlib/thirdparty; patch -p2 < ../../thirdparty/patches/pypubsub.diff
 	$(PYTHON) fixinit.py
-
-taskcoachlib/gui/icons.py: icons.in/iconmap.py icons.in/nuvola.zip icons.in/splash.png
-	cd icons.in; $(PYTHON) make.py
-
-taskcoachlib/persistence/xml/templates.py:
-	cd templates.in; $(PYTHON) make.py
 
 website: changes
 	cd website.in; $(PYTHON) make.py; cd ..

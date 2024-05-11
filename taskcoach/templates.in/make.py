@@ -45,7 +45,7 @@ def dumpDirectory(path):
         "w",
         encoding="utf-8",
     )
-    fd.write("#-*- coding: UTF-8\n\n")
+    fd.write("# -*- coding: UTF-8 -*-\n\n")
     fd.write("from taskcoachlib.i18n import _\n\n")
     fd.write("def getDefaultTemplates():\n")
     fd.write("    templates = []\n")
