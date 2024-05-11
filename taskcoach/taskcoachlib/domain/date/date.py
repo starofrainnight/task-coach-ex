@@ -16,7 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import time, string, datetime, re, timedelta  # pylint: disable=W0402
+import time, string, datetime, re  # pylint: disable=W0402
+from datetime import timedelta
 from taskcoachlib import patterns
 from .fix import StrftimeFix
 
