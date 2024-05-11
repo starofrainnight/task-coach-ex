@@ -25,7 +25,7 @@ from taskcoachlib.i18n import _
 from taskcoachlib.notify import NotificationFrameBase, NotificationCenter
 from taskcoachlib.patterns import Observer
 from taskcoachlib.powermgt import IdleNotifier
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from taskcoachlib import render
 import wx
 

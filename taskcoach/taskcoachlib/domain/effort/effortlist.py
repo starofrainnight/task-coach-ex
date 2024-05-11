@@ -19,8 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from taskcoachlib import patterns
 from taskcoachlib.i18n import _
 from taskcoachlib import help
-from taskcoachlib.thirdparty.pubsub import pub
-from taskcoachlib.thirdparty.pubsub.core import Publisher
+from pubsub import pub
+from pubsub.core import Publisher
 from taskcoachlib.domain import task
 from . import effort
 

@@ -40,7 +40,7 @@ from taskcoachlib.gui.iphone import IPhoneSyncFrame
 from taskcoachlib.i18n import _
 from taskcoachlib.powermgt import PowerStateMixin
 from taskcoachlib.help.balloontips import BalloonTipManager
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 import taskcoachlib.thirdparty.aui as aui
 import wx, ctypes
 

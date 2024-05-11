@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import codecs, os
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from . import todotxt
 
 

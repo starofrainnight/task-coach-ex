@@ -25,7 +25,7 @@ from taskcoachlib import patterns, widgets, command, render
 from taskcoachlib.i18n import _
 from taskcoachlib.gui import uicommand, toolbar, artprovider
 from taskcoachlib.thirdparty import hypertreelist
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from taskcoachlib.widgets import ToolTipMixin
 from . import mixin
 

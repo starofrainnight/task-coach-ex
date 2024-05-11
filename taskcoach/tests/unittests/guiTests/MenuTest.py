@@ -23,7 +23,7 @@ import test
 from taskcoachlib import gui, config
 from taskcoachlib.gui import uicommand
 from taskcoachlib.domain import task, category, date
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 
 
 class MockViewerContainer(object):

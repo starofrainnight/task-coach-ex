@@ -242,9 +242,6 @@ if sys.argv[1] == "py2exe":
                     "packages": [
                         "taskcoachlib.i18n",
                         "taskcoachlib.thirdparty.keyring",
-                        "taskcoachlib.thirdparty.pubsub",
-                        "taskcoachlib.thirdparty.pubsub.core",
-                        "taskcoachlib.thirdparty.pubsub.core.kwargs",
                         "taskcoachlib.thirdparty._weakrefset",
                         "igraph.vendor.texttable",
                         "cairo",

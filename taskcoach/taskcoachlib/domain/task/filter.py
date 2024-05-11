@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from taskcoachlib import patterns
 from taskcoachlib.domain import base, date
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from . import task
 from . import tasklist
 

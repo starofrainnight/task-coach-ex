@@ -24,7 +24,7 @@ from taskcoachlib import command
 from taskcoachlib.domain import base, task, category, attachment
 from taskcoachlib.gui import uicommand
 from taskcoachlib.i18n import _
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 import wx
 
 

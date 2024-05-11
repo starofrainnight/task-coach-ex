@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from taskcoachlib import patterns
 from taskcoachlib.domain.attribute import icon
 from taskcoachlib.domain.date import DateTime, Now
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from . import attribute
 import functools
 import sys

@@ -26,7 +26,7 @@ from taskcoachlib import (
 )
 from taskcoachlib.domain import date
 from taskcoachlib.i18n import _
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from wx.lib import sized_controls
 import subprocess
 import wx

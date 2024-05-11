@@ -23,7 +23,7 @@ from taskcoachlib.domain.task import Task
 from taskcoachlib.domain.effort import Effort
 from taskcoachlib.domain.attachment import AttachmentOwner
 from taskcoachlib.thirdparty import guid
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 
 
 class ChangeMonitor(Observer):

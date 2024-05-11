@@ -28,7 +28,7 @@ from taskcoachlib.filesystem import (
     FilesystemNotifier,
     FilesystemPollerNotifier,
 )
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 
 
 def _isCloud(path):

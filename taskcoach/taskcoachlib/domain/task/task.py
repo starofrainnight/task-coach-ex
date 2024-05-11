@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from taskcoachlib import patterns
 from taskcoachlib.domain import date, categorizable, note, attachment, base
 from taskcoachlib.domain.attribute.icon import getImageOpen
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from taskcoachlib.thirdparty._weakrefset import WeakSet
 from . import status
 import weakref
