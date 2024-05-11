@@ -20,7 +20,7 @@ from taskcoachlib import patterns, meta, notify
 from taskcoachlib.domain import date, task
 from taskcoachlib.gui.dialog import reminder, editor
 from taskcoachlib.i18n import _
-from pubsub import pub
+from taskcoachlib.thirdparty.pubsub import pub
 import wx
 
 

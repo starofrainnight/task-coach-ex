@@ -20,7 +20,7 @@ import test
 from unittests import dummy
 from taskcoachlib import gui, config, persistence, widgets
 from taskcoachlib.domain import task
-from pubsub import pub
+from taskcoachlib.thirdparty.pubsub import pub
 
 
 class DummyMainWindow(widgets.AuiManagedFrameWithDynamicCenterPane):

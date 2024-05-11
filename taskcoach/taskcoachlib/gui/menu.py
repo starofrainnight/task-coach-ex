@@ -20,7 +20,7 @@ from taskcoachlib import operating_system
 from taskcoachlib import patterns, persistence, help  # pylint: disable=W0622
 from taskcoachlib.domain import task, base, category
 from taskcoachlib.i18n import _
-from pubsub import pub
+from taskcoachlib.thirdparty.pubsub import pub
 from taskcoachlib.gui.newid import IdProvider
 from . import uicommand
 import taskcoachlib.gui.viewer

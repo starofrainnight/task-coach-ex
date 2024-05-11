@@ -28,7 +28,7 @@ from taskcoachlib.domain import task, date
 from taskcoachlib.gui import uicommand, dialog
 import taskcoachlib.gui.menu
 from taskcoachlib.i18n import _
-from pubsub import pub
+from taskcoachlib.thirdparty.pubsub import pub
 from taskcoachlib.thirdparty.wxScheduler import (
     wxSCHEDULER_TODAY,
     wxFancyDrawer,

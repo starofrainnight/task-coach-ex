@@ -20,7 +20,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import test, sys, os, configparser, io
 from taskcoachlib import config, meta
-from pubsub import pub
+from taskcoachlib.thirdparty.pubsub import pub
 
 
 class SettingsTestCase(test.TestCase):
