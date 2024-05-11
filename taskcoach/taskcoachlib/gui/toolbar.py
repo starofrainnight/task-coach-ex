@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from taskcoachlib import operating_system
-from taskcoachlib.thirdparty import aui
+from wx import aui
 import wx
 from . import uicommand
 

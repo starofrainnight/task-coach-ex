@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import wx
-import taskcoachlib.thirdparty.aui as aui
+import wx.aui as aui
 from taskcoachlib import operating_system
 
 

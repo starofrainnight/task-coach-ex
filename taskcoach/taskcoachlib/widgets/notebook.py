@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import taskcoachlib.thirdparty.aui as aui
 import wx
+import wx.aui as aui
 
 
 class GridCursor:
