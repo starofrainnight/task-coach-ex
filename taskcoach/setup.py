@@ -49,7 +49,7 @@ def majorAndMinorPythonVersion():
         return info[0], info[1]
 
 
-install_requires = ["wxversion"]
+install_requires = []
 
 setup_requires = ["distro"]
 
