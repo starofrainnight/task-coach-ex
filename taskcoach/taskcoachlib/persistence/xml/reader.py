@@ -65,11 +65,12 @@ def parseAndAdjustDateTime(string, *timeDefaults):
     return dateTime
 
 
-class PIParser(ET.XMLTreeBuilder):
+class PIParser(ET.XMLParser):
     """See http://effbot.org/zone/element-pi.htm"""
 
     def __init__(self):
-        ET.XMLTreeBuilder.__init__(self)
+        super(self).__init__()
+
         self._parser.ProcessingInstructionHandler = self.handle_pi
         self.tskversion = meta.data.tskversion
 
