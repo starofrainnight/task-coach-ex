@@ -18,8 +18,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx
 
-wxFontFromNativeInfoString = wx.FontFromNativeInfoString
-
 
 def FontFromNativeInfoString(nativeInfoString):
     """wx.FontFromNativeInfoString may throw an wx.PyAssertionError when the
@@ -28,7 +26,12 @@ def FontFromNativeInfoString(nativeInfoString):
     instead."""
     if nativeInfoString:
         try:
-            return wxFontFromNativeInfoString(nativeInfoString)
+            # Old wx.FontFromNativeInfoString not exists in wxPython4, use
+            # nfi.FromString instead
+            nfi = wx.NativeFontInfo()
+            if nfi.FromString(nativeInfoString):
+                return wx.Font(nfi)
+            return None
         except wx.PyAssertionError:
             pass
     return None
