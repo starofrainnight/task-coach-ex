@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from taskcoachlib import operating_system
-from taskcoachlib.thirdparty import customtreectrl as customtree, hypertreelist
+from wx.lib.agw import customtreectrl as customtree, hypertreelist
 from taskcoachlib.widgets import itemctrl, draganddrop
 import wx
 

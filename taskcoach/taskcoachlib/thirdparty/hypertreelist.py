@@ -270,10 +270,10 @@ Version 1.3
 import wx
 import wx.gizmos
 
-from customtreectrl import CustomTreeCtrl
-from customtreectrl import DragImage, TreeEvent, GenericTreeItem, ChopText
-from customtreectrl import TreeEditTimer as TreeListEditTimer
-from customtreectrl import EVT_TREE_ITEM_CHECKING, EVT_TREE_ITEM_CHECKED, EVT_TREE_ITEM_HYPERLINK
+from wx.lib.agw.customtreectrl import CustomTreeCtrl
+from wx.lib.agw.customtreectrl import DragImage, TreeEvent, GenericTreeItem, ChopText
+from wx.lib.agw.customtreectrl import TreeEditTimer as TreeListEditTimer
+from wx.lib.agw.customtreectrl import EVT_TREE_ITEM_CHECKING, EVT_TREE_ITEM_CHECKED, EVT_TREE_ITEM_HYPERLINK
 
 # Version Info
 __version__ = "1.3"
