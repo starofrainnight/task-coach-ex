@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from . import singleton
 import functools
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 
 # Ignore these pylint messages:
 # - W0142: * or ** magic

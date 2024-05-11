@@ -49,7 +49,7 @@ def majorAndMinorPythonVersion():
         return info[0], info[1]
 
 
-install_requires = ["desktop3"]
+install_requires = ["desktop3", "pypubsub"]
 
 setup_requires = ["distro"]
 
