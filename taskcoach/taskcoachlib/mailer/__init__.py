@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import wx, os, re, tempfile, urllib.request, urllib.parse, urllib.error, email, email.header
-from taskcoachlib.thirdparty import chardet
+import chardet
 from taskcoachlib.tools import openfile
 from taskcoachlib.mailer.macmail import getSubjectOfMail
 from taskcoachlib.i18n import _

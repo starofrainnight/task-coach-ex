@@ -49,7 +49,7 @@ def majorAndMinorPythonVersion():
         return info[0], info[1]
 
 
-install_requires = ["desktop3", "pypubsub", "twisted"]
+install_requires = ["desktop3", "pypubsub", "twisted", "chardet"]
 
 setup_requires = ["distro"]
 
