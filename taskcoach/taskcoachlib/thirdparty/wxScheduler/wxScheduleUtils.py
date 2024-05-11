@@ -18,18 +18,18 @@ def timeFunction(func):
 			func.elapsed[exc] = (elapsed + (time.time() - t0), count + 1)
 
 	def printit():
-		elapsed = [(tm, count, exc) for exc, (tm, count) in func.elapsed.items()]
+		elapsed = [(tm, count, exc) for exc, (tm, count) in list(func.elapsed.items())]
 		elapsed.sort()
 		totalElapsed = 0.0
 		totalCount = 0
 		for tm, count, exc in elapsed:
-			print '========== %d ms / %d calls' % (int(tm * 1000), count)
-			print exc
+			print('========== %d ms / %d calls' % (int(tm * 1000), count))
+			print(exc)
 			totalElapsed += tm
 			totalCount += count
-		print '==========='
-		print 'Total time: %d ms' % int(totalElapsed * 1000)
-		print 'Total calls: %d' % totalCount
+		print('===========')
+		print('Total time: %d ms' % int(totalElapsed * 1000))
+		print('Total calls: %d' % totalCount)
 
 	atexit.register(printit)
 

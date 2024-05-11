@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from wxSchedulerPrint import *
+from .wxSchedulerPrint import *
 import calendar
 import wx
 
@@ -32,7 +32,7 @@ class wxReportScheduler( wx.Printout ):
 		scheduler.Draw( None )
 		self.pages = scheduler.pageCount
 
-		for idx in xrange( scheduler.pageCount ):
+		for idx in range( scheduler.pageCount ):
 			self._bitmaps.append( scheduler.Draw( idx + 1 ) )
 
 	def _GetScheduler( self, dc, day ):

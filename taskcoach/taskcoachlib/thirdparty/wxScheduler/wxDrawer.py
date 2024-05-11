@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from wxSchedulerConstants import *
-from wxScheduleUtils import copyDateTime
-from wxTimeFormat import wxTimeFormat
+from .wxSchedulerConstants import *
+from .wxScheduleUtils import copyDateTime
+from .wxTimeFormat import wxTimeFormat
 
 import wx, math
 
@@ -251,7 +251,7 @@ class wxDrawer(object):
 		for startHour, endHour in workingHours:
 			totalTime += copyDateTime(endHour).Subtract(startHour).GetMinutes() / 60.0
 
-		for dayNumber in xrange(dayCount):
+		for dayNumber in range(dayCount):
 			currentDay = copyDateTime(firstDay)
 			currentDay.AddDS(wx.DateSpan(days=dayNumber))
 
@@ -298,19 +298,19 @@ class wxDrawer(object):
 
 	def _drawTextInRect( self, context, text, offsetX, x, y, w, h ):
 		words = text.split()
-		tw, th = context.GetTextExtent( u' '.join(words) )
+		tw, th = context.GetTextExtent( ' '.join(words) )
 
 		if h is not None and th > h + SCHEDULE_INSIDE_MARGIN:
 			return SCHEDULE_INSIDE_MARGIN
 
 		if tw <= w - offsetX:
-			context.DrawText( u' '.join(words), x + offsetX, y )
+			context.DrawText( ' '.join(words), x + offsetX, y )
 			return th + SCHEDULE_INSIDE_MARGIN
 
 		dpyWords = []
 		remaining = w - offsetX
 		totalW = 0
-		spaceW, _ = context.GetTextExtent(u' ')
+		spaceW, _ = context.GetTextExtent(' ')
 
 		for idx, word in enumerate(words):
 			tw, _ = context.GetTextExtent(word)
@@ -345,7 +345,7 @@ class wxDrawer(object):
 			ny = y + SCHEDULE_INSIDE_MARGIN + th
 			if h is not None and ny > y + h:
 				return SCHEDULE_INSIDE_MARGIN
-			th += self._drawTextInRect( context, u' '.join(words), SCHEDULE_INSIDE_MARGIN, x, ny, w, None if h is None else h - (ny - y) )
+			th += self._drawTextInRect( context, ' '.join(words), SCHEDULE_INSIDE_MARGIN, x, ny, w, None if h is None else h - (ny - y) )
 
 		return th + SCHEDULE_INSIDE_MARGIN
 

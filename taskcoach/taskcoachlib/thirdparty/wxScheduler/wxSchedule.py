@@ -5,7 +5,7 @@ import warnings
 import wx
 import time
 
-from wxScheduleUtils import copyDateTime
+from .wxScheduleUtils import copyDateTime
 
 #New event
 wxEVT_COMMAND_SCHEDULE_CHANGE = wx.NewEventType()
@@ -106,7 +106,7 @@ class wxSchedule( wx.EvtHandler ):
 
 	def Clone(self):
 		newSchedule = wxSchedule()
-		for name, value in self.GetData().items():
+		for name, value in list(self.GetData().items()):
 			setattr(newSchedule, name, value)
 		# start and end should be copied as well
 		newSchedule._start = copyDateTime(newSchedule._start)
@@ -159,8 +159,8 @@ class wxSchedule( wx.EvtHandler ):
 		"""
 		Set the color
 		"""
-		if category not in self.CATEGORIES.keys():
-			raise ValueError, "%s is not a valid category" % category
+		if category not in list(self.CATEGORIES.keys()):
+			raise ValueError("%s is not a valid category" % category)
 		
 		self._category = category
 		self._eventNotification()
@@ -176,7 +176,7 @@ class wxSchedule( wx.EvtHandler ):
 		Set the color
 		"""
 		if not isinstance( color, wx.Colour ):
-			raise ValueError, "Color can be only a wx.Colour value"
+			raise ValueError("Color can be only a wx.Colour value")
 
 		self._color = color
 		self._eventNotification()
@@ -221,8 +221,8 @@ class wxSchedule( wx.EvtHandler ):
 		"""
 		Set the description
 		"""
-		if not isinstance( description, basestring ):
-			raise ValueError, "Description can be only a str value"
+		if not isinstance( description, str ):
+			raise ValueError("Description can be only a str value")
 
 		self._description = description
 		self._eventNotification( True )
@@ -238,7 +238,7 @@ class wxSchedule( wx.EvtHandler ):
 		Are this schedule complete?
 		""" 
 		if not isinstance( done, bool ):
-			raise ValueError, "Done can be only a bool value"
+			raise ValueError("Done can be only a bool value")
 		
 		self._done = done
 		self._eventNotification()
@@ -254,7 +254,7 @@ class wxSchedule( wx.EvtHandler ):
 		Set the end
 		"""
 		if not isinstance( dtEnd, wx.DateTime ):
-			raise ValueError, "dateTime can be only a wx.DateTime value"
+			raise ValueError("dateTime can be only a wx.DateTime value")
 
 		self._end = dtEnd
 		self._eventNotification( True )
@@ -269,8 +269,8 @@ class wxSchedule( wx.EvtHandler ):
 		""" 
 		Set the notes
 		"""
-		if not isinstance( notes, basestring ):
-			raise ValueError, "notes can be only a str value"
+		if not isinstance( notes, str ):
+			raise ValueError("notes can be only a str value")
 	   
 		self._notes = notes
 		self._eventNotification()
@@ -285,7 +285,7 @@ class wxSchedule( wx.EvtHandler ):
 		""" Set the start
 		"""
 		if not isinstance( dtStart, wx.DateTime ):
-			raise ValueError, "dateTime can be only a wx.DateTime value"
+			raise ValueError("dateTime can be only a wx.DateTime value")
 		
 		self._start = dtStart
 		self._eventNotification( True )

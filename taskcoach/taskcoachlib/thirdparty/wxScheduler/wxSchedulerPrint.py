@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from wxSchedulerCore import *
+from .wxSchedulerCore import *
 
 
 class wxSchedulerPrint( wxSchedulerCore ):
