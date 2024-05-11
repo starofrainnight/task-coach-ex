@@ -34,6 +34,8 @@ taskcoach/website.in/all_changes.html
 taskcoach/website.in/changes.html
 taskcoach/website.in/md5digests.py
 taskcoach/taskcoachlib/imported.txt
+taskcoach/taskcoachlib/meta/revision.py
+taskcoach/i18n.in/messages.pot
 taskcoach/TaskCoach.egg-info
 build
 __pycache__
