@@ -80,7 +80,7 @@ class Translator(metaclass=patterns.Singleton):
                 # py2exe'ified versions, but it doesn't seem to hurt on other
                 # platforms...
                 localeDir = os.path.join(
-                    wx.StandardPaths_Get().GetResourcesDir(), "locale"
+                    wx.StandardPaths.Get().GetResourcesDir(), "locale"
                 )
                 self.__locale.AddCatalogLookupPathPrefix(localeDir)
                 self.__locale.AddCatalog("wxstd")
