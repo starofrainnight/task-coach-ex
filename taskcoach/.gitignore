@@ -21,7 +21,6 @@ taskcoachlib/thirdparty/desktop
 taskcoachlib/thirdparty/keyring
 taskcoachlib/thirdparty/lockfile
 taskcoachlib/thirdparty/squaremap
-taskcoachlib/thirdparty/wxScheduler
 taskcoachlib/thirdparty/xdg
 taskcoachlib/thirdparty/pubsub
 taskcoachlib/persistence/xml/templates.py
