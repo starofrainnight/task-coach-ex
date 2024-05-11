@@ -22,7 +22,7 @@ from .xml import TemplateXMLWriter, TemplateXMLReader
 
 
 class TemplateList(object):
-    def __init__(self, path, TemplateReader=TemplateXMLReader, openFile=file):
+    def __init__(self, path, TemplateReader=TemplateXMLReader, openFile=open):
         self._path = path
         self._templates = self._readTemplates(TemplateReader, openFile)
         self._toDelete = []
