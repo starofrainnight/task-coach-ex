@@ -22,7 +22,6 @@ taskcoachlib/thirdparty/gntp
 taskcoachlib/thirdparty/desktop
 taskcoachlib/thirdparty/keyring
 taskcoachlib/thirdparty/lockfile
-taskcoachlib/thirdparty/ntlm
 taskcoachlib/thirdparty/squaremap
 taskcoachlib/thirdparty/wxScheduler
 taskcoachlib/thirdparty/xdg
