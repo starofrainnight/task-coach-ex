@@ -112,8 +112,13 @@ def make(filename, outfile=None):
     # Compute output
     output = generateDict()
 
+    # TODO: This is a hack to get the encoding from the output
+    encoding = re.search(r"\-\*\-\s*coding\:\s*(.*)\s*\-\*\-\n", output).group(
+        1
+    )
+
     try:
-        open(outfile, "wb").write(output)
+        open(outfile, "w", encoding=encoding).write(output)
     except IOError as msg:
         print(msg, file=sys.stderr)
 

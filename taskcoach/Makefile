@@ -28,23 +28,23 @@ DOT="dot"       # dot should be on the path
 ifeq "$(shell uname -s)" "Darwin"
 BITS=$(shell python -c "import struct; print len(struct.pack('L', 0))")
 ifeq "$(BITS)" "8"
-    PYTHON?="python3-32"
+    PYTHON?="python-32"
 else
-    PYTHON?="python3"
+    PYTHON?="python"
 endif
 else
-    PYTHON?="python3"
+    PYTHON?="python"
 endif
 
 ifeq (CYGWIN_NT,$(findstring CYGWIN_NT,$(shell uname)))
     INNOSETUP="/cygdrive/c/Program Files/Inno Setup 5/ISCC.exe"
     PORTABLEAPPSINSTALLER="/cygdrive/c/Program Files/PortableApps.comInstaller/PortableApps.comInstaller.exe"
-    EPYDOC=$(PYTHON) $(shell python -c "import os, sys; print \"'\" + os.path.join(os.path.split(sys.executable)[0], 'Scripts', 'epydoc.py') + \"'\"")
+    EPYDOC=$(PYTHON) $(shell python -c "import os, sys; print(\"'\" + os.path.join(os.path.split(sys.executable)[0], 'Scripts', 'epydoc.py') + \"'\")")
 else
     EPYDOC="epydoc"
 endif
 
-TCVERSION=$(shell python -c "import taskcoachlib.meta.data as data; print data.version")
+TCVERSION=$(shell python -c "import taskcoachlib.meta.data as data; print(data.version)")
 TCPORTABLE=$(shell python -c "import os; print \"'\" + os.path.join(os.getcwd(), 'build', 'TaskCoachPortable') + \"'\"")
 
 ifeq ($(PGPID)x,x)
