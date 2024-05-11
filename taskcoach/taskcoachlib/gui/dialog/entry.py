@@ -26,7 +26,6 @@ from taskcoachlib.thirdparty import combotreebox
 import datetime
 from wx.lib import newevent
 import wx
-import wx.combo
 
 
 DateTimeEntryEvent, EVT_DATETIMEENTRY = newevent.NewEvent()
@@ -344,7 +343,7 @@ class ColorEntry(widgets.PanelWithBoxSizer):
 IconEntryEvent, EVT_ICONENTRY = newevent.NewEvent()
 
 
-class IconEntry(wx.combo.BitmapComboBox):
+class IconEntry(wx.adv.BitmapComboBox):
     def __init__(self, parent, currentIcon, *args, **kwargs):
         kwargs["style"] = wx.CB_READONLY
         super(IconEntry, self).__init__(parent, *args, **kwargs)
