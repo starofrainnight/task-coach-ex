@@ -49,7 +49,7 @@ def majorAndMinorPythonVersion():
         return info[0], info[1]
 
 
-install_requires = []
+install_requires = ["desktop3"]
 
 setup_requires = ["distro"]
 
