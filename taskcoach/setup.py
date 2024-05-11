@@ -50,10 +50,12 @@ def majorAndMinorPythonVersion():
 
 
 install_requires = [
+    "six>=1.16.0",
     "desktop3",
     "pypubsub",
     "twisted",
-    "chardet",
+    "chardet>=5.2.0",
+    "python-dateutil>2.9.0",
     "pyparsing>=3.1.2",
 ]
 
