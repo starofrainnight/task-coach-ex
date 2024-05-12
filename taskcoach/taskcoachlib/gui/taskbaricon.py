@@ -28,7 +28,7 @@ from taskcoachlib.thirdparty.pubsub import pub
 from . import artprovider
 
 
-class TaskBarIcon(patterns.Observer, wx.TaskBarIcon):
+class TaskBarIcon(patterns.Observer, wx.adv.TaskBarIcon):
     def __init__(
         self,
         mainwindow,
