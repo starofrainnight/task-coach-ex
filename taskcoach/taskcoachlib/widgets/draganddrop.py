@@ -212,6 +212,9 @@ class TreeHelperMixin(object):
     """This class provides methods that are not part of the API of any
     tree control, but are convenient to have available."""
 
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
     def GetItemChildren(self, item=None, recursively=False):
         """Return the children of item as a list."""
         if not item:
