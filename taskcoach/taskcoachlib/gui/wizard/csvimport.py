@@ -23,7 +23,7 @@ import wx
 import csv
 import tempfile
 import wx.grid as gridlib
-import wx.wizard as wiz
+import wx.adv as wiz
 
 
 class CSVDialect(csv.Dialect):
