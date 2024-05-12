@@ -373,7 +373,7 @@ class Publisher(object, metaclass=singleton.Singleton):
 class Observer(object):
     def __init__(self, *args, **kwargs):
         self.__observers = set()
-        super(Observer, self).__init__(*args, **kwargs)
+        super().__init__()
 
     def registerObserver(self, observer, *args, **kwargs):
         self.__observers.add(observer)
@@ -452,6 +452,10 @@ class ObservableSet(ObservableCollection, Set):
         else:
             result = list(self) == other
         return result
+
+    # FIXME: Only for satisfying registerObserver()
+    def __hash__(self):
+        return hash(id(self))
 
     @eventSource
     def append(self, item, event=None):

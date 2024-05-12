@@ -44,14 +44,6 @@ class TaskList(TaskListQueryMixin, categorizable.CategorizableContainer):
     )
     newItemHelpText = help.taskNew
 
-    # FIXME: Only for satisfying registerObserver()
-    def __eq__(self, other):
-        return id(self) == id(other)
-
-    # FIXME: Only for satisfying registerObserver()
-    def __hash__(self):
-        return hash(id(self))
-
     def nrBeingTracked(self):
         return len(self.tasksBeingTracked())
 
