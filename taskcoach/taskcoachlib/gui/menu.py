@@ -69,7 +69,7 @@ class Menu(wx.Menu, uicommand.UICommandContainerMixin):
         )
         if bitmap:
             subMenuItem.SetBitmap(
-                wx.ArtProvider_GetBitmap(bitmap, wx.ART_MENU, (16, 16))
+                wx.ArtProvider.GetBitmap(bitmap, wx.ART_MENU, (16, 16))
             )
         self._accels.extend(subMenu.accelerators())
         self.AppendItem(subMenuItem)

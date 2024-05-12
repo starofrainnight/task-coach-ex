@@ -212,4 +212,4 @@ class UICommand(object):
     def __getBitmap(
         self, bitmapName, bitmapType=wx.ART_MENU, bitmapSize=(16, 16)
     ):
-        return wx.ArtProvider_GetBitmap(bitmapName, bitmapType, bitmapSize)
+        return wx.ArtProvider.GetBitmap(bitmapName, bitmapType, bitmapSize)

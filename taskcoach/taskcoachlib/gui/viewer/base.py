@@ -220,7 +220,7 @@ class Viewer(patterns.Observer, metaclass=ViewerMeta):
         for index, image in enumerate(self.viewerImages):
             try:
                 imageList.Add(
-                    wx.ArtProvider_GetBitmap(image, wx.ART_MENU, size)
+                    wx.ArtProvider.GetBitmap(image, wx.ART_MENU, size)
                 )
             except:
                 print(image)
