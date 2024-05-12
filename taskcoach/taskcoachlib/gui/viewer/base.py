@@ -30,9 +30,11 @@ from taskcoachlib.widgets import ToolTipMixin
 from . import mixin
 
 
-class Viewer(
-    patterns.Observer, wx.Panel, metaclass=patterns.NumberedInstances
-):
+class ViewerMeta(type(wx.Panel), patterns.NumberedInstances):
+    pass
+
+
+class Viewer(patterns.Observer, metaclass=ViewerMeta):
     """A Viewer shows domain objects (e.g. tasks or efforts) by means of a
     widget (e.g. a ListCtrl or a TreeListCtrl)."""
 
@@ -41,7 +43,7 @@ class Viewer(
     viewerImages = artprovider.itemImages
 
     def __init__(self, parent, taskFile, settings, *args, **kwargs):
-        super(Viewer, self).__init__(parent, -1)
+        super().__init__(parent, -1)
         self.parent = parent
         self.taskFile = taskFile
         self.settings = settings
