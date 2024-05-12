@@ -44,7 +44,7 @@ class SplashScreen(wx.adv.SplashScreen):
             bitmap = splash.getBitmap()
         super(SplashScreen, self).__init__(
             bitmap,
-            wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
+            wx.adv.SPLASH_CENTRE_ON_SCREEN | wx.adv.SPLASH_TIMEOUT,
             4000,
             None,
             -1,
