@@ -72,7 +72,7 @@ class Menu(wx.Menu, uicommand.UICommandContainerMixin):
                 wx.ArtProvider.GetBitmap(bitmap, wx.ART_MENU, (16, 16))
             )
         self._accels.extend(subMenu.accelerators())
-        self.AppendItem(subMenuItem)
+        self.Append(subMenuItem)
 
     def invokeMenuItem(self, menuItem):
         """Programmatically invoke the menuItem. This is mainly for testing

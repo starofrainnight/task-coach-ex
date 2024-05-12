@@ -94,7 +94,7 @@ class UICommand(object):
         self.menuItems.append(menuItem)
         self.addBitmapToMenuItem(menuItem)
         if position is None:
-            menu.AppendItem(menuItem)
+            menu.Append(menuItem)
         else:
             menu.InsertItem(position, menuItem)
         self.bind(window, self.id)

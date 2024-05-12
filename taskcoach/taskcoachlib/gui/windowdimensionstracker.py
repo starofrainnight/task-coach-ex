@@ -98,7 +98,7 @@ class WindowSizeAndPositionTracker(_Tracker):
             # highly annoying. This doesn't hold for dialogs though. Sigh.
             if not isinstance(self._window, wx.Dialog):
                 height += 18
-        self._window.SetDimensions(x, y, width, height)
+        self._window.SetSize(x, y, width, height)
         if operating_system.isMac():
             self._window.SetClientSize((width, height))
         if self.get_setting("maximized"):
