@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from taskcoachlib import operating_system
 import taskcoachlib.gui.menu
 from taskcoachlib.thirdparty.pubsub import pub
-import wx.aui as aui
+import wx.lib.agw.aui as aui
 import wx
 
 

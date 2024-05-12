@@ -41,7 +41,7 @@ from taskcoachlib.i18n import _
 from taskcoachlib.powermgt import PowerStateMixin
 from taskcoachlib.help.balloontips import BalloonTipManager
 from taskcoachlib.thirdparty.pubsub import pub
-import wx.aui as aui
+import wx.lib.agw.aui as aui
 import wx, ctypes
 
 
