@@ -25,13 +25,31 @@ import wx
 # pylint: disable=E1101,E1103
 
 
-class HyperTreeList(
-    draganddrop.TreeCtrlDragAndDropMixin, hypertreelist.HyperTreeList
-):
+class BaseHyperTreeList(hypertreelist.HyperTreeList):
+    def __init__(
+        self,
+        parent,
+        id=wx.ID_ANY,
+        pos=wx.DefaultPosition,
+        size=wx.DefaultSize,
+        style=0,
+        agwStyle=wx.TR_DEFAULT_STYLE,
+        validator=wx.DefaultValidator,
+        name="HyperTreeList",
+        *args,
+        **kwargs
+    ):
+        super().__init__(
+            parent, id, pos, size, style, agwStyle, validator, name
+        )
+
+
+class HyperTreeList(BaseHyperTreeList, draganddrop.TreeCtrlDragAndDropMixin):
     # pylint: disable=W0223
 
     def __init__(self, *args, **kwargs):
-        super(HyperTreeList, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
+
         if operating_system.isGTK():
             self.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self.__on_item_collapsed)
 

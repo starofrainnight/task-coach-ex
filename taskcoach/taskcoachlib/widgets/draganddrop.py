@@ -252,7 +252,7 @@ class TreeCtrlDragAndDropMixin(TreeHelperMixin):
             kwargs.get("style", wx.TR_DEFAULT_STYLE) | wx.TR_HIDE_ROOT
         )
         self._validateDragCallback = kwargs.pop("validateDrag", None)
-        super(TreeCtrlDragAndDropMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.Bind(wx.EVT_TREE_BEGIN_DRAG, self.OnBeginDrag)
         self._dragStartPos = None
         self.GetMainWindow().Bind(wx.EVT_LEFT_DOWN, self._OnLeftDown)
