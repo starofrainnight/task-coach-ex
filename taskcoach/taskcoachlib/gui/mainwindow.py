@@ -302,7 +302,9 @@ If this happens again, please make a copy of your TaskCoach.ini file """
         self.SetTitle(title)
 
     def displayMessage(self, message, pane=0):
-        self.GetStatusBar().SetStatusText(message, pane)
+        statusBar = self.GetStatusBar()
+        if statusBar:
+            statusBar.SetStatusText(message, pane)
 
     def save_settings(self):
         self.__save_viewer_counts()
