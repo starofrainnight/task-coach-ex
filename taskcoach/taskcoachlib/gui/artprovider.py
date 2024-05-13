@@ -121,7 +121,7 @@ class IconProvider(object, metaclass=patterns.Singleton):
         # I just spent two hours trying to get rid of garbage in the icon
         # background on KDE. I give up.
         if operating_system.isGTK():
-            return wx.ArtProvider_GetIcon(
+            return wx.ArtProvider.GetIcon(
                 iconTitle, wx.ART_FRAME_ICON, (size, size)
             )
 
