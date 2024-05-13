@@ -159,7 +159,7 @@ class TaskBarIcon(patterns.Observer, wx.adv.TaskBarIcon):
     # Menu:
 
     def setPopupMenu(self, menu):
-        self.Bind(wx.EVT_TASKBAR_RIGHT_UP, self.popupTaskBarMenu)
+        self.Bind(wx.adv.EVT_TASKBAR_RIGHT_UP, self.popupTaskBarMenu)
         self.popupmenu = menu  # pylint: disable=W0201
 
     def popupTaskBarMenu(self, event):  # pylint: disable=W0613
