@@ -63,6 +63,9 @@ class TaskStatus(object):
     def __bool__(self):
         return True
 
+    def __hash__(self) -> int:
+        return hash(self.statusString)
+
 
 inactive = TaskStatus(
     "inactive",
