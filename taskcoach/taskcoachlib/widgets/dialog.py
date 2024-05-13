@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from taskcoachlib import operating_system
 from taskcoachlib.i18n import _
-from wx import aui
+from wx.lib.agw import aui
 from . import notebook
 import wx
 import wx.html
