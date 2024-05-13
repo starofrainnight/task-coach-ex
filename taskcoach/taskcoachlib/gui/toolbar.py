@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from taskcoachlib import operating_system
-from wx import aui
+from wx.lib.agw import aui
 import wx
 from . import uicommand
 
@@ -209,5 +209,5 @@ class MainToolBar(ToolBar):
         super(MainToolBar, self).Realize()
         self._agwStyle |= aui.AUI_TB_NO_AUTORESIZE
         wx.CallAfter(self.GetParent().SendSizeEvent)
-        w, h = self.GetParent().GetClientSizeTuple()
+        w, h = self.GetParent().GetClientSize()
         wx.CallAfter(self.SetMinSize, (w, -1))
