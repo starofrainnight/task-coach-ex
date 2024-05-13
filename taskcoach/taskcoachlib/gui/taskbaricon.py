@@ -25,6 +25,7 @@ from taskcoachlib import meta, patterns, operating_system
 from taskcoachlib.i18n import _
 from taskcoachlib.domain import date, task
 from taskcoachlib.thirdparty.pubsub import pub
+import wx.adv
 from . import artprovider
 
 
@@ -78,12 +79,15 @@ class TaskBarIcon(patterns.Observer, wx.adv.TaskBarIcon):
             eventType=task.Task.appearanceChangedEventType(),
         )
         if operating_system.isGTK():
-            events = [wx.EVT_TASKBAR_LEFT_DOWN]
+            events = [wx.adv.EVT_TASKBAR_LEFT_DOWN]
         elif operating_system.isWindows():
             # See http://msdn.microsoft.com/en-us/library/windows/desktop/aa511448.aspx#interaction
-            events = [wx.EVT_TASKBAR_LEFT_DOWN, wx.EVT_TASKBAR_LEFT_DCLICK]
+            events = [
+                wx.adv.EVT_TASKBAR_LEFT_DOWN,
+                wx.adv.EVT_TASKBAR_LEFT_DCLICK,
+            ]
         else:
-            events = [wx.EVT_TASKBAR_LEFT_DCLICK]
+            events = [wx.adv.EVT_TASKBAR_LEFT_DCLICK]
         for event in events:
             self.Bind(event, self.onTaskbarClick)
         self.__setTooltipText()
