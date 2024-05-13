@@ -409,7 +409,7 @@ class Application(object, metaclass=patterns.Singleton):
                     self.taskBarIcon,
                     self.settings,
                     self.taskFile,
-                    self.mainwindow.viewer,
+                    self.mainwindow.__dict__.get("viewer"),
                 )
             )
 
