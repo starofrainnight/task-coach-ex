@@ -95,7 +95,7 @@ class TipDialog(sized_controls.SizedDialog):
         pane.SetSizerType("horizontal")
         wx.StaticBitmap(
             pane,
-            bitmap=wx.ArtProvider_GetBitmap(
+            bitmap=wx.ArtProvider.GetBitmap(
                 "lamp_icon", wx.ART_MENU, (32, 32)
             ),
         )
