@@ -590,3 +590,6 @@ class Settings(CachingConfigParser):
             os.rmdir(self.pathToConfigDir_deprecated(environ=os.environ))
         except:
             pass
+
+    def __hash__(self) -> int:
+        return id(self)
