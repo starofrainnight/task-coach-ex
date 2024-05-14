@@ -107,11 +107,16 @@ class TipDialog(sized_controls.SizedDialog):
         )
         next_tip_button.Bind(wx.EVT_BUTTON, self.on_next_tip)
         self.__check = self.__create_checkbox(tip_pane)
-        button_sizer = self.CreateStdDialogButtonSizer(wx.OK)
+        button_sizer = wx.StdDialogButtonSizer()
+        btn_ok = wx.Button(self, wx.ID_OK)
+        btn_ok.Bind(wx.EVT_BUTTON, self.on_close)
+        button_sizer.SetAffirmativeButton(btn_ok)
+        button_sizer.Realize()
+
         self.SetButtonSizer(button_sizer)
         self.Fit()
         self.CentreOnParent()
-        button_sizer.GetAffirmativeButton().Bind(wx.EVT_BUTTON, self.on_close)
+
         self.Bind(wx.EVT_CLOSE, self.on_close)
 
     def __show_tip(self):
