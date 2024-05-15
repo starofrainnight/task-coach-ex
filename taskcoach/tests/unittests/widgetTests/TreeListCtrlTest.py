@@ -40,7 +40,7 @@ class TreeListCtrlTestCase(TreeCtrlTest.TreeCtrlTestCase):
         imageList = wx.ImageList(16, 16)
         for bitmapName in ["led_blue_icon", "folder_blue_icon"]:
             imageList.Add(
-                wx.ArtProvider_GetBitmap(bitmapName, wx.ART_MENU, (16, 16))
+                wx.ArtProvider.GetBitmap(bitmapName, wx.ART_MENU, (16, 16))
             )
         self.treeCtrl.AssignImageList(imageList)  # pylint: disable=E1101
 

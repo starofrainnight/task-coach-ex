@@ -125,9 +125,9 @@ class IconProvider(object, metaclass=patterns.Singleton):
                 iconTitle, wx.ART_FRAME_ICON, (size, size)
             )
 
-        # wx.ArtProvider_GetIcon doesn't convert alpha to mask, so we do it
+        # wx.ArtProvider.GetIcon doesn't convert alpha to mask, so we do it
         # ourselves:
-        bitmap = wx.ArtProvider_GetBitmap(
+        bitmap = wx.ArtProvider.GetBitmap(
             iconTitle, wx.ART_FRAME_ICON, (size, size)
         )
         bitmap = ArtProvider.convertAlphaToMask(bitmap)
@@ -146,7 +146,7 @@ def init():
     if operating_system.isWindows() and wx.DisplayDepth() >= 32:
         wx.SystemOptions_SetOption("msw.remap", "0")  # pragma: no cover
     try:
-        wx.ArtProvider_PushProvider(ArtProvider())  # pylint: disable=E1101
+        wx.ArtProvider.PushProvider(ArtProvider())  # pylint: disable=E1101
     except AttributeError:
         wx.ArtProvider.Push(ArtProvider())
 

@@ -39,7 +39,7 @@ class ReminderDialog(patterns.Observer, sized_controls.SizedDialog):
         )
         super(ReminderDialog, self).__init__(*args, **kwargs)
         self.SetIcon(
-            wx.ArtProvider_GetIcon("taskcoach", wx.ART_FRAME_ICON, (16, 16))
+            wx.ArtProvider.GetIcon("taskcoach", wx.ART_FRAME_ICON, (16, 16))
         )
         self.task = task
         self.taskList = taskList
@@ -146,7 +146,7 @@ class ReminderDialog(patterns.Observer, sized_controls.SizedDialog):
             "clock_stop_icon" if self.task.isBeingTracked() else "clock_icon"
         )
         self.startTracking.SetBitmapLabel(
-            wx.ArtProvider_GetBitmap(icon, wx.ART_TOOLBAR, (16, 16))
+            wx.ArtProvider.GetBitmap(icon, wx.ART_TOOLBAR, (16, 16))
         )
 
     def onMarkTaskCompleted(self, event):  # pylint: disable=W0613

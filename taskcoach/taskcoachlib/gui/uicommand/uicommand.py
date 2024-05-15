@@ -2370,7 +2370,7 @@ class EffortStop(EffortListCommand, TaskListCommand, ViewerCommand):
     def updateToolBitmap(self, bitmapName):
         if not self.toolbar:
             return  # Toolbar is hidden
-        bitmap = wx.ArtProvider_GetBitmap(
+        bitmap = wx.ArtProvider.GetBitmap(
             bitmapName, wx.ART_TOOLBAR, self.toolbar.GetToolBitmapSize()
         )
         # On wxGTK, changing the bitmap doesn't work when the tool is

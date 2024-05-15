@@ -41,7 +41,7 @@ class Dialog(sized_controls.SizedDialog):
             | wx.MINIMIZE_BOX,
         )
         self.SetIcon(
-            wx.ArtProvider_GetIcon(bitmap, wx.ART_FRAME_ICON, (16, 16))
+            wx.ArtProvider.GetIcon(bitmap, wx.ART_FRAME_ICON, (16, 16))
         )
 
         if operating_system.isWindows7_OrNewer():

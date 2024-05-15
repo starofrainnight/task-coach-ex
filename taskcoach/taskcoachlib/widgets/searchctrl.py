@@ -56,7 +56,7 @@ class SearchCtrl(tooltip.ToolTipMixin, wx.SearchCtrl):
         return textCtrl[0] if textCtrl else self
 
     def getBitmap(self, bitmap):
-        return wx.ArtProvider_GetBitmap(
+        return wx.ArtProvider.GetBitmap(
             bitmap, wx.ART_TOOLBAR, self.__bitmapSize
         )
 

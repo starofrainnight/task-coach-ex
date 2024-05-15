@@ -176,7 +176,7 @@ class BookMixin(object):
 
     def AddPage(self, page, name, bitmap=None):
         """Override AddPage to allow for simply specifying the bitmap name."""
-        bitmap = wx.ArtProvider_GetBitmap(
+        bitmap = wx.ArtProvider.GetBitmap(
             bitmap, wx.ART_MENU, self._bitmapSize
         )
         super(BookMixin, self).AddPage(page, name, bitmap=bitmap)

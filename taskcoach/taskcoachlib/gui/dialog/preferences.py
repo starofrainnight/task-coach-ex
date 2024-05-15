@@ -252,7 +252,7 @@ class SettingsPageBase(widgets.BookPage):
         imageNames = sorted(artprovider.chooseableItemImages.keys())
         for imageName in imageNames:
             label = artprovider.chooseableItemImages[imageName]
-            bitmap = wx.ArtProvider_GetBitmap(imageName, wx.ART_MENU, (16, 16))
+            bitmap = wx.ArtProvider.GetBitmap(imageName, wx.ART_MENU, (16, 16))
             item = iconEntry.Append(label, bitmap)
             iconEntry.SetClientData(item, imageName)
         currentIcon = self.gettext(iconSection, iconSetting)

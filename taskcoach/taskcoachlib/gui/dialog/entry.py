@@ -351,7 +351,7 @@ class IconEntry(wx.adv.BitmapComboBox):
         size = (16, 16)
         for imageName in imageNames:
             label = artprovider.chooseableItemImages[imageName]
-            bitmap = wx.ArtProvider_GetBitmap(imageName, wx.ART_MENU, size)
+            bitmap = wx.ArtProvider.GetBitmap(imageName, wx.ART_MENU, size)
             item = self.Append(label, bitmap)
             self.SetClientData(item, imageName)
         self.SetSelection(imageNames.index(currentIcon))

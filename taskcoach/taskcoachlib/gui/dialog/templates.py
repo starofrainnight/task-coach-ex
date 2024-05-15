@@ -113,7 +113,7 @@ class TemplatesDialog(sized_controls.SizedDialog):
         panel.Fit()
 
     def createButton(self, parent, bitmapName, handler, enable=True):
-        bitmap = wx.ArtProvider_GetBitmap(bitmapName, size=(32, 32))
+        bitmap = wx.ArtProvider.GetBitmap(bitmapName, size=(32, 32))
         button = wx.BitmapButton(parent, bitmap=bitmap)
         button.Bind(wx.EVT_BUTTON, handler)
         button.Enable(enable)
