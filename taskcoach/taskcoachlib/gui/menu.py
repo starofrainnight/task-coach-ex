@@ -156,7 +156,10 @@ class DynamicMenu(Menu):
         # lines below with this one:
         # myId = self._parentMenu.FindItem(self._labelInParentMenu)
         for item in self._parentMenu.MenuItems:
-            if self.__GetLabelText(item.GetText()) == self._labelInParentMenu:
+            if (
+                self.__GetLabelText(item.GetItemLabel())
+                == self._labelInParentMenu
+            ):
                 return item.Id
         return wx.NOT_FOUND
 
