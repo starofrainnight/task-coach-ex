@@ -314,13 +314,17 @@ If this happens again, please make a copy of your TaskCoach.ini file """
     def __save_viewer_counts(self):
         """Save the number of viewers for each viewer type."""
         for viewer_type in viewer.viewerTypes():
-            count = len(
-                [
-                    v
-                    for v in self.viewer
-                    if v.__class__.__name__.lower() == viewer_type
-                ]
-            )
+
+            if hasattr(self, "viewer"):
+                count = len(
+                    [
+                        v
+                        for v in self.viewer
+                        if v.__class__.__name__.lower() == viewer_type
+                    ]
+                )
+            else:
+                count = 0
             self.settings.set("view", viewer_type + "count", str(count))
 
     def __save_perspective(self):
