@@ -467,7 +467,7 @@ class Application(object, metaclass=patterns.Singleton):
         from taskcoachlib.domain import date
 
         date.Scheduler().shutdown()
-        self.__wx_app.ProcessIdle()
+        wx.EventLoop.GetActive().ProcessIdle()
 
         # For PowerStateMixin
         self.mainwindow.OnQuit()
