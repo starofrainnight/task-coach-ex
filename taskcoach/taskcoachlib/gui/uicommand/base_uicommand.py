@@ -132,7 +132,7 @@ class UICommand(object):
             bitmap,
             wx.NullBitmap,
             self.kind,
-            shortHelp=wx.MenuItem.GetLabelFromText(self.menuText),
+            shortHelp=wx.MenuItem.GetLabelText(self.menuText),
             longHelp=self.helpText,
         )
         self.bind(toolbar, self.id)
