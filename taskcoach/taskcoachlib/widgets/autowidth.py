@@ -141,7 +141,7 @@ class AutoColumnWidthMixin(object):
             self.__is_scrollbar_visible()
             and self.__is_scrollbar_included_in_client_size()
         ):
-            scrollbar_width = wx.SystemSettings_GetMetric(wx.SYS_VSCROLL_X)
+            scrollbar_width = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X)
             available_width -= scrollbar_width
         return available_width
 

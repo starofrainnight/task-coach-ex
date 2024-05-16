@@ -1676,7 +1676,7 @@ class EffortEditBook(Page):
 
     def __create_invalid_period_message(self):
         text = wx.StaticText(self, label="")
-        font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         font.SetWeight(wx.FONTWEIGHT_BOLD)
         text.SetFont(font)
         return text

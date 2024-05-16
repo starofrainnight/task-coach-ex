@@ -203,7 +203,7 @@ class TimeLine(wx.Panel):
 
     def FontForLabels(self, dc):
         """Return the default GUI font, scaled for printing if necessary."""
-        font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         scale = dc.GetPPI()[0] / wx.ScreenDC().GetPPI()[0]
         font.SetPointSize(scale * font.GetPointSize())
         return font
@@ -327,11 +327,11 @@ class TimeLine(wx.Panel):
         """Determine the text foreground color to use to display the label of
         the given node"""
         if node == self.selectedNode:
-            fg_color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
+            fg_color = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
         else:
             fg_color = self.adapter.foreground_color(node, depth)
             if not fg_color:
-                fg_color = wx.SystemSettings_GetColour(
+                fg_color = wx.SystemSettings.GetColour(
                     wx.SYS_COLOUR_WINDOWTEXT
                 )
         return fg_color
@@ -343,7 +343,7 @@ class TimeLine(wx.Panel):
         font = (
             font
             if font
-            else wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+            else wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         )
         scale = dc.GetPPI()[0] / wx.ScreenDC().GetPPI()[0]
         font.SetPointSize(scale * font.GetPointSize())
@@ -352,7 +352,7 @@ class TimeLine(wx.Panel):
     def brushForNode(self, node, isSequentialNode=False, depth=0):
         """Create brush to use to display the given node"""
         if node == self.selectedNode:
-            color = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
+            color = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
         else:
             color = self.adapter.background_color(node)
             if color:

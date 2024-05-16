@@ -189,7 +189,7 @@ class SettingsPageBase(widgets.BookPage):
         self._timeSettings.append((section, setting, timeCtrl))
 
     def addFontSetting(self, section, setting, text):
-        default_font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        default_font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         native_info_string = self.gettext(section, setting)
         current_font = (
             wx.FontFromNativeInfoString(native_info_string)
@@ -237,7 +237,7 @@ class SettingsPageBase(widgets.BookPage):
         fgColorButton = wx.ColourPickerCtrl(self, col=currentFgColor)
         currentBgColor = self.getvalue(bgColorSection, bgColorSetting)
         bgColorButton = wx.ColourPickerCtrl(self, col=currentBgColor)
-        defaultFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        defaultFont = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         nativeInfoString = self.gettext(fontSection, fontSetting)
         currentFont = (
             wx.FontFromNativeInfoString(nativeInfoString)
@@ -347,7 +347,7 @@ class SettingsPageBase(widgets.BookPage):
             self.setvalue(section, setting, colorButton.GetColour())
         for section, setting, fontButton in self._fontSettings:
             selectedFont = fontButton.GetSelectedFont()
-            defaultFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+            defaultFont = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
             fontInfoDesc = (
                 ""
                 if selectedFont == defaultFont

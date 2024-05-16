@@ -417,10 +417,10 @@ class TreeListColumnInfo(object):
             self._image = image
             self._selected_image = -1
             self._shown = shown
-            self._edit = edit
-            self._font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+            self._edit = edit            
+            self._font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
             if colour is None:
-                self._colour = wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+                self._colour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
             else:
                 self._colour = colour
                 
@@ -2749,9 +2749,9 @@ class TreeListMainWindow(CustomTreeCtrl):
         
         if item.IsSelected():
             if (wx.Platform == "__WXMAC__" and self._hasFocus):
-                colTextHilight = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
+                colTextHilight = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
             else:
-                colTextHilight = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
+                colTextHilight = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
 
         else:
             attr = item.GetAttributes()
@@ -2965,7 +2965,7 @@ class TreeListMainWindow(CustomTreeCtrl):
                     dc.SetTextForeground(colText)
                 
             if self.HasAGWFlag(wx.TR_COLUMN_LINES):  # vertical lines between columns
-                pen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DLIGHT), 1, wx.SOLID)
+                pen = wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DLIGHT), 1, wx.SOLID)
                 dc.SetPen((self.GetBackgroundColour() == wx.WHITE and [pen] or [wx.WHITE_PEN])[0])
                 dc.DrawLine(x_colstart+col_w-1, item.GetY(), x_colstart+col_w-1, item.GetY()+total_h)
             
@@ -3104,7 +3104,7 @@ class TreeListMainWindow(CustomTreeCtrl):
                 total_width = self._owner.GetHeaderWindow().GetWidth()
                 # if the background colour is white, choose a
                 # contrasting colour for the lines
-                pen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DLIGHT), 1, wx.SOLID)
+                pen = wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DLIGHT), 1, wx.SOLID)
                 dc.SetPen((self.GetBackgroundColour() == wx.WHITE and [pen] or [wx.WHITE_PEN])[0])
                 dc.DrawLine(0, y_top, total_width, y_top)
                 dc.DrawLine(0, y_top+h, total_width, y_top+h)
@@ -4868,9 +4868,9 @@ class HyperTreeList(wx.PyControl):
         """
 
         attr = wx.VisualAttributes()
-        attr.colFg = wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOWTEXT)
-        attr.colBg = wx.SystemSettings_GetColour(wx.SYS_COLOUR_LISTBOX)
-        attr.font  = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        attr.colFg = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOWTEXT)
+        attr.colBg = wx.SystemSettings.GetColour(wx.SYS_COLOUR_LISTBOX)
+        attr.font  = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         return attr
 
     GetClassDefaultAttributes = classmethod(GetClassDefaultAttributes)

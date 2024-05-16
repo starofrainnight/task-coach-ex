@@ -244,7 +244,7 @@ class FontEntry(widgets.PanelWithBoxSizer):
         return checkBox
 
     def _createFontPicker(self, currentFont, currentColor):
-        defaultFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        defaultFont = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         picker = widgets.FontPickerCtrl(
             self, font=currentFont or defaultFont, colour=currentColor
         )

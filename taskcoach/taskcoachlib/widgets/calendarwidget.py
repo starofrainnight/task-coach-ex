@@ -434,7 +434,7 @@ class TaskSchedule(wxSchedule):
         try:
             self.__selected = selected
             if selected:
-                self.color = wx.SystemSettings_GetColour(
+                self.color = wx.SystemSettings.GetColour(
                     wx.SYS_COLOUR_HIGHLIGHT
                 )
                 # On MS Windows, the selection background is very dark. If

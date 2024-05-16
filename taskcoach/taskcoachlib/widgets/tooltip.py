@@ -236,9 +236,9 @@ class SimpleToolTip(ToolTipBase):
             dc.EndDrawing()
 
     def _setFontBrushAndPen(self, dc):
-        font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
-        textColour = wx.SystemSettings_GetColour(wx.SYS_COLOUR_INFOTEXT)
-        backgroundColour = wx.SystemSettings_GetColour(wx.SYS_COLOUR_INFOBK)
+        font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
+        textColour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_INFOTEXT)
+        backgroundColour = wx.SystemSettings.GetColour(wx.SYS_COLOUR_INFOBK)
         dc.SetFont(font)
         dc.SetTextForeground(textColour)
         dc.SetBrush(wx.Brush(backgroundColour))
