@@ -30,13 +30,10 @@ from . import defaults
 
 class UnicodeAwareConfigParser(configparser.RawConfigParser):
     def set(self, section, setting, value):  # pylint: disable=W0222
-        if type(value) == type(""):
-            value = value.encode("utf-8")
         configparser.RawConfigParser.set(self, section, setting, value)
 
     def get(self, section, setting):  # pylint: disable=W0221
-        value = configparser.RawConfigParser.get(self, section, setting)
-        return value.decode("utf-8")  # pylint: disable=E1103
+        return configparser.RawConfigParser.get(self, section, setting)
 
 
 class CachingConfigParser(UnicodeAwareConfigParser):
