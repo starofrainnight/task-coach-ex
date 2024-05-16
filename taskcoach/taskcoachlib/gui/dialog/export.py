@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from taskcoachlib.tools import wxhelper
 import wx
 from taskcoachlib.i18n import _
 from wx.lib import sized_controls
@@ -38,7 +39,9 @@ class ExportDialog(sized_controls.SizedDialog):
         self.components = self.createInterior(pane)
         buttonSizer = self.CreateStdDialogButtonSizer(wx.OK | wx.CANCEL)
         self.SetButtonSizer(buttonSizer)
-        buttonSizer.GetAffirmativeButton().Bind(wx.EVT_BUTTON, self.onOk)
+        wxhelper.getButtonFromStdDialogButtonSizer(buttonSizer, wx.ID_OK).Bind(
+            wx.EVT_BUTTON, self.onOk
+        )
         self.Fit()
         self.CentreOnParent()
 

@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from taskcoachlib.tools import wxhelper
 import wx
 from taskcoachlib.domain.task import Task
 from taskcoachlib import persistence, operating_system
@@ -66,7 +67,9 @@ class TemplatesDialog(sized_controls.SizedDialog):
         self.SetButtonSizer(self._buttonSizer)
         self.Fit()
         self.SetMinSize(self.GetSize())  # Current size is min size
-        self._buttonSizer.GetAffirmativeButton().Bind(wx.EVT_BUTTON, self.ok)
+        wxhelper.getButtonFromStdDialogButtonSizer(
+            self._buttonSizer, wx.ID_OK
+        ).Bind(wx.EVT_BUTTON, self.ok)
         self.CentreOnParent()
 
     def createInterior(self, pane):

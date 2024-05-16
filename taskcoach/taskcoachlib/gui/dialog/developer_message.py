@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from taskcoachlib.tools import wxhelper
 import wx
 from wx.lib.agw import hyperlink
 from taskcoachlib import meta
@@ -42,7 +43,10 @@ class MessageDialog(sized_controls.SizedDialog):  # pylint: disable=R0904,R0901
         self.SetButtonSizer(button_sizer)
         self.Fit()
         self.CentreOnParent()
-        button_sizer.GetAffirmativeButton().Bind(wx.EVT_BUTTON, self.on_close)
+
+        wxhelper.getButtonFromStdDialogButtonSizer(
+            button_sizer, wx.ID_OK
+        ).Bind(wx.EVT_BUTTON, self.on_close)
         self.Bind(wx.EVT_CLOSE, self.on_close)
 
     def __create_message(self, pane):

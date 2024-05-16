@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from taskcoachlib.tools import wxhelper
 import wx
 import wx.lib.colourselect as csel
 from wx.lib import sized_controls
@@ -50,7 +51,9 @@ class CalendarConfigDialog(sized_controls.SizedDialog):
         buttonSizer = self.CreateStdDialogButtonSizer(wx.OK | wx.CANCEL)
         self.SetButtonSizer(buttonSizer)
         self.Fit()
-        buttonSizer.GetAffirmativeButton().Bind(wx.EVT_BUTTON, self.ok)
+        wxhelper.getButtonFromStdDialogButtonSizer(buttonSizer, wx.ID_OK).Bind(
+            wx.EVT_BUTTON, self.ok
+        )
 
     def createInterior(self, pane):
         self.createPeriodEntry(pane)
