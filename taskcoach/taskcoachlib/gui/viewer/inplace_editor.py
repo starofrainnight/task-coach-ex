@@ -21,7 +21,7 @@ In place editors for viewers.
 """  # pylint: disable=W0105
 
 import wx
-from taskcoachlib.thirdparty import hypertreelist
+from wx.lib.agw import hypertreelist
 from taskcoachlib import widgets
 from taskcoachlib.domain import date
 

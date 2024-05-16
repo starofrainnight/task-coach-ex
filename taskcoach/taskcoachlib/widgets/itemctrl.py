@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx, inspect
 from . import draganddrop, autowidth, tooltip
-from taskcoachlib.thirdparty import hypertreelist
+from wx.lib.agw import hypertreelist
 
 
 class _CtrlWithItemsMixin(object):

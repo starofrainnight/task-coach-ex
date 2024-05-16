@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import wx
-from taskcoachlib.thirdparty import hypertreelist
+from wx.lib.agw import hypertreelist
 from taskcoachlib import operating_system
 
 

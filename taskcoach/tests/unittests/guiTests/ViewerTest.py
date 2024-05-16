@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import test
 from taskcoachlib import gui, config, widgets, persistence
 from taskcoachlib.domain import task, date
-from taskcoachlib.thirdparty import hypertreelist
+from wx.lib.agw import hypertreelist
 
 
 class AuiManagedFrameWithDynamicCenterPane(
