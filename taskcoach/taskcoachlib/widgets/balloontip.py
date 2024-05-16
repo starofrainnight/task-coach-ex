@@ -78,7 +78,7 @@ class BalloonTip(wx.Frame):
         self._interior.SetSizer(vsizer)
         self._interior.Fit()
 
-        class Sizer(wx.PySizer):
+        class Sizer(wx.Sizer):
             def __init__(self, interior, direction, offset):
                 self._interior = interior
                 self._direction = direction
