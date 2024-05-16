@@ -2696,7 +2696,7 @@ class TreeListMainWindow(CustomTreeCtrl):
             if x < self.GetClientSize().GetWidth():
                 x_pos = 0
 
-            self.SetScrollbars(xUnit, yUnit, x/xUnit, y/yUnit, x_pos, y_pos)
+            self.SetScrollbars(xUnit, yUnit, x//xUnit, y//yUnit, x_pos, y_pos)
         else:
             self.SetScrollbars(0, 0, 0, 0)
     
