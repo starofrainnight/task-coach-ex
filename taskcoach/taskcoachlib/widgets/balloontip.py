@@ -83,7 +83,7 @@ class BalloonTip(wx.Frame):
                 self._interior = interior
                 self._direction = direction
                 self._offset = offset
-                super(Sizer, self).__init__()
+                super().__init__()
 
             def SetDirection(self, direction):
                 self._direction = direction
@@ -123,7 +123,7 @@ class BalloonTip(wx.Frame):
         w, h = self._interior.GetClientSize()
         h += self.ARROWSIZE
         if self._getRect is None:
-            tw, th = self._target.GetSizeTuple()
+            tw, th = self._target.GetSize()
             tx, ty = 0, 0
         else:
             tx, ty, tw, th = self._getRect()
@@ -140,7 +140,7 @@ class BalloonTip(wx.Frame):
             y = ty + th
             direction = "top"
 
-        mask = wx.EmptyBitmap(w, h)
+        mask = wx.Bitmap(w, h)
         memDC = wx.MemoryDC()
         memDC.SelectObject(mask)
         try:
@@ -189,7 +189,7 @@ class BalloonTip(wx.Frame):
             self._sizer.SetDirection(direction)
         finally:
             memDC.SelectObject(wx.NullBitmap)
-        self.SetDimensions(x, y, w, h)
+        self.SetSize(x, y, w, h)
         self.SetShape(wx.Region(mask, wx.Colour(0, 0, 0)))
         self.Layout()
 
