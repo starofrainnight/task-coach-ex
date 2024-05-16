@@ -174,26 +174,21 @@ class _ToolBarEditorInterior(wx.Panel):
         self.__visibleSelection = None
         self.__draggedItem = None
         self.__draggingFromAvailable = False
-        wx.EVT_TREE_SEL_CHANGED(
-            self.__remainingCommands,
-            wx.ID_ANY,
-            self.__OnRemainingSelectionChanged,
+        self.__remainingCommands.Bind(
+            wx.EVT_TREE_SEL_CHANGED, self.__OnRemainingSelectionChanged
         )
-        wx.EVT_TREE_SEL_CHANGED(
-            self.__visibleCommands, wx.ID_ANY, self.__OnVisibleSelectionChanged
+        self.__visibleCommands.Bind(
+            wx.EVT_TREE_SEL_CHANGED, self.__OnVisibleSelectionChanged
         )
-        wx.EVT_BUTTON(self.__hideButton, wx.ID_ANY, self.__OnHide)
-        wx.EVT_BUTTON(self.__showButton, wx.ID_ANY, self.__OnShow)
-        wx.EVT_BUTTON(self.__moveUpButton, wx.ID_ANY, self.__OnMoveUp)
-        wx.EVT_BUTTON(self.__moveDownButton, wx.ID_ANY, self.__OnMoveDown)
-        wx.EVT_TREE_BEGIN_DRAG(
-            self.__visibleCommands, wx.ID_ANY, self.__OnBeginDrag
-        )
-        wx.EVT_TREE_END_DRAG(
-            self.__visibleCommands, wx.ID_ANY, self.__OnEndDrag
-        )
-        wx.EVT_TREE_BEGIN_DRAG(
-            self.__remainingCommands, wx.ID_ANY, self.__OnBeginDrag2
+
+        self.__hideButton.Bind(wx.EVT_BUTTON, self.__OnHide)
+        self.__showButton.Bind(wx.EVT_BUTTON, self.__OnShow)
+        self.__moveUpButton.Bind(wx.EVT_BUTTON, self.__OnMoveUp)
+        self.__moveDownButton.Bind(wx.EVT_BUTTON, self.__OnMoveDown)
+        self.__visibleCommands.Bind(wx.EVT_TREE_BEGIN_DRAG, self.__OnBeginDrag)
+        self.__visibleCommands.Bind(wx.EVT_TREE_END_DRAG, self.__OnEndDrag)
+        self.__remainingCommands.Bind(
+            wx.EVT_TREE_BEGIN_DRAG, self.__OnBeginDrag2
         )
 
         wx.CallAfter(
