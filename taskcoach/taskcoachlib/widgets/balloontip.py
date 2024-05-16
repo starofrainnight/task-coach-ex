@@ -190,7 +190,7 @@ class BalloonTip(wx.Frame):
         finally:
             memDC.SelectObject(wx.NullBitmap)
         self.SetDimensions(x, y, w, h)
-        self.SetShape(wx.RegionFromBitmapColour(mask, wx.Colour(0, 0, 0)))
+        self.SetShape(wx.Region(mask, wx.Colour(0, 0, 0)))
         self.Layout()
 
 
