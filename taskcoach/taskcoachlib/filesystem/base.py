@@ -27,9 +27,9 @@ class NotifierBase(object):
         self._path = None
         self._name = None
         self.stamp = None
-        atexit.register(self._stop)
+        atexit.register(self.__stopWhenExit)
 
-    def _stop(self):
+    def __stopWhenExit(self):
         self.stop()
 
     def stop(self):
