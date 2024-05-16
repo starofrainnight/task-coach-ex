@@ -120,7 +120,7 @@ class BalloonTip(wx.Frame):
         self.Close()
 
     def Position(self):
-        w, h = self._interior.GetClientSizeTuple()
+        w, h = self._interior.GetClientSize()
         h += self.ARROWSIZE
         if self._getRect is None:
             tw, th = self._target.GetSizeTuple()
