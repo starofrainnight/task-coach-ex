@@ -62,7 +62,7 @@ class _ToolBarEditorInterior(wx.Panel):
 
         self.__imgList = wx.ImageList(16, 16)
         self.__imgListIndex = dict()
-        empty = wx.EmptyImage(16, 16)
+        empty = wx.Image(16, 16)
         empty.Replace(0, 0, 0, 255, 255, 255)
         self.__imgListIndex["nobitmap"] = self.__imgList.Add(
             empty.ConvertToBitmap()
