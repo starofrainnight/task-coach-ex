@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import wx
 import wx.adv
 from taskcoachlib import i18n
+from wx.lib.embeddedimage import PyEmbeddedImage
 
 try:
     from . import icons
@@ -33,15 +34,15 @@ except ImportError:  # pragma: no cover
 
 class SplashScreen(wx.adv.SplashScreen):
     def __init__(self):
-        splash = icons.catalog["splash"]
+        splash = icons.catalog["splash"]  # type: PyEmbeddedImage
         if i18n.currentLanguageIsRightToLeft():
             # RTL languages cause the bitmap to be mirrored too, but because
             # the splash image is not internationalized, we have to mirror it
             # (back). Unfortunately using SetLayoutDirection() on the
             # SplashWindow doesn't work.
-            bitmap = wx.BitmapFromImage(splash.getImage().Mirror())
+            bitmap = wx.BitmapFromImage(splash.GetBitmap().Mirror())
         else:
-            bitmap = splash.getBitmap()
+            bitmap = splash.GetBitmap()
         super(SplashScreen, self).__init__(
             bitmap,
             wx.adv.SPLASH_CENTRE_ON_SCREEN | wx.adv.SPLASH_TIMEOUT,

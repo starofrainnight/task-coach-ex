@@ -75,7 +75,7 @@ class ArtProvider(wx.ArtProvider):
             return wx.EmptyBitmap(*size)
         catalogKey = "%s%dx%d" % (artId, size[0], size[1])
         if catalogKey in list(icons.catalog.keys()):
-            bitmap = icons.catalog[catalogKey].getBitmap()
+            bitmap = icons.catalog[catalogKey].GetBitmap()
             if artClient == wx.ART_FRAME_ICON:
                 bitmap = self.convertAlphaToMask(bitmap)
             return bitmap
