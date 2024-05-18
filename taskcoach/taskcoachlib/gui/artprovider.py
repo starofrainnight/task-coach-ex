@@ -48,7 +48,7 @@ class ArtProvider(wx.ArtProvider):
             dstDC.SelectObject(mainBitmap)
             try:
                 dstDC.DrawBitmap(
-                    overlayBitmap, w - int(w / 2), h - int(h / 2), True
+                    overlayBitmap, w - (w // 2), h - (h // 2), True
                 )
             finally:
                 dstDC.SelectObject(wx.NullBitmap)
@@ -60,10 +60,10 @@ class ArtProvider(wx.ArtProvider):
             for y in range(h):
                 for x in range(w):
                     alpha = mainAlpha[y * w + x]
-                    if x >= w / 2 and y >= h / 2:
+                    if x >= w // 2 and y >= h // 2:
                         alpha = max(
                             alpha,
-                            overlayAlpha[(y - h / 2) * w / 2 + x - w / 2],
+                            overlayAlpha[(y - h // 2) * w // 2 + x - w // 2],
                         )
                     resultAlpha.append(alpha)
             wxhelper.setAlphaDataToImage(mainImage, resultAlpha)
