@@ -41,6 +41,7 @@ from taskcoachlib.i18n import _
 from taskcoachlib.powermgt import PowerStateMixin
 from taskcoachlib.help.balloontips import BalloonTipManager
 from taskcoachlib.thirdparty.pubsub import pub
+from taskcoachlib.config.settings import Settings
 import wx.lib.agw.aui as aui
 import wx, ctypes
 
@@ -65,7 +66,9 @@ class MainWindow(
     BalloonTipManager,
     widgets.AuiManagedFrameWithDynamicCenterPane,
 ):
-    def __init__(self, iocontroller, taskFile, settings, *args, **kwargs):
+    def __init__(
+        self, iocontroller, taskFile, settings: Settings, *args, **kwargs
+    ):
         self.__splash = kwargs.pop("splash", None)
         super(MainWindow, self).__init__(None, -1, "", *args, **kwargs)
         # This prevents the viewers from flickering on Windows 7 when refreshed:
