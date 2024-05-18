@@ -121,8 +121,8 @@ class AutoColumnWidthMixin(object):
         )
         for column_index in other_columns:
             this_column_width = self.GetColumnWidth(column_index)
-            this_column_width += this_column_width / total_width * extra_width
-            self.SetColumnWidth(column_index, this_column_width)
+            this_column_width += this_column_width // total_width * extra_width
+            self.SetColumnWidth(column_index, int(this_column_width))
 
     def GetResizeColumn(self):
         if self.__resize_column == -1:
