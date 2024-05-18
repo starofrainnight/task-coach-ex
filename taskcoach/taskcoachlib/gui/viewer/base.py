@@ -34,7 +34,7 @@ class ViewerMeta(type(wx.Panel), patterns.NumberedInstances):
     pass
 
 
-class Viewer(patterns.Observer, wx.Panel, metaclass=ViewerMeta):
+class Viewer(wx.Panel, patterns.Observer, metaclass=ViewerMeta):
     """A Viewer shows domain objects (e.g. tasks or efforts) by means of a
     widget (e.g. a ListCtrl or a TreeListCtrl)."""
 
