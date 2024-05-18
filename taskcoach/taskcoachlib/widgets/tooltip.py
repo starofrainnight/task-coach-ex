@@ -121,7 +121,7 @@ class ToolTipMixin(object):
         event.Skip()
 
     def __OnTimer(self, event):  # pylint: disable=W0613
-        self.ShowTip(*self.GetMainWindow().ClientToScreenXY(*self.__position))
+        self.ShowTip(*self.GetMainWindow().ClientToScreen(*self.__position))
 
 
 if operating_system.isWindows():
