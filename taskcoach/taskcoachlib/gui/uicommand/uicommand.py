@@ -1381,7 +1381,7 @@ class Edit(mixin_uicommand.NeedsSelectionMixin, ViewerCommand):
 
     def findEditCtrl(self, windowWithFocus):
         while windowWithFocus:
-            if isinstance(windowWithFocus, thirdparty.hypertreelist.EditCtrl):
+            if isinstance(windowWithFocus, hypertreelist.EditCtrl):
                 break
             windowWithFocus = windowWithFocus.GetParent()
         return windowWithFocus
