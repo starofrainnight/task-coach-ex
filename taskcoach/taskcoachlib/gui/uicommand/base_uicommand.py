@@ -175,7 +175,7 @@ class UICommand(object):
     def updateToolHelp(self):
         if not self.toolbar:
             return  # Not attached to a toolbar or it's hidden
-        shortHelp = wx.MenuItem.GetLabelFromText(self.getMenuText())
+        shortHelp = wx.MenuItem.GetLabelText(self.getMenuText())
         if shortHelp != self.toolbar.GetToolShortHelp(self.id):
             self.toolbar.SetToolShortHelp(self.id, shortHelp)
         longHelp = self.getHelpText()
