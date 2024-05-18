@@ -63,7 +63,7 @@ class SecondRefresher(patterns.Observer, wx.EvtHandler):
         self.__trackedItems = set()
         id_ = IdProvider.get()
         self.__timer = wx.Timer(self, id_)
-        wx.EVT_TIMER(self, id_, self.onEverySecond)
+        self.Bind(wx.EVT_TIMER, self.onEverySecond, id=id_)
         pub.subscribe(self.onTrackingChanged, trackingChangedEventType)
         self.registerObserver(
             self.onItemAdded,
