@@ -43,6 +43,7 @@ class Viewer(wx.Panel, patterns.Observer, metaclass=ViewerMeta):
     viewerImages = artprovider.itemImages
 
     def __init__(self, parent, taskFile, settings, *args, **kwargs):
+        patterns.Observer.__init__(self)
         super().__init__(parent, -1)
         self.parent = parent
         self.taskFile = taskFile
