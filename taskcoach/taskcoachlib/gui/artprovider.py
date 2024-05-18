@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from taskcoachlib import patterns, operating_system
 from taskcoachlib.i18n import _
+from taskcoachlib.tools import wxhelper
 import wx
 from . import icons
 
@@ -30,16 +31,17 @@ class ArtProvider(wx.ArtProvider):
 
             overlayImage = self._CreateBitmap(
                 overlay, artClient, size
-            ).ConvertToImage()
+            ).ConvertToImage()  # type: wx.Image
             overlayImage.Rescale(int(w / 2), int(h / 2), wx.IMAGE_QUALITY_HIGH)
-            overlayAlpha = overlayImage.GetAlphaData()
+
+            overlayAlpha = overlayImage.GetAlphaBuffer()
             overlayBitmap = overlayImage.ConvertToBitmap()
 
             mainImage = self._CreateBitmap(
                 main, artClient, size
-            ).ConvertToImage()
-            mainAlpha = mainImage.GetAlphaData()
-            mainImage.SetAlphaData(chr(255) * len(mainAlpha))
+            ).ConvertToImage()  # type: wx.Image
+            mainAlpha = wxhelper.getAlphaDataFromImage(mainImage)
+            wxhelper.clearAlphaDataOfImage(mainImage, 255)
             mainBitmap = mainImage.ConvertToBitmap()
 
             dstDC = wx.MemoryDC()
@@ -64,15 +66,15 @@ class ArtProvider(wx.ArtProvider):
                             overlayAlpha[(y - h / 2) * w / 2 + x - w / 2],
                         )
                     resultAlpha.append(alpha)
-            mainImage.SetAlphaData("".join(resultAlpha))
+            wxhelper.setAlphaDataToImage(mainImage, resultAlpha)
 
             return mainImage.ConvertToBitmap()
         else:
             return self._CreateBitmap(artId, artClient, size)
 
-    def _CreateBitmap(self, artId, artClient, size):
+    def _CreateBitmap(self, artId, artClient, size) -> wx.Bitmap:
         if not artId:
-            return wx.EmptyBitmap(*size)
+            return wx.Bitmap(*size)
         catalogKey = "%s%dx%d" % (artId, size[0], size[1])
         if catalogKey in list(icons.catalog.keys()):
             bitmap = icons.catalog[catalogKey].GetBitmap()
