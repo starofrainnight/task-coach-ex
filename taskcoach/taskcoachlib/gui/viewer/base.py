@@ -286,10 +286,17 @@ class Viewer(wx.Panel, patterns.Observer, metaclass=ViewerMeta):
     def onSelect(self, event=None):  # pylint: disable=W0613
         """The selection of items in the widget has been changed. Notify
         our observers."""
-        if self.IsBeingDeleted() or self.__selectingAllItems:
-            # Some widgets change the selection and send selection events when
-            # deleting all items as part of the Destroy process. Ignore.
-            return
+
+        try:
+            if self.IsBeingDeleted() or self.__selectingAllItems:
+                # Some widgets change the selection and send selection events when
+                # deleting all items as part of the Destroy process. Ignore.
+                return
+        except RuntimeError:
+            # RuntimeError: wrapped C/C++ object of type EffortViewer has been deleted
+            # FIXME: It's a bug?
+            pass
+
         # Be sure all wx events are handled before we update our selection
         # cache and notify our observers:
         wx.CallAfter(self.updateSelection)
