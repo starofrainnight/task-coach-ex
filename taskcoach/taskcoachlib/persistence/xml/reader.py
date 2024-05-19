@@ -43,7 +43,7 @@ import os
 import re
 import stat
 import wx
-import xml.etree.ElementTree as ET
+from lxml import etree as ET
 
 
 def parseAndAdjustDateTime(string, *timeDefaults):
@@ -71,15 +71,12 @@ class PIParser(ET.XMLParser):
     def __init__(self):
         super().__init__()
 
-        self._parser.ProcessingInstructionHandler = self.handle_pi
-        self.tskversion = meta.data.tskversion
-
-    def handle_pi(self, target, data):
-        if target == "taskcoach":
-            match_object = re.search('tskversion="(\d+)"', data)
-            self.tskversion = int(match_object.group(1))
-
-
+        # FIXME: The codes below no longer works with lastest python
+        #
+        # Codes refs: https://uucode.com/blog/2012/06/19/xmletreeelementtree-and-processing-instructions/
+        # self._parser.ProcessingInstructionHandler = self.handle_pi
+        # 
+        # Use lxml's ElementTree instead, it's provided better Processing Instruction handling
 class XMLReaderTooNewException(Exception):
     pass
 
@@ -113,7 +110,12 @@ class XMLReader(object):
         parser = PIParser()
         tree = ET.parse(self.__fd, parser)
         root = tree.getroot()
-        self.__tskversion = parser.tskversion  # pylint: disable=W0201
+        pis = tree.getroot().xpath("//processing-instruction()")
+        for pi in pis:
+            if pi.target == "taskcoach":
+                tskversion = int(pi.attrib.get("tskversion"))
+                break
+        self.__tskversion = tskversion  # pylint: disable=W0201
         if self.__tskversion > meta.data.tskversion:
             # Version number of task file is too high
             raise XMLReaderTooNewException
