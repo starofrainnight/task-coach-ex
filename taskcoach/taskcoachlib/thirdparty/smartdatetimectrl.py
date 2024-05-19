@@ -546,7 +546,7 @@ class Entry(wx.Panel):
         dc.SetBackground(wx.WHITE_BRUSH)
         dc.Clear()
         dc.SetBrush(wx.TRANSPARENT_BRUSH)
-        w, h = self.GetClientSizeTuple()
+        w, h = self.GetClientSize()
         dc.SetPen(
             wx.Pen(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNFACE), width=3)
         )
@@ -1170,7 +1170,7 @@ class TimeEntry(Entry):
             choices=self.__relChoices,
             units=self.__units,
         )
-        w, h = self.GetClientSizeTuple()
+        w, h = self.GetClientSize()
         self.__choicePopup.Popup(self.ClientToScreen(wx.Point(0, h)))
         EVT_POPUP_DISMISS(self.__choicePopup, self.OnRelativePopupDismiss)
 
@@ -1865,7 +1865,7 @@ class DateEntry(Entry):
 
     def __OnLeftUp(self, event):
         if self.__calendar is None:
-            w, h = self.GetClientSizeTuple()
+            w, h = self.GetClientSize()
             x, y = self.GetPosition()
             self.__calendar = _CalendarPopup(self, selection=self.GetDate())
             self.__calendar.Popup(
@@ -2249,7 +2249,7 @@ class _CalendarPopup(_PopupWindow):
         dc.Clear()
         dc.SetFont(wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT))
 
-        w, h = self.GetClientSizeTuple()
+        w, h = self.GetClientSize()
 
         # Header: current month/year
 
@@ -2402,7 +2402,7 @@ class _CalendarPopup(_PopupWindow):
             y += self.__maxDim
 
     def OnLeftUp(self, event):
-        w, h = self.GetClientSizeTuple()
+        w, h = self.GetClientSize()
 
         # Buttons
         if event.GetY() < 16 and event.GetX() > w - 48:

@@ -104,7 +104,7 @@ class TimeLine(wx.Panel):
     def OnSize(self, event):
         # The buffer is initialized in here, so that the buffer is always
         # the same size as the Window.
-        width, height = self.GetClientSizeTuple()
+        width, height = self.GetClientSize()
         if width <= 0 or height <= 0:
             return
         # Make new off-screen bitmap: this bitmap will always have the

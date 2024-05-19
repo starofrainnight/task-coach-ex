@@ -266,7 +266,7 @@ class SimpleToolTip(ToolTipBase):
 
     def _drawSectionSeparator(self, dc, x, y):
         y += 1
-        width = self.GetClientSizeTuple()[0]
+        width = self.GetClientSize()[0]
         dc.DrawLine(x, y, width - x, y)
         return y + 2
 

@@ -254,16 +254,16 @@ class CalendarCanvas(wx.Panel):
         self.Refresh()
 
     def HitTest(self, x, y):
-        w, h = self.GetClientSizeTuple()
+        w, h = self.GetClientSize()
 
         if y <= self._marginTop:
             return None
         if self._hScroll.IsShown():
-            h -= self._hScroll.GetClientSizeTuple()[1]
+            h -= self._hScroll.GetClientSize()[1]
             if y >= h:
                 return None
         if self._vScroll.IsShown():
-            w -= self._vScroll.GetClientSizeTuple()[0]
+            w -= self._vScroll.GetClientSize()[0]
             if x >= w:
                 return None
 
@@ -375,15 +375,15 @@ class CalendarCanvas(wx.Panel):
             self._DrawEvent(gc, child)
 
     def _OnPaint(self, event):
-        w, h = self.GetClientSizeTuple()
+        w, h = self.GetClientSize()
         vw = max(w, self._minSize[0])
         vh = max(h, self._minSize[1])
         dx = dy = 0
         if self._hScroll.IsShown():
-            vh -= self._hScroll.GetClientSizeTuple()[1]
+            vh -= self._hScroll.GetClientSize()[1]
             dx = self._hScroll.GetThumbPosition()
         if self._vScroll.IsShown():
-            vw -= self._vScroll.GetClientSizeTuple()[0]
+            vw -= self._vScroll.GetClientSize()[0]
             dy = self._vScroll.GetThumbPosition()
 
         bmp = wx.EmptyBitmap(vw, vh)
@@ -608,12 +608,12 @@ class CalendarCanvas(wx.Panel):
 
     def _OnResize(self, event=None):
         if event is None:
-            w, h = self.GetClientSizeTuple()
+            w, h = self.GetClientSize()
         else:
             w, h = event.GetSize()
 
-        _, hh = self._hScroll.GetClientSizeTuple()
-        vw, _ = self._vScroll.GetClientSizeTuple()
+        _, hh = self._hScroll.GetClientSize()
+        vw, _ = self._vScroll.GetClientSize()
 
         self._hScroll.SetDimensions(0, h - hh, w - vw, hh)
         self._vScroll.SetDimensions(
