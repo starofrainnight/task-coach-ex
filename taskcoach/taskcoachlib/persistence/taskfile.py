@@ -685,7 +685,7 @@ class LockedTaskFile(TaskFile):
 
     def __isFuse(self, path):
         if operating_system.isGTK() and os.path.exists("/proc/mounts"):
-            for line in open("/proc/mounts", "rb"):
+            for line in open("/proc/mounts", "r", encoding='utf-8'):
                 try:
                     location, mountPoint, fsType, options, a, b = (
                         line.strip().split()
