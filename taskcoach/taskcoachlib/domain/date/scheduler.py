@@ -39,6 +39,11 @@ class ScheduledMethod(object):
             and self.__id == other.__id
         )
 
+    def __lt__(self, other):
+        lvalue = 0 if self.__id is None else self.__id
+        rvalue = 0 if other.__id is None else other.__id
+        return lvalue < rvalue
+
     def __hash__(self):
         return hash((self.__dict__["_ScheduledMethod__func"], self.__id))
 
