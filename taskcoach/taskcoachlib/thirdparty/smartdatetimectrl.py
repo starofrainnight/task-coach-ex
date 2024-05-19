@@ -409,13 +409,12 @@ class Entry(wx.Panel):
 
         timerId = wx.NewId()
         self.__timer = wx.Timer(self, timerId)
-        wx.EVT_TIMER(self, timerId, self.OnTimer)
-
-        wx.EVT_PAINT(self, self.OnPaint)
-        wx.EVT_CHAR(self, self.OnChar)
-        wx.EVT_LEFT_UP(self, self.OnLeftUp)
-        wx.EVT_KILL_FOCUS(self, self.OnKillFocus)
-        wx.EVT_SET_FOCUS(self, self.OnSetFocus)
+        self.Bind(wx.EVT_TIMER,  self.OnTimer, id=timerId)
+        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_CHAR, self.OnChar)
+        self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
+        self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
+        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
 
     def AddField(self, name, field):
         dc = wx.ClientDC(self)
