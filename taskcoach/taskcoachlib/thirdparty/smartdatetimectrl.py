@@ -583,7 +583,7 @@ class Entry(wx.Panel):
             text = "N/A"
             tw, th = dc.GetTextExtent(text)
             dc.SetTextForeground(wx.LIGHT_GREY)
-            dc.DrawText(text, (w - tw) / 2, (h - th) / 2)
+            dc.DrawText(text, (w - tw) // 2, (h - th) // 2)
 
     def FocusNext(self):
         if self.__focus is not None:
