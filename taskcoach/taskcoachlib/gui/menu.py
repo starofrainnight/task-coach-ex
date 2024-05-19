@@ -128,9 +128,12 @@ class DynamicMenu(Menu):
             event.Skip()
             if event.GetMenu() != self._parentMenu:
                 return
+
+        # FIXME: No wx.PyDeadObjectError similar classes in wxPython4, so
+        # you must carefully check if the window already destroyed.
         try:  # Prepare for menu or window to be destroyed
             self.updateMenu()
-        except wx.PyDeadObjectError:
+        except:
             pass
 
     def updateMenu(self):
