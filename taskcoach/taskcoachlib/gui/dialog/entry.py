@@ -520,7 +520,7 @@ class RecurrenceEntry(wx.Panel):
         panelSizer.Add(
             self._recurrenceSameWeekdayCheckBox,
             proportion=1,
-            flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND,
+            flag=wx.EXPAND,
         )
         recurrenceFrequencyPanel.SetSizerAndFit(panelSizer)
         self._recurrenceSizer = panelSizer
