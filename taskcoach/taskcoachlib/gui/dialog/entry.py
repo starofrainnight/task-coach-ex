@@ -313,7 +313,7 @@ class ColorEntry(widgets.PanelWithBoxSizer):
         currentColor = (
             wx.Colour(*currentColor) if currentColor else defaultColor
         )  # pylint: disable=W0142
-        picker = wx.ColourPickerCtrl(self, col=currentColor)
+        picker = wx.ColourPickerCtrl(self, colour=currentColor)
         picker.Bind(wx.EVT_COLOURPICKER_CHANGED, self.onColorPicked)
         return picker
 
