@@ -63,28 +63,24 @@ class BackupManagerDialog(wx.Dialog):
         self.__filenames = self.__manifest.listFiles()
         selection = None
         for filename in self.__filenames:
-            item = self.__files.InsertStringItem(
+            item = self.__files.InsertItem(
                 self.__files.GetItemCount(), os.path.split(filename)[-1]
             )
-            self.__files.SetStringItem(item, 1, filename)
+            self.__files.SetItem(item, 1, filename)
             if filename == selectedFile:
                 selection = item
 
         self.SetSize(wx.Size(600, 400))
         self.CentreOnParent()
 
-        wx.EVT_BUTTON(btn, wx.ID_ANY, self.DoClose)
-        wx.EVT_LIST_ITEM_SELECTED(self.__files, wx.ID_ANY, self._OnSelectFile)
-        wx.EVT_LIST_ITEM_DESELECTED(
-            self.__files, wx.ID_ANY, self._OnDeselectFile
+        btn.Bind(wx.EVT_BUTTON, self.DoClose)
+        self.__files.Bind(wx.EVT_LIST_ITEM_SELECTED, self._OnSelectFile)
+        self.__files.Bind(wx.EVT_LIST_ITEM_DESELECTED, self._OnDeselectFile)
+        self.__backups.Bind(wx.EVT_LIST_ITEM_SELECTED, self._OnSelectBackup)
+        self.__backups.Bind(
+            wx.EVT_LIST_ITEM_DESELECTED, self._OnDeselectBackup
         )
-        wx.EVT_LIST_ITEM_SELECTED(
-            self.__backups, wx.ID_ANY, self._OnSelectBackup
-        )
-        wx.EVT_LIST_ITEM_DESELECTED(
-            self.__backups, wx.ID_ANY, self._OnDeselectBackup
-        )
-        wx.EVT_BUTTON(self.__btnRestore, wx.ID_ANY, self._OnRestore)
+        self.__btnRestore.Bind(wx.EVT_BUTTON, self._OnRestore)
 
         if selection is not None:
             self.__files.SetItemState(
