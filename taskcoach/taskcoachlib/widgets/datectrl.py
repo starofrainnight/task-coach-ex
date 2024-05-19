@@ -110,7 +110,7 @@ class DateTimeCtrl(wx.Panel):
         sizer.Add(self.__ctrl, 1, wx.EXPAND)
         self.SetSizer(sizer)
 
-        sdtc.EVT_DATETIME_CHANGE(self.__ctrl, self.__OnChange)
+        self.__ctrl.Bind(sdtc.EVT_DATETIME_CHANGE, self.__OnChange)
 
     def __OnChange(self, event):
         self.__value = event.GetValue()
