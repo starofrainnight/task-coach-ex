@@ -43,6 +43,7 @@ import os
 import re
 import stat
 import wx
+import lxml
 from lxml import etree as ET
 
 
@@ -737,7 +738,12 @@ class ChangesXMLReader(object):
 
     def read(self):
         allChanges = dict()
-        tree = ET.parse(self.__fd)
+        try:
+            tree = ET.parse(self.__fd)
+        except lxml.etree.XMLSyntaxError:
+            # lxml.etree.XMLSyntaxError: Document is empty, line 1, column 1
+            return allChanges
+
         for devNode in tree.getroot().findall("device"):
             id_ = devNode.attrib["guid"]
             mon = ChangeMonitor(id_)
