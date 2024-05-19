@@ -35,3 +35,4 @@ i18n.in/messages.pot
 TaskCoach.egg-info
 build
 __pycache__
+*.delta
