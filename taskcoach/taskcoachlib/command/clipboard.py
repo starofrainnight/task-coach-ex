@@ -41,4 +41,4 @@ class Clipboard(metaclass=patterns.Singleton):
         self._source = None
 
     def __bool__(self):
-        return len(self._contents)
+        return len(self._contents) > 0

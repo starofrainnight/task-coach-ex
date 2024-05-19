@@ -34,7 +34,7 @@ class DirectoryChooser(wx.Panel):
         self.SetSizer(sz)
         self.Fit()
 
-        wx.EVT_CHECKBOX(self.checkbx, wx.ID_ANY, self.OnCheck)
+        self.checkbx.Bind(wx.EVT_CHECKBOX, self.OnCheck)
 
     def SetPath(self, pth):
         if pth:

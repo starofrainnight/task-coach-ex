@@ -25,6 +25,8 @@ from taskcoachlib.domain import date, task
 from taskcoachlib.gui import artprovider
 from taskcoachlib.meta import data
 from taskcoachlib.i18n import _
+from wx.lib.agw.hyperlink import HyperLinkCtrl
+from wx.adv import BitmapComboBox
 import wx, calendar
 
 
@@ -248,7 +250,7 @@ class SettingsPageBase(widgets.BookPage):
             self, font=currentFont or defaultFont, colour=currentFgColor
         )
         fontButton.SetBackgroundColour(currentBgColor)
-        iconEntry = wx.combo.BitmapComboBox(self, style=wx.CB_READONLY)
+        iconEntry = BitmapComboBox(self, style=wx.CB_READONLY)
         imageNames = sorted(artprovider.chooseableItemImages.keys())
         for imageName in imageNames:
             label = artprovider.chooseableItemImages[imageName]
@@ -685,7 +687,7 @@ class LanguagePage(SettingsPage):
         )
         sizer.Add(text)
         url = meta.i18n_url
-        urlCtrl = wx.HyperlinkCtrl(panel, -1, label=url, url=url)
+        urlCtrl = HyperLinkCtrl(panel, -1, label=url, URL=url)
         sizer.Add(urlCtrl)
         panel.SetSizerAndFit(sizer)
         self.addText(_("Language not found?"), panel)
