@@ -718,8 +718,10 @@ class Entry(wx.Panel):
                 widget,
             )
             self.__popup[0].Popup(self.ClientToScreen(wx.Point(x, y + h)))
-            EVT_POPUP_DISMISS(self.__popup[0], self.OnPopupDismiss)
-            EVT_ENTRY_CHOICE_SELECTED(self.__popup[0], self.__OnChoiceSelected)
+            self.__popup[0].Bind(EVT_POPUP_DISMISS, self.OnPopupDismiss)
+            self.__popup[0].Bind(
+                EVT_ENTRY_CHOICE_SELECTED, self.__OnChoiceSelected
+            )
 
     def __OnChoiceSelected(self, event):
         if self.__popup is not None:  # How can this happen ? It does.
@@ -2456,8 +2458,8 @@ class _MultipleChoicesPopup(_PopupWindow):
         super(_MultipleChoicesPopup, self).__init__(*args, **kwargs)
 
     def Fill(self, interior):
-        wx.EVT_PAINT(interior, self.OnPaint)
-        wx.EVT_LEFT_UP(interior, self.OnLeftUp)
+        interior.Bind(wx.EVT_PAINT, self.OnPaint)
+        interior.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.SetClientSize(self.GetExtent(wx.ClientDC(interior)))
 
     def GetExtent(self, dc):
