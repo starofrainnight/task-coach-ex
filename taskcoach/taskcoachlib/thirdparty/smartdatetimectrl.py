@@ -2262,12 +2262,12 @@ class _CalendarPopup(_PopupWindow):
             ).strftime("%B %Y")
         )
         tw, th = dc.GetTextExtent(header)
-        dc.DrawText(header, (w - 48 - tw) / 2, 1)
+        dc.DrawText(header, (w - 48 - tw) // 2, 1)
 
         buttonDim = min(th, 10)
 
         cx = w - 24
-        cy = th / 2 + 1
+        cy = th // 2 + 1
 
         gc = wx.GraphicsContext.Create(dc)
         gc.SetPen(wx.BLACK_PEN)
@@ -2281,7 +2281,7 @@ class _CalendarPopup(_PopupWindow):
             yinf = th / 2 + 1 - buttonDim / 2
             ysup = th / 2 + 1 + buttonDim / 2
 
-            gp.MoveToPoint(xinf, th / 2 + 1)
+            gp.MoveToPoint(xinf, th // 2 + 1)
             gp.AddArc(
                 cx,
                 cy,
@@ -2302,7 +2302,7 @@ class _CalendarPopup(_PopupWindow):
             yinf = th / 2 + 1 - buttonDim / 2
             ysup = th / 2 + 1 + buttonDim / 2
 
-            gp.MoveToPoint(xsup, th / 2 + 1)
+            gp.MoveToPoint(xsup, th // 2 + 1)
             gp.AddArc(
                 cx,
                 cy,
@@ -2334,8 +2334,8 @@ class _CalendarPopup(_PopupWindow):
             tw, th = dc.GetTextExtent(header)
             dc.DrawText(
                 header,
-                self.__maxDim * idx + int((self.__maxDim - tw) / 2),
-                y + int((self.__maxDim - th) / 2),
+                self.__maxDim * idx + int((self.__maxDim - tw) // 2),
+                y + int((self.__maxDim - th) // 2),
             )
 
         y += self.__maxDim
@@ -2392,8 +2392,8 @@ class _CalendarPopup(_PopupWindow):
                 tw, th = dc.GetTextExtent(label)
                 dc.DrawText(
                     label,
-                    x + (self.__maxDim - tw) / 2,
-                    y + (self.__maxDim - th) / 2,
+                    x + (self.__maxDim - tw) // 2,
+                    y + (self.__maxDim - th) // 2,
                 )
 
                 if active:
