@@ -409,7 +409,7 @@ class Entry(wx.Panel):
 
         timerId = wx.NewId()
         self.__timer = wx.Timer(self, timerId)
-        self.Bind(wx.EVT_TIMER,  self.OnTimer, id=timerId)
+        self.Bind(wx.EVT_TIMER, self.OnTimer, id=timerId)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
@@ -1089,7 +1089,7 @@ class TimeEntry(Entry):
                 % (debugInfo, e)
             )
 
-        EVT_ENTRY_CHOICE_SELECTED(self, self.__OnHourSelected)
+        self.Bind(EVT_ENTRY_CHOICE_SELECTED, self.__OnHourSelected)
 
     def Format(self):
         return self.__formatter(self.GetTime())
@@ -1564,9 +1564,9 @@ class DateEntry(Entry):
 
         self.__calendar = None
 
-        wx.EVT_LEFT_UP(self, self.__OnLeftUp)
+        self.Bind(wx.EVT_LEFT_UP, self.__OnLeftUp)
         if "__WXMAC__" in wx.PlatformInfo:
-            wx.EVT_KILL_FOCUS(self, self.__OnKillFocus)
+            self.Bind(wx.EVT_KILL_FOCUS, self.__OnKillFocus)
 
         if self.Field("day") is NullField:
             self.AddField(None, " ")
@@ -2573,9 +2573,7 @@ class SmartDateTimeCtrl(wx.Panel):
         if self.__enableNone:
             self.__checkbox = _CheckBox(self, label)
             self.__checkbox.Bind(wx.EVT_CHECKBOX, self.OnToggleNone)
-            sizer.Add(
-                self.__checkbox, 0, wx.ALL | wx.EXPAND, 3
-            )
+            sizer.Add(self.__checkbox, 0, wx.ALL | wx.EXPAND, 3)
             self.__label = self.__checkbox
         elif label:
             self.__label = wx.StaticText(self, wx.ID_ANY, label)
@@ -2627,11 +2625,11 @@ class SmartDateTimeCtrl(wx.Panel):
         if self.__enableNone and value is None:
             self.Enable(False)
 
-        EVT_DATE_CHANGE(self, self.OnDateChange)
-        EVT_TIME_CHANGE(self, self.OnTimeChange)
-        EVT_TIME_CHOICES_CHANGE(self.__timeCtrl, self.__OnChoicesChange)
-        EVT_TIME_NEXT_DAY(self, self.OnNextDay)
-        EVT_TIME_PREV_DAY(self, self.OnPrevDay)
+        self.Bind(EVT_DATE_CHANGE, self.OnDateChange)
+        self.Bind(EVT_TIME_CHANGE, self.OnTimeChange)
+        self.__timeCtrl.Bind(EVT_TIME_CHOICES_CHANGE, self.__OnChoicesChange)
+        self.Bind(EVT_TIME_NEXT_DAY, self.OnNextDay)
+        self.Bind(EVT_TIME_PREV_DAY, self.OnPrevDay)
 
     def __OnPopupRelativeChoices(self, event):
         self.__timeCtrl.PopupRelativeChoices()
