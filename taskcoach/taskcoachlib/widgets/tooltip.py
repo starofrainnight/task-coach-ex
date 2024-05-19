@@ -227,13 +227,9 @@ class SimpleToolTip(ToolTipBase):
 
     def OnPaint(self, event):  # pylint: disable=W0613
         dc = wx.PaintDC(self)
-        dc.BeginDrawing()
-        try:
-            self._setFontBrushAndPen(dc)
-            self._drawBorder(dc)
-            self._drawSections(dc)
-        finally:
-            dc.EndDrawing()
+        self._setFontBrushAndPen(dc)
+        self._drawBorder(dc)
+        self._drawSections(dc)
 
     def _setFontBrushAndPen(self, dc):
         font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)

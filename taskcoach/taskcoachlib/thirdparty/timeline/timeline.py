@@ -175,7 +175,6 @@ class TimeLine(wx.Panel):
     def Draw(self, dc):
         """Draw the timeline on the device context."""
         self.hot_map = HotMap()
-        dc.BeginDrawing()
         brush = wx.Brush(self.backgroundColour)
         dc.SetBackground(brush)
         dc.Clear()
@@ -199,7 +198,6 @@ class TimeLine(wx.Panel):
                 self.hot_map,
             )
             self.DrawNow(dc)
-        dc.EndDrawing()
 
     def FontForLabels(self, dc):
         """Return the default GUI font, scaled for printing if necessary."""
