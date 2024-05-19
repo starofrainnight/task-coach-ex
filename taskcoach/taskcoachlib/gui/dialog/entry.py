@@ -575,7 +575,7 @@ class RecurrenceEntry(wx.Panel):
         if operating_system.isMac():
             # On Mac OS X, the wx.Choice gets too little vertical space by
             # default
-            size = self._scheduleChoice.GetSizeTuple()
+            size = self._scheduleChoice.GetSize()
             self._scheduleChoice.SetMinSize((size[0], size[1] + 1))
         panelSizer.Add(self._scheduleChoice, flag=wx.ALIGN_CENTER_VERTICAL)
         schedulePanel.SetSizerAndFit(panelSizer)

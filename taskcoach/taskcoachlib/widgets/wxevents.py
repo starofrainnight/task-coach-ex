@@ -1174,7 +1174,7 @@ class CalendarPrintout(wx.Printout):
         if self._count is None:
             minW, minH = self._calendar._minSize
             dc = self.GetDC()
-            dcw, dch = dc.GetSizeTuple()
+            dcw, dch = dc.GetSize()
             cw = minW
             ch = minW * dch / dcw
             cells = int(
@@ -1210,7 +1210,7 @@ class CalendarPrintout(wx.Printout):
         # Cannot print with a GraphicsContext...
         minW, minH = self._calendar._minSize
         dc = self.GetDC()
-        dcw, dch = dc.GetSizeTuple()
+        dcw, dch = dc.GetSize()
         cw = minW
         ch = minW * dch / dcw
         cells = int(

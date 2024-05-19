@@ -59,7 +59,7 @@ class ToolTipMixin(object):
             displayX, displayY, displayWidth, displayHeight = (
                 theDisplay.GetClientArea()
             )
-            tipWidth, tipHeight = self.__tip.GetSizeTuple()
+            tipWidth, tipHeight = self.__tip.GetSize()
 
             if tipHeight > displayHeight:
                 # Too big. Take as much space as possible.

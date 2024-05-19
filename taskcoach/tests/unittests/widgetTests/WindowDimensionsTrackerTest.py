@@ -42,7 +42,7 @@ class WindowDimensionsTrackerTest(test.wxTestCase):
 
     def test_initial_size(self):
         # See MainWindowTest...
-        width, height = self.frame.GetSizeTuple()
+        width, height = self.frame.GetSize()
         if operating_system.isMac():  # pragma: no cover
             width, height = self.frame.GetClientSize()
             height -= 18

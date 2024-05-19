@@ -305,11 +305,11 @@ class _NotificationCenter(wx.EvtHandler):
 
         if frm.GetParent():
             dx, dy = frm.GetParent().GetPosition()
-            dw, dh = frm.GetParent().GetSizeTuple()
+            dw, dh = frm.GetParent().GetSize()
         else:
             dx, dy, dw, dh = self.GetDisplayRect()
 
-        w, h = frm.GetSizeTuple()
+        w, h = frm.GetSize()
         w = w if w > self.notificationWidth else self.notificationWidth
 
         bottom = dy + dh - self.notificationMargin
@@ -394,7 +394,7 @@ class _NotificationCenter(wx.EvtHandler):
         for frame, height, tmo in self.displayedFrames:
             if frame.GetParent():
                 dx, dy = frame.GetParent().GetPosition()
-                dw, dh = frame.GetParent().GetSizeTuple()
+                dw, dh = frame.GetParent().GetSize()
             else:
                 dx, dy, dw, dh = self.GetDisplayRect()
 

@@ -2665,7 +2665,7 @@ class SmartDateTimeCtrl(wx.Panel):
 
     def GetLabelWidth(self):
         if self.__label is not None:
-            return self.__label.GetSizeTuple()[0]
+            return self.__label.GetSize()[0]
 
     def SetLabelWidth(self, width):
         if self.__label is not None:

@@ -35,7 +35,7 @@ class DummyToolTipWindow(object):
     def Show(self, *args):
         self.rect = args
 
-    def GetSizeTuple(self):
+    def GetSize(self):
         return self.size
 
 
