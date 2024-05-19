@@ -45,8 +45,12 @@ class PIElementTree(ET.ElementTree):
         if node == self._root:
             # WTF? ElementTree does not write the encoding if it's ASCII or UTF-8...
             if encoding in ["us-ascii", "utf-8"]:
-                file.write('<?xml version="1.0" encoding="%s"?>\n' % encoding)
-            file.write(self.__pi.encode(encoding) + "\n")
+                file.write(
+                    (
+                        '<?xml version="1.0" encoding="%s"?>\n' % encoding
+                    ).encode(encoding)
+                )
+            file.write((self.__pi + "\n").encode(encoding))
         ET.ElementTree._write(
             self, file, node, encoding, namespaces
         )  # pylint: disable=E1101
@@ -55,8 +59,12 @@ class PIElementTree(ET.ElementTree):
         if encoding is None:
             encoding = "utf-8"
         if sys.version_info >= (2, 7):
-            file.write('<?xml version="1.0" encoding="%s"?>\n' % encoding)
-            file.write(self.__pi.encode(encoding) + "\n")
+            file.write(
+                ('<?xml version="1.0" encoding="%s"?>\n' % encoding).encode(
+                    encoding
+                )
+            )
+            file.write((self.__pi + "\n").encode(encoding))
             kwargs["xml_declaration"] = False
         ET.ElementTree.write(self, file, encoding, *args, **kwargs)
 

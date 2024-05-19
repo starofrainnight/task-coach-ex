@@ -66,12 +66,12 @@ class SafeWriteFile(object):
         if self._isCloud():
             # Ideally we should create a temporary file on the same filesystem (so that
             # os.rename works) but outside the Dropbox folder...
-            self.__fd = open(self.__filename, "w")
+            self.__fd = open(self.__filename, "wb")
         else:
             self.__tempFilename = self._getTemporaryFileName(
                 os.path.dirname(filename)
             )
-            self.__fd = open(self.__tempFilename, "w")
+            self.__fd = open(self.__tempFilename, "wb")
 
     def write(self, bf):
         self.__fd.write(bf)
@@ -685,7 +685,7 @@ class LockedTaskFile(TaskFile):
 
     def __isFuse(self, path):
         if operating_system.isGTK() and os.path.exists("/proc/mounts"):
-            for line in open("/proc/mounts", "r", encoding='utf-8'):
+            for line in open("/proc/mounts", "r", encoding="utf-8"):
                 try:
                     location, mountPoint, fsType, options, a, b = (
                         line.strip().split()
