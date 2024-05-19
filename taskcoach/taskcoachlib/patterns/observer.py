@@ -373,7 +373,7 @@ class Publisher(object, metaclass=singleton.Singleton):
 class Observer(object):
     def __init__(self, *args, **kwargs):
         self.__observers = set()
-        super().__init__()
+        super().__init__(*args, **kwargs)
 
     def registerObserver(self, observer, *args, **kwargs):
         self.__observers.add(observer)
