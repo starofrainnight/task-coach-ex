@@ -102,7 +102,7 @@ class BackupManagerDialog(wx.Dialog):
         for index, dateTime in enumerate(
             self.__manifest.listBackups(self.__filenames[event.GetIndex()])
         ):
-            self.__backups.InsertStringItem(
+            self.__backups.InsertItem(
                 index, render.dateTime(dateTime, humanReadable=True)
             )
         self.__backups.SetColumnWidth(0, -1)
