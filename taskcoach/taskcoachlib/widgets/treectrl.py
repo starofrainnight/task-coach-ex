@@ -274,7 +274,7 @@ class TreeListCtrl(
 
     def _addObjectRecursively(self, parent_item, parent_object=None):
         for child_object in self.__adapter.children(parent_object):
-            child_item = self.Append(
+            child_item = self.AppendItem(
                 parent_item,
                 "",
                 self.getItemCTType(child_object),
