@@ -75,8 +75,10 @@ class PIParser(ET.XMLParser):
         #
         # Codes refs: https://uucode.com/blog/2012/06/19/xmletreeelementtree-and-processing-instructions/
         # self._parser.ProcessingInstructionHandler = self.handle_pi
-        # 
+        #
         # Use lxml's ElementTree instead, it's provided better Processing Instruction handling
+
+
 class XMLReaderTooNewException(Exception):
     pass
 
@@ -472,7 +474,7 @@ class XMLReader(object):
             selectedIcon=self.__parse_icon(
                 node.attrib.get("selectedIcon", "")
             ),
-            ordering=int(node.attrib.get("ordering", "0L")),
+            ordering=int(node.attrib.get("ordering", "0")),
         )
 
         if self.__tskversion <= 20:
