@@ -136,7 +136,7 @@ if operating_system.isWindows():
             )
 
         def Show(self, x, y, w, h):  # pylint: disable=W0221
-            self.SetDimensions(x, y, w, h)
+            self.SetSize(x, y, w, h)
             super(ToolTipBase, self).Show()
 
 elif operating_system.isMac():
@@ -163,7 +163,7 @@ elif operating_system.isMac():
             super(ToolTipBase, self).Show()
 
         def Show(self, x, y, width, height):  # pylint: disable=W0221
-            self.SetDimensions(x, y, width, height)
+            self.SetSize(x, y, width, height)
 
         def Hide(self):  # pylint: disable=W0221
             self.MoveXY(self.__maxWidth, self.__maxHeight)
@@ -172,7 +172,7 @@ else:
 
     class ToolTipBase(wx.PopupWindow):
         def Show(self, x, y, width, height):  # pylint: disable=E1003,W0221
-            self.SetDimensions(x, y, width, height)
+            self.SetSize(x, y, width, height)
             super(ToolTipBase, self).Show()
 
 
@@ -241,7 +241,7 @@ class SimpleToolTip(ToolTipBase):
         dc.SetPen(wx.Pen(textColour))
 
     def _drawBorder(self, dc):
-        width, height = self.GetClientSizeTuple()
+        width, height = self.GetClientSize()
         dc.DrawRectangle(0, 0, width, height)
 
     def _drawSections(self, dc):
