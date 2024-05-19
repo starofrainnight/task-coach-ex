@@ -1871,7 +1871,8 @@ class DateEntry(Entry):
             self.__calendar.Popup(
                 self.GetParent().ClientToScreen(wx.Point(x, y + h))
             )
-            EVT_POPUP_DISMISS(self.__calendar, self.OnCalendarDismissed)
+
+            self.__calendar.Bind(EVT_POPUP_DISMISS, self.OnCalendarDismissed)
             self.ForceFocus()
         else:
             self.__calendar.Dismiss()
@@ -1935,11 +1936,11 @@ class _PopupWindow(wx.Dialog):
             self, style=wx.WANTS_CHARS if "__WXMSW__" in wx.PlatformInfo else 0
         )
 
-        wx.EVT_ACTIVATE(self, self.OnActivate)
+        self.Bind(wx.EVT_ACTIVATE, self.OnActivate)
         if "__WXMAC__" in wx.PlatformInfo:
-            wx.EVT_CHAR(self, self.OnChar)
+            self.Bind(wx.EVT_CHAR, self.OnChar)
         else:
-            wx.EVT_CHAR(self.__interior, self.OnChar)
+            self.__interior.Bind(wx.EVT_CHAR, self.OnChar)
 
         self.Fill(self.__interior)
 
@@ -2196,8 +2197,8 @@ class _CalendarPopup(_PopupWindow):
         super(_CalendarPopup, self).__init__(*args, **kwargs)
 
     def Fill(self, interior):
-        wx.EVT_PAINT(interior, self.OnPaint)
-        wx.EVT_LEFT_UP(interior, self.OnLeftUp)
+        interior.Bind(wx.EVT_PAINT, self.OnPaint)
+        interior.Bind(wx.EVT_LEFT_UP, self.OnLeftUp)
         self.SetClientSize(self.GetExtent(wx.ClientDC(interior)))
 
     def GetExtent(self, dc):
