@@ -69,7 +69,7 @@ class PIParser(ET.XMLParser):
     """See http://effbot.org/zone/element-pi.htm"""
 
     def __init__(self):
-        super(self).__init__()
+        super().__init__()
 
         self._parser.ProcessingInstructionHandler = self.handle_pi
         self.tskversion = meta.data.tskversion
