@@ -368,7 +368,7 @@ If this happens again, please make a copy of your TaskCoach.ini file """
         self.Refresh()
 
     def onIconify(self, event):
-        if event.Iconized() and self.settings.getboolean(
+        if event.IsIconized() and self.settings.getboolean(
             "window", "hidewheniconized"
         ):
             self.Hide()
