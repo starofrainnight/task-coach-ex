@@ -510,8 +510,9 @@ class DatesPage(Page):
         self._dueDateTimeEntry.LoadChoices(
             self.__settings.get("feature", "sdtcspans")
         )
-        sdtc.EVT_TIME_CHOICES_CHANGE(
-            self._dueDateTimeEntry, self.__onTimeChoicesChange
+
+        self._dueDateTimeEntry.Bind(
+            sdtc.EVT_TIME_CHOICES_CHANGE, self.__onTimeChoicesChange
         )
 
     def addDateEntry(self, label, taskMethodName):
