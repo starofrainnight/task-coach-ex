@@ -2575,7 +2575,7 @@ class SmartDateTimeCtrl(wx.Panel):
             self.__checkbox = _CheckBox(self, label)
             self.__checkbox.Bind(wx.EVT_CHECKBOX, self.OnToggleNone)
             sizer.Add(
-                self.__checkbox, 0, wx.ALL | wx.EXPAND | wx.ALIGN_CENTRE, 3
+                self.__checkbox, 0, wx.ALL | wx.EXPAND, 3
             )
             self.__label = self.__checkbox
         elif label:
