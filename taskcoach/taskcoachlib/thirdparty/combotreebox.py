@@ -519,7 +519,7 @@ class BaseComboTreeBoxMixin(object):
         item."""
         if parent is None:
             parent = self._tree.GetRootItem()
-        item = self._tree.Append(
+        item = self._tree.AppendItem(
             parent, itemText, data=wx.TreeItemData(clientData)
         )
         if self._sort:
