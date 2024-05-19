@@ -51,7 +51,7 @@ if operating_system.isWindows():
             else:
                 margin = 0
 
-            x, y = window.GetPositionTuple()
+            x, y = window.GetPosition()
             return Display.GetFromPoint(wx.Point(x + margin, y + margin))
 
         def __init__(self, index):

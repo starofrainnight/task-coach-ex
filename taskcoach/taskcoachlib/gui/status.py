@@ -73,7 +73,7 @@ class StatusBar(wx.StatusBar):
         if self.scheduledStatusDisplay:
             self.scheduledStatusDisplay.Stop()
         super(StatusBar, self).SetStatusText(message, pane)
-        self.scheduledStatusDisplay = wx.FutureCall(delay, self._displayStatus)
+        self.scheduledStatusDisplay = wx.CallLater(delay, self._displayStatus)
 
     def Destroy(self):  # pylint: disable=W0221
         for eventType in self.wxEventTypes:

@@ -1867,7 +1867,7 @@ class DateEntry(Entry):
     def __OnLeftUp(self, event):
         if self.__calendar is None:
             w, h = self.GetClientSizeTuple()
-            x, y = self.GetPositionTuple()
+            x, y = self.GetPosition()
             self.__calendar = _CalendarPopup(self, selection=self.GetDate())
             self.__calendar.Popup(
                 self.GetParent().ClientToScreen(wx.Point(x, y + h))

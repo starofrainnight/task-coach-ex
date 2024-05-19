@@ -81,7 +81,7 @@ class AnimatedMove(wx.Timer):
         super(AnimatedMove, self).__init__()
 
         self.__frame = frame
-        self.__origin = frame.GetPositionTuple()
+        self.__origin = frame.GetPosition()
         self.__destination = destination
         self.__step = 0
 
@@ -417,7 +417,7 @@ class _NotificationCenter(wx.EvtHandler):
                     newList.append(
                         (frame, height, tmo - 1 if tmo is not None else None)
                     )
-                    x, y = frame.GetPositionTuple()
+                    x, y = frame.GetPosition()
                     AnimatedMove(
                         frame, (x, bottom - height - self.notificationMargin)
                     )

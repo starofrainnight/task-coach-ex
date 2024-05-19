@@ -33,7 +33,7 @@ class UICommandContainerMixin(object):
                 label = wx.MenuItem(self, text=uiCommand)
                 # must append item before disable to insure
                 # that internal object exists
-                self.AppendItem(label)
+                self.Append(label)
                 label.Enable(False)
             elif type(uiCommand) == type(()):  # This only works for menu's
                 menuTitle, menuUICommands = uiCommand[0], uiCommand[1:]

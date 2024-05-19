@@ -37,7 +37,7 @@ class WindowDimensionsTrackerTest(test.wxTestCase):
     def test_initial_position(self):
         self.assertEqual(
             self.settings.getvalue(self.section, "position"),
-            self.frame.GetPositionTuple(),
+            self.frame.GetPosition(),
         )
 
     def test_initial_size(self):
