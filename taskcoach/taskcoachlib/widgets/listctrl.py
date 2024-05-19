@@ -110,7 +110,7 @@ class VirtualListCtrl(
             item_attribute_arguments.append(font)
         # We need to keep a reference to the item attribute to prevent it
         # from being garbage collected too soon:
-        self.__item_attribute = wx.ListItemAttr(
+        self.__item_attribute = wx.ItemAttr(
             *item_attribute_arguments
         )  # pylint: disable=W0142,W0201
         return self.__item_attribute
