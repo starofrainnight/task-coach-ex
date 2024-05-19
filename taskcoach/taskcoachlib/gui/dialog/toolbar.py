@@ -375,7 +375,7 @@ class _ToolBarEditorInterior(wx.Panel):
                 else:
                     text = uiCommand.getHelpText()
 
-                item = tree.Append(root, text)
+                item = tree.AppendItem(root, text)
                 if uiCommand is not None and not isinstance(uiCommand, int):
                     tree.SetItemImage(
                         item, self.__imgListIndex.get(uiCommand.bitmap, -1)
