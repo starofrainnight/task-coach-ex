@@ -39,8 +39,7 @@ class Page(patterns.Observer, widgets.BookPage):
 
     def __init__(self, items, *args, **kwargs):
         self.items = items
-        self.__observers = []
-        super(Page, self).__init__(columns=self.columns, *args, **kwargs)
+        super().__init__(columns=self.columns, *args, **kwargs)
         self.addEntries()
         self.fit()
 
