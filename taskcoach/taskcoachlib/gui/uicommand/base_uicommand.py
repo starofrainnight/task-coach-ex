@@ -96,7 +96,7 @@ class UICommand(object):
         if position is None:
             menu.Append(menuItem)
         else:
-            menu.InsertItem(position, menuItem)
+            menu.Insert(position, menuItem)
         self.bind(window, self.id)
         return self.id
 
