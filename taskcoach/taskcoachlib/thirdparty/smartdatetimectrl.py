@@ -1174,7 +1174,7 @@ class TimeEntry(Entry):
         )
         w, h = self.GetClientSize()
         self.__choicePopup.Popup(self.ClientToScreen(wx.Point(0, h)))
-        EVT_POPUP_DISMISS(self.__choicePopup, self.OnRelativePopupDismiss)
+        self.__choicePopup.Bind(EVT_POPUP_DISMISS, self.OnRelativePopupDismiss)
 
     def OnRelativePopupDismiss(self, event):
         self.__choicePopup = None
@@ -1999,7 +1999,7 @@ class _RelativeChoicePopup(_PopupWindow):
         super(_RelativeChoicePopup, self).__init__(*args, **kwargs)
 
     def Fill(self, interior):
-        sizer = wx.FlexGridSizer(0, 2, gap=wx.Size(2,2))
+        sizer = wx.FlexGridSizer(0, 2, gap=wx.Size(2, 2))
         sizer.AddGrowableCol(0)
         interior.SetSizer(sizer)
         self.__sizer = sizer
@@ -2041,7 +2041,7 @@ class _RelativeChoicePopup(_PopupWindow):
     def __Populate(self):
         hsizer = wx.BoxSizer(wx.HORIZONTAL)
         self.__btnEdit = wx.Button(self.__interior, wx.ID_ANY, _("Edit"))
-        wx.EVT_BUTTON(self.__btnEdit, wx.ID_ANY, self.OnEdit)
+        self.__btnEdit.Bind(wx.EVT_BUTTON, self.OnEdit)
         hsizer.Add(self.__btnEdit, 0, wx.ALL | wx.ALIGN_CENTRE, 2)
 
         self.__amountCtrl = wx.SpinCtrl(self.__interior, wx.ID_ANY, "1", min=1)
@@ -2055,8 +2055,8 @@ class _RelativeChoicePopup(_PopupWindow):
         hsizer.Add(self.__unitCtrl, 1, wx.ALL | wx.ALIGN_CENTRE, 2)
 
         if "__WXGTK__" in wx.PlatformInfo:
-            wx.EVT_SET_FOCUS(self.__unitCtrl, self.__OnComboFocus)
-            wx.EVT_LEFT_DOWN(self.__unitCtrl, self.__OnComboLeftDown)
+            self.__unitCtrl.Bind(wx.EVT_SET_FOCUS, self.__OnComboFocus)
+            self.__unitCtrl.Bind(wx.EVT_LEFT_DOWN, self.__OnComboLeftDown)
 
         self.__sizer.Add(hsizer, flag=wx.EXPAND)
 
@@ -2068,7 +2068,7 @@ class _RelativeChoicePopup(_PopupWindow):
             ),
         )
         self.__sizer.Add(self.__btnAdd, 0, wx.ALL | wx.ALIGN_CENTRE, 3)
-        wx.EVT_BUTTON(self.__btnAdd, wx.ID_ANY, self.OnAdd)
+        self.__btnAdd.Bind(wx.EVT_BUTTON, self.OnAdd)
 
         self.__lines = list()
         for line, delta in enumerate(self.__choices):
@@ -2083,7 +2083,7 @@ class _RelativeChoicePopup(_PopupWindow):
                 style=pbtn.PB_STYLE_SQUARE,
             )
             self.__sizer.Add(btn, 0, wx.EXPAND)
-            wx.EVT_BUTTON(btn, idSpan, self.OnChoose)
+            btn.Bind(wx.EVT_BUTTON, self.OnChoose, id=idSpan)
 
             btn = wx.BitmapButton(
                 self.__interior,
@@ -2094,7 +2094,7 @@ class _RelativeChoicePopup(_PopupWindow):
             )
             self.__sizer.Add(btn, 0, wx.ALL | wx.ALIGN_CENTRE, 3)
             btn.Show(False)
-            wx.EVT_BUTTON(btn, idDel, self.OnDel)
+            btn.Bind(wx.EVT_BUTTON, self.OnDel, id=idDel)
 
             self.__lines.append((delta, idSpan, idDel, btn))
 
