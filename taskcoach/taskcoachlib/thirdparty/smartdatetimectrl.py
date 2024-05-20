@@ -1999,7 +1999,7 @@ class _RelativeChoicePopup(_PopupWindow):
         super(_RelativeChoicePopup, self).__init__(*args, **kwargs)
 
     def Fill(self, interior):
-        sizer = wx.FlexGridSizer(0, 2)
+        sizer = wx.FlexGridSizer(0, 2, gap=wx.Size(2,2))
         sizer.AddGrowableCol(0)
         interior.SetSizer(sizer)
         self.__sizer = sizer
