@@ -193,13 +193,21 @@ class SubjectPage(Page):
             creation_text += " - %s" % render.dateTime(
                 max_creation_datetime, humanReadable=True
             )
-        self.addEntry(_("Creation date"), creation_text, flags=[wx.ALIGN_RIGHT, wx.EXPAND])
+        self.addEntry(
+            _("Creation date"),
+            creation_text,
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
+        )
 
     def addModificationDateTimeEntry(self):
         self._modificationTextEntry = wx.StaticText(
             self, label=self.__modification_text()
         )
-        self.addEntry(_("Modification date"), self._modificationTextEntry, flags=[wx.ALIGN_RIGHT, wx.EXPAND])
+        self.addEntry(
+            _("Modification date"),
+            self._modificationTextEntry,
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
+        )
         for eventType in self.items[0].modificationEventTypes():
             if eventType.startswith("pubsub"):
                 pub.subscribe(self.onAttributeChanged, eventType)
@@ -280,7 +288,11 @@ class TaskSubjectPage(SubjectPage):
             wx.EVT_SPINCTRL,
             self.items[0].priorityChangedEventType(),
         )
-        self.addEntry(_("Priority"), self._priorityEntry, flags=[wx.ALIGN_RIGHT, wx.EXPAND])
+        self.addEntry(
+            _("Priority"),
+            self._priorityEntry,
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
+        )
 
     def entries(self):
         entries = super(TaskSubjectPage, self).entries()
@@ -565,7 +577,7 @@ class DatesPage(Page):
             ),
         )
         setattr(self, "_%sSync" % taskMethodName, datetimeSync)
-        self.addEntry(label, dateTimeEntry)
+        self.addEntry(label, dateTimeEntry, flags=[wx.ALIGN_RIGHT, wx.EXPAND])
 
     def __keep_delta(self, taskMethodName):
         datesTied = self.__settings.get("view", "datestied")
@@ -597,7 +609,11 @@ class DatesPage(Page):
             entry.EVT_DATETIMEENTRY,
             self.items[0].reminderChangedEventType(),
         )
-        self.addEntry(_("Reminder"), self._reminderDateTimeEntry)
+        self.addEntry(
+            _("Reminder"),
+            self._reminderDateTimeEntry,
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
+        )
 
     def addRecurrenceEntry(self):
         # pylint: disable=W0201
@@ -618,7 +634,11 @@ class DatesPage(Page):
             entry.EVT_RECURRENCEENTRY,
             self.items[0].recurrenceChangedEventType(),
         )
-        self.addEntry(_("Recurrence"), self._recurrenceEntry)
+        self.addEntry(
+            _("Recurrence"),
+            self._recurrenceEntry,
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
+        )
 
     def entries(self):
         # pylint: disable=E1101
