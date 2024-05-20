@@ -660,7 +660,7 @@ class ProgressPage(Page):
     def averagePercentageComplete(items):
         return (
             sum([item.percentageComplete() for item in items])
-            / float(len(items))
+            // float(len(items))
             if items
             else 0
         )
