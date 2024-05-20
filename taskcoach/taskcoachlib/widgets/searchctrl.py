@@ -90,7 +90,7 @@ class SearchCtrl(tooltip.ToolTipMixin, wx.SearchCtrl):
     def PopupMenu(self):  # pylint: disable=W0221
         rect = self.GetClientRect()
         x, y = rect[0], rect[1] + rect[3] + 3
-        self.PopupMenuXY(self.GetMenu(), x, y)
+        super(SearchCtrl, self).PopupMenu(self.Getmenu(), wx.Point(x, y))
 
     def bindEventHandlers(self):
         # pylint: disable=W0142,W0612,W0201
