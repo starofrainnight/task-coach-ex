@@ -172,7 +172,7 @@ class PercentageEntry(widgets.PanelWithBoxSizer):
     def _createSlider(self, percentage):
         slider = wx.Slider(
             self,
-            value=percentage,
+            value=int(percentage),
             style=wx.SL_AUTOTICKS,
             minValue=0,
             maxValue=100,
