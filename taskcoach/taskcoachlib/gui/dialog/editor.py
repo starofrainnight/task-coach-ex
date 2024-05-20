@@ -137,7 +137,11 @@ class SubjectPage(Page):
             wx.EVT_KILL_FOCUS,
             self.items[0].subjectChangedEventType(),
         )
-        self.addEntry(_("Subject"), self._subjectEntry)
+        self.addEntry(
+            _("Subject"),
+            self._subjectEntry,
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
+        )
 
     def addDescriptionEntry(self):
         # pylint: disable=W0201
@@ -171,7 +175,12 @@ class SubjectPage(Page):
             wx.EVT_KILL_FOCUS,
             self.items[0].descriptionChangedEventType(),
         )
-        self.addEntry(_("Description"), self._descriptionEntry, growable=True)
+        self.addEntry(
+            _("Description"),
+            self._descriptionEntry,
+            growable=True,
+            flags=[wx.ALIGN_TOP | wx.ALIGN_RIGHT, wx.EXPAND],
+        )
 
     def addCreationDateTimeEntry(self):
         creation_datetimes = [item.creationDateTime() for item in self.items]
@@ -184,13 +193,13 @@ class SubjectPage(Page):
             creation_text += " - %s" % render.dateTime(
                 max_creation_datetime, humanReadable=True
             )
-        self.addEntry(_("Creation date"), creation_text)
+        self.addEntry(_("Creation date"), creation_text, flags=[wx.ALIGN_RIGHT, wx.EXPAND])
 
     def addModificationDateTimeEntry(self):
         self._modificationTextEntry = wx.StaticText(
             self, label=self.__modification_text()
         )
-        self.addEntry(_("Modification date"), self._modificationTextEntry)
+        self.addEntry(_("Modification date"), self._modificationTextEntry, flags=[wx.ALIGN_RIGHT, wx.EXPAND])
         for eventType in self.items[0].modificationEventTypes():
             if eventType.startswith("pubsub"):
                 pub.subscribe(self.onAttributeChanged, eventType)
@@ -271,7 +280,7 @@ class TaskSubjectPage(SubjectPage):
             wx.EVT_SPINCTRL,
             self.items[0].priorityChangedEventType(),
         )
-        self.addEntry(_("Priority"), self._priorityEntry, flags=[None, wx.ALL])
+        self.addEntry(_("Priority"), self._priorityEntry, flags=[wx.ALIGN_RIGHT, wx.EXPAND])
 
     def entries(self):
         entries = super(TaskSubjectPage, self).entries()
