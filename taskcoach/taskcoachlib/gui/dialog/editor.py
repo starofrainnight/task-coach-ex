@@ -434,7 +434,7 @@ class TaskAppearancePage(Page):
             self.items[0].appearanceChangedEventType(),
         )
         setattr(self, "_%sColorSync" % colorType, colorSync)
-        self.addEntry(labelText, colorEntry, flags=[None, wx.ALL])
+        self.addEntry(labelText, colorEntry, flags=[wx.ALIGN_RIGHT, wx.ALL])
 
     def addFontEntry(self):
         # pylint: disable=W0201,E1101
@@ -459,7 +459,9 @@ class TaskAppearancePage(Page):
             entry.EVT_FONTENTRY,
             self.items[0].appearanceChangedEventType(),
         )
-        self.addEntry(_("Font"), self._fontEntry, flags=[None, wx.ALL])
+        self.addEntry(
+            _("Font"), self._fontEntry, flags=[wx.ALIGN_RIGHT, wx.ALL]
+        )
 
     def addIconEntry(self):
         # pylint: disable=W0201,E1101
@@ -474,7 +476,9 @@ class TaskAppearancePage(Page):
             entry.EVT_ICONENTRY,
             self.items[0].appearanceChangedEventType(),
         )
-        self.addEntry(_("Icon"), self._iconEntry, flags=[None, wx.ALL])
+        self.addEntry(
+            _("Icon"), self._iconEntry, flags=[wx.ALIGN_RIGHT, wx.ALL]
+        )
 
     def entries(self):
         return dict(
@@ -682,7 +686,11 @@ class ProgressPage(Page):
             entry.EVT_PERCENTAGEENTRY,
             self.items[0].percentageCompleteChangedEventType(),
         )
-        self.addEntry(_("Percentage complete"), self._percentageCompleteEntry)
+        self.addEntry(
+            _("Percentage complete"),
+            self._percentageCompleteEntry,
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
+        )
 
     @staticmethod
     def averagePercentageComplete(items):
@@ -720,7 +728,7 @@ class ProgressPage(Page):
         self.addEntry(
             _("Mark task completed when all children are completed?"),
             self._shouldMarkCompletedEntry,
-            flags=[None, wx.ALL],
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
         )
 
     def entries(self):
@@ -767,7 +775,9 @@ class BudgetPage(Page):
             wx.EVT_KILL_FOCUS,
             self.items[0].budgetChangedEventType(),
         )
-        self.addEntry(_("Budget"), self._budgetEntry, flags=[None, wx.ALL])
+        self.addEntry(
+            _("Budget"), self._budgetEntry, flags=[wx.ALIGN_RIGHT, wx.ALL]
+        )
 
     def addTimeSpentEntry(self):
         assert len(self.items) == 1
@@ -776,7 +786,9 @@ class BudgetPage(Page):
             self, self.items[0].timeSpent(), readonly=True
         )
         self.addEntry(
-            _("Time spent"), self._timeSpentEntry, flags=[None, wx.ALL]
+            _("Time spent"),
+            self._timeSpentEntry,
+            flags=[wx.ALIGN_RIGHT, wx.ALL],
         )
         pub.subscribe(
             self.onTimeSpentChanged, self.items[0].timeSpentChangedEventType()
@@ -795,7 +807,9 @@ class BudgetPage(Page):
             self, self.items[0].budgetLeft(), readonly=True
         )
         self.addEntry(
-            _("Budget left"), self._budgetLeftEntry, flags=[None, wx.ALL]
+            _("Budget left"),
+            self._budgetLeftEntry,
+            flags=[wx.ALIGN_RIGHT, wx.ALL],
         )
         pub.subscribe(
             self.onBudgetLeftChanged,
@@ -830,7 +844,9 @@ class BudgetPage(Page):
             self.items[0].hourlyFeeChangedEventType(),
         )
         self.addEntry(
-            _("Hourly fee"), self._hourlyFeeEntry, flags=[None, wx.ALL]
+            _("Hourly fee"),
+            self._hourlyFeeEntry,
+            flags=[wx.ALIGN_RIGHT, wx.ALL],
         )
 
     def addFixedFeeEntry(self):
@@ -849,7 +865,7 @@ class BudgetPage(Page):
             self.items[0].fixedFeeChangedEventType(),
         )
         self.addEntry(
-            _("Fixed fee"), self._fixedFeeEntry, flags=[None, wx.ALL]
+            _("Fixed fee"), self._fixedFeeEntry, flags=[wx.ALIGN_RIGHT, wx.ALL]
         )
 
     def addRevenueEntry(self):
@@ -858,7 +874,9 @@ class BudgetPage(Page):
         self._revenueEntry = entry.AmountEntry(
             self, revenue, readonly=True
         )  # pylint: disable=W0201
-        self.addEntry(_("Revenue"), self._revenueEntry, flags=[None, wx.ALL])
+        self.addEntry(
+            _("Revenue"), self._revenueEntry, flags=[wx.ALIGN_RIGHT, wx.ALL]
+        )
         pub.subscribe(
             self.onRevenueChanged, self.items[0].revenueChangedEventType()
         )
@@ -932,7 +950,7 @@ class PageWithViewer(Page):
         self.viewer = self.createViewer(
             self.__taskFile, self.__settings, self.__settingsSection
         )
-        self.addEntry(self.viewer, growable=True)
+        self.addEntry(self.viewer, growable=True, flags=[wx.EXPAND])
 
     def createViewer(self, taskFile, settings, settingsSection):
         raise NotImplementedError
