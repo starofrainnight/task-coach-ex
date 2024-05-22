@@ -47,16 +47,10 @@ class SpinCtrl(wx.Panel):
         maxValue = kwargs["max"] if "max" in kwargs else self.maxRange
         value = min(maxValue, max(int(value), minValue))
         self._textCtrl = wx.TextCtrl(self, value=str(value))
-        self._spinButton = wx.SpinButton(
-            self,
-            size=(-1, self._textCtrl.GetSize()[1]),
-            style=wx.SP_VERTICAL | wx.SP_ARROW_KEYS,
-        )
+        self._spinButton = wx.SpinButton(self)
         self._spinButton.SetRange(minValue, maxValue)
         self._spinButton.SetValue(value)
-        self._textCtrl.SetMinSize(
-            (size[0] - self._spinButton.GetSize()[0], -1)
-        )
+
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         sizer.AddMany([self._textCtrl, self._spinButton])
         self.SetSizerAndFit(sizer)
