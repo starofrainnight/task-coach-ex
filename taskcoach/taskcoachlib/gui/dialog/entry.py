@@ -166,7 +166,7 @@ class PercentageEntry(widgets.PanelWithBoxSizer):
         self._slider = self._createSlider(percentage)
         self.add(self._entry, flag=wx.ALIGN_LEFT, proportion=0)
         self.add((5, -1), flag=wx.ALIGN_LEFT, proportion=0)
-        self.add(self._slider, flag=wx.ALIGN_LEFT | wx.EXPAND, proportion=1)
+        self.add(self._slider, flag=wx.ALL | wx.EXPAND, proportion=1)
         self.fit()
 
     def _createSlider(self, percentage):
@@ -188,7 +188,7 @@ class PercentageEntry(widgets.PanelWithBoxSizer):
             value=percentage,
             min=0,
             max=100,
-            size=(500 if operating_system.isMac() else 190, -1),
+            size=(60 if operating_system.isMac() else 50, -1),
         )
         for eventType in wx.EVT_SPINCTRL, wx.EVT_KILL_FOCUS:
             entry.Bind(eventType, self.onSpin)
