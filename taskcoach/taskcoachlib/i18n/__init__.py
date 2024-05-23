@@ -142,7 +142,7 @@ def currentLanguageIsRightToLeft():
 
 
 def translate(string):
-    return Translator().translate(string)
+    return Translator(locale.getdefaultlocale()[0]).translate(string)
 
 
 _ = translate  # This prevents a warning from pygettext.py
