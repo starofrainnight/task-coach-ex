@@ -292,14 +292,14 @@ class Viewer(wx.Panel, patterns.Observer, metaclass=ViewerMeta):
                 # Some widgets change the selection and send selection events when
                 # deleting all items as part of the Destroy process. Ignore.
                 return
+
+            # Be sure all wx events are handled before we update our selection
+            # cache and notify our observers:
+            wx.CallAfter(self.updateSelection)
         except RuntimeError:
             # RuntimeError: wrapped C/C++ object of type EffortViewer has been deleted
             # FIXME: It's a bug?
             pass
-
-        # Be sure all wx events are handled before we update our selection
-        # cache and notify our observers:
-        wx.CallAfter(self.updateSelection)
 
     def updateSelection(self, sendViewerStatusEvent=True):
         newSelection = self.widget.curselection()
