@@ -353,7 +353,7 @@ class FileMenu(Menu):
             recentFileUICommand.removeFromMenu(self, self._window)
         self.__recentFileUICommands = []
         if self.__separator:
-            self.RemoveItem(self.__separator)
+            self.Remove(self.__separator)
             self.__separator = None
 
 
