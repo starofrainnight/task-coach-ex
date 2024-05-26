@@ -519,9 +519,7 @@ class BaseComboTreeBoxMixin(object):
         item."""
         if parent is None:
             parent = self._tree.GetRootItem()
-        item = self._tree.AppendItem(
-            parent, itemText, data=wx.TreeItemData(clientData)
-        )
+        item = self._tree.AppendItem(parent, itemText, data=clientData)
         if self._sort:
             self._tree.SortChildren(parent)
         return item
@@ -604,7 +602,7 @@ class BaseComboTreeBoxMixin(object):
         and/or as child of the ``parent`` item. The itemText is associated
         with clientData when not None.
         """
-        data = wx.TreeItemData(clientData)
+        data = clientData
         if parent is None:
             parent = self._tree.GetRootItem()
         if previous is None:
@@ -677,7 +675,7 @@ class BaseComboTreeBoxMixin(object):
 
         Returns the client data associated with the given item, if any.
         """
-        return self._tree.GetItemPyData(item)
+        return self._tree.GetItemData(item)
 
     def SetClientData(self, item, clientData):
         """
@@ -685,7 +683,7 @@ class BaseComboTreeBoxMixin(object):
 
         Associate the given client data with the provided item.
         """
-        self._tree.SetItemPyData(item, clientData)
+        self._tree.SetItemData(item, clientData)
 
     def GetValue(self):
         """

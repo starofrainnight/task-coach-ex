@@ -159,9 +159,7 @@ class TemplatesDialog(sized_controls.SizedDialog):
             ctrl.Enable(enable)
 
     def appendTemplate(self, parentItem, task):
-        item = self._templateList.Append(
-            parentItem, task.subject(), data=wx.TreeItemData(task)
-        )
+        item = self._templateList.Append(parentItem, task.subject(), data=task)
         for child in task.children():
             self.appendTemplate(item, child)
         return item
@@ -242,11 +240,11 @@ class TemplatesDialog(sized_controls.SizedDialog):
         self._templateList.Delete(selection)
         if prev.IsOk():
             item = self._templateList.InsertItem(
-                self._root, prev, task.subject(), data=wx.TreeItemData(task)
+                self._root, prev, task.subject(), data=task
             )
         else:
             item = self._templateList.PrependItem(
-                self._root, task.subject(), data=wx.TreeItemData(task)
+                self._root, task.subject(), data=task
             )
         for child in task.children():
             self.appendTemplate(item, child)
@@ -260,7 +258,7 @@ class TemplatesDialog(sized_controls.SizedDialog):
         task = self._templateList.GetItemData(selection).GetData()
         self._templateList.Delete(selection)
         item = self._templateList.InsertItem(
-            self._root, next, task.subject(), data=wx.TreeItemData(task)
+            self._root, next, task.subject(), data=task
         )
         for child in task.children():
             self.appendTemplate(item, child)
