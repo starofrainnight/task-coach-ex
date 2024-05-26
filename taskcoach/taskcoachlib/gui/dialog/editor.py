@@ -1608,7 +1608,7 @@ class EffortEditBook(Page):
         panel_sizer.Add(
             self._taskEntry,
             proportion=1,
-            flag=wx.EXPAND | wx.ALIGN_CENTER_VERTICAL,
+            flag=wx.EXPAND,
         )
         panel_sizer.Add((3, -1))
         panel_sizer.Add(
