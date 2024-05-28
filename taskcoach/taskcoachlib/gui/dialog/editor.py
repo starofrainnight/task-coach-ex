@@ -372,7 +372,7 @@ class AttachmentSubjectPage(SubjectPage):
         if all(item.type_ == "file" for item in self.items):
             button = wx.Button(panel, wx.ID_ANY, _("Browse"))
             sizer.Add(button, 0, wx.ALL, 3)
-            wx.EVT_BUTTON(button, wx.ID_ANY, self.onSelectLocation)
+            button.bind(wx.EVT_BUTTON, self.onSelectLocation)
         panel.SetSizer(sizer)
         self.addEntry(_("Location"), panel, flags=[None, wx.ALL | wx.EXPAND])
 
@@ -1703,10 +1703,10 @@ class EffortEditBook(Page):
         self._stopDateTimeEntry.LoadChoices(
             self._settings.get("feature", "sdtcspans_effort")
         )
-        sdtc.EVT_TIME_CHOICES_CHANGE(
-            self._stopDateTimeEntry, self.__onChoicesChanged
-        )
 
+        self._stopDateTimeEntry.Bind(
+            sdtc.EVT_TIME_CHOICES_CHANGE, self.__onChoicesChanged
+        )
         self.addEntry("", self._invalidPeriodMessage)
 
     def __create_start_from_last_effort_button(self):
