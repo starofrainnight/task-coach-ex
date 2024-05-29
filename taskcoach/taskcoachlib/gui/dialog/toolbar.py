@@ -381,7 +381,7 @@ class _ToolBarEditorInterior(wx.Panel):
                         item, self.__imgListIndex.get(uiCommand.bitmap, -1)
                     )
                     tree.EnableItem(item, enableCallback(uiCommand))
-                tree.SetItemData(item, uiCommand)
+                tree.SetItemPyData(item, uiCommand)
         finally:
             tree.Thaw()
 
