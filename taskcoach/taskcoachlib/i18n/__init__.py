@@ -16,7 +16,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import wx, os, sys, imp, tempfile, locale, gettext
+import wx, os, sys, importlib, tempfile, locale, gettext
 from taskcoachlib import patterns, operating_system
 from . import po2dict
 
@@ -36,7 +36,7 @@ class Translator(metaclass=patterns.Singleton):
         language = self._languageFromPoFilename(poFilename)
         pyFilename = self._tmpPyFilename()
         po2dict.make(poFilename, pyFilename)
-        module = imp.load_source(language, pyFilename)
+        module = importlib.load_source(language, pyFilename)
         os.remove(pyFilename)
         return module, language
 

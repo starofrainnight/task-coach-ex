@@ -159,7 +159,8 @@ If `inputfile' is -, standard input is read.
 )
 
 import os
-import imp
+import importlib.machinery
+import importlib.util
 import sys
 import glob
 import time
@@ -167,6 +168,7 @@ import getopt
 import token
 import tokenize
 import operator
+from enum import Enum
 from functools import reduce
 
 __version__ = "1.5"
@@ -199,6 +201,56 @@ msgstr ""
 
 """
 )
+
+
+class ModuleType(Enum):
+    SEARCH_ERROR = 0
+    PY_SOURCE = 1
+    PY_COMPILED = 2
+    C_EXTENSION = 3
+    PY_RESOURCE = 4
+    PKG_DIRECTORY = 5
+    C_BUILTIN = 6
+    PY_FROZEN = 7
+    PY_CODERESOURCE = 8
+    IMP_HOOK = 9
+
+
+_VALID_MODULE_TYPES = [
+    ModuleType.PY_SOURCE,
+    ModuleType.PY_COMPILED,
+    ModuleType.C_EXTENSION,
+]
+
+
+def importlib_get_suffixes(return_as_dict=False):
+    if return_as_dict:
+        suffixes = {
+            ModuleType.C_EXTENSION: (
+                importlib.machinery.EXTENSION_SUFFIXES,
+                "rb",
+            ),
+            ModuleType.PY_SOURCE: (importlib.machinery.SOURCE_SUFFIXES, "r"),
+            ModuleType.PY_COMPILED: (
+                importlib.machinery.BYTECODE_SUFFIXES,
+                "rb",
+            ),
+        }
+    else:
+        extensions = [
+            (s, "rb", ModuleType.C_EXTENSION)
+            for s in importlib.machinery.EXTENSION_SUFFIXES
+        ]
+        source = [
+            (s, "r", ModuleType.PY_SOURCE)
+            for s in importlib.machinery.SOURCE_SUFFIXES
+        ]
+        bytecode = [
+            (s, "rb", ModuleType.PY_COMPILED)
+            for s in importlib.machinery.BYTECODE_SUFFIXES
+        ]
+        suffixes = extensions + source + bytecode
+    return suffixes
 
 
 def usage(code, msg=""):
@@ -267,6 +319,9 @@ def containsAny(str, set):
     return 1 in [c in str for c in set]
 
 
+# def
+
+
 def _visit_pyfiles(list, dirname, names):
     """Helper for getFilesForName()."""
     # get extension for python source files
@@ -274,8 +329,8 @@ def _visit_pyfiles(list, dirname, names):
         global _py_ext
         _py_ext = [
             triple[0]
-            for triple in imp.get_suffixes()
-            if triple[2] == imp.PY_SOURCE
+            for triple in importlib_get_suffixes()
+            if triple[2] == ModuleType.PY_SOURCE
         ][0]
 
     # don't recurse into CVS directories
@@ -305,14 +360,16 @@ def _get_modpkg_path(dotted_name, pathlist=None):
     if len(parts) > 1:
         # we have a dotted path, import top-level package
         try:
-            file, pathname, description = imp.find_module(parts[0], pathlist)
+            file, pathname, description = importlib.find_module(
+                parts[0], pathlist
+            )
             if file:
                 file.close()
         except ImportError:
             return None
 
         # check if it's indeed a package
-        if description[2] == imp.PKG_DIRECTORY:
+        if description[2] == ModuleType.PKG_DIRECTORY:
             # recursively handle the remaining name parts
             pathname = _get_modpkg_path(parts[1], [pathname])
         else:
@@ -320,12 +377,15 @@ def _get_modpkg_path(dotted_name, pathlist=None):
     else:
         # plain name
         try:
-            file, pathname, description = imp.find_module(
+            file, pathname, description = importlib.find_module(
                 dotted_name, pathlist
             )
             if file:
                 file.close()
-            if description[2] not in [imp.PY_SOURCE, imp.PKG_DIRECTORY]:
+            if description[2] not in [
+                ModuleType.PY_SOURCE,
+                ModuleType.PKG_DIRECTORY,
+            ]:
                 pathname = None
         except ImportError:
             pathname = None
@@ -362,7 +422,7 @@ def getFilesForName(name):
 
     return []
 
- 
+
 class TokenEater:
     def __init__(self, options):
         self.__options = options
