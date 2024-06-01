@@ -36,3 +36,5 @@ TaskCoach.egg-info
 build
 __pycache__
 *.delta
+*.eggs
+*.egg
