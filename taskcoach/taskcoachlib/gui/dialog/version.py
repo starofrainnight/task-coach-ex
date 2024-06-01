@@ -21,6 +21,7 @@ from wx.lib.agw import hyperlink
 from taskcoachlib import meta
 from taskcoachlib.i18n import _
 from wx.lib import sized_controls
+from taskcoachlib.tools import wxhelper
 
 
 class VersionDialog(sized_controls.SizedDialog):  # pylint: disable=R0904,R0901
@@ -47,7 +48,9 @@ class VersionDialog(sized_controls.SizedDialog):  # pylint: disable=R0904,R0901
         buttonSizer = self.CreateStdDialogButtonSizer(wx.OK)
         self.SetButtonSizer(buttonSizer)
         self.Fit()
-        buttonSizer.GetAffirmativeButton().Bind(wx.EVT_BUTTON, self.onClose)
+        wxhelper.getButtonFromStdDialogButtonSizer(buttonSizer, wx.ID_OK).Bind(
+            wx.EVT_BUTTON, self.onClose
+        )
         self.Bind(wx.EVT_CLOSE, self.onClose)
 
     def createInterior(self, pane):
