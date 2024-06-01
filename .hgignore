@@ -15,7 +15,6 @@ taskcoach/taskcoachlib/i18n/pap.py
 taskcoach/taskcoachlib/thirdparty/customtreectrl.py
 taskcoach/taskcoachlib/thirdparty/hypertreelist.py
 taskcoach/taskcoachlib/thirdparty/pybonjour.py
-taskcoach/taskcoachlib/thirdparty/pyparsing.py
 taskcoach/taskcoachlib/thirdparty/wmi.py
 taskcoach/taskcoachlib/thirdparty/aui
 taskcoach/taskcoachlib/thirdparty/chardet
