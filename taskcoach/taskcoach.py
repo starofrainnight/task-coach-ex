@@ -20,9 +20,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import sys
+import inspect
 
 # Workaround for a bug in Ubuntu 10.10
 os.environ["XLIB_SKIP_ARGB_VISUALS"] = "1"
+
+try:
+    inspect.getargspec
+except AttributeError:
+    # Workaround for getargspec() missing inspect.getargspec() for python3.11 or later
+    def getargspec(func):
+        from inspect import signature
+
+        sig = signature(func)
+
+        # (args, varargs, keywords, defaults)
+        args = list(sig.parameters.keys())
+        varargs = None
+        keywords = None
+        defaults = {}
+
+        for param_name, param in sig.parameters.items():
+            if param.kind == param.VAR_POSITIONAL:
+                varargs = param_name
+            elif param.kind == param.VAR_KEYWORD:
+                keywords = param_name
+            if param.default != param.empty:
+                defaults[param_name] = param.default
+
+        return args, varargs, keywords, defaults
+
+    inspect.getargspec = getargspec
 
 # This prevents a message printed to the console when wx.lib.masked
 # is imported from taskcoachlib.widgets on Ubuntu 12.04 64 bits...
