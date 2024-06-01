@@ -55,7 +55,7 @@ install_requires = [
     "pypubsub",
     "twisted",
     "chardet>=5.2.0",
-    "python-dateutil>2.9.0",
+    "python-dateutil>=2.9.0",
     "pyparsing>=3.1.2",
     "lxml",
 ]
