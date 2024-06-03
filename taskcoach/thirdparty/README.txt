@@ -44,16 +44,6 @@ Copied on: 2012-08-05
 Changes for Task Coach: fixes for KDE4
 Patch files: patch01-lubuntu.diff, patch02-kde4.diff
 
-Component: pubsub
-Name: PyPubSub
-Author: Oliver Schoenborn <oliver.schoenborn@gmail.com>
-Version: 3.1.2
-Date: 2012-08-28
-License: BSD
-Source: http://pypi.python.org/pypi/PyPubSub
-Copied on: 2012-08-28
-Changes for Task Coach: pubsub.diff
-
 Component: ntlm
 Name: python-ntlm
 Author: Ben Dyer <ben.dyer@taguchimail.com>, Dmitry A. Rozmanov <dima@xenon.spb.ru>, Matthijs Mullender <info@zopyx.org>

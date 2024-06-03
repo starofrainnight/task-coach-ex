@@ -274,11 +274,6 @@ elif sys.argv[1] == "py2app":
                     includes=[
                         filename[:-3].replace("/", ".")
                         for filename in glob.glob("taskcoachlib/i18n/*.py")
-                        + glob.glob("taskcoachlib/thirdparty/pubsub/*.py")
-                        + glob.glob("taskcoachlib/thirdparty/pubsub/core/*.py")
-                        + glob.glob(
-                            "taskcoachlib/thirdparty/pubsub/core/kwargs/*.py"
-                        )
                     ],
                     plist=dict(
                         CFBundleIconFile="taskcoach.icns",

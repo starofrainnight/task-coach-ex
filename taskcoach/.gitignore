@@ -12,16 +12,11 @@ taskcoachlib/i18n/nds.py
 taskcoachlib/i18n/pap.py
 taskcoachlib/thirdparty/pybonjour.py
 taskcoachlib/thirdparty/wmi.py
-taskcoachlib/thirdparty/aui
-taskcoachlib/thirdparty/chardet
-taskcoachlib/thirdparty/dateutil
 taskcoachlib/thirdparty/gntp
-taskcoachlib/thirdparty/desktop
 taskcoachlib/thirdparty/keyring
 taskcoachlib/thirdparty/lockfile
 taskcoachlib/thirdparty/squaremap
 taskcoachlib/thirdparty/xdg
-taskcoachlib/thirdparty/pubsub
 taskcoachlib/persistence/xml/templates.py
 website.out
 taskcoachlib/used.txt
