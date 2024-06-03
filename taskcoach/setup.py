@@ -59,6 +59,7 @@ install_requires = [
     "pyparsing>=3.1.2",
     "lxml",
     "pyxdg",
+    "keyring",
 ]
 
 setup_requires = ["distro"]
