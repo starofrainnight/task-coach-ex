@@ -200,8 +200,6 @@ templates:
 	cd templates.in; $(PYTHON) make.py
 
 thirdpartymodules:
-	cd thirdparty; tar xzf keyring-3.7.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty keyring-3.7/keyring
-	cd thirdparty; tar xzf lockfile-0.12.2.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty lockfile-0.12.2/lockfile
 	cd thirdparty; tar xzf SquareMap-1.0.3.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty SquareMap-1.0.3/squaremap
 	cd thirdparty; tar xzf WMI-1.4.9.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty WMI-1.4.9/wmi.py
 	cd thirdparty; tar xzf pybonjour-1.1.1.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty pybonjour-1.1.1/pybonjour.py

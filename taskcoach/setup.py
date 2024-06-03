@@ -60,6 +60,8 @@ install_requires = [
     "lxml",
     "pyxdg",
     "keyring",
+    # FIXME: It's been replaced by new library "fasteners"
+    "lockfile>=0.12.2",
 ]
 
 setup_requires = ["distro"]

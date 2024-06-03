@@ -20,7 +20,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from taskcoachlib import meta, persistence, patterns, operating_system
 from taskcoachlib.i18n import _
-from taskcoachlib.thirdparty import lockfile
 from taskcoachlib.widgets import GetPassword
 from taskcoachlib.workarounds import ExceptionAsUnicode
 from taskcoachlib.gui.dialog import BackupManagerDialog
@@ -30,6 +29,7 @@ import gc
 import sys
 import codecs
 import traceback
+import lockfile
 
 try:
     from taskcoachlib.syncml import sync

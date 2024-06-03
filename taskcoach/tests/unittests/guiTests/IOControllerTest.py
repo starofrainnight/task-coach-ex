@@ -18,8 +18,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from taskcoachlib import gui, config, persistence
 from taskcoachlib.domain import task, note, category
-from taskcoachlib.thirdparty import lockfile
 from unittests import dummy
+import lockfile
 import os
 import shutil
 import wx

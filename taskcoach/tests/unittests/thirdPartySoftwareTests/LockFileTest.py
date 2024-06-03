@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import test, tempfile
-from taskcoachlib.thirdparty import lockfile
+import lockfile
 
 
 class LockFileTest(test.TestCase):
