@@ -18,7 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from taskcoachlib import meta, patterns, operating_system
 from taskcoachlib.i18n import _
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from taskcoachlib.workarounds import ExceptionAsUnicode
 import configparser
 import os

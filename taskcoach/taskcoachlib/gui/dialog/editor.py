@@ -27,7 +27,7 @@ from taskcoachlib.gui import viewer, uicommand, windowdimensionstracker
 from taskcoachlib.gui.dialog import entry, attributesync
 from taskcoachlib.gui.newid import IdProvider
 from taskcoachlib.i18n import _
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from taskcoachlib.thirdparty import smartdatetimectrl as sdtc
 from taskcoachlib.help.balloontips import BalloonTipManager
 import os.path

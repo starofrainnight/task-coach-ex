@@ -26,7 +26,7 @@ from taskcoachlib.domain.base import filter  # pylint: disable=W0622
 from taskcoachlib.gui import uicommand, dialog
 import taskcoachlib.gui.menu
 from taskcoachlib.i18n import _
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from . import base
 from . import mixin
 from . import refresher

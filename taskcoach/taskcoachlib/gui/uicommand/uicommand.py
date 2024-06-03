@@ -44,7 +44,7 @@ from taskcoachlib.gui.wizard import CSVImportWizard
 from taskcoachlib.i18n import _
 from taskcoachlib.mailer import sendMail
 from wx.lib.agw import hypertreelist
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from taskcoachlib.thirdparty.wxScheduler import (
     wxSCHEDULER_NEXT,
     wxSCHEDULER_PREV,

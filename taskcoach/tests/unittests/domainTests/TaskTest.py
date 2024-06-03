@@ -21,7 +21,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from taskcoachlib import patterns, config
 from taskcoachlib.domain import task, effort, date, attachment, note, category
 from taskcoachlib.domain.attribute.icon import getImagePlural, getImageOpen
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from unittests import asserts
 import test
 import wx

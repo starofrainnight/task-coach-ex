@@ -21,7 +21,7 @@ import urllib.parse
 from taskcoachlib import patterns, mailer
 from taskcoachlib.domain import base
 from taskcoachlib.tools import openfile
-from taskcoachlib.thirdparty.pubsub import pub
+from pubsub import pub
 from taskcoachlib.domain.note.noteowner import NoteOwner
 
 
