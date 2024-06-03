@@ -12,7 +12,6 @@ taskcoachlib/i18n/nds.py
 taskcoachlib/i18n/pap.py
 taskcoachlib/thirdparty/pybonjour.py
 taskcoachlib/thirdparty/wmi.py
-taskcoachlib/thirdparty/gntp
 taskcoachlib/thirdparty/squaremap
 taskcoachlib/persistence/xml/templates.py
 website.out
