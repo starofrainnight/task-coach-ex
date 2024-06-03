@@ -58,6 +58,7 @@ install_requires = [
     "python-dateutil>=2.9.0",
     "pyparsing>=3.1.2",
     "lxml",
+    "pyxdg",
 ]
 
 setup_requires = ["distro"]

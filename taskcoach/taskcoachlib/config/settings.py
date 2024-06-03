@@ -408,7 +408,7 @@ class Settings(CachingConfigParser):
     def pathToConfigDir(self, environ):
         try:
             if operating_system.isGTK():
-                from taskcoachlib.thirdparty.xdg import BaseDirectory
+                from xdg import BaseDirectory
 
                 path = BaseDirectory.save_config_path(meta.name)
             elif operating_system.isMac():
@@ -439,7 +439,7 @@ class Settings(CachingConfigParser):
     def _pathToDataDir(self, *args, **kwargs):
         forceGlobal = kwargs.pop("forceGlobal", False)
         if operating_system.isGTK():
-            from taskcoachlib.thirdparty.xdg import BaseDirectory
+            from xdg import BaseDirectory
 
             path = BaseDirectory.save_data_path(meta.name)
         elif operating_system.isMac():

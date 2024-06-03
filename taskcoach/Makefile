@@ -206,7 +206,6 @@ thirdpartymodules:
 	cd thirdparty; tar xzf WMI-1.4.9.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty WMI-1.4.9/wmi.py
 	cd thirdparty; tar xzf pybonjour-1.1.1.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty pybonjour-1.1.1/pybonjour.py
 	cd thirdparty; tar xzf gntp-d639fa2e981fe41196a5115ad64320b5061f004b.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty gntp/gntp
-	cd thirdparty; tar xzf pyxdg-0.25.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty pyxdg-0.25/xdg
 	$(PYTHON) fixinit.py
 
 website: changes
