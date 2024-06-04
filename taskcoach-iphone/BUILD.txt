@@ -1,8 +1,0 @@
-
-In order to build this project, you'll need the TapkuLibrary code, more
-specifically my own fork of it. Issue the following command in the
-Classes/ThirdParty directory:
-
-git clone git://github.com/fraca7/tapkulibrary.git
-
-Then select your configuration and build.
