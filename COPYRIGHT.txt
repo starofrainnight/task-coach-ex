@@ -18,7 +18,7 @@ Copyright (C) 2008 Joăo Alexandre de Toledo <jtoledo@griffo.com.br>
 Copyright (C) 2008 Marcin Zajaczkowski <mszpak@wp.pl>
 Copyright (C) 2011 Tobias Gradl <https://sourceforge.net/users/greentomato>
 Copyright (C) 2013 Ivan Romanov <https://sourceforge.net/u/ivanromanov/>
-Copyright (C) 2014 Joseph Wang <https://sourceforge.net/u/drjoe/profile/)>
+Copyright (C) 2014 Joseph Wang <https://sourceforge.net/u/drjoe/profile/>
 Copyright (C) 2014 Tom Monaco <http://www.thomasmonaco.com/>
 Copyright (C) 2014 Manab Chetia <manab.chetia@outlook.com>
 Copyright (C) 2015 Nicola (https://sourceforge.net/u/swisscarbon/profile/)
