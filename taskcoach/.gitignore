@@ -28,3 +28,8 @@ __pycache__
 *.delta
 *.eggs
 *.egg
+*.bak
+*.log
+*.old
+.vscode
+.idea
