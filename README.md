@@ -24,10 +24,22 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+## Clone the repository
+
+If you clone the sources from GitHub, you will notice that it might
+take a long time more than you expect (Hundreds MB!!).
+
+So you have better just checkout a few versions (500?) like this:
+
+    git clone --depth=500 https://github.com/taskcoach/taskcoach.git
+
+It's more faster than clone the whole history (There lots archives 
+inside the history tree)
+
 ## Prerequisites
 
-You need Python version 2.6 or higher, wxPython version 
-2.8.9.2-unicode or higher and Twisted. See http://www.taskcoach.org/devinfo.html 
+You need Python version 3.8 or higher, wxPython version 
+4.2.1-unicode or higher and Twisted. See http://www.taskcoach.org/devinfo.html 
 for more details and platform specific notes. 
     
 For building distributions and running tests, GNU make is used. Make 
