@@ -1,7 +1,15 @@
-=====================================================================
+# Welcome to Task Coach - Your friendly task manager
+
+Below you find information about running, testing, installing, and 
+developing Task Coach.
+
+## License
+
 Task Coach - Your friendly task manager
-Copyright (C) 2004-2016 Task Coach developers <developers@taskcoach.org>
-Copyright (C) 2009 George Weeks <gcw52@telus.net>
+
+Copyright (C) 2004-2016 Task Coach developers \<developers@taskcoach.org\>
+
+Copyright (C) 2009 George Weeks \<gcw52@telus.net\>
 
 Task Coach is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -15,14 +23,8 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-=====================================================================
 
-Welcome to Task Coach - Your friendly task manager
-
-Below you find information about running, testing, installing, and 
-developing Task Coach.
-
---- Prerequisites ---------------------------------------------------
+## Prerequisites
 
 You need Python version 2.6 or higher, wxPython version 
 2.8.9.2-unicode or higher and Twisted. See http://www.taskcoach.org/devinfo.html 
@@ -50,42 +52,42 @@ available for Windows, but installing this on OSX is a bit
 difficult. The best way is probably to install the C core using Brew,
 and then the Python extension using pip:
 
-brew install gcc
-brew tap homebrew/science
-brew install --use-gcc --universal igraph
-sudo pip install python-igraph
+    brew install gcc
+    brew tap homebrew/science
+    brew install --use-gcc --universal igraph
+    sudo pip install python-igraph
 
 Note that --universal is needed because wxWidgets 2.x is 32-bits only;
 --use-gcc is needed because of a bug in recent versions of the XCode
 command-line tools, which make the link fail.
 
---- Preparation -----------------------------------------------------
+## Preparation
 
 Task Coach needs a few generated files, run the following command
 to generate them:
 
-  make prepare
+    make prepare
 
---- Running ---------------------------------------------------------
+## Running
 
 Start Task Coach from the command line like this:
 
-  python taskcoach.py
+    python taskcoach.py
 
---- Testing ---------------------------------------------------------
+## Testing
 
 To run the tests, enter:
 
-  make unittests
+    make unittests
 
 Check out the Makefile for more testing options. The test script
 has a bunch of options as well, enter: 
 
-  cd tests; python test.py --help
+    cd tests; python test.py --help
 
 for more information.
 
---- Test coverage ---------------------------------------------------
+## Test coverage
 
 To create test coverage reports, you need to install coverage.py
 (http://pypi.python.org/pypi/coverage/). Install with:
@@ -98,7 +100,7 @@ To create a coverage report, enter:
 
 The coverage report is written to tests/coverage.out.
 
---- Building distributions ------------------------------------------
+## Building distributions
 
 Use the Makefile to create distributions (they are placed in dist/):
 
@@ -115,7 +117,7 @@ Coach app on Mac OS X you can also run:
 
 The TaskCoach.app ends up in build/
 
---- Installation ----------------------------------------------------
+## Installation
 
 There are two options to install Task Coach: 
 
@@ -139,7 +141,7 @@ need to force old files to be overwritten, like this:
 
   python setup.py install --force
 
---- Architecture overview -------------------------------------------
+## Architecture overview
   
 Task Coach is a desktop application, developed in Python and using 
 wxPython for its GUI. Task Coach is more or less developed using the 
@@ -158,7 +160,7 @@ gui and persistence layer. The persistence layer has no knowledge of
 the gui layer. But the gui layer has knowledge of both persistence 
 and domain layer.
 
---- Source code overview --------------------------------------------
+## Source code overview
 
 The Task Coach source code is organized in python packages. The most 
 important and biggest packages are the domain packages that contains 
@@ -199,5 +201,3 @@ is, but are included here to ease installation.
 The widgets package contains widgets that are used in the gui 
 package. These are mostly widgets from wxPython that need a slight 
 adaption in their interface.
-
-=====================================================================
