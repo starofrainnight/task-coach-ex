@@ -17,16 +17,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import wx, operator
-from taskcoachlib.thirdparty.squaremap import squaremap
+from squaremap import squaremap
 from . import tooltip
 from functools import reduce
 
 
-class SquareMap(tooltip.ToolTipMixin, squaremap.SquareMap):
+class TcSquareMap(tooltip.ToolTipMixin, squaremap.SquareMap):
     def __init__(self, parent, rootNode, onSelect, onEdit, popupMenu):
         self.__selection = []
         self.getItemTooltipData = parent.getItemTooltipData
-        super(SquareMap, self).__init__(
+        super().__init__(
             parent, model=rootNode, adapter=parent, highlight=False
         )
 

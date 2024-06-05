@@ -671,7 +671,7 @@ class SquareTaskViewer(BaseTaskTreeViewer):
     def createWidget(self):
         itemPopupMenu = self.createTaskPopupMenu()
         self._popupMenus.append(itemPopupMenu)
-        return widgets.SquareMap(
+        return widgets.TcSquareMap(
             self,
             SquareMapRootNode(self.presentation()),
             self.onSelect,

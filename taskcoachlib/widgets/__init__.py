@@ -23,7 +23,7 @@ from .itemctrl import Column
 from .listctrl import VirtualListCtrl
 from .checklistbox import CheckListBox
 from .treectrl import CheckTreeCtrl, TreeListCtrl
-from .squaremap import SquareMap
+from .tcsquaremap import TcSquareMap
 from .timeline import Timeline
 from .datectrl import DateTimeCtrl, TimeEntry
 from .textctrl import (
