@@ -104,11 +104,11 @@ for more information.
 To create test coverage reports, you need to install coverage.py
 (http://pypi.python.org/pypi/coverage/). Install with:
 
-  sudo easy_install coverage
+    sudo easy_install coverage
 
 To create a coverage report, enter:
 
-  make coverage
+    make coverage
 
 The coverage report is written to tests/coverage.out.
 
@@ -116,16 +116,16 @@ The coverage report is written to tests/coverage.out.
 
 Use the Makefile to create distributions (they are placed in dist/):
 
-  make windist # Creates installer for Windows
-  make dmg     # Creates disk image for Mac OS X
-  make rpm     # Creates generic RPM
-  make fedora  # Creates RPM for Fedora 8 or later
-  make deb     # Creates Debian package for Debian and Ubuntu
+    make windist # Creates installer for Windows
+    make dmg     # Creates disk image for Mac OS X
+    make rpm     # Creates generic RPM
+    make fedora  # Creates RPM for Fedora 8 or later
+    make deb     # Creates Debian package for Debian and Ubuntu
 
 Check out the Makefile for more details. E.g. to create the Task
 Coach app on Mac OS X you can also run:
 
-  python pymake.py py2app
+    python pymake.py py2app
 
 The TaskCoach.app ends up in build/
 
@@ -141,17 +141,17 @@ Alternatively, you can use the Python distutils setup script
 to let Python install Task Coach for you. In that case run the
 following command:
 
-  python setup.py install
+    python setup.py install
 
 You may need to run this command as root if you get 
 "Permission denied" errors:
 
-  sudo python setup.py install
+    sudo python setup.py install
 
 If you have a previous version of Task Coach installed, you may
 need to force old files to be overwritten, like this:
 
-  python setup.py install --force
+    python setup.py install --force
 
 ## Architecture overview
   
