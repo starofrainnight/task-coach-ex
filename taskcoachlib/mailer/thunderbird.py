@@ -124,7 +124,7 @@ def getDefaultProfileDir():
         if _PORTABLECACHE is not None:
             return _PORTABLECACHE
 
-        from taskcoachlib.thirdparty import wmi  # pylint: disable=W0404
+        import wmi  # pylint: disable=W0404
 
         for process in wmi.WMI().Win32_Process():
             if (

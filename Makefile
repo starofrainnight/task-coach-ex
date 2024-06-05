@@ -201,7 +201,6 @@ templates:
 
 thirdpartymodules:
 	cd thirdparty; tar xzf SquareMap-1.0.3.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty SquareMap-1.0.3/squaremap
-	cd thirdparty; tar xzf WMI-1.4.9.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty WMI-1.4.9/wmi.py
 	cd thirdparty; tar xzf pybonjour-1.1.1.tar.gz --strip-components=1 -C ../taskcoachlib/thirdparty pybonjour-1.1.1/pybonjour.py
 	$(PYTHON) fixinit.py
 
