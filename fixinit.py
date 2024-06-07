@@ -22,6 +22,7 @@ import os
 def visitDir(arg, dirname, names):
     try:
         names.remove(".hg")
+        names.remove(".git")
     except:
         pass
 
