@@ -539,10 +539,16 @@ class WindowBehaviorPage(SettingsPage):
             columns=2, growableColumn=-1, *args, **kwargs
         )
         self.addBooleanSetting(
-            "window", "splash", _("Show splash screen on startup")
+            "window",
+            "splash",
+            _("Show splash screen on startup"),
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
         )
         self.addBooleanSetting(
-            "window", "tips", _("Show tips window on startup")
+            "window",
+            "tips",
+            _("Show tips window on startup"),
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
         )
         self.addChoiceSetting(
             "window",
@@ -554,30 +560,40 @@ class WindowBehaviorPage(SettingsPage):
                 ("Always", _("Always")),
                 ("WhenClosedIconized", _("If it was iconized last session")),
             ],
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
         )
         self.addBooleanSetting(
             "version",
             "notify",
             _("Check for new version " "of %(name)s on startup")
             % meta.data.metaDict,
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
         )
         self.addBooleanSetting(
             "view",
             "developermessages",
             _("Check for " "messages from the %(name)s developers on startup")
             % meta.data.metaDict,
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
         )
         self.addBooleanSetting(
-            "window", "hidewheniconized", _("Hide main window when iconized")
+            "window",
+            "hidewheniconized",
+            _("Hide main window when iconized"),
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
         )
         self.addBooleanSetting(
-            "window", "hidewhenclosed", _("Minimize main window when closed")
+            "window",
+            "hidewhenclosed",
+            _("Minimize main window when closed"),
+            flags=[wx.ALIGN_RIGHT, wx.EXPAND],
         )
         if not operating_system.isMacOsXMavericks_OrNewer():
             self.addBooleanSetting(
                 "window",
                 "blinktaskbariconwhentrackingeffort",
                 _("Make clock in the task bar tick when tracking effort"),
+                flags=[wx.ALIGN_RIGHT, wx.EXPAND],
             )
         self.fit()
 
