@@ -372,7 +372,7 @@ class AttachmentSubjectPage(SubjectPage):
         if all(item.type_ == "file" for item in self.items):
             button = wx.Button(panel, wx.ID_ANY, _("Browse"))
             sizer.Add(button, 0, wx.ALL, 3)
-            button.bind(wx.EVT_BUTTON, self.onSelectLocation)
+            button.Bind(wx.EVT_BUTTON, self.onSelectLocation)
         panel.SetSizer(sizer)
         self.addEntry(_("Location"), panel, flags=[None, wx.ALL | wx.EXPAND])
 
