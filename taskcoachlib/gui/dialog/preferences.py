@@ -183,9 +183,9 @@ class SettingsPageBase(widgets.BookPage):
             timeCtrl,
             helpText=helpText,
             flags=(
-                wx.ALL | wx.ALIGN_CENTER_VERTICAL,
-                wx.ALL | wx.ALIGN_CENTER_VERTICAL,
-                wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+                wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT,
+                wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
+                wx.ALL | wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_LEFT,
             ),
         )
         self._timeSettings.append((section, setting, timeCtrl))
@@ -268,7 +268,7 @@ class SettingsPageBase(widgets.BookPage):
             fontButton,
             iconEntry,
             flags=(
-                wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+                wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL,
                 wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL,
                 wx.ALL | wx.EXPAND | wx.ALIGN_CENTER_VERTICAL,
                 wx.ALL
@@ -288,17 +288,17 @@ class SettingsPageBase(widgets.BookPage):
             FontColorSyncer(fgColorButton, bgColorButton, fontButton)
         )
 
-    def addPathSetting(self, section, setting, text, helpText=""):
+    def addPathSetting(self, section, setting, text, helpText="", **kwargs):
         pathChooser = widgets.DirectoryChooser(self, wx.ID_ANY)
         pathChooser.SetPath(self.gettext(section, setting))
-        self.addEntry(text, pathChooser, helpText=helpText)
+        self.addEntry(text, pathChooser, helpText=helpText, **kwargs)
         self._pathSettings.append((section, setting, pathChooser))
 
-    def addTextSetting(self, section, setting, text, helpText=""):
+    def addTextSetting(self, section, setting, text, helpText="", **kwargs):
         textChooser = wx.TextCtrl(
             self, wx.ID_ANY, self.gettext(section, setting)
         )
-        self.addEntry(text, textChooser, helpText=helpText)
+        self.addEntry(text, textChooser, helpText=helpText, **kwargs)
         self._textSettings.append((section, setting, textChooser))
 
     def setTextSetting(self, section, setting, value):
@@ -312,8 +312,8 @@ class SettingsPageBase(widgets.BookPage):
                 textChooser.Enable(enabled)
                 break
 
-    def addText(self, label, text):
-        self.addEntry(label, text)
+    def addText(self, label, text, **kwargs):
+        self.addEntry(label, text, **kwargs)
 
     def ok(self):
         for section, setting, checkBox in self._booleanSettings:
@@ -469,10 +469,16 @@ class SavePage(SettingsPage):
     def __init__(self, *args, **kwargs):
         super(SavePage, self).__init__(columns=3, *args, **kwargs)
         self.addBooleanSetting(
-            "file", "autosave", _("Auto save after every change")
+            "file",
+            "autosave",
+            _("Auto save after every change"),
+            flags=(wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL, wx.ALIGN_LEFT),
         )
         self.addBooleanSetting(
-            "file", "autoload", _("Auto load when the file changes on disk")
+            "file",
+            "autoload",
+            _("Auto load when the file changes on disk"),
+            flags=(wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL, wx.ALIGN_LEFT),
         )
         self.addBooleanSetting(
             "file",
@@ -482,6 +488,11 @@ class SavePage(SettingsPage):
                 "Try to detect changes to the task file in real time.\nDo not check this if your task file is on a network share.\nYou must restart %s after changing this."
             )
             % meta.name,
+            flags=(
+                wx.ALIGN_RIGHT | wx.ALIGN_TOP,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.addBooleanSetting(
             "file",
@@ -492,6 +503,11 @@ class SavePage(SettingsPage):
             )
             % meta.filename,
             _("For running %s from a removable medium") % meta.name,
+            flags=(
+                wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL,
+                wx.ALIGN_LEFT | wx.ALIGN_CENTRE_VERTICAL,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.addPathSetting(
             "file",
@@ -500,6 +516,13 @@ class SavePage(SettingsPage):
             _(
                 "When adding an attachment, try to make\n"
                 "its path relative to this one."
+            ),
+            flags=(
+                wx.ALIGN_RIGHT | wx.ALIGN_TOP,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
             ),
         )
         self.addMultipleChoiceSettings(
@@ -513,6 +536,13 @@ class SavePage(SettingsPage):
                 "but with extension .txt"
             )
             % meta.name,
+            flags=(
+                wx.ALIGN_RIGHT | wx.ALIGN_TOP,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.addMultipleChoiceSettings(
             "file",
@@ -525,6 +555,13 @@ class SavePage(SettingsPage):
                 "but with extension .txt"
             )
             % meta.name,
+            flags=(
+                wx.ALIGN_RIGHT | wx.ALIGN_TOP,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.fit()
 
@@ -684,9 +721,9 @@ class LanguagePage(SettingsPage):
             "restart",
             choices,
             flags=(
-                None,
-                wx.ALL | wx.ALIGN_CENTER_VERTICAL,
-                wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+                wx.ALIGN_RIGHT,
+                wx.EXPAND,
+                wx.ALIGN_LEFT,
             ),
             sep="-",
         )
@@ -706,7 +743,14 @@ class LanguagePage(SettingsPage):
         urlCtrl = HyperLinkCtrl(panel, -1, label=url, URL=url)
         sizer.Add(urlCtrl)
         panel.SetSizerAndFit(sizer)
-        self.addText(_("Language not found?"), panel)
+        self.addText(
+            _("Language not found?"),
+            panel,
+            flags=(
+                wx.ALIGN_RIGHT,
+                wx.EXPAND,
+            ),
+        )
         self.fit()
 
     def ok(self):
@@ -743,6 +787,10 @@ class TaskAppearancePage(SettingsPage):
                 "These appearance settings can be overridden "
                 "for individual tasks in the task edit dialog."
             ),
+            flags=(
+                wx.ALIGN_LEFT,
+                wx.EXPAND,
+            ),
         )
         self.fit()
 
@@ -761,20 +809,32 @@ class FeaturesPage(SettingsPage):
                 "All settings on this tab require a restart of %s "
                 "to take effect"
             )
-            % meta.name
+            % meta.name,
+            flags=(wx.ALIGN_CENTER,),
         )
         try:
             import taskcoachlib.syncml.core  # pylint: disable=W0404,W0612
         except ImportError:
             pass
         else:
-            self.addBooleanSetting("feature", "syncml", _("Enable SyncML"))
+            self.addBooleanSetting(
+                "feature",
+                "syncml",
+                _("Enable SyncML"),
+                flags=(wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL, wx.EXPAND),
+            )
         self.addBooleanSetting(
-            "feature", "iphone", _("Enable iPhone synchronization")
+            "feature",
+            "iphone",
+            _("Enable iPhone synchronization"),
+            flags=(wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL, wx.EXPAND),
         )
         if operating_system.isGTK():
             self.addBooleanSetting(
-                "feature", "usesm2", _("Use X11 session management")
+                "feature",
+                "usesm2",
+                _("Use X11 session management"),
+                flags=(wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL, wx.EXPAND),
             )
         self.addChoiceSetting(
             "view",
@@ -782,6 +842,13 @@ class FeaturesPage(SettingsPage):
             _("Start of work week"),
             " ",
             [("monday", _("Monday")), ("sunday", _("Sunday"))],
+            flags=(
+                wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.addTimeSetting(
             "view",
@@ -805,6 +872,7 @@ class FeaturesPage(SettingsPage):
                 "Use gradients in calendar views.\n"
                 "This may slow down Task Coach."
             ),
+            flags=(wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL, wx.EXPAND),
         )
         self.addChoiceSetting(
             "view",
@@ -823,8 +891,8 @@ class FeaturesPage(SettingsPage):
                 for minutes in ("5", "6", "10", "15", "20", "30")
             ],
             flags=(
-                None,
-                wx.ALL | wx.ALIGN_CENTER_VERTICAL,
+                wx.ALL | wx.ALIGN_TOP | wx.ALIGN_RIGHT,
+                wx.ALL | wx.ALIGN_TOP,
                 wx.ALL | wx.ALIGN_CENTER_VERTICAL,
             ),
         )
@@ -838,6 +906,13 @@ class FeaturesPage(SettingsPage):
                 "efforts."
             )
             % meta.data.metaDict,
+            flags=(
+                wx.ALL | wx.ALIGN_CENTRE_VERTICAL | wx.ALIGN_RIGHT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.addBooleanSetting(
             "feature",
@@ -847,6 +922,11 @@ class FeaturesPage(SettingsPage):
                 "Display one hour, fifteen minutes as 1.25 instead of 1:15\n"
                 "This is useful when creating invoices."
             ),
+            flags=(
+                wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL,
+                wx.ALIGN_LEFT | wx.ALIGN_CENTRE_VERTICAL,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.addBooleanSetting(
             "view",
@@ -855,6 +935,7 @@ class FeaturesPage(SettingsPage):
                 "Show a popup with the description of an item\n"
                 "when hovering over it"
             ),
+            flags=(wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL, wx.EXPAND),
         )
         self.fit()
 
@@ -879,6 +960,11 @@ class TaskDatesPage(SettingsPage):
             "markparentcompletedwhenallchildrencompleted",
             _("Mark parent task completed when all children are completed"),
             helpText="override",
+            flags=(
+                wx.ALIGN_RIGHT,
+                wx.ALIGN_LEFT,
+                wx.EXPAND,
+            ),
         )
         self.addIntegerSetting(
             "behavior",
@@ -886,7 +972,7 @@ class TaskDatesPage(SettingsPage):
             _("Number of hours that tasks are considered to be 'due soon'"),
             minimum=0,
             maximum=9999,
-            flags=(None, wx.ALL | wx.ALIGN_LEFT),
+            flags=(wx.ALIGN_RIGHT, wx.ALL | wx.ALIGN_LEFT),
         )
         choices = [
             ("", _("Nothing")),
@@ -907,7 +993,7 @@ class TaskDatesPage(SettingsPage):
             ),
             "",
             choices,
-            flags=(None, wx.ALL | wx.ALIGN_LEFT),
+            flags=(wx.ALIGN_RIGHT, wx.ALL | wx.ALIGN_LEFT),
         )
 
         check_choices = [("preset", _("Preset")), ("propose", _("Propose"))]
@@ -933,6 +1019,12 @@ class TaskDatesPage(SettingsPage):
             check_choices,
             day_choices,
             time_choices,
+            flags=(
+                wx.ALIGN_RIGHT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.addChoiceSetting(
             "view",
@@ -942,6 +1034,12 @@ class TaskDatesPage(SettingsPage):
             check_choices,
             day_choices,
             time_choices,
+            flags=(
+                wx.ALIGN_RIGHT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.addChoiceSetting(
             "view",
@@ -951,6 +1049,12 @@ class TaskDatesPage(SettingsPage):
             check_choices,
             day_choices,
             time_choices,
+            flags=(
+                wx.ALIGN_RIGHT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.addChoiceSetting(
             "view",
@@ -960,6 +1064,12 @@ class TaskDatesPage(SettingsPage):
             [check_choices[1]],
             day_choices,
             time_choices,
+            flags=(
+                wx.ALIGN_RIGHT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.addChoiceSetting(
             "view",
@@ -969,6 +1079,12 @@ class TaskDatesPage(SettingsPage):
             check_choices,
             day_choices,
             time_choices,
+            flags=(
+                wx.ALIGN_RIGHT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+                wx.ALIGN_LEFT,
+            ),
         )
         self.__add_help_text()
         self.fit()
@@ -1008,7 +1124,10 @@ class TaskReminderPage(SettingsPage):
             _("Notification system to use for reminders"),
             "",
             names,
-            flags=(None, wx.ALL | wx.ALIGN_LEFT),
+            flags=(
+                wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL,
+                wx.ALL | wx.EXPAND,
+            ),
         )
         if operating_system.isMac() or operating_system.isGTK():
             self.addBooleanSetting(
@@ -1017,7 +1136,7 @@ class TaskReminderPage(SettingsPage):
                 _("Let the computer say the reminder"),
                 _("(Needs espeak)") if operating_system.isGTK() else "",
                 flags=(
-                    None,
+                    wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL,
                     wx.ALL | wx.ALIGN_LEFT,
                     wx.ALL | wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL,
                 ),
@@ -1031,14 +1150,17 @@ class TaskReminderPage(SettingsPage):
             _("Default snooze time to use after reminder"),
             "",
             snoozeChoices,
-            flags=(None, wx.ALL | wx.ALIGN_LEFT),
+            flags=(
+                wx.ALIGN_RIGHT | wx.ALIGN_CENTRE_VERTICAL,
+                wx.ALL | wx.ALIGN_LEFT,
+            ),
         )
         self.addMultipleChoiceSettings(
             "view",
             "snoozetimes",
             _("Snooze times to offer in task reminder dialog"),
             date.snoozeChoices[1:],
-            flags=(wx.ALIGN_TOP | wx.ALL, None),
+            flags=(wx.ALIGN_TOP | wx.ALIGN_RIGHT, wx.ALL | wx.EXPAND),
         )  # Don't offer "Don't snooze" as a choice
         self.fit()
 
