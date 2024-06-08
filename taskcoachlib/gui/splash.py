@@ -17,6 +17,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import wx
+
+# FIXME: Adding duplicate image handler for 'Windows bitmap file'
+# FIXME: Adding duplicate animation handler for '1' type
+# FIXME: Adding duplicate animation handler for '2' type
 import wx.adv
 from taskcoachlib import i18n
 from wx.lib.embeddedimage import PyEmbeddedImage
