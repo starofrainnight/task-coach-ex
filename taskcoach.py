@@ -20,53 +20,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
 import sys
-import inspect
-from collections import namedtuple
 
 # Workaround for a bug in Ubuntu 10.10
 os.environ["XLIB_SKIP_ARGB_VISUALS"] = "1"
 
 import taskcoachlib.workarounds.monkeypatches
 
-try:
-    inspect.getargspec
-except AttributeError:
-    ArgSpec = namedtuple("ArgSpec", "args varargs keywords defaults")
-
-    # Workaround for getargspec() missing inspect.getargspec() for python3.11 or later
-    def getargspec(func):
-        """Get the names and default values of a function's parameters.
-
-        A tuple of four things is returned: (args, varargs, keywords, defaults).
-        'args' is a list of the argument names, including keyword-only argument names.
-        'varargs' and 'keywords' are the names of the * and ** parameters or None.
-        'defaults' is an n-tuple of the default values of the last n parameters.
-
-        This function is deprecated, as it does not support annotations or
-        keyword-only parameters and will raise ValueError if either is present
-        on the supplied callable.
-
-        For a more structured introspection API, use inspect.signature() instead.
-
-        Alternatively, use getfullargspec() for an API with a similar namedtuple
-        based interface, but full support for annotations and keyword-only
-        parameters.
-
-        Deprecated since Python 3.5, use `inspect.getfullargspec()`.
-        """
-        from inspect import getfullargspec
-
-        args, varargs, varkw, defaults, kwonlyargs, kwonlydefaults, ann = (
-            getfullargspec(func)
-        )
-        if kwonlyargs or ann:
-            raise ValueError(
-                "Function has keyword-only parameters or annotations"
-                ", use inspect.signature() API which can support them"
-            )
-        return ArgSpec(args, varargs, varkw, defaults)
-
-    inspect.getargspec = getargspec
 
 # This prevents a message printed to the console when wx.lib.masked
 # is imported from taskcoachlib.widgets on Ubuntu 12.04 64 bits...
