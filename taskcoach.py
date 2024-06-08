@@ -26,6 +26,8 @@ from collections import namedtuple
 # Workaround for a bug in Ubuntu 10.10
 os.environ["XLIB_SKIP_ARGB_VISUALS"] = "1"
 
+import taskcoachlib.workarounds.monkeypatches
+
 try:
     inspect.getargspec
 except AttributeError:
