@@ -3,20 +3,23 @@
 
 import wx
 
+
 class wxTimeFormat(object):
-	"""Singleton used to format times."""
+    """Singleton used to format times."""
 
-	def __init__(self):
-		def defaultFormat(dt, includeMinutes=False):
-			if includeMinutes:
-				return dt.Format('%H:%M')
-			return dt.Format('%H')
-		self.__fmt = defaultFormat
+    def __init__(self):
+        def defaultFormat(dt, includeMinutes=False):
+            if includeMinutes:
+                return dt.Format("%H:%M")
+            return dt.Format("%H")
 
-	def FormatTime(self, dateTime, includeMinutes=False):
-		return self.__fmt(dateTime, includeMinutes=includeMinutes)
+        self.__fmt = defaultFormat
 
-	def SetFormatFunction(self, func):
-		self.__fmt = func
+    def FormatTime(self, dateTime, includeMinutes=False):
+        return self.__fmt(dateTime, includeMinutes=includeMinutes)
+
+    def SetFormatFunction(self, func):
+        self.__fmt = func
+
 
 wxTimeFormat = wxTimeFormat()
