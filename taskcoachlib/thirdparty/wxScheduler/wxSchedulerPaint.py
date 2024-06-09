@@ -741,9 +741,9 @@ class wxSchedulerPaint(object):
                 w, h = self._paintDailyHeaders(
                     drawer,
                     theDay,
-                    x + 1.0 * width / self._periodCount * idx,
+                    int(x + 1.0 * width / self._periodCount * idx),
                     y,
-                    1.0 * width / self._periodCount,
+                    int(1.0 * width / self._periodCount),
                     height,
                 )
                 maxDY = max(maxDY, h)
@@ -756,9 +756,9 @@ class wxSchedulerPaint(object):
                 self._paintDailyHeaders(
                     drawer,
                     theDay,
-                    x + 1.0 * width / self._periodCount * idx,
+                    int(x + 1.0 * width / self._periodCount * idx),
                     y,
-                    1.0 * width / self._periodCount,
+                    int(1.0 * width / self._periodCount),
                     height,
                     includeText=False,
                 )
@@ -775,9 +775,9 @@ class wxSchedulerPaint(object):
                 maxDY = 0
                 for idx in range(self._periodCount):
                     _, h = drawer.DrawHours(
-                        x + 1.0 * width / self._periodCount * idx,
+                        int(x + 1.0 * width / self._periodCount * idx),
                         y,
-                        1.0 * width / self._periodCount,
+                        int(1.0 * width / self._periodCount),
                         height,
                         self._style,
                     )
@@ -809,9 +809,9 @@ class wxSchedulerPaint(object):
                 dw, dh = self._paintDay(
                     drawer,
                     theDay,
-                    x + 1.0 * width / self._periodCount * idx,
+                    int(x + 1.0 * width / self._periodCount * idx),
                     y,
-                    1.0 * width / self._periodCount,
+                    int(1.0 * width / self._periodCount),
                     height,
                 )
                 w += dw
@@ -841,9 +841,9 @@ class wxSchedulerPaint(object):
                 color = None
             w, h = drawer.DrawDayHeader(
                 theDay,
-                x + weekday * 1.0 * width / 7,
+                int(x + weekday * 1.0 * width / 7),
                 y,
-                1.0 * width / 7,
+                int(1.0 * width / 7),
                 height,
                 highlight=color,
             )
@@ -880,9 +880,9 @@ class wxSchedulerPaint(object):
                     self._paintWeeklyHeaders(
                         drawer,
                         theDay,
-                        x + 1.0 * width / self._periodCount * idx,
+                        int(x + 1.0 * width / self._periodCount * idx),
                         y,
-                        1.0 * width / self._periodCount,
+                        int(1.0 * width / self._periodCount),
                         height,
                     ),
                 )
@@ -913,14 +913,16 @@ class wxSchedulerPaint(object):
                     self._paintDay(
                         drawer,
                         theDay,
-                        x
-                        + (weekday + 7 * idx)
-                        * 1.0
-                        * width
-                        / 7
-                        / self._periodCount,
+                        int(
+                            x
+                            + (weekday + 7 * idx)
+                            * 1.0
+                            * width
+                            / 7
+                            / self._periodCount
+                        ),
                         y,
-                        1.0 * width / 7 / self._periodCount,
+                        int(1.0 * width / 7 / self._periodCount),
                         height,
                     )
                 day.AddDS(wx.DateSpan(weeks=1))
@@ -970,14 +972,14 @@ class wxSchedulerPaint(object):
                     color = None
                 w, h = drawer.DrawSimpleDayHeader(
                     theDay,
-                    x + 1.0 * idx * width / daysCount,
+                    int(x + 1.0 * idx * width / daysCount),
                     y + h,
-                    1.0 * width / daysCount,
+                    int(1.0 * width / daysCount),
                     height,
                     highlight=color,
                 )
                 self._headerBounds.append(
-                    (x + 1.0 * (idx + 1) * width / daysCount, y + h, height)
+                    int((x + 1.0 * (idx + 1) * width / daysCount), y + h, height)
                 )
                 maxDY = max(maxDY, h)
 
@@ -1404,9 +1406,9 @@ class wxSchedulerPaint(object):
                 _, h = self._paintDailyHeaders(
                     drawer,
                     theDay,
-                    x + 1.0 * width / self._periodCount * idx,
+                    int(x + 1.0 * width / self._periodCount * idx),
                     y,
-                    1.0 * width / self._periodCount,
+                    int(1.0 * width / self._periodCount),
                     36,
                 )
                 maxDY = max(maxDY, h)
@@ -1422,9 +1424,9 @@ class wxSchedulerPaint(object):
                 h = self._paintWeeklyHeaders(
                     drawer,
                     theDay,
-                    x + 1.0 * width / self._periodCount * idx,
+                    int(x + 1.0 * width / self._periodCount * idx),
                     y,
-                    1.0 * width / self._periodCount,
+                    int(1.0 * width / self._periodCount),
                     36,
                 )
                 maxDY = max(maxDY, h)
