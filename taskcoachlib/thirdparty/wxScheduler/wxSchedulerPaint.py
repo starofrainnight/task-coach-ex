@@ -979,7 +979,9 @@ class wxSchedulerPaint(object):
                     highlight=color,
                 )
                 self._headerBounds.append(
-                    int((x + 1.0 * (idx + 1) * width / daysCount), y + h, height)
+                    int((x + 1.0 * (idx + 1) * width / daysCount)),
+                    y + h,
+                    height,
                 )
                 maxDY = max(maxDY, h)
 
