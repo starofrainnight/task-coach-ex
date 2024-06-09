@@ -1194,29 +1194,25 @@ class wxSchedulerPaint(object):
         memDC = wx.MemoryDC()
         memDC.SelectObject(self._bitmap)
         try:
-            memDC.BeginDrawing()
-            try:
-                memDC.SetBackground(wx.Brush(SCHEDULER_BACKGROUND_BRUSH()))
-                memDC.SetPen(FOREGROUND_PEN)
-                memDC.Clear()
-                memDC.SetFont(wx.NORMAL_FONT)
+            memDC.SetBackground(wx.Brush(SCHEDULER_BACKGROUND_BRUSH()))
+            memDC.SetPen(FOREGROUND_PEN)
+            memDC.Clear()
+            memDC.SetFont(wx.NORMAL_FONT)
 
-                if self._drawerClass.use_gc:
-                    context = wx.GraphicsContext.Create(memDC)
-                    context.SetFont(wx.NORMAL_FONT, wx.BLACK)
-                else:
-                    context = memDC
-                    context.SetFont(wx.NORMAL_FONT)
+            if self._drawerClass.use_gc:
+                context = wx.GraphicsContext.Create(memDC)
+                context.SetFont(wx.NORMAL_FONT, wx.BLACK)
+            else:
+                context = memDC
+                context.SetFont(wx.NORMAL_FONT)
 
-                width, height = self.DoPaint(
-                    self._drawerClass(context, self._lstDisplayedHours),
-                    0,
-                    0,
-                    size.GetWidth(),
-                    size.GetHeight(),
-                )
-            finally:
-                memDC.EndDrawing()
+            width, height = self.DoPaint(
+                self._drawerClass(context, self._lstDisplayedHours),
+                0,
+                0,
+                size.GetWidth(),
+                size.GetHeight(),
+            )
         finally:
             memDC.SelectObject(wx.NullBitmap)
 
@@ -1239,7 +1235,6 @@ class wxSchedulerPaint(object):
             memDC = wx.MemoryDC()
             memDC.SelectObject(self._bitmap)
             try:
-                memDC.BeginDrawing()
                 memDC.SetBackground(wx.Brush(SCHEDULER_BACKGROUND_BRUSH()))
                 memDC.SetPen(FOREGROUND_PEN)
                 memDC.SetFont(wx.NORMAL_FONT)
@@ -1278,11 +1273,7 @@ class wxSchedulerPaint(object):
             dc = wx.PaintDC(self)
             self.PrepareDC(dc)
 
-        dc.BeginDrawing()
-        try:
-            dc.DrawBitmap(self._bitmap, 0, 0, False)
-        finally:
-            dc.EndDrawing()
+        dc.DrawBitmap(self._bitmap, 0, 0, False)
 
     def SetResizable(self, value):
         """
@@ -1372,88 +1363,84 @@ class wxSchedulerPaint(object):
 
     def _OnPaintHeaders(self, evt):
         dc = wx.PaintDC(self._headerPanel)
-        dc.BeginDrawing()
-        try:
-            dc.SetBackground(wx.Brush(SCHEDULER_BACKGROUND_BRUSH()))
-            dc.SetPen(FOREGROUND_PEN)
-            dc.Clear()
-            dc.SetFont(wx.NORMAL_FONT)
+        dc.SetBackground(wx.Brush(SCHEDULER_BACKGROUND_BRUSH()))
+        dc.SetPen(FOREGROUND_PEN)
+        dc.Clear()
+        dc.SetFont(wx.NORMAL_FONT)
 
-            if self._drawerClass.use_gc:
-                context = wx.GraphicsContext.Create(dc)
-                context.SetFont(wx.NORMAL_FONT, wx.BLACK)
-            else:
-                context = dc
-                context.SetFont(wx.NORMAL_FONT)
+        if self._drawerClass.use_gc:
+            context = wx.GraphicsContext.Create(dc)
+            context.SetFont(wx.NORMAL_FONT, wx.BLACK)
+        else:
+            context = dc
+            context.SetFont(wx.NORMAL_FONT)
 
-            drawer = self._drawerClass(context, self._lstDisplayedHours)
+        drawer = self._drawerClass(context, self._lstDisplayedHours)
 
-            if self._resizable:
-                width, _ = self.GetVirtualSize()
-            else:
-                width, _ = self.CalcMinSize()
+        if self._resizable:
+            width, _ = self.GetVirtualSize()
+        else:
+            width, _ = self.CalcMinSize()
 
-            day = utils.copyDate(self.GetDate())
+        day = utils.copyDate(self.GetDate())
 
-            x, y = 0, 0
+        x, y = 0, 0
 
-            # Take horizontal scrolling into account
-            x0, _ = self.GetViewStart()
-            xu, _ = self.GetScrollPixelsPerUnit()
-            x0 *= xu
-            x -= x0
+        # Take horizontal scrolling into account
+        x0, _ = self.GetViewStart()
+        xu, _ = self.GetScrollPixelsPerUnit()
+        x0 *= xu
+        x -= x0
 
-            self._headerBounds = []
+        self._headerBounds = []
 
-            if self._viewType == wxSCHEDULER_DAILY:
-                if self._style == wxSCHEDULER_VERTICAL:
-                    x += LEFT_COLUMN_SIZE
-                    width -= LEFT_COLUMN_SIZE
-                theDay = utils.copyDateTime(day)
-                maxDY = 0
-                for idx in range(self._periodCount):
-                    _, h = self._paintDailyHeaders(
-                        drawer,
-                        theDay,
-                        x + 1.0 * width / self._periodCount * idx,
-                        y,
-                        1.0 * width / self._periodCount,
-                        36,
-                    )
-                    maxDY = max(maxDY, h)
-                    theDay.AddDS(wx.DateSpan(days=1))
-                h = maxDY
-            elif self._viewType == wxSCHEDULER_WEEKLY:
-                if self._style == wxSCHEDULER_VERTICAL:
-                    x += LEFT_COLUMN_SIZE
-                    width -= LEFT_COLUMN_SIZE
-                theDay = utils.copyDateTime(day)
-                maxDY = 0
-                for idx in range(self._periodCount):
-                    h = self._paintWeeklyHeaders(
-                        drawer,
-                        theDay,
-                        x + 1.0 * width / self._periodCount * idx,
-                        y,
-                        1.0 * width / self._periodCount,
-                        36,
-                    )
-                    maxDY = max(maxDY, h)
-                    theDay.AddDS(wx.DateSpan(weeks=1))
-                h = maxDY
-            elif self._viewType == wxSCHEDULER_MONTHLY:
-                _, h = self._paintMonthlyHeaders(drawer, day, x, y, width, 36)
-
-            minW, minH = self._headerPanel.GetMinSize()
-            if minH != h:
-                self._headerPanel.SetMinSize(wx.Size(-1, h))
-                self._headerPanel.GetParent().Layout()
-
-            # Mmmmh, maybe we'll support this later, but not right now
+        if self._viewType == wxSCHEDULER_DAILY:
             if self._style == wxSCHEDULER_VERTICAL:
-                self._headerBounds = []
-        finally:
-            dc.EndDrawing()
+                x += LEFT_COLUMN_SIZE
+                width -= LEFT_COLUMN_SIZE
+            theDay = utils.copyDateTime(day)
+            maxDY = 0
+            for idx in range(self._periodCount):
+                _, h = self._paintDailyHeaders(
+                    drawer,
+                    theDay,
+                    x + 1.0 * width / self._periodCount * idx,
+                    y,
+                    1.0 * width / self._periodCount,
+                    36,
+                )
+                maxDY = max(maxDY, h)
+                theDay.AddDS(wx.DateSpan(days=1))
+            h = maxDY
+        elif self._viewType == wxSCHEDULER_WEEKLY:
+            if self._style == wxSCHEDULER_VERTICAL:
+                x += LEFT_COLUMN_SIZE
+                width -= LEFT_COLUMN_SIZE
+            theDay = utils.copyDateTime(day)
+            maxDY = 0
+            for idx in range(self._periodCount):
+                h = self._paintWeeklyHeaders(
+                    drawer,
+                    theDay,
+                    x + 1.0 * width / self._periodCount * idx,
+                    y,
+                    1.0 * width / self._periodCount,
+                    36,
+                )
+                maxDY = max(maxDY, h)
+                theDay.AddDS(wx.DateSpan(weeks=1))
+            h = maxDY
+        elif self._viewType == wxSCHEDULER_MONTHLY:
+            _, h = self._paintMonthlyHeaders(drawer, day, x, y, width, 36)
+
+        minW, minH = self._headerPanel.GetMinSize()
+        if minH != h:
+            self._headerPanel.SetMinSize(wx.Size(-1, h))
+            self._headerPanel.GetParent().Layout()
+
+        # Mmmmh, maybe we'll support this later, but not right now
+        if self._style == wxSCHEDULER_VERTICAL:
+            self._headerBounds = []
 
     def _OnMoveHeaders(self, evt):
         if self._headerDragOrigin is None:
