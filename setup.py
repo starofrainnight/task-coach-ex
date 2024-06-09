@@ -63,7 +63,6 @@ install_requires = [
     # FIXME: It's been replaced by new library "fasteners"
     "lockfile>=0.12.2",
     "gntp>=1.0.3",
-    "SquareMap>=1.0.5",
 ]
 
 system = platform.system()

@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import wx, operator
-from squaremap import squaremap
+from ..thirdparty.squaremap import squaremap
 from . import tooltip
 from functools import reduce
 
