@@ -31,7 +31,7 @@ class ColorMixer(object):
                     colorSums[colorIndex] += color[colorIndex]
                 colorCount += 1
         return (
-            tuple(colorSum / colorCount for colorSum in colorSums)
+            tuple(colorSum // colorCount for colorSum in colorSums)
             if colorCount
             else None
         )
