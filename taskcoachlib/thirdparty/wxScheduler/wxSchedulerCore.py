@@ -123,7 +123,7 @@ class wxSchedulerCore(wxSchedulerPaint):
         if side == wxSCHEDULER_NEXT:
             self._currentDate.Add(offset)
         elif side == wxSCHEDULER_PREV:
-            self._currentDate.SubtractDS(offset)
+            self._currentDate.Subtract(offset)
 
     # -----------------------
     #  External methods
