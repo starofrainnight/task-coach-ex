@@ -377,7 +377,7 @@ class wxDrawer(object):
 
         for dayNumber in range(dayCount):
             currentDay = copyDateTime(firstDay)
-            currentDay.AddDS(wx.DateSpan(days=dayNumber))
+            currentDay.Add(wx.DateSpan(days=dayNumber))
 
             for startHour, endHour in workingHours:
                 startHourCopy = wx.DateTimeFromDMY(

@@ -459,7 +459,7 @@ class wxSchedulerPaint(object):
         self, drawer, start, daysCount, x, y, width, height, highlight=None
     ):
         end = utils.copyDateTime(start)
-        end.AddDS(wx.DateSpan(days=daysCount))
+        end.Add(wx.DateSpan(days=daysCount))
 
         blocks = self._splitSchedules(
             self._getSchedInPeriod(self._schedules, start, end)
@@ -483,7 +483,7 @@ class wxSchedulerPaint(object):
 
         for dayN in range(daysCount):
             theDay = utils.copyDateTime(start)
-            theDay.AddDS(wx.DateSpan(days=dayN))
+            theDay.Add(wx.DateSpan(days=dayN))
             theDay.SetSecond(0)
             color = highlight
             if theDay.IsSameDate(wx.DateTime.Now()):
@@ -567,7 +567,7 @@ class wxSchedulerPaint(object):
 
         for dayN in range(daysCount):
             theDay = utils.copyDateTime(start)
-            theDay.AddDS(wx.DateSpan(days=dayN))
+            theDay.Add(wx.DateSpan(days=dayN))
             theDay.SetSecond(0)
 
             nbHours = len(self._lstDisplayedHours)
@@ -619,7 +619,7 @@ class wxSchedulerPaint(object):
             # This assumes self._lstDisplayedHours is sorted of course
             for dayN in range(daysCount):
                 theDay = utils.copyDateTime(start)
-                theDay.AddDS(wx.DateSpan(days=dayN))
+                theDay.Add(wx.DateSpan(days=dayN))
                 if theDay.IsSameDate(now):
                     theDay.SetSecond(0)
                     previous = None
@@ -747,7 +747,7 @@ class wxSchedulerPaint(object):
                     height,
                 )
                 maxDY = max(maxDY, h)
-                theDay.AddDS(wx.DateSpan(days=1))
+                theDay.Add(wx.DateSpan(days=1))
             minHeight += maxDY
             y += maxDY
             height -= maxDY
@@ -762,7 +762,7 @@ class wxSchedulerPaint(object):
                     height,
                     includeText=False,
                 )
-                theDay.AddDS(wx.DateSpan(days=1))
+                theDay.Add(wx.DateSpan(days=1))
 
         if self._style == wxSCHEDULER_VERTICAL:
             x -= LEFT_COLUMN_SIZE
@@ -816,7 +816,7 @@ class wxSchedulerPaint(object):
                 )
                 w += dw
                 maxDY = max(maxDY, dh)
-                theDay.AddDS(wx.DateSpan(days=1))
+                theDay.Add(wx.DateSpan(days=1))
 
         minWidth += w
         minHeight += h
@@ -886,7 +886,7 @@ class wxSchedulerPaint(object):
                         height,
                     ),
                 )
-                theDay.AddDS(wx.DateSpan(weeks=1))
+                theDay.Add(wx.DateSpan(weeks=1))
 
         if self._style == wxSCHEDULER_VERTICAL:
             x -= LEFT_COLUMN_SIZE
@@ -925,7 +925,7 @@ class wxSchedulerPaint(object):
                         int(1.0 * width / 7 / self._periodCount),
                         height,
                     )
-                day.AddDS(wx.DateSpan(weeks=1))
+                day.Add(wx.DateSpan(weeks=1))
 
             return max(
                 WEEK_SIZE_MIN.width * self._periodCount + LEFT_COLUMN_SIZE,
@@ -965,7 +965,7 @@ class wxSchedulerPaint(object):
             maxDY = 0
             for idx in range(daysCount):
                 theDay = utils.copyDateTime(day)
-                theDay.AddDS(wx.DateSpan(days=idx))
+                theDay.Add(wx.DateSpan(days=idx))
                 if theDay.IsSameDate(wx.DateTime.Now()):
                     color = self._highlightColor
                 else:
@@ -1020,7 +1020,7 @@ class wxSchedulerPaint(object):
                         theDay.SetSecond(0)
 
                         end = utils.copyDateTime(theDay)
-                        end.AddDS(wx.DateSpan(days=1))
+                        end.Add(wx.DateSpan(days=1))
 
                         schedules = self._getSchedInPeriod(
                             self._schedules, theDay, end
@@ -1414,7 +1414,7 @@ class wxSchedulerPaint(object):
                     36,
                 )
                 maxDY = max(maxDY, h)
-                theDay.AddDS(wx.DateSpan(days=1))
+                theDay.Add(wx.DateSpan(days=1))
             h = maxDY
         elif self._viewType == wxSCHEDULER_WEEKLY:
             if self._style == wxSCHEDULER_VERTICAL:
@@ -1432,7 +1432,7 @@ class wxSchedulerPaint(object):
                     36,
                 )
                 maxDY = max(maxDY, h)
-                theDay.AddDS(wx.DateSpan(weeks=1))
+                theDay.Add(wx.DateSpan(weeks=1))
             h = maxDY
         elif self._viewType == wxSCHEDULER_MONTHLY:
             _, h = self._paintMonthlyHeaders(drawer, day, x, y, width, 36)
