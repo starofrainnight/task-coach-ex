@@ -37,6 +37,10 @@ class wxSchedulerSizer(wx.Sizer):
     def CalcMin(self):
         return self._minSizeCallback()
 
+    def RepositionChildren(self, minSize):
+        # FIXME: How to implement it ?
+        pass
+
 
 # Main class
 class wxSchedulerPaint(object):
