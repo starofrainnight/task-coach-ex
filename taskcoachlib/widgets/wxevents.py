@@ -386,7 +386,7 @@ class CalendarCanvas(wx.Panel):
             vw -= self._vScroll.GetClientSize()[0]
             dy = self._vScroll.GetThumbPosition()
 
-        bmp = wx.EmptyBitmap(vw, vh)
+        bmp = wx.Bitmap(vw, vh)
         memDC = wx.MemoryDC()
         memDC.SelectObject(bmp)
         try:
@@ -1120,7 +1120,7 @@ class CalendarCanvas(wx.Panel):
         for rootEvent in self.GetRootEvents():
             computeEvent(rootEvent)
 
-        bmp = wx.EmptyBitmap(10, 10)  # Don't care
+        bmp = wx.Bitmap(10, 10)  # Don't care
         memDC = wx.MemoryDC()
         memDC.SelectObject(bmp)
         try:
@@ -1227,7 +1227,7 @@ class CalendarPrintout(wx.Printout):
             * (page - 1)
         )
 
-        bmp = wx.EmptyBitmap(cw, ch)
+        bmp = wx.Bitmap(cw, ch)
         memDC = wx.MemoryDC()
         memDC.SelectObject(bmp)
         try:

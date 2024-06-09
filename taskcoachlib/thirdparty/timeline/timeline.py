@@ -75,7 +75,7 @@ class TimeLine(wx.Panel):
         self.adapter = kwargs.pop("adapter", DefaultAdapter())
         self.selectedNode = None
         self.backgroundColour = wx.WHITE
-        self._buffer = wx.EmptyBitmap(20, 20)  # Have a default buffer ready
+        self._buffer = wx.Bitmap(20, 20)  # Have a default buffer ready
         self.DEFAULT_PEN = wx.Pen(wx.BLACK, 1, wx.SOLID)
         self.SELECTED_PEN = wx.Pen(wx.WHITE, 2, wx.SOLID)
         kwargs["style"] = (
@@ -110,7 +110,7 @@ class TimeLine(wx.Panel):
         # Make new off-screen bitmap: this bitmap will always have the
         # current drawing in it, so it can be used to save the image to
         # a file, or whatever.
-        self._buffer = wx.EmptyBitmap(width, height)
+        self._buffer = wx.Bitmap(width, height)
         self.UpdateDrawing()
 
     def OnClickRelease(self, event):

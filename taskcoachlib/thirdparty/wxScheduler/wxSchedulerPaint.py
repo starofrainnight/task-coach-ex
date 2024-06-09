@@ -1143,7 +1143,7 @@ class wxSchedulerPaint(object):
             or self._style == wxSCHEDULER_HORIZONTAL
         ):
             memDC = wx.MemoryDC()
-            bmp = wx.EmptyBitmap(1, 1)
+            bmp = wx.Bitmap(1, 1)
             memDC.SelectObject(bmp)
             try:
                 if self._drawerClass.use_gc:
@@ -1207,7 +1207,7 @@ class wxSchedulerPaint(object):
         else:
             size = self.GetSize()
 
-        self._bitmap = wx.EmptyBitmap(size.GetWidth(), size.GetHeight())
+        self._bitmap = wx.Bitmap(size.GetWidth(), size.GetHeight())
         memDC = wx.MemoryDC()
         memDC.SelectObject(self._bitmap)
         try:
