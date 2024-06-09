@@ -28,7 +28,7 @@ wxEVT_COMMAND_PERIODWIDTH_CHANGED = wx.NewEventType()
 EVT_PERIODWIDTH_CHANGED = wx.PyEventBinder(wxEVT_COMMAND_PERIODWIDTH_CHANGED)
 
 
-class wxSchedulerSizer(wx.PySizer):
+class wxSchedulerSizer(wx.Sizer):
     def __init__(self, minSizeCallback):
         super(wxSchedulerSizer, self).__init__()
 
