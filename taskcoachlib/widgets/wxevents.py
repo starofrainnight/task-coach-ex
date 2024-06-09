@@ -108,11 +108,11 @@ class CalendarCanvas(wx.Panel):
         # Drawing attributes
         self._precision = 1  # Minutes
         self._gridSize = 15  # Minutes
-        self._eventHeight = 32.0
+        self._eventHeight = 32
         self._eventWidthMin = 0.1
         self._eventWidth = 0.1
-        self._margin = 5.0
-        self._marginTop = 22.0
+        self._margin = 5
+        self._marginTop = 22
         self._outlineColorDark = wx.Colour(180, 180, 180)
         self._outlineColorLight = wx.Colour(210, 210, 210)
         self._headerSpans = []
@@ -460,10 +460,10 @@ class CalendarCanvas(wx.Panel):
                     x0,
                     0,
                     x1 - x0,
-                    self._marginTop - 2.0,
+                    self._marginTop - 2,
                 )
             )
-            gc.DrawRectangle(x0, 0, x1 - x0, self._marginTop - 2.0)
+            gc.DrawRectangle(x0, 0, x1 - x0, self._marginTop - 2)
             text = shortenText(
                 gc,
                 self.FormatDateTime(
@@ -474,29 +474,28 @@ class CalendarCanvas(wx.Panel):
             )
             tw, th = gc.GetTextExtent(text)
             gc.DrawText(
-                text, x0 + (x1 - x0 - tw) / 2, (self._marginTop - 2.0 - th) / 2
+                text, x0 + (x1 - x0 - tw) // 2, (self._marginTop - 2 - th) // 2
             )
 
     def _DrawNow(self, gc, h):
         now = datetime.datetime.now()
-        x = (
-            int(
-                (now - self._start).total_seconds()
-                / 60.0
-                / self._precision
-                * self._eventWidth
-            )
+        x = int(
+            (now - self._start).total_seconds()
+            / 60.0
+            / self._precision
+            * self._eventWidth
             - 0.5
         )
+
         gc.SetPen(wx.Pen(wx.Colour(0, 128, 0)))
         gc.SetBrush(wx.Brush(wx.Colour(0, 128, 0)))
 
         path = gc.CreatePath()
-        path.MoveToPoint(x - 4.0, self._marginTop)
-        path.AddLineToPoint(x + 4.0, self._marginTop)
-        path.AddLineToPoint(x, self._marginTop + 4.0)
+        path.MoveToPoint(x - 4, self._marginTop)
+        path.AddLineToPoint(x + 4, self._marginTop)
+        path.AddLineToPoint(x, self._marginTop + 4)
         path.AddLineToPoint(x, h + self._marginTop)
-        path.AddLineToPoint(x, self._marginTop + 4.0)
+        path.AddLineToPoint(x, self._marginTop + 4)
         path.CloseSubpath()
         gc.DrawPath(path)
 
@@ -1176,7 +1175,7 @@ class CalendarPrintout(wx.Printout):
             dc = self.GetDC()
             dcw, dch = dc.GetSize()
             cw = minW
-            ch = minW * dch / dcw
+            ch = minW * dch // dcw
             cells = int(
                 math.ceil(
                     1.0
@@ -1212,7 +1211,7 @@ class CalendarPrintout(wx.Printout):
         dc = self.GetDC()
         dcw, dch = dc.GetSize()
         cw = minW
-        ch = minW * dch / dcw
+        ch = minW * dch // dcw
         cells = int(
             math.ceil(
                 1.0
