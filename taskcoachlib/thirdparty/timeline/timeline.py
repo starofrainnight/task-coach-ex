@@ -285,7 +285,7 @@ class TimeLine(wx.Panel):
             len(recursiveChildren)
             for recursiveChildren in recursiveChildrenList
         ]
-        recursiveChildHeight = h / float(
+        recursiveChildHeight = h // (
             len(children) + sum(recursiveChildrenCounts)
         )
         for child, numberOfRecursiveChildren in zip(
@@ -313,13 +313,13 @@ class TimeLine(wx.Panel):
         alpha_dc.DrawLine(now, 0, now, self.height)
         label = self.adapter.nowlabel()
         textWidth = alpha_dc.GetTextExtent(label)[0]
-        alpha_dc.DrawText(label, now - (textWidth / 2), 0)
+        alpha_dc.DrawText(label, now - (textWidth // 2), 0)
 
     def scaleX(self, x):
         return self.scaleWidth(x - self.min_start)
 
     def scaleWidth(self, width):
-        return (width / self.length) * self.width
+        return int((width / self.length) * self.width)
 
     def textForegroundForNode(self, node, depth=0):
         """Determine the text foreground color to use to display the label of
@@ -344,7 +344,7 @@ class TimeLine(wx.Panel):
             else wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         )
         scale = dc.GetPPI()[0] / wx.ScreenDC().GetPPI()[0]
-        font.SetPointSize(scale * font.GetPointSize())
+        font.SetPointSize(int(scale * font.GetPointSize()))
         return font
 
     def brushForNode(self, node, isSequentialNode=False, depth=0):
@@ -355,7 +355,7 @@ class TimeLine(wx.Panel):
             color = self.adapter.background_color(node)
             if color:
                 # The adapter returns a 3-tuple
-                color = wx.Colour(*color)
+                color = wx.Colour(*[int(value) for value in color])
             else:
                 red = (depth * 10) % 255
                 green = 255 - ((depth * 10) % 255)
