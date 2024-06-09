@@ -567,7 +567,7 @@ class TaskSchedule(wxSchedule):
                 dateTime.second,
             )
         )
-        return wx.DateTimeFromDMY(*args)  # pylint: disable=W0142
+        return wx.DateTime.FromDMY(*args)  # pylint: disable=W0142
 
     @staticmethod
     def tcDateTime(dateTime):

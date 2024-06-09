@@ -26,7 +26,7 @@ class wxDrawer(object):
         while True:
             font.SetPointSize(pointSize)
             _, th = self.context.GetTextExtent(
-                " " + wxTimeFormat.FormatTime(wx.DateTimeFromHMS(23, 59, 59))
+                " " + wxTimeFormat.FormatTime(wx.DateTime.FromHMS(23, 59, 59))
             )
             if th <= height:
                 return
@@ -40,7 +40,7 @@ class wxDrawer(object):
             font.SetPointSize(pointSize)
             self.context.SetFont(font)
             tw, _ = self.context.GetTextExtent(
-                " " + wxTimeFormat.FormatTime(wx.DateTimeFromHMS(23, 59, 59))
+                " " + wxTimeFormat.FormatTime(wx.DateTime.FromHMS(23, 59, 59))
             )
             if tw <= width:
                 return
@@ -380,7 +380,7 @@ class wxDrawer(object):
             currentDay.Add(wx.DateSpan(days=dayNumber))
 
             for startHour, endHour in workingHours:
-                startHourCopy = wx.DateTimeFromDMY(
+                startHourCopy = wx.DateTime.FromDMY(
                     currentDay.GetDay(),
                     currentDay.GetMonth(),
                     currentDay.GetYear(),
@@ -388,7 +388,7 @@ class wxDrawer(object):
                     startHour.GetMinute(),
                     0,
                 )
-                endHourCopy = wx.DateTimeFromDMY(
+                endHourCopy = wx.DateTime.FromDMY(
                     currentDay.GetDay(),
                     currentDay.GetMonth(),
                     currentDay.GetYear(),
@@ -960,14 +960,14 @@ class wxBaseDrawer(
                 self.AdjustFontForHeight(font, hourH)
                 hourW, _ = self.context.GetTextExtent(
                     " "
-                    + wxTimeFormat.FormatTime(wx.DateTimeFromHMS(23, 59, 59))
+                    + wxTimeFormat.FormatTime(wx.DateTime.FromHMS(23, 59, 59))
                 )
             else:
                 hourW = int(1.0 * w / len(self.displayedHours))
                 self.AdjustFontForWidth(font, int(hourW * 2 * 0.9))
                 _, hourH = self.context.GetTextExtent(
                     " "
-                    + wxTimeFormat.FormatTime(wx.DateTimeFromHMS(23, 59, 59))
+                    + wxTimeFormat.FormatTime(wx.DateTime.FromHMS(23, 59, 59))
                 )
 
             if not includeText:
@@ -1087,14 +1087,14 @@ class wxFancyDrawer(
                 self.AdjustFontForHeight(font, hourH)
                 hourW, _ = self.context.GetTextExtent(
                     " "
-                    + wxTimeFormat.FormatTime(wx.DateTimeFromHMS(23, 59, 59))
+                    + wxTimeFormat.FormatTime(wx.DateTime.FromHMS(23, 59, 59))
                 )
             else:
                 hourW = int(1.0 * w / len(self.displayedHours))
                 self.AdjustFontForWidth(font, int(hourW * 2 * 0.9))
                 _, hourH = self.context.GetTextExtent(
                     " "
-                    + wxTimeFormat.FormatTime(wx.DateTimeFromHMS(23, 59, 59))
+                    + wxTimeFormat.FormatTime(wx.DateTime.FromHMS(23, 59, 59))
                 )
 
             if not includeText:

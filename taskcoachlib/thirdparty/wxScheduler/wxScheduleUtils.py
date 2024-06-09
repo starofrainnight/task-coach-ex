@@ -42,7 +42,7 @@ def timeFunction(func):
 
 def copyDate(value):
     """Simple method for copy the date (Y,M,D)."""
-    return wx.DateTimeFromDMY(
+    return wx.DateTime.FromDMY(
         value.GetDay(), value.GetMonth(), value.GetYear()
     )
 
@@ -50,7 +50,7 @@ def copyDate(value):
 def copyDateTime(value):
     """Return a copy of input wxDateTime object"""
     if value.IsValid():
-        return wx.DateTimeFromDMY(
+        return wx.DateTime.FromDMY(
             value.GetDay(),
             value.GetMonth(),
             value.GetYear(),
