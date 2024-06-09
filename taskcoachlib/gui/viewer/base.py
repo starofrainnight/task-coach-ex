@@ -169,7 +169,7 @@ class Viewer(wx.Panel, patterns.Observer, metaclass=ViewerMeta):
             try:
                 popupMenu.clearMenu()
                 popupMenu.Destroy()
-            except wx.PyDeadObjectError:
+            except RuntimeError:
                 pass
 
         pub.unsubscribe(self.onBeginIO, "taskfile.aboutToRead")
@@ -235,7 +235,7 @@ class Viewer(wx.Panel, patterns.Observer, metaclass=ViewerMeta):
     def SetFocus(self, *args, **kwargs):
         try:
             self.widget.SetFocus(*args, **kwargs)
-        except wx.PyDeadObjectError:
+        except RuntimeError:
             pass
 
     def createSorter(self, collection):

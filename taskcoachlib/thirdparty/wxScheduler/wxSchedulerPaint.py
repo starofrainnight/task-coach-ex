@@ -417,7 +417,7 @@ class wxSchedulerPaint(object):
                     newSchedule.end = utils.copyDateTime(end)
 
                 results.append(newSchedule)
-            except wx.PyDeadObjectError:
+            except RuntimeError:
                 pass
 
         return results

@@ -448,7 +448,7 @@ class Entry(wx.Panel):
         # It's complicated.
         try:
             self.DismissPopup()
-        except wx.PyDeadObjectError:
+        except RuntimeError:
             pass
 
     def Format(self):

@@ -39,7 +39,7 @@ class KillFocusAcceptsEditsMixin(object):
                 # User clicked outside edit window
                 self.AcceptChanges()
                 self.Finish()
-        except wx.PyDeadObjectError:
+        except RuntimeError:
             pass
 
     def __has_focus(self):

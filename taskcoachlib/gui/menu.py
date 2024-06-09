@@ -116,7 +116,7 @@ class DynamicMenu(Menu):
         the menu has a chance to update itself."""
         try:  # Prepare for menu or window to be destroyed
             self.updateMenu()
-        except wx.PyDeadObjectError:
+        except RuntimeError:
             pass
 
     def onUpdateMenu_Deprecated(self, event=None):
@@ -129,7 +129,7 @@ class DynamicMenu(Menu):
             if event.GetMenu() != self._parentMenu:
                 return
 
-        # FIXME: No wx.PyDeadObjectError similar classes in wxPython4, so
+        # FIXME: No RuntimeError similar classes in wxPython4, so
         # you must carefully check if the window already destroyed.
         try:  # Prepare for menu or window to be destroyed
             self.updateMenu()
@@ -1198,7 +1198,7 @@ class ColumnPopupMenu(ColumnPopupMenuMixin, Menu):
         # Prepare for PyDeadObjectError since we're called from wx.CallAfter
         try:
             super(ColumnPopupMenu, self).appendUICommands(*args, **kwargs)
-        except wx.PyDeadObjectError:
+        except RuntimeError:
             pass
 
 
