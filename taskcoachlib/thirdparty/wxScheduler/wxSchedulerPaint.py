@@ -490,15 +490,15 @@ class wxSchedulerPaint(object):
                 if self._viewType != wxSCHEDULER_DAILY or daysCount >= 2:
                     color = self._highlightColor
             drawer.DrawDayBackground(
-                x + 1.0 * width / daysCount * dayN,
+                int(x + 1.0 * width / daysCount * dayN),
                 y,
-                1.0 * width / daysCount,
+                int(1.0 * width / daysCount),
                 height,
                 highlight=color,
             )
 
         if blocks:
-            dayWidth = width / len(blocks)
+            dayWidth = width // len(blocks)
 
             for idx, block in enumerate(blocks):
                 maxDY = 0
@@ -582,12 +582,17 @@ class wxSchedulerPaint(object):
                             (
                                 utils.copyDateTime(theDay),
                                 wx.Point(
-                                    x + 1.0 * width * dayN / daysCount,
-                                    y + 1.0 * height * idx / nbHours,
+                                    int(x + 1.0 * width * dayN / daysCount),
+                                    int(y + 1.0 * height * idx / nbHours),
                                 ),
                                 wx.Point(
-                                    x + 1.0 * width * (dayN + 1) / daysCount,
-                                    y + 1.0 * height * (idx + 1) / nbHours,
+                                    int(
+                                        x
+                                        + 1.0 * width * (dayN + 1) / daysCount
+                                    ),
+                                    int(
+                                        y + 1.0 * height * (idx + 1) / nbHours
+                                    ),
                                 ),
                             )
                         )
@@ -596,19 +601,23 @@ class wxSchedulerPaint(object):
                             (
                                 utils.copyDateTime(theDay),
                                 wx.Point(
-                                    x
-                                    + 1.0
-                                    * width
-                                    * (nbHours * dayN + idx)
-                                    / (nbHours * daysCount),
+                                    int(
+                                        x
+                                        + 1.0
+                                        * width
+                                        * (nbHours * dayN + idx)
+                                        / (nbHours * daysCount)
+                                    ),
                                     y,
                                 ),
                                 wx.Point(
-                                    x
-                                    + 1.0
-                                    * width
-                                    * (nbHours * dayN + idx + 1)
-                                    / (nbHours * daysCount),
+                                    int(
+                                        x
+                                        + 1.0
+                                        * width
+                                        * (nbHours * dayN + idx + 1)
+                                        / (nbHours * daysCount)
+                                    ),
                                     y + height,
                                 ),
                             )
@@ -629,10 +638,10 @@ class wxSchedulerPaint(object):
                         if theDay.IsLaterThan(now):
                             if idx != 0:
                                 if self._style == wxSCHEDULER_VERTICAL:
-                                    yPrev = (
+                                    yPrev = int(
                                         y + 1.0 * height * (idx - 1) / nbHours
                                     )
-                                    delta = (
+                                    delta = int(
                                         1.0
                                         * height
                                         / nbHours
@@ -645,10 +654,14 @@ class wxSchedulerPaint(object):
                                         x, yPrev + delta, width
                                     )
                                 else:
-                                    xPrev = x + 1.0 * width * (
-                                        nbHours * dayN + idx - 1
-                                    ) / (nbHours * daysCount)
-                                    delta = (
+                                    xPrev = int(
+                                        x
+                                        + 1.0
+                                        * width
+                                        * (nbHours * dayN + idx - 1)
+                                        / (nbHours * daysCount)
+                                    )
+                                    delta = int(
                                         1.0
                                         * width
                                         / (nbHours * daysCount)
