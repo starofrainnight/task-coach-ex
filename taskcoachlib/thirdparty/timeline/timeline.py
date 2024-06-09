@@ -203,7 +203,7 @@ class TimeLine(wx.Panel):
         """Return the default GUI font, scaled for printing if necessary."""
         font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         scale = dc.GetPPI()[0] / wx.ScreenDC().GetPPI()[0]
-        font.SetPointSize(scale * font.GetPointSize())
+        font.SetPointSize(int(scale * font.GetPointSize()))
         return font
 
     def DrawBox(
