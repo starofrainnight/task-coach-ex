@@ -106,7 +106,7 @@ class WindowSizeAndPositionTracker(_Tracker):
         # Check that the window is on a valid display and move if necessary:
         if wx.Display.GetFromWindow(self._window) == wx.NOT_FOUND:
             # Not (0, 0) because on OSX this hides the window bar...
-            self._window.SetDimensions(50, 50, width, height)
+            self._window.SetSize(50, 50, width, height)
             if operating_system.isMac():
                 self._window.SetClientSize((width, height))
 

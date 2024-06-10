@@ -4759,17 +4759,17 @@ class HyperTreeList(wx.PyControl):
         has_header = self._agwStyle & TR_NO_HEADER == 0
 
         if self._header_win and has_header:
-            self._header_win.SetDimensions(0, 0, w, self._headerHeight)
+            self._header_win.SetSize(0, 0, w, self._headerHeight)
             self._header_win.Refresh()
         else:
-            self._header_win.SetDimensions(0, 0, 0, 0)
+            self._header_win.SetSize(0, 0, 0, 0)
 
         if self._main_win and has_header:
-            self._main_win.SetDimensions(
+            self._main_win.SetSize(
                 0, self._headerHeight + 1, w, h - self._headerHeight - 1
             )
         else:
-            self._main_win.SetDimensions(0, 0, w, h)
+            self._main_win.SetSize(0, 0, w, h)
 
     def OnSize(self, event):
         """

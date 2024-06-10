@@ -442,7 +442,7 @@ class BaseComboTreeBoxMixin(object):
         y_position += comboBoxSize[1]
         width = comboBoxSize[0]
         height = 300
-        self._popupFrame.SetDimensions(x_position, y_position, width, height)
+        self._popupFrame.SetSize(x_position, y_position, width, height)
         # On wxGTK, when the Combobox width has been increased a call
         # to SetMinSize is needed to force a resize of the popupFrame:
         self._popupFrame.SetMinSize((width, height))

@@ -613,8 +613,8 @@ class CalendarCanvas(wx.Panel):
         _, hh = self._hScroll.GetClientSize()
         vw, _ = self._vScroll.GetClientSize()
 
-        self._hScroll.SetDimensions(0, h - hh, w - vw, hh)
-        self._vScroll.SetDimensions(
+        self._hScroll.SetSize(0, h - hh, w - vw, hh)
+        self._vScroll.SetSize(
             w - vw, self._marginTop, vw, h - hh - self._marginTop
         )
 
