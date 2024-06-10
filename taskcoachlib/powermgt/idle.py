@@ -70,7 +70,7 @@ if operating_system.isGTK():
             self.XScreenSaverQueryInfo(
                 self.dpy, self.XRootWindow(self.dpy, 0), self.info
             )
-            return 1.0 * self.info.contents.idle / 1000
+            return  self.info.contents.idle / 1000
 
     IdleQuery = LinuxIdleQuery
 
@@ -90,7 +90,7 @@ elif operating_system.isWindows():
         def getIdleSeconds(self):
             self.GetLastInputInfo(byref(self.lastInputInfo))
             return (
-                1.0 * self.GetTickCount() - self.lastInputInfo.dwTime
+                 self.GetTickCount() - self.lastInputInfo.dwTime
             ) / 1000
 
     IdleQuery = WindowsIdleQuery

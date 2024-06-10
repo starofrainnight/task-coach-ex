@@ -62,7 +62,7 @@ class _Watermark(object):
 
 def total_seconds(td):  # Method new in 2.7
     return (
-        1.0 * td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6
+        td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6
     ) / 10**6
 
 
@@ -192,7 +192,7 @@ class CalendarCanvas(wx.Panel):
         return self._eventHeight
 
     def SetEventHeight(self, height):
-        self._eventHeight = 1.0 * height
+        self._eventHeight = height
         self._Invalidate()
         self.Refresh()
 
@@ -208,7 +208,7 @@ class CalendarCanvas(wx.Panel):
         return self._margin
 
     def SetMargin(self, margin):
-        self._margin = 1.0 * margin
+        self._margin = margin
         self._Invalidate()
         self.Refresh()
 
@@ -645,7 +645,7 @@ class CalendarCanvas(wx.Panel):
             self._vScroll.Hide()
 
         self._eventWidth = max(
-            self._eventWidthMin, 1.0 * max(w, minW) / self._maxIndex
+            self._eventWidthMin, max(w, minW) / self._maxIndex
         )
 
         if event is not None:
@@ -1196,7 +1196,7 @@ class CalendarPrintout(wx.Printout):
                 )
                 + 1
             )
-            self._count = int(math.ceil(1.0 * total / cells))
+            self._count = int(math.ceil(total / cells))
         return self._count
 
     def GetPageInfo(self):
@@ -1240,7 +1240,7 @@ class CalendarPrintout(wx.Printout):
                 self._calendar._Draw(gc, cw, ch, 0, dy)
             finally:
                 self._calendar._eventWidth = oldWidth
-            dc.SetUserScale(1.0 * dcw / cw, 1.0 * dch / ch)
+            dc.SetUserScale(dcw / cw, dch / ch)
             dc.Blit(0, 0, cw, ch, memDC, 0, 0)
         finally:
             memDC.SelectObject(wx.NullBitmap)

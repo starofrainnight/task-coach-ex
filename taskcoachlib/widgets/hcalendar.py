@@ -266,7 +266,7 @@ class HierarchicalCalendar(tooltip.ToolTipMixin, CalendarCanvas):
     def GetProgress(self, task):
         p = task.percentageComplete(recursive=True)
         if p:
-            return 1.0 * p / 100
+            return p / 100
         return None
 
     def GetIcons(self, task):

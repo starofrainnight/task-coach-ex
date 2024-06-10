@@ -86,8 +86,8 @@ class Window(object):
         desktop = win32gui.GetDesktopWindow()
         left, top, right, bottom = win32gui.GetClientRect(desktop)
 
-        x = int(1.0 * x * 65535 / (right - left))
-        y = int(1.0 * y * 65535 / (bottom - top))
+        x = int(x * 65535 / (right - left))
+        y = int(y * 65535 / (bottom - top))
 
         si.SendInput(
             (

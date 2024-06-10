@@ -96,8 +96,8 @@ class AnimatedMove(wx.Timer):
         x1, y1 = self.__destination
         self.__step += 1
 
-        curX = int(x0 + (x1 - x0) * 1.0 * self.__step / 10)
-        curY = int(y0 + (y1 - y0) * 1.0 * self.__step / 10)
+        curX = int(x0 + (x1 - x0) * self.__step / 10)
+        curY = int(y0 + (y1 - y0) * self.__step / 10)
 
         self.__frame.SetPosition(wx.Point(curX, curY))
 

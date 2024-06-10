@@ -136,7 +136,7 @@ class TwistedScheduler(object):
             from twisted.internet import reactor
 
             self.__nextCall = reactor.callLater(
-                1.0 * nextDuration / 1000, self.__callback
+                nextDuration / 1000, self.__callback
             )
 
     def __callback(self):

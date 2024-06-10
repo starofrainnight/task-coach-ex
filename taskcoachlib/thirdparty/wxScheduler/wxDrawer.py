@@ -457,12 +457,10 @@ class wxDrawer(object):
         if dpyWords:
             words = words[idx:]
 
-            currentX = 1.0 * offsetX
+            currentX = offsetX
             if len(dpyWords) > 1:
                 if words:
-                    spacing = (1.0 * (w - offsetX) - totalW) / (
-                        len(dpyWords) - 1
-                    )
+                    spacing = ((w - offsetX) - totalW) / (len(dpyWords) - 1)
                 else:
                     spacing = spaceW
             else:
@@ -867,7 +865,7 @@ class HeaderDrawerGCMixin(object):
                     )
                     self.context.SetBrush(brush)
                     self.context.DrawRoundedRectangle(
-                        x, y, width, int(textH * 1.2), int(1.0 * textH / 2)
+                        x, y, width, int(textH * 1.2), int(textH / 2)
                     )
                     results.append(
                         (
@@ -956,14 +954,14 @@ class wxBaseDrawer(
             self.context.SetTextForeground(wx.BLACK)
 
             if direction == wxSCHEDULER_VERTICAL:
-                hourH = int(1.0 * h / len(self.displayedHours))
+                hourH = int(h / len(self.displayedHours))
                 self.AdjustFontForHeight(font, hourH)
                 hourW, _ = self.context.GetTextExtent(
                     " "
                     + wxTimeFormat.FormatTime(wx.DateTime.FromHMS(23, 59, 59))
                 )
             else:
-                hourW = int(1.0 * w / len(self.displayedHours))
+                hourW = int(w / len(self.displayedHours))
                 self.AdjustFontForWidth(font, int(hourW * 2 * 0.9))
                 _, hourH = self.context.GetTextExtent(
                     " "
@@ -1083,14 +1081,14 @@ class wxFancyDrawer(
             self.context.SetPen(FOREGROUND_PEN)
 
             if direction == wxSCHEDULER_VERTICAL:
-                hourH = int(1.0 * h / len(self.displayedHours))
+                hourH = int(h / len(self.displayedHours))
                 self.AdjustFontForHeight(font, hourH)
                 hourW, _ = self.context.GetTextExtent(
                     " "
                     + wxTimeFormat.FormatTime(wx.DateTime.FromHMS(23, 59, 59))
                 )
             else:
-                hourW = int(1.0 * w / len(self.displayedHours))
+                hourW = int(w / len(self.displayedHours))
                 self.AdjustFontForWidth(font, int(hourW * 2 * 0.9))
                 _, hourH = self.context.GetTextExtent(
                     " "

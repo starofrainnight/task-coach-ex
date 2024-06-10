@@ -535,7 +535,7 @@ class TaskSchedule(wxSchedule):
                 # If 0, just let the default None value so the progress bar isn't drawn
                 # at all
                 self.complete = (
-                    1.0 * self.task.percentageComplete(recursive=True) / 100
+                    self.task.percentageComplete(recursive=True) / 100
                 )
             else:
                 self.complete = None
