@@ -87,10 +87,10 @@ class _CalendarContent(tooltip.ToolTipMixin, wxScheduler):
         self.taskList = taskList
         self.RefreshAllItems(0)
 
-        EVT_SCHEDULE_ACTIVATED(self, self.OnActivation)
-        EVT_SCHEDULE_RIGHT_CLICK(self, self.OnPopup)
-        EVT_SCHEDULE_DCLICK(self, self.OnEdit)
-        EVT_PERIODWIDTH_CHANGED(self, self.OnChangeConfig)
+        self.Bind(EVT_SCHEDULE_ACTIVATED, self.OnActivation)
+        self.Bind(EVT_SCHEDULE_RIGHT_CLICK, self.OnPopup)
+        self.Bind(EVT_SCHEDULE_DCLICK, self.OnEdit)
+        self.Bind(EVT_PERIODWIDTH_CHANGED, self.OnChangeConfig)
 
         wxTimeFormat.SetFormatFunction(self.__formatTime)
 
