@@ -129,15 +129,14 @@ class CalendarCanvas(wx.Panel):
         self._hScroll.Hide()
         self._vScroll.Hide()
 
-        wx.EVT_SCROLL(self._hScroll, self._OnScroll)
-        wx.EVT_SCROLL(self._vScroll, self._OnScroll)
-
-        wx.EVT_PAINT(self, self._OnPaint)
-        wx.EVT_SIZE(self, self._OnResize)
-        wx.EVT_LEFT_DOWN(self, self._OnLeftDown)
-        wx.EVT_LEFT_UP(self, self._OnLeftUp)
-        wx.EVT_RIGHT_DOWN(self, self._OnRightDown)
-        wx.EVT_MOTION(self, self._OnMotion)
+        self._hScroll.Bind(wx.EVT_SCROLL, self._OnScroll)
+        self._vScroll.Bind(wx.EVT_SCROLL, self._OnScroll)
+        self.Bind(wx.EVT_PAINT, self._OnPaint)
+        self.Bind(wx.EVT_SIZE, self._OnResize)
+        self.Bind(wx.EVT_LEFT_DOWN, self._OnLeftDown)
+        self.Bind(wx.EVT_LEFT_UP, self._OnLeftUp)
+        self.Bind(wx.EVT_RIGHT_DOWN, self._OnRightDown)
+        self.Bind(wx.EVT_MOTION, self._OnMotion)
         self._Invalidate()
 
     # Methods to override

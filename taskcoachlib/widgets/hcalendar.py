@@ -66,10 +66,10 @@ class HierarchicalCalendar(tooltip.ToolTipMixin, CalendarCanvas):
         )
         self.SetDropTarget(self.__dropTarget)
 
-        EVT_EVENT_SELECTION_CHANGED(self, self._OnSelectionChanged)
-        EVT_EVENT_DATES_CHANGED(self, self._OnDatesChanged)
-        wx.EVT_LEFT_DCLICK(self, self._OnLeftDClick)
-        wx.EVT_RIGHT_UP(self, self._OnRightUp)
+        self.Bind(EVT_EVENT_SELECTION_CHANGED, self._OnSelectionChanged)
+        self.Bind(EVT_EVENT_DATES_CHANGED, self._OnDatesChanged)
+        self.Bind(wx.EVT_LEFT_DCLICK, self._OnLeftDClick)
+        self.Bind(wx.EVT_RIGHT_UP, self._OnRightUp)
 
     def _OnSelectionChanged(self, event):
         self.__onSelect()
