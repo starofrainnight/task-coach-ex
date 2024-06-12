@@ -267,7 +267,7 @@ if __name__ == "__main__":
             super(Frame, self).__init__(None, wx.ID_ANY, "Test")
 
             self.btn = wx.Button(self, wx.ID_ANY, "Show balloon")
-            wx.EVT_BUTTON(self.btn, wx.ID_ANY, self.OnClick)
+            self.btn.Bind(wx.EVT_BUTTON, self.OnClick)
             s = wx.BoxSizer()
             s.Add(self.btn, 1, wx.EXPAND)
             self.SetSizer(s)

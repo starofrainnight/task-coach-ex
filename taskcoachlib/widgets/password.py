@@ -62,8 +62,8 @@ class KeychainPasswordWidget(wx.Dialog):
         self.SetSizer(sz)
         self.Fit()
 
-        wx.EVT_BUTTON(btnOK, wx.ID_ANY, self.OnOK)
-        wx.EVT_BUTTON(btnCancel, wx.ID_ANY, self.OnCancel)
+        btnOK.Bind(wx.EVT_BUTTON, self.OnOK)
+        btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
 
         self.SetDefaultItem(btnOK)
         wx.CallAfter(self.RequestUserAttention)

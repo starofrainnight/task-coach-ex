@@ -1894,7 +1894,7 @@ class Editor(BalloonTipManager, widgets.Dialog):
             # be pending changes...
             id_ = IdProvider.get()
             self.__timer = wx.Timer(self, id_)
-            wx.EVT_TIMER(self, id_, self.__on_timer)
+            self.Bind(wx.EVT_TIMER, self.__on_timer, id=id_)
             self.__timer.Start(1000, False)
         else:
             self.__timer = None

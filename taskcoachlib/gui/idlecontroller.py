@@ -68,9 +68,9 @@ class WakeFromIdleFrame(NotificationFrameBase):
         sizer.Add(btnStopAt, 0, wx.EXPAND | wx.ALL, 1)
         sizer.Add(btnStopResume, 0, wx.EXPAND | wx.ALL, 1)
 
-        wx.EVT_BUTTON(btnNothing, wx.ID_ANY, self.DoNothing)
-        wx.EVT_BUTTON(btnStopAt, wx.ID_ANY, self.DoStopAt)
-        wx.EVT_BUTTON(btnStopResume, wx.ID_ANY, self.DoStopResume)
+        btnNothing.Bind(wx.EVT_BUTTON, self.DoNothing)
+        btnStopAt.Bind(wx.EVT_BUTTON, self.DoStopAt)
+        btnStopResume.Bind(wx.EVT_BUTTON, self.DoStopResume)
 
     def CloseButton(self, panel):
         return None

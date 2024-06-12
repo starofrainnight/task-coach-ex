@@ -32,7 +32,7 @@ class TimeExpressionEntry(wx.TextCtrl):
         self.__defaultColor = self.GetBackgroundColour()
         self.__invalidColor = wx.Colour(255, 128, 128)
 
-        wx.EVT_TEXT(self, wx.ID_ANY, self._onTextChanged)
+        self.Bind(wx.EVT_TEXT, self._onTextChanged)
 
     @staticmethod
     def isValid(value):

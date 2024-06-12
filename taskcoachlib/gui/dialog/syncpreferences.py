@@ -109,7 +109,7 @@ class SyncMLAccessPage(SyncMLBasePage):
                 ("2", _("Horde-based")),
             ],
         )[0]
-        wx.EVT_CHOICE(choice, wx.ID_ANY, self.OnPresetChanged)
+        choice.Bind(wx.EVT_CHOICE, self.OnPresetChanged)
 
         self.addTextSetting("access", "syncUrl", _("SyncML server URL"))
         self.addTextSetting("access", "username", _("User name/ID"))
@@ -117,7 +117,7 @@ class SyncMLAccessPage(SyncMLBasePage):
         checkBox = self.addBooleanSetting(
             "task", "dosync", _("Enable tasks synchronization")
         )
-        wx.EVT_CHECKBOX(checkBox, wx.ID_ANY, self.OnSyncTaskChanged)
+        checkBox.Bind(wx.EVT_CHECKBOX, self.OnSyncTaskChanged)
         self.addTextSetting("task", "uri", _("Tasks database name"))
         self.addChoiceSetting(
             "task",
@@ -143,7 +143,7 @@ class SyncMLAccessPage(SyncMLBasePage):
         checkBox = self.addBooleanSetting(
             "note", "dosync", _("Enable notes synchronization")
         )
-        wx.EVT_CHECKBOX(checkBox, wx.ID_ANY, self.OnSyncNoteChanged)
+        checkBox.Bind(wx.EVT_CHECKBOX, self.OnSyncNoteChanged)
         self.addTextSetting("note", "uri", _("Notes database name"))
         self.addChoiceSetting(
             "note",

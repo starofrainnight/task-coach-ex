@@ -51,8 +51,8 @@ class SyncMLWarningDialog(wx.Dialog):
 
         self.SetSizer(sizer)
 
-        wx.EVT_BUTTON(button, wx.ID_ANY, self.OnOK)
-        wx.EVT_CLOSE(self, self.OnOK)
+        button.Bind(wx.EVT_BUTTON, wx.ID_ANY, self.OnOK)
+        self.Bind(wx.EVT_CLOSE, self.OnOK)
 
         self.Fit()
 

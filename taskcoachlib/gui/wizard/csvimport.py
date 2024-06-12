@@ -154,15 +154,13 @@ class CSVImportOptionsPage(wiz.WizardPageSimple):
         self.encoding = chardet.detect(open(filename, "rb").read())["encoding"]
         self.OnOptionChanged(None)
 
-        wx.EVT_CHOICE(self.delimiter, wx.ID_ANY, self.OnOptionChanged)
-        wx.EVT_CHOICE(self.quoteChar, wx.ID_ANY, self.OnOptionChanged)
-        wx.EVT_CHECKBOX(
-            self.importSelectedRowsOnly, wx.ID_ANY, self.OnOptionChanged
-        )
-        wx.EVT_CHECKBOX(self.hasHeaders, wx.ID_ANY, self.OnOptionChanged)
-        wx.EVT_RADIOBUTTON(self.doubleQuote, wx.ID_ANY, self.OnOptionChanged)
-        wx.EVT_RADIOBUTTON(self.escapeQuote, wx.ID_ANY, self.OnOptionChanged)
-        wx.EVT_TEXT(self.escapeChar, wx.ID_ANY, self.OnOptionChanged)
+        self.delimiter.Bind(wx.EVT_CHOICE, self.OnOptionChanged)
+        self.quoteChar.Bind(wx.EVT_CHOICE, self.OnOptionChanged)
+        self.importSelectedRowsOnly.Bind(wx.EVT_CHECKBOX, self.OnOptionChanged)
+        self.hasHeaders.Bind(wx.EVT_CHECKBOX, self.OnOptionChanged)
+        self.doubleQuote.Bind(wx.EVT_RADIOBUTTON, self.OnOptionChanged)
+        self.escapeQuote.Bind(wx.EVT_RADIOBUTTON, self.OnOptionChanged)
+        self.escapeChar.Bind(wx.EVT_TEXT, self.OnOptionChanged)
 
     def OnOptionChanged(self, event):  # pylint: disable=W0613
         self.escapeChar.Enable(self.escapeQuote.GetValue())

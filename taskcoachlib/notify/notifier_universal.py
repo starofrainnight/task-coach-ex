@@ -40,9 +40,9 @@ class AnimatedShow(wx.Timer):
 
             id_ = wx.NewId()
             self.SetOwner(self, id_)
-            wx.EVT_TIMER(self, id_, self.__OnTick)
+            self.Bind(wx.EVT_TIMER, self.__OnTick, id=id_)
             self.Start(100)
-            wx.EVT_CLOSE(frame, self.__OnClose)
+            frame.Bind(wx.EVT_CLOSE, self.__OnClose)
 
             frame.SetTransparent(0)
 
@@ -87,9 +87,9 @@ class AnimatedMove(wx.Timer):
 
         id_ = wx.NewId()
         self.SetOwner(self, id_)
-        wx.EVT_TIMER(self, id_, self.__OnTick)
+        self.Bind(wx.EVT_TIMER, self.__OnTick, id=id_)
         self.Start(100)
-        wx.EVT_CLOSE(frame, self.__OnClose)
+        frame.Bind(wx.EVT_CLOSE, self.__OnClose)
 
     def __OnTick(self, event):  # pylint: disable=W0613
         x0, y0 = self.__origin
@@ -185,7 +185,7 @@ class NotificationFrameBase(_NotifyBase):
         btn = self.CloseButton(panel)
         if btn is not None:
             hsz.Add(btn, 0, wx.ALL, 2)
-            wx.EVT_BUTTON(btn, wx.ID_ANY, self.DoClose)
+            btn.Bind(wx.EVT_BUTTON, self.DoClose)
 
         vsz.Add(hsz, 0, wx.ALL | wx.EXPAND, 2)
 
@@ -291,7 +291,7 @@ class _NotificationCenter(wx.EvtHandler):
         self.__tmr = wx.Timer()
         id_ = wx.NewId()
         self.__tmr.SetOwner(self, id_)
-        wx.EVT_TIMER(self, id_, self.__OnTick)
+        self.Bind(wx.EVT_TIMER, self.__OnTick, id=id_)
         self.__tmr.Start(1000)
 
     def NotifyFrame(self, frm, timeout=None):
@@ -496,7 +496,7 @@ if __name__ == "__main__":
             )
             NotificationCenter().Notify("Last sample", "Foobar!")
 
-            wx.EVT_CLOSE(self, self.OnClose)
+            self.Bind(wx.EVT_CLOSE, self.OnClose)
 
         def OnClose(self, evt):
             NotificationCenter().HideAll()  # pylint: disable=E1101

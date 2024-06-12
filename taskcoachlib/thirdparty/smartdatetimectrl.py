@@ -2955,7 +2955,7 @@ if __name__ == "__main__":
                 pnl2.LoadChoices(cfg.Read("Choices"))
             EVT_TIME_CHOICES_CHANGE(pnl2, self.OnChoicesChanged)
 
-            wx.EVT_CLOSE(self, self.OnClose)
+            self.Bind(wx.EVT_CLOSE, self.OnClose)
 
             self.Fit()
             self.CentreOnScreen()

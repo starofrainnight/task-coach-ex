@@ -44,7 +44,7 @@ class IPhoneSyncFrame(NotificationFrameBase):
             self.btn = wx.Button(panel, wx.ID_ANY, _("OK"))
             sizer.Add(self.btn, 0, wx.ALIGN_CENTRE | wx.ALL, 3)
             self.btn.Enable(False)
-            wx.EVT_BUTTON(self.btn, wx.ID_ANY, self.OnOK)
+            self.btn.Bind(wx.EVT_BUTTON, self.OnOK)
 
     def CloseButton(self, panel):
         return None

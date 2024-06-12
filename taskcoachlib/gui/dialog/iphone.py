@@ -47,13 +47,13 @@ would you like to use?"""
         hsz = wx.BoxSizer(wx.HORIZONTAL)
         btn = wx.Button(self, wx.ID_ANY, _("Refresh from desktop"))
         hsz.Add(btn, 0, wx.ALL, 3)
-        wx.EVT_BUTTON(btn, wx.ID_ANY, self.OnType1)
+        btn.Bind(wx.EVT_BUTTON, self.OnType1)
         btn = wx.Button(self, wx.ID_ANY, _("Refresh from device"))
         hsz.Add(btn, 0, wx.ALL, 3)
-        wx.EVT_BUTTON(btn, wx.ID_ANY, self.OnType2)
+        btn.Bind(wx.EVT_BUTTON, self.OnType2)
         btn = wx.Button(self, wx.ID_ANY, _("Cancel"))
         hsz.Add(btn, 0, wx.ALL, 3)
-        wx.EVT_BUTTON(btn, wx.ID_ANY, self.OnCancel)
+        btn.Bind(wx.EVT_BUTTON, self.OnCancel)
         vsz.Add(hsz, 0, wx.ALIGN_RIGHT)
 
         self.SetSizer(vsz)
@@ -175,7 +175,7 @@ class IPhoneBonjourDialog(wx.Dialog):
         self.Fit()
         self.CentreOnScreen()
 
-        wx.EVT_BUTTON(btnOK, wx.ID_ANY, self.OnDismiss)
+        btnOK.Bind(wx.EVT_BUTTON, self.OnDismiss)
 
     def OnDismiss(self, evt):
         self.EndModal(wx.ID_OK)
