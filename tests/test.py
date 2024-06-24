@@ -18,10 +18,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-import wxversion
-
-wxversion.select(["2.8-unicode", "3.0"], optionsRequired=True)
-
 import sys, unittest, os, time, wx, logging
 
 projectRoot = os.path.abspath("..")
