@@ -31,7 +31,7 @@ class MessageDialog(sized_controls.SizedDialog):  # pylint: disable=R0904,R0901
         self.__settings = kwargs.pop("settings")
         self.__message = kwargs.pop("message")
         self.__url = kwargs.pop("url")
-        super(MessageDialog, self).__init__(
+        super().__init__(
             title=_("Message from the %s " "developers") % meta.data.name,
             *args,
             **kwargs

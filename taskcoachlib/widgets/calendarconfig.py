@@ -44,7 +44,7 @@ class CalendarConfigDialog(sized_controls.SizedDialog):
     def __init__(self, settings, settingsSection, *args, **kwargs):
         self._settings = settings
         self._settingsSection = settingsSection
-        super(CalendarConfigDialog, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         pane = self.GetContentsPane()
         pane.SetSizerType("form")
         self.createInterior(pane)

@@ -51,9 +51,7 @@ class BookPage(wx.Panel):
     """A page in a notebook."""
 
     def __init__(self, parent, columns, growableColumn=None, *args, **kwargs):
-        super(BookPage, self).__init__(
-            parent, style=wx.TAB_TRAVERSAL, *args, **kwargs
-        )
+        super().__init__(parent, style=wx.TAB_TRAVERSAL, *args, **kwargs)
         self._sizer = wx.GridBagSizer(vgap=5, hgap=5)
         self._columns = columns
         self._position = GridCursor(columns)
@@ -159,7 +157,7 @@ class BookMixin(object):
     pageChangedEvent = "Subclass responsibility"
 
     def __init__(self, parent, *args, **kwargs):
-        super(BookMixin, self).__init__(parent, -1, *args, **kwargs)
+        super().__init__(parent, -1, *args, **kwargs)
         self.Bind(self.pageChangedEvent, self.onPageChanged)
 
     def __getitem__(self, index):
@@ -179,7 +177,7 @@ class BookMixin(object):
         bitmap = wx.ArtProvider.GetBitmap(
             bitmap, wx.ART_MENU, self._bitmapSize
         )
-        super(BookMixin, self).AddPage(page, name, bitmap=bitmap)
+        super().AddPage(page, name, bitmap=bitmap)
 
     def ok(self, *args, **kwargs):
         for page in self:
@@ -196,4 +194,4 @@ class Notebook(BookMixin, aui.AuiNotebook):
             & ~aui.AUI_NB_CLOSE_ON_ACTIVE_TAB
             & ~aui.AUI_NB_MIDDLE_CLICK_CLOSE
         )
-        super(Notebook, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)

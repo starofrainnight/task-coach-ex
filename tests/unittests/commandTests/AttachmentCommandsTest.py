@@ -58,7 +58,7 @@ class AddAttachmentTestCase(CommandTestCase):
     ItemClass = ContainerClass = lambda subject: "Subclass responsibility"
 
     def setUp(self):
-        super(AddAttachmentTestCase, self).setUp()
+        super().setUp()
         self.item1 = self.ItemClass(subject="item1")
         self.item2 = self.ItemClass(subject="item2")
         self.container = self.ContainerClass([self.item1, self.item2])

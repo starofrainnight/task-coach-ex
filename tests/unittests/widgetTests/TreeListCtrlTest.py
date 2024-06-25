@@ -27,7 +27,7 @@ class TreeListCtrlTestCase(TreeCtrlTest.TreeCtrlTestCase):
     onSelect = getItemTooltipText = None
 
     def setUp(self):
-        super(TreeListCtrlTestCase, self).setUp()
+        super().setUp()
         self._columns = self.createColumns()
         self.treeCtrl = widgets.TreeListCtrl(
             self.frame,
@@ -61,7 +61,7 @@ class TreeListCtrlTest(TreeListCtrlTestCase, TreeCtrlTest.CommonTestsMixin):
 
 class TreeListCtrlColumnsTest(TreeListCtrlTestCase):
     def setUp(self):
-        super(TreeListCtrlColumnsTest, self).setUp()
+        super().setUp()
         self.children[None] = [TreeCtrlTest.DummyDomainObject("item")]
         self.treeCtrl.RefreshAllItems(1)
         self.visibleColumns = self.columns()[1:]

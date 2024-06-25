@@ -95,9 +95,7 @@ class CalendarCanvas(wx.Panel):
             datetime.datetime.now().date(), datetime.time(0, 0, 0)
         )
         self._end = end or self._start + datetime.timedelta(days=7)
-        super(CalendarCanvas, self).__init__(
-            parent, wx.ID_ANY, style=wx.FULL_REPAINT_ON_RESIZE
-        )
+        super().__init__(parent, wx.ID_ANY, style=wx.FULL_REPAINT_ON_RESIZE)
 
         self._coords = (
             dict()
@@ -1163,7 +1161,7 @@ class CalendarCanvas(wx.Panel):
 
 class CalendarPrintout(wx.Printout):
     def __init__(self, calendar, settings, *args, **kwargs):
-        super(CalendarPrintout, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._calendar = calendar
         self._settings = settings
         self._count = None

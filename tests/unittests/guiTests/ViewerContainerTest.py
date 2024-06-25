@@ -27,13 +27,11 @@ class DummyMainWindow(widgets.AuiManagedFrameWithDynamicCenterPane):
     count = 0
 
     def __init__(self):
-        super(DummyMainWindow, self).__init__(None)
+        super().__init__(None)
 
     def addPane(self, window, caption, floating=False):
         self.count += 1
-        super(DummyMainWindow, self).addPane(
-            window, caption, str("name%d" % self.count)
-        )
+        super().addPane(window, caption, str("name%d" % self.count))
 
     def AddBalloonTip(self, *args, **kwargs):
         pass
@@ -75,12 +73,12 @@ class DummyChangeEvent(DummyEvent):
 
 class DummyCloseEvent(DummyEvent):
     def __init__(self, window):
-        super(DummyCloseEvent, self).__init__(DummyPane(window))
+        super().__init__(DummyPane(window))
 
 
 class ViewerContainerTest(test.wxTestCase):
     def setUp(self):
-        super(ViewerContainerTest, self).setUp()
+        super().setUp()
         self.events = 0
         task.Task.settings = self.settings = config.Settings(load=False)
         self.settings.set("view", "viewerwithdummywidgetcount", "2", new=True)

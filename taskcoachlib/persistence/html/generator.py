@@ -95,7 +95,7 @@ class Viewer2HTMLConverter(object):
     )
 
     def __init__(self, viewer, settings):
-        super(Viewer2HTMLConverter, self).__init__()
+        super().__init__()
         self.viewer = viewer
         self.settings = settings
         self.count = 0

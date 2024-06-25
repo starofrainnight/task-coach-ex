@@ -149,7 +149,7 @@ class CompositeEffort(BaseCompositeEffort):
     afterwards."""
 
     def __init__(self, task, start, stop):  # pylint: disable=W0621
-        super(CompositeEffort, self).__init__(task, start, stop)
+        super().__init__(task, start, stop)
         self.__hash_value = hash((task, start))
         # Effort cache: {True: [efforts recursively], False: [efforts]}
         self.__effort_cache = dict()
@@ -251,7 +251,7 @@ class CompositeEffortPerPeriod(BaseCompositeEffort):
 
     def __init__(self, start, stop, taskList, initialEffort=None):
         self.taskList = taskList
-        super(CompositeEffortPerPeriod, self).__init__(None, start, stop)
+        super().__init__(None, start, stop)
         if initialEffort:
             assert self._inPeriod(initialEffort)
             self.__effort_cache = [initialEffort]

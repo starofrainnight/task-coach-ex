@@ -28,7 +28,7 @@ import os
 
 class FilesystemNotifier(base.NotifierBase):
     def __init__(self):
-        super(FilesystemNotifier, self).__init__()
+        super().__init__()
 
         self.notifier = INotify()
         self.notifier.startReading()
@@ -36,7 +36,7 @@ class FilesystemNotifier(base.NotifierBase):
     def setFilename(self, filename):
         if self._path is not None:
             self.notifier.ignore(FilePath(self._path))
-        super(FilesystemNotifier, self).setFilename(filename)
+        super().setFilename(filename)
         if self._path is not None:
             self.notifier.watch(
                 FilePath(self._path), callbacks=[self.__notify]

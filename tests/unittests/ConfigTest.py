@@ -28,7 +28,7 @@ class SettingsTestCase(test.TestCase):
         self.settings = config.Settings(load=False)
 
     def tearDown(self):
-        super(SettingsTestCase, self).tearDown()
+        super().tearDown()
         del self.settings
 
 
@@ -137,7 +137,7 @@ class SettingsTest(SettingsTestCase):
 
 class SettingsIOTest(SettingsTestCase):
     def setUp(self):
-        super(SettingsIOTest, self).setUp()
+        super().setUp()
         self.fakeFile = io.StringIO()
 
     def testSave(self):
@@ -195,7 +195,7 @@ class SettingsIOTest(SettingsTestCase):
 
 class SettingsObservableTest(SettingsTestCase):
     def setUp(self):
-        super(SettingsObservableTest, self).setUp()
+        super().setUp()
         self.events = []
         pub.subscribe(self.onEvent, "settings.view.toolbar")
 
@@ -325,7 +325,7 @@ class MinimumSettingsTest(SettingsTestCase):
 
 class ApplicationOptionsTest(test.TestCase):
     def setUp(self):
-        super(ApplicationOptionsTest, self).setUp()
+        super().setUp()
         self.parser = config.ApplicationOptionParser()
 
     def parse(self, *args):

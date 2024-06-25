@@ -88,9 +88,7 @@ class TipDialog(sized_controls.SizedDialog):
     def __init__(self, *args, **kwargs):
         self.__tip_provider = kwargs.pop("tip_provider")
         self.__settings = kwargs.pop("settings")
-        super(TipDialog, self).__init__(
-            title=_("Tip of the day"), *args, **kwargs
-        )
+        super().__init__(title=_("Tip of the day"), *args, **kwargs)
         pane = self.GetContentsPane()
         pane.SetSizerType("horizontal")
         wx.StaticBitmap(

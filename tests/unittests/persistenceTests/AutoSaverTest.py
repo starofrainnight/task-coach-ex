@@ -38,7 +38,7 @@ class DummyTaskFile(persistence.TaskFile):
     def __init__(self, *args, **kwargs):
         self.saveCalled = 0
         self._throw = False
-        super(DummyTaskFile, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def _read(self, *args, **kwargs):  # pylint: disable=W0613,W0221
         if self._throw:
@@ -65,13 +65,13 @@ class DummyTaskFile(persistence.TaskFile):
     def save(self, *args, **kwargs):
         if kwargs.get("doNotify", True):
             self.saveCalled += 1
-        super(DummyTaskFile, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def load(
         self, filename=None, throw=False, *args, **kwargs
     ):  # pylint: disable=W0221
         self._throw = throw  # pylint: disable=W0201
-        return super(DummyTaskFile, self).load(filename, *args, **kwargs)
+        return super().load(filename, *args, **kwargs)
 
 
 class AutoSaverTestCase(test.TestCase):
@@ -81,7 +81,7 @@ class AutoSaverTestCase(test.TestCase):
         self.autoSaver = persistence.AutoSaver(self.settings)
 
     def tearDown(self):
-        super(AutoSaverTestCase, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
         del self.autoSaver  # Make sure AutoSaver is not observing task files

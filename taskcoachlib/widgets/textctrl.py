@@ -29,7 +29,7 @@ for ordinal in range(0x20):
 
 class BaseTextCtrl(wx.TextCtrl):
     def __init__(self, parent, *args, **kwargs):
-        super(BaseTextCtrl, self).__init__(parent, -1, *args, **kwargs)
+        super().__init__(parent, -1, *args, **kwargs)
         self.__data = None
         if operating_system.isGTK() or operating_system.isMac():
             if operating_system.isGTK():
@@ -39,17 +39,17 @@ class BaseTextCtrl(wx.TextCtrl):
             self.__undone_value = None
 
     def GetValue(self, *args, **kwargs):
-        value = super(BaseTextCtrl, self).GetValue(*args, **kwargs)
+        value = super().GetValue(*args, **kwargs)
         # Don't allow unicode control characters:
         return value.translate(UNICODE_CONTROL_CHARACTERS_TO_WEED)
 
     def SetValue(self, *args, **kwargs):
-        super(BaseTextCtrl, self).SetValue(*args, **kwargs)
+        super().SetValue(*args, **kwargs)
         if operating_system.isGTK() or operating_system.isMac():
             self.__initial_value = self.GetValue()
 
     def AppendText(self, *args, **kwargs):
-        super(BaseTextCtrl, self).AppendText(*args, **kwargs)
+        super().AppendText(*args, **kwargs)
         if operating_system.isGTK() or operating_system.isMac():
             self.__initial_value = self.GetValue()
 
@@ -62,24 +62,24 @@ class BaseTextCtrl(wx.TextCtrl):
     def CanUndo(self):
         if operating_system.isMac():
             return self.__can_undo()
-        return super(BaseTextCtrl, self).CanUndo()
+        return super().CanUndo()
 
     def Undo(self):
         if operating_system.isMac():
             self.__undo()
         else:
-            super(BaseTextCtrl, self).Undo()
+            super().Undo()
 
     def CanRedo(self):
         if operating_system.isMac():
             return self.__can_redo()
-        return super(BaseTextCtrl, self).CanRedo()
+        return super().CanRedo()
 
     def Redo(self):
         if operating_system.isMac():
             self.__redo()
         else:
-            super(BaseTextCtrl, self).Redo()
+            super().Redo()
 
     def __on_key_down(self, event):
         """Check whether the user pressed Ctrl-Z (or Ctrl-Y) and if so,
@@ -104,7 +104,7 @@ class BaseTextCtrl(wx.TextCtrl):
         """Undo the last change."""
         insertion_point = self.GetInsertionPoint()
         self.__undone_value = self.GetValue()
-        super(BaseTextCtrl, self).SetValue(self.__initial_value)
+        super().SetValue(self.__initial_value)
         insertion_point = min(insertion_point, self.GetLastPosition())
         self.SetInsertionPoint(insertion_point)
 
@@ -120,7 +120,7 @@ class BaseTextCtrl(wx.TextCtrl):
     def __redo(self):
         """Redo the last undone change."""
         insertion_point = self.GetInsertionPoint()
-        super(BaseTextCtrl, self).SetValue(self.__undone_value)
+        super().SetValue(self.__undone_value)
         self.__undone_value = None
         insertion_point = min(insertion_point, self.GetLastPosition())
         self.SetInsertionPoint(insertion_point)
@@ -145,7 +145,7 @@ class MultiLineTextCtrl(BaseTextCtrl):
             # from the right-click menu in the TextCtrl, so we don't use
             # wx.TE_RICH if the language is RTL.
             kwargs["style"] |= wx.TE_RICH | wx.TE_AUTO_URL
-        super(MultiLineTextCtrl, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         self.__initializeText(text)
         self.Bind(wx.EVT_TEXT_URL, self.onURLClicked)
         try:
@@ -170,6 +170,6 @@ class MultiLineTextCtrl(BaseTextCtrl):
 
 class StaticTextWithToolTip(wx.StaticText):
     def __init__(self, *args, **kwargs):
-        super(StaticTextWithToolTip, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         label = kwargs["label"]
         self.SetToolTip(wx.ToolTip(label))

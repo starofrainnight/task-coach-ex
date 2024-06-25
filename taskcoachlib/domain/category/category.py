@@ -35,7 +35,7 @@ class Category(
         *args,
         **kwargs
     ):
-        super(Category, self).__init__(
+        super().__init__(
             subject=subject,
             children=children or [],
             parent=parent,
@@ -94,7 +94,7 @@ class Category(
         ]
 
     def __getstate__(self):
-        state = super(Category, self).__getstate__()
+        state = super().__getstate__()
         state.update(
             dict(
                 categorizables=self.__categorizables.get(),
@@ -106,7 +106,7 @@ class Category(
 
     @patterns.eventSource
     def __setstate__(self, state, event=None):
-        super(Category, self).__setstate__(state, event=event)
+        super().__setstate__(state, event=event)
         self.setCategorizables(state["categorizables"], event=event)
         self.setFiltered(state["filtered"], event=event)
         self.makeSubcategoriesExclusive(
@@ -114,7 +114,7 @@ class Category(
         )
 
     def __getcopystate__(self):
-        state = super(Category, self).__getcopystate__()
+        state = super().__getcopystate__()
         state.update(
             dict(
                 categorizables=self.__categorizables.get(),
@@ -124,7 +124,7 @@ class Category(
         return state
 
     def subjectChangedEvent(self, event):
-        super(Category, self).subjectChangedEvent(event)
+        super().subjectChangedEvent(event)
         self.categorySubjectChangedEvent(event)
 
     def categorySubjectChangedEvent(self, event):
@@ -185,7 +185,7 @@ class Category(
         """Override to include all categorizables in the event
         that belong to this category since their appearance (may)
         have changed too."""
-        super(Category, self).appearanceChangedEvent(event)
+        super().appearanceChangedEvent(event)
         for categorizable in self.categorizables():
             categorizable.appearanceChangedEvent(event)
 

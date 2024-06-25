@@ -37,7 +37,7 @@ class SynchronizedObject(object):
 
     def __init__(self, *args, **kwargs):
         self.__status = kwargs.pop("status", self.STATUS_NEW)
-        super(SynchronizedObject, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     @classmethod
     def markDeletedEventType(class_):
@@ -49,7 +49,7 @@ class SynchronizedObject(object):
 
     def __getstate__(self):
         try:
-            state = super(SynchronizedObject, self).__getstate__()
+            state = super().__getstate__()
         except AttributeError:
             state = dict()
 
@@ -59,7 +59,7 @@ class SynchronizedObject(object):
     @patterns.eventSource
     def __setstate__(self, state, event=None):
         try:
-            super(SynchronizedObject, self).__setstate__(state, event=event)
+            super().__setstate__(state, event=event)
         except AttributeError:
             pass
         if state["status"] != self.__status:
@@ -176,14 +176,14 @@ class Object(SynchronizedObject):
             self.orderingChangedEvent,
         )
         self.__id = kwargs.pop("id", None) or str(uuid.uuid1())
-        super(Object, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __repr__(self):
         return self.subject()
 
     def __getstate__(self):
         try:
-            state = super(Object, self).__getstate__()
+            state = super().__getstate__()
         except AttributeError:
             state = dict()
         state.update(
@@ -206,7 +206,7 @@ class Object(SynchronizedObject):
     @patterns.eventSource
     def __setstate__(self, state, event=None):
         try:
-            super(Object, self).__setstate__(state, event=event)
+            super().__setstate__(state, event=event)
         except AttributeError:
             pass
         self.__id = state["id"]
@@ -229,7 +229,7 @@ class Object(SynchronizedObject):
 
         E.g. copy = obj.__class__(**original.__getcopystate__())"""
         try:
-            state = super(Object, self).__getcopystate__()
+            state = super().__getcopystate__()
         except AttributeError:
             state = dict()
         # Note that we don't put the id and the creation date/time in the state
@@ -444,10 +444,10 @@ class Object(SynchronizedObject):
 class CompositeObject(Object, patterns.ObservableComposite):
     def __init__(self, *args, **kwargs):
         self.__expandedContexts = set(kwargs.pop("expandedContexts", []))
-        super(CompositeObject, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __getcopystate__(self):
-        state = super(CompositeObject, self).__getcopystate__()
+        state = super().__getcopystate__()
         state.update(dict(expandedContexts=self.expandedContexts()))
         return state
 
@@ -458,7 +458,7 @@ class CompositeObject(Object, patterns.ObservableComposite):
     # Subject:
 
     def subject(self, recursive=False):  # pylint: disable=W0221
-        subject = super(CompositeObject, self).subject()
+        subject = super().subject()
         if recursive and self.parent():
             subject = "%s -> %s" % (
                 self.parent().subject(recursive=True),
@@ -467,7 +467,7 @@ class CompositeObject(Object, patterns.ObservableComposite):
         return subject
 
     def subjectChangedEvent(self, event):
-        super(CompositeObject, self).subjectChangedEvent(event)
+        super().subjectChangedEvent(event)
         for child in self.children():
             child.subjectChangedEvent(event)
 
@@ -484,7 +484,7 @@ class CompositeObject(Object, patterns.ObservableComposite):
 
     def description(self, recursive=False):  # pylint: disable=W0221,W0613
         # Allow for the recursive flag, but ignore it
-        return super(CompositeObject, self).description()
+        return super().description()
 
     # Expansion state:
 
@@ -534,50 +534,48 @@ class CompositeObject(Object, patterns.ObservableComposite):
     # Appearance:
 
     def appearanceChangedEvent(self, event):
-        super(CompositeObject, self).appearanceChangedEvent(event)
+        super().appearanceChangedEvent(event)
         # Assume that most of the times our children change appearance too
         for child in self.children():
             child.appearanceChangedEvent(event)
 
     def foregroundColor(self, recursive=False):
-        myFgColor = super(CompositeObject, self).foregroundColor()
+        myFgColor = super().foregroundColor()
         if not myFgColor and recursive and self.parent():
             return self.parent().foregroundColor(recursive=True)
         else:
             return myFgColor
 
     def backgroundColor(self, recursive=False):
-        myBgColor = super(CompositeObject, self).backgroundColor()
+        myBgColor = super().backgroundColor()
         if not myBgColor and recursive and self.parent():
             return self.parent().backgroundColor(recursive=True)
         else:
             return myBgColor
 
     def font(self, recursive=False):
-        myFont = super(CompositeObject, self).font()
+        myFont = super().font()
         if not myFont and recursive and self.parent():
             return self.parent().font(recursive=True)
         else:
             return myFont
 
     def icon(self, recursive=False):
-        myIcon = super(CompositeObject, self).icon()
+        myIcon = super().icon()
         if not recursive:
             return myIcon
         if not myIcon and self.parent():
             myIcon = self.parent().icon(recursive=True)
-        return self.pluralOrSingularIcon(
-            myIcon, native=super(CompositeObject, self).icon() == ""
-        )
+        return self.pluralOrSingularIcon(myIcon, native=super().icon() == "")
 
     def selectedIcon(self, recursive=False):
-        myIcon = super(CompositeObject, self).selectedIcon()
+        myIcon = super().selectedIcon()
         if not recursive:
             return myIcon
         if not myIcon and self.parent():
             myIcon = self.parent().selectedIcon(recursive=True)
         return self.pluralOrSingularIcon(
-            myIcon, native=super(CompositeObject, self).selectedIcon() == ""
+            myIcon, native=super().selectedIcon() == ""
         )
 
     def pluralOrSingularIcon(self, myIcon, native=True):
@@ -605,24 +603,24 @@ class CompositeObject(Object, patterns.ObservableComposite):
 
     @patterns.eventSource
     def markDeleted(self, event=None):
-        super(CompositeObject, self).markDeleted(event=event)
+        super().markDeleted(event=event)
         for child in self.children():
             child.markDeleted(event=event)
 
     @patterns.eventSource
     def markNew(self, event=None):
-        super(CompositeObject, self).markNew(event=event)
+        super().markNew(event=event)
         for child in self.children():
             child.markNew(event=event)
 
     @patterns.eventSource
     def markDirty(self, force=False, event=None):
-        super(CompositeObject, self).markDirty(force, event=event)
+        super().markDirty(force, event=event)
         for child in self.children():
             child.markDirty(force, event=event)
 
     @patterns.eventSource
     def cleanDirty(self, event=None):
-        super(CompositeObject, self).cleanDirty(event=event)
+        super().cleanDirty(event=event)
         for child in self.children():
             child.cleanDirty(event=event)

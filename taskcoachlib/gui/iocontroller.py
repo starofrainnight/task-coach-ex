@@ -44,7 +44,7 @@ class IOController(object):
     to let the user specify what file to load/save/etc."""
 
     def __init__(self, taskFile, messageCallback, settings, splash=None):
-        super(IOController, self).__init__()
+        super().__init__()
         self.__taskFile = taskFile
         self.__messageCallback = messageCallback
         self.__settings = settings

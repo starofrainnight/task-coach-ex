@@ -45,7 +45,7 @@ class NewCategoryCommandTest(CategoryCommandTestCase):
 
 class NewSubCategoryCommandTest(CategoryCommandTestCase):
     def setUp(self):
-        super(NewSubCategoryCommandTest, self).setUp()
+        super().setUp()
         self.category = category.Category("category")
         self.categories.append(self.category)
 
@@ -74,7 +74,7 @@ class NewSubCategoryCommandTest(CategoryCommandTestCase):
 
 class DragAndDropCategoryCommandTest(CategoryCommandTestCase):
     def setUp(self):
-        super(DragAndDropCategoryCommandTest, self).setUp()
+        super().setUp()
         self.parent = category.Category("parent")
         self.child = category.Category("child")
         self.grandchild = category.Category("grandchild")
@@ -109,7 +109,7 @@ class DragAndDropCategoryCommandTest(CategoryCommandTestCase):
 
 class CopyAndPasteCommandTest(CategoryCommandTestCase):
     def setUp(self):
-        super(CopyAndPasteCommandTest, self).setUp()
+        super().setUp()
         self.original = category.Category("original")
         self.categories.append(self.original)
         self.task = task.Task()
@@ -166,7 +166,7 @@ class CopyAndPasteCommandTest(CategoryCommandTestCase):
 
 class EditExclusiveSubcategoriesCommandTest(CategoryCommandTestCase):
     def setUp(self):
-        super(EditExclusiveSubcategoriesCommandTest, self).setUp()
+        super().setUp()
         self.category = category.Category("category")
 
     def testEdit(self):

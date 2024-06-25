@@ -30,7 +30,7 @@ class SettingsCommand(base_uicommand.UICommand):  # pylint: disable=W0223
         self.settings = settings
         self.section = section
         self.setting = setting
-        super(SettingsCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
 
 class BooleanSettingsCommand(SettingsCommand):  # pylint: disable=W0223
@@ -41,16 +41,14 @@ class BooleanSettingsCommand(SettingsCommand):  # pylint: disable=W0223
 
     def __init__(self, value=None, *args, **kwargs):
         self.value = value
-        super(BooleanSettingsCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def onUpdateUI(self, event):
         event.Check(self.isSettingChecked())
-        super(BooleanSettingsCommand, self).onUpdateUI(event)
+        super().onUpdateUI(event)
 
     def addToMenu(self, menu, window, position=None):
-        menuId = super(BooleanSettingsCommand, self).addToMenu(
-            menu, window, position
-        )
+        menuId = super().addToMenu(menu, window, position)
         menuItem = menu.FindItemById(menuId)
         menuItem.Check(self.isSettingChecked())
         return menuId
@@ -62,9 +60,7 @@ class BooleanSettingsCommand(SettingsCommand):  # pylint: disable=W0223
 class UICheckCommand(BooleanSettingsCommand):
     def __init__(self, *args, **kwargs):
         kwargs["bitmap"] = kwargs.get("bitmap", self.getBitmap())
-        super(UICheckCommand, self).__init__(
-            kind=wx.ITEM_CHECK, *args, **kwargs
-        )
+        super().__init__(kind=wx.ITEM_CHECK, *args, **kwargs)
 
     def isSettingChecked(self):
         return self.settings.getboolean(self.section, self.setting)
@@ -98,13 +94,11 @@ class UICheckCommand(BooleanSettingsCommand):
 
 class UIRadioCommand(BooleanSettingsCommand):
     def __init__(self, *args, **kwargs):
-        super(UIRadioCommand, self).__init__(
-            kind=wx.ITEM_RADIO, bitmap="", *args, **kwargs
-        )
+        super().__init__(kind=wx.ITEM_RADIO, bitmap="", *args, **kwargs)
 
     def onUpdateUI(self, event):
         if self.isSettingChecked():
-            super(UIRadioCommand, self).onUpdateUI(event)
+            super().onUpdateUI(event)
 
     def isSettingChecked(self):
         return self.settings.get(self.section, self.setting) == str(self.value)

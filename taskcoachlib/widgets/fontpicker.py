@@ -23,7 +23,7 @@ class FontPickerCtrl(wx.Button):
     def __init__(self, *args, **kwargs):
         self.__font = kwargs.pop("font")
         self.__colour = kwargs.pop("colour")
-        super(FontPickerCtrl, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__updateButton()
         self.Bind(wx.EVT_BUTTON, self.onClick)
 

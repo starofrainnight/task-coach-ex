@@ -30,7 +30,7 @@ class NewNoteCommand(base.NewItemCommand):
         description = kwargs.pop("description", "")
         attachments = kwargs.pop("attachments", [])
         categories = kwargs.get("categories", None)
-        super(NewNoteCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.items = self.notes = [
             note.Note(
                 subject=subject,
@@ -50,7 +50,7 @@ class NewSubNoteCommand(base.NewSubItemCommand):
         description = kwargs.pop("description", "")
         attachments = kwargs.pop("attachments", [])
         categories = kwargs.get("categories", None)
-        super(NewSubNoteCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.items = self.notes = [
             parent.newChild(
                 subject=subject,
@@ -79,7 +79,7 @@ class AddNoteCommand(base.BaseCommand):
 
     def __init__(self, *args, **kwargs):
         self.owners = []
-        super(AddNoteCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.owners = self.items
         self.items = self.__notes = [
             note.Note(subject=_("New note")) for dummy in self.items
@@ -110,15 +110,15 @@ class AddNoteCommand(base.BaseCommand):
             owner.removeNote(note, event=event)
 
     def do_command(self):
-        super(AddNoteCommand, self).do_command()
+        super().do_command()
         self.addNotes()
 
     def undo_command(self):
-        super(AddNoteCommand, self).undo_command()
+        super().undo_command()
         self.removeNotes()
 
     def redo_command(self):
-        super(AddNoteCommand, self).redo_command()
+        super().redo_command()
         self.addNotes()
 
 
@@ -129,7 +129,7 @@ class AddSubNoteCommand(base.BaseCommand):
     def __init__(self, *args, **kwargs):
         self.__owner = kwargs.pop("owner")
         self.__parents = []
-        super(AddSubNoteCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__parents = self.items
         self.__notes = kwargs.get(
             "notes",
@@ -157,15 +157,15 @@ class AddSubNoteCommand(base.BaseCommand):
             self.__owner.removeNote(subnote, event=event)
 
     def do_command(self):
-        super(AddSubNoteCommand, self).do_command()
+        super().do_command()
         self.addNotes()
 
     def undo_command(self):
-        super(AddSubNoteCommand, self).undo_command()
+        super().undo_command()
         self.removeNotes()
 
     def redo_command(self):
-        super(AddSubNoteCommand, self).redo_command()
+        super().redo_command()
         self.addNotes()
 
 
@@ -175,7 +175,7 @@ class RemoveNoteCommand(base.BaseCommand):
 
     def __init__(self, *args, **kwargs):
         self.__notes = kwargs.pop("notes")
-        super(RemoveNoteCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     @patterns.eventSource
     def addNotes(self, event=None):
@@ -194,13 +194,13 @@ class RemoveNoteCommand(base.BaseCommand):
             item.removeNotes(*self.__notes, **kwargs)
 
     def do_command(self):
-        super(RemoveNoteCommand, self).do_command()
+        super().do_command()
         self.removeNotes()
 
     def undo_command(self):
-        super(RemoveNoteCommand, self).undo_command()
+        super().undo_command()
         self.addNotes()
 
     def redo_command(self):
-        super(RemoveNoteCommand, self).redo_command()
+        super().redo_command()
         self.removeNotes()

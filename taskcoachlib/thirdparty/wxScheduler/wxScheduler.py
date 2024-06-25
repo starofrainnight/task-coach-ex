@@ -11,7 +11,7 @@ class wxScheduler(wxSchedulerCore, scrolled.ScrolledPanel):
     def __init__(self, *args, **kwds):
         kwds["style"] = wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE
 
-        super(wxScheduler, self).__init__(*args, **kwds)
+        super().__init__(*args, **kwds)
 
         timerId = wx.NewId()
         self._sizeTimer = wx.Timer(self, timerId)
@@ -87,7 +87,7 @@ class wxScheduler(wxSchedulerCore, scrolled.ScrolledPanel):
         else:
             self.DrawBuffer()
             self.GetSizer().FitInside(self)
-            super(wxScheduler, self).Refresh()
+            super().Refresh()
             self._dirty = False
 
     def Freeze(self):
@@ -102,7 +102,7 @@ class wxScheduler(wxSchedulerCore, scrolled.ScrolledPanel):
         """
         Call derived method and force wxDC refresh
         """
-        super(wxScheduler, self).SetResizable(value)
+        super().SetResizable(value)
         self.InvalidateMinSize()
         self.Refresh()
 
@@ -144,7 +144,7 @@ class wxScheduler(wxSchedulerCore, scrolled.ScrolledPanel):
         return coords
 
     def SetViewType(self, view=None):
-        super(wxScheduler, self).SetViewType(view)
+        super().SetViewType(view)
         self.InvalidateMinSize()
         self.Refresh()
 

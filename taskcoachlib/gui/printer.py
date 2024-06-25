@@ -90,7 +90,7 @@ class PrinterSettings(object, metaclass=patterns.Singleton):
 
 class HTMLPrintout(wx.html.HtmlPrintout):
     def __init__(self, html_text, settings):
-        super(HTMLPrintout, self).__init__()
+        super().__init__()
         self.SetHtmlText(html_text)
         self.SetFooter(_("Page") + " @PAGENUM@/@PAGESCNT@", wx.html.PAGE_ALL)
         self.SetFonts("Arial", "Courier")
@@ -103,7 +103,7 @@ class HTMLPrintout(wx.html.HtmlPrintout):
 class DCPrintout(wx.Printout):
     def __init__(self, widget):
         self.widget = widget
-        super(DCPrintout, self).__init__()
+        super().__init__()
 
     def OnPrintPage(self, page):  # pylint: disable=W0613
         self.widget.Draw(self.GetDC())

@@ -32,7 +32,7 @@ class ChangeMonitor(Observer):
     """
 
     def __init__(self, id_=None):
-        super(ChangeMonitor, self).__init__()
+        super().__init__()
 
         self.__guid = id_ or guid.generate()
         self.__frozen = False

@@ -24,15 +24,13 @@ from . import uicommand
 
 class _Toolbar(aui.AuiToolBar):
     def __init__(self, parent, style):
-        super(_Toolbar, self).__init__(
-            parent, agwStyle=aui.AUI_TB_NO_AUTORESIZE
-        )
+        super().__init__(parent, agwStyle=aui.AUI_TB_NO_AUTORESIZE)
 
     def AddLabelTool(self, id, label, bitmap1, bitmap2, kind, **kwargs):
         long_help_string = kwargs.pop("longHelp", "")
         short_help_string = kwargs.pop("shortHelp", "")
         bitmap2 = self.MakeDisabledBitmap(bitmap1)
-        super(_Toolbar, self).AddTool(
+        super().AddTool(
             id,
             label,
             bitmap1,
@@ -58,9 +56,9 @@ class _Toolbar(aui.AuiToolBar):
 
     def SetMargins(self, *args):
         if len(args) == 2:
-            super(_Toolbar, self).SetMarginsXY(args[0], args[1])
+            super().SetMarginsXY(args[0], args[1])
         else:
-            super(_Toolbar, self).SetMargins(*args)
+            super().SetMargins(*args)
 
     def MakeDisabledBitmap(self, bitmap):
         return bitmap.ConvertToImage().ConvertToGreyscale().ConvertToBitmap()
@@ -72,9 +70,7 @@ class ToolBar(_Toolbar, uicommand.UICommandContainerMixin):
         self.__settings = settings
         self.__visibleUICommands = list()
         self.__cache = None
-        super(ToolBar, self).__init__(
-            window, style=wx.TB_FLAT | wx.TB_NODIVIDER
-        )
+        super().__init__(window, style=wx.TB_FLAT | wx.TB_NODIVIDER)
         self.SetToolBitmapSize(size)
         if operating_system.isMac():
             # Extra margin needed because the search control is too high
@@ -98,7 +94,7 @@ class ToolBar(_Toolbar, uicommand.UICommandContainerMixin):
             else:
                 idx += 1
 
-        super(ToolBar, self).Clear()
+        super().Clear()
 
     def detach(self):
         self.Clear()
@@ -194,7 +190,7 @@ class ToolBar(_Toolbar, uicommand.UICommandContainerMixin):
 
 class MainToolBar(ToolBar):
     def __init__(self, *args, **kwargs):
-        super(MainToolBar, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.Bind(wx.EVT_SIZE, self._OnSize)
 
     def _OnSize(self, event):
@@ -206,7 +202,7 @@ class MainToolBar(ToolBar):
 
     def Realize(self):
         self._agwStyle &= ~aui.AUI_TB_NO_AUTORESIZE
-        super(MainToolBar, self).Realize()
+        super().Realize()
         self._agwStyle |= aui.AUI_TB_NO_AUTORESIZE
         wx.CallAfter(self.GetParent().SendSizeEvent)
         w, h = self.GetParent().GetClientSize()

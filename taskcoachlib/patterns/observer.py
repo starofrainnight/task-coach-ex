@@ -271,7 +271,7 @@ class Publisher(object, metaclass=singleton.Singleton):
     observables can reach all observers."""
 
     def __init__(self, *args, **kwargs):
-        super(Publisher, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.clear()
 
     def clear(self):
@@ -397,7 +397,7 @@ class Observer(object):
 class Decorator(Observer):
     def __init__(self, observable, *args, **kwargs):
         self.__observable = observable
-        super(Decorator, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def observable(self, recursive=False):
         if recursive:
@@ -471,7 +471,7 @@ class ObservableSet(ObservableCollection, Set):
 
     @eventSource
     def remove(self, item, event=None):
-        super(ObservableSet, self).remove(item)
+        super().remove(item)
         event.addSource(self, item, type=self.removeItemEventType())
 
     @eventSource
@@ -486,7 +486,7 @@ class ObservableSet(ObservableCollection, Set):
         if not self:
             return
         items = tuple(self)
-        super(ObservableSet, self).clear()
+        super().clear()
         event.addSource(self, *items, **dict(type=self.removeItemEventType()))
 
 
@@ -496,26 +496,26 @@ class ObservableList(ObservableCollection, List):
 
     @eventSource
     def append(self, item, event=None):
-        super(ObservableList, self).append(item)
+        super().append(item)
         event.addSource(self, item, type=self.addItemEventType())
 
     @eventSource
     def extend(self, items, event=None):
         if not items:
             return
-        super(ObservableList, self).extend(items)
+        super().extend(items)
         event.addSource(self, *items, **dict(type=self.addItemEventType()))
 
     @eventSource
     def remove(self, item, event=None):
-        super(ObservableList, self).remove(item)
+        super().remove(item)
         event.addSource(self, item, type=self.removeItemEventType())
 
     @eventSource
     def removeItems(self, items, event=None):  # pylint: disable=W0221
         if not items:
             return
-        super(ObservableList, self).removeItems(items)
+        super().removeItems(items)
         event.addSource(self, *items, **dict(type=self.removeItemEventType()))
 
     @eventSource
@@ -535,9 +535,7 @@ class CollectionDecorator(Decorator, ObservableCollection):
     original collection or a decorated version."""
 
     def __init__(self, observedCollection, *args, **kwargs):
-        super(CollectionDecorator, self).__init__(
-            observedCollection, *args, **kwargs
-        )
+        super().__init__(observedCollection, *args, **kwargs)
         self.__freezeCount = 0
         observable = self.observable()
         self.registerObserver(
@@ -555,7 +553,7 @@ class CollectionDecorator(Decorator, ObservableCollection):
     def __repr__(self):  # pragma: no cover
         return "%s(%s)" % (
             self.__class__,
-            super(CollectionDecorator, self).__repr__(),
+            super().__repr__(),
         )
 
     def freeze(self):
@@ -575,7 +573,7 @@ class CollectionDecorator(Decorator, ObservableCollection):
         self.removeObserver(self.onAddItem)
         self.removeObserver(self.onRemoveItem)
         self.observable().detach()
-        super(CollectionDecorator, self).detach()
+        super().detach()
 
     def onAddItem(self, event):
         """The default behaviour is to simply add the items that are
@@ -592,12 +590,12 @@ class CollectionDecorator(Decorator, ObservableCollection):
     def extendSelf(self, items, event=None):
         """Provide a method to extend this collection without delegating to
         the observed collection."""
-        return super(CollectionDecorator, self).extend(items, event=event)
+        return super().extend(items, event=event)
 
     def removeItemsFromSelf(self, items, event=None):
         """Provide a method to remove items from this collection without
         delegating to the observed collection."""
-        return super(CollectionDecorator, self).removeItems(items, event=event)
+        return super().removeItems(items, event=event)
 
     # Delegate changes to the observed collection
 

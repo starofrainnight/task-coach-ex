@@ -29,7 +29,7 @@ from .notifier import AbstractNotifier
 
 class GrowlNotifier(AbstractNotifier):
     def __init__(self):
-        super(GrowlNotifier, self).__init__()
+        super().__init__()
         try:
             # pylint: disable=E1101
             self._notifier = Growl.GrowlNotifier(

@@ -26,7 +26,7 @@ class VersionCheckerUnderTest(meta.VersionChecker):
         self.retrievalException = kwargs.pop("retrievalException", None)
         self.parseException = kwargs.pop("parseException", None)
         self.userNotified = False
-        super(VersionCheckerUnderTest, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def retrieveVersionFile(self):  # pylint: disable=W0221
         if self.retrievalException:
@@ -40,9 +40,7 @@ class VersionCheckerUnderTest(meta.VersionChecker):
         if self.parseException:
             raise self.parseException
         else:
-            return super(VersionCheckerUnderTest, self).parseVersionFile(
-                versionFile
-            )
+            return super().parseVersionFile(versionFile)
 
     def notifyUser(self, *args, **kwargs):  # pylint: disable=W0221,W0613
         self.userNotified = True

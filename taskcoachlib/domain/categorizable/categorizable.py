@@ -33,22 +33,20 @@ class CategorizableCompositeObject(base.CompositeObject):
             self.addCategoryEvent,
             self.removeCategoryEvent,
         )
-        super(CategorizableCompositeObject, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __getstate__(self):
-        state = super(CategorizableCompositeObject, self).__getstate__()
+        state = super().__getstate__()
         state.update(dict(categories=self.categories()))
         return state
 
     @patterns.eventSource
     def __setstate__(self, state, event=None):
-        super(CategorizableCompositeObject, self).__setstate__(
-            state, event=event
-        )
+        super().__setstate__(state, event=event)
         self.setCategories(state["categories"], event=event)
 
     def __getcopystate__(self):
-        state = super(CategorizableCompositeObject, self).__getcopystate__()
+        state = super().__getcopystate__()
         state.update(dict(categories=self.categories()))
         return state
 
@@ -178,9 +176,7 @@ class CategorizableCompositeObject(base.CompositeObject):
         if categoryBasedFgColor:
             return categoryBasedFgColor
         else:
-            return super(CategorizableCompositeObject, self).foregroundColor(
-                recursive=True
-            )
+            return super().foregroundColor(recursive=True)
 
     def backgroundColor(self, recursive=False):
         myOwnBgColor = super(
@@ -192,9 +188,7 @@ class CategorizableCompositeObject(base.CompositeObject):
         if categoryBasedBgColor:
             return categoryBasedBgColor
         else:
-            return super(CategorizableCompositeObject, self).backgroundColor(
-                recursive=True
-            )
+            return super().backgroundColor(recursive=True)
 
     def _categoryForegroundColor(self):
         """If a categorizable object belongs to a category that has a
@@ -229,16 +223,14 @@ class CategorizableCompositeObject(base.CompositeObject):
             return color.ColorMixer.mix(colors)
 
     def font(self, recursive=False):
-        myFont = super(CategorizableCompositeObject, self).font()
+        myFont = super().font()
         if myFont or not recursive:
             return myFont
         categoryBasedFont = self._categoryFont()
         if categoryBasedFont:
             return categoryBasedFont
         else:
-            return super(CategorizableCompositeObject, self).font(
-                recursive=True
-            )
+            return super().font(recursive=True)
 
     def _categoryFont(self):
         """If a categorizable object belongs to a category that has a
@@ -255,7 +247,7 @@ class CategorizableCompositeObject(base.CompositeObject):
             return font.FontMixer.mix(*fonts)  # pylint: disable=W0142
 
     def icon(self, recursive=False):
-        icon = super(CategorizableCompositeObject, self).icon()
+        icon = super().icon()
         if not icon and recursive:
             icon = self.categoryIcon() or super(
                 CategorizableCompositeObject, self
@@ -274,7 +266,7 @@ class CategorizableCompositeObject(base.CompositeObject):
             return ""
 
     def selectedIcon(self, recursive=False):
-        icon = super(CategorizableCompositeObject, self).selectedIcon()
+        icon = super().selectedIcon()
         if not icon and recursive:
             icon = self.categorySelectedIcon() or super(
                 CategorizableCompositeObject, self

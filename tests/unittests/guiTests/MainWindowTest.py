@@ -53,7 +53,7 @@ class DummyIOController(object):
 
 class MainWindowTestCase(test.wxTestCase):
     def setUp(self):
-        super(MainWindowTestCase, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.setSettings()
         task.Task.settings = self.settings
@@ -73,7 +73,7 @@ class MainWindowTestCase(test.wxTestCase):
         self.mainwindow.Destroy()
         wx.Yield()
         del self.mainwindow
-        super(MainWindowTestCase, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
@@ -119,7 +119,7 @@ class MainWindowMaximizeTestCase(MainWindowTestCase):
     maximized = "Subclass responsibility"
 
     def setUp(self):
-        super(MainWindowMaximizeTestCase, self).setUp()
+        super().setUp()
         if not operating_system.isMac():
             self.mainwindow.Show()  # Or IsMaximized() returns always False...
 
@@ -155,7 +155,7 @@ class MainWindowMaximizedTest(MainWindowMaximizeTestCase):
 
 class MainWindowIconizedTest(MainWindowTestCase):
     def setUp(self):
-        super(MainWindowIconizedTest, self).setUp()
+        super().setUp()
         if operating_system.isGTK():
             wx.SafeYield()  # pragma: no cover
 

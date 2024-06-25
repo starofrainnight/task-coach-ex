@@ -48,11 +48,11 @@ class PowerStateMixin(PowerStateMixinBase):
     POWEROFF = _powermgt.POWEROFF
 
     def __init__(self, *args, **kwargs):
-        super(PowerStateMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         class Observer(_powermgt.PowerObserver):
             def __init__(self, cb):
-                super(Observer, self).__init__()
+                super().__init__()
 
                 self.__callback = cb
 

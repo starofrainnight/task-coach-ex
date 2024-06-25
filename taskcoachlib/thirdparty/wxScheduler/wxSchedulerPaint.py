@@ -30,7 +30,7 @@ EVT_PERIODWIDTH_CHANGED = wx.PyEventBinder(wxEVT_COMMAND_PERIODWIDTH_CHANGED)
 
 class wxSchedulerSizer(wx.Sizer):
     def __init__(self, minSizeCallback):
-        super(wxSchedulerSizer, self).__init__()
+        super().__init__()
 
         self._minSizeCallback = minSizeCallback
 
@@ -46,7 +46,7 @@ class wxSchedulerSizer(wx.Sizer):
 class wxSchedulerPaint(object):
 
     def __init__(self, *args, **kwds):
-        super(wxSchedulerPaint, self).__init__(*args, **kwds)
+        super().__init__(*args, **kwds)
 
         self._resizable = False
         self._style = wxSCHEDULER_VERTICAL
@@ -1350,7 +1350,7 @@ class wxSchedulerPaint(object):
 
     def Refresh(self):
         self.DrawBuffer()
-        super(wxSchedulerPaint, self).Refresh()
+        super().Refresh()
         if self._headerPanel is not None:
             self._headerPanel.Refresh()
 

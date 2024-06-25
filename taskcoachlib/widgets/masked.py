@@ -29,7 +29,7 @@ class FixOverwriteSelectionMixin(object):
             # cursor is at the start of the field so that typing overwrites the
             # current field instead of moving to the next field:
             start, end = end, start
-        super(FixOverwriteSelectionMixin, self)._SetSelection(start, end)
+        super()._SetSelection(start, end)
 
     def _OnKeyDown(self, event):
         # Allow keyboard navigation in notebook. Just skipping the event does not work;
@@ -41,7 +41,7 @@ class FixOverwriteSelectionMixin(object):
         ):
             if self.GetParent().NavigateBook(event):
                 return
-        super(FixOverwriteSelectionMixin, self)._OnKeyDown(event)
+        super()._OnKeyDown(event)
 
 
 class TextCtrl(FixOverwriteSelectionMixin, masked.TextCtrl):
@@ -63,7 +63,7 @@ class AmountCtrl(FixOverwriteSelectionMixin, masked.NumCtrl):
         # Prevent decimalChar and groupChar from being the same:
         if groupChar == decimalChar:
             groupChar = "." if decimalChar == "," else ","
-        super(AmountCtrl, self).__init__(
+        super().__init__(
             parent,
             value=value,
             allowNegative=False,
@@ -97,7 +97,7 @@ class TimeDeltaCtrl(TextCtrl):
         # the minus sign in the mask. Otherwise only allow for numbers.
         mask = "X{9}:##:##" if negative_value or readonly else "#{9}:##:##"
         hours = self.__hour_string(hours, negative_value)
-        super(TimeDeltaCtrl, self).__init__(
+        super().__init__(
             parent,
             mask=mask,
             formatcodes="FS",

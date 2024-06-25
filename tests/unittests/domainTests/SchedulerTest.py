@@ -22,7 +22,7 @@ from taskcoachlib.domain import date
 
 class SchedulerTest(test.TestCase):
     def setUp(self):
-        super(SchedulerTest, self).setUp()
+        super().setUp()
         self.scheduler = date.Scheduler()
         self.callCount = 0
 

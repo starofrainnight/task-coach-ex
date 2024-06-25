@@ -26,7 +26,7 @@ class Timeline(tooltip.ToolTipMixin, timeline.TimeLine):
     def __init__(self, parent, rootNode, onSelect, onEdit, popupMenu):
         self.__selection = []
         self.getItemTooltipData = parent.getItemTooltipData
-        super(Timeline, self).__init__(parent, model=rootNode, adapter=parent)
+        super().__init__(parent, model=rootNode, adapter=parent)
         self.__tip = tooltip.SimpleToolTip(self)
         self.selectCommand = onSelect
         self.Bind(timeline.EVT_TIMELINE_SELECTED, self.onSelect)

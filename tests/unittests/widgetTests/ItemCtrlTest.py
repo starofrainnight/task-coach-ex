@@ -23,7 +23,7 @@ from taskcoachlib import widgets
 
 class CtrlWithColumnsTestCase(test.wxTestCase):
     def setUp(self):
-        super(CtrlWithColumnsTestCase, self).setUp()
+        super().setUp()
         self.column1 = widgets.Column("Column 1", "eventType1")
         self.column2 = widgets.Column("Column 2", "eventType2")
         self.control = self.createControl()

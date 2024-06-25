@@ -23,7 +23,7 @@ from .CommandTestCase import CommandTestCase
 
 class DeleteCommandTest(CommandTestCase):
     def setUp(self):
-        super(DeleteCommandTest, self).setUp()
+        super().setUp()
         self.item = task.Task()
         self.items = patterns.List([self.item])
 
@@ -53,7 +53,7 @@ class EditSubjectTestCase(CommandTestCase):
     ContainerClass = task.TaskList
 
     def setUp(self):
-        super(EditSubjectTestCase, self).setUp()
+        super().setUp()
         self.item1 = self.ItemClass(subject="item1")
         self.item2 = self.ItemClass(subject="item2")
         self.container = self.ContainerClass([self.item1, self.item2])
@@ -106,7 +106,7 @@ class EditDescriptionTestCase(CommandTestCase):
     ContainerClass = task.TaskList
 
     def setUp(self):
-        super(EditDescriptionTestCase, self).setUp()
+        super().setUp()
         self.item1 = self.ItemClass(description="item1")
         self.item2 = self.ItemClass(description="item2")
         self.container = self.ContainerClass([self.item1, self.item2])

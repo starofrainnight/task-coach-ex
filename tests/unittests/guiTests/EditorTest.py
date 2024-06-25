@@ -26,17 +26,17 @@ from unittests import dummy
 class EditorUnderTest(gui.dialog.editor.NoteEditor):
     def __init__(self, *args, **kwargs):
         kwargs["call_after"] = lambda f, *args, **kwargs: f(*args, **kwargs)
-        super(EditorUnderTest, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.editorClosed = False
 
     def on_close_editor(self, event):
         self.editorClosed = True
-        super(EditorUnderTest, self).on_close_editor(event)
+        super().on_close_editor(event)
 
 
 class EditorTestCase(test.wxTestCase):
     def setUp(self):
-        super(EditorTestCase, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
         self.items = base.filter.SearchFilter(self.taskFile.notes())
@@ -48,7 +48,7 @@ class EditorTestCase(test.wxTestCase):
         self.appearance = self.editor._interior[-1]
 
     def tearDown(self):
-        super(EditorTestCase, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

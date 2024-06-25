@@ -106,7 +106,7 @@ class Settings(CachingConfigParser):
             self.add_section(section)
             for key, value in list(settings.items()):
                 # Don't notify observers while we are initializing
-                super(Settings, self).set(section, key, value)
+                super().set(section, key, value)
 
     def setLoadStatus(self, message):
         self.set("file", "inifileloaded", "False" if message else "True")
@@ -124,21 +124,21 @@ class Settings(CachingConfigParser):
     def add_section(
         self, section, copyFromSection=None
     ):  # pylint: disable=W0221
-        result = super(Settings, self).add_section(section)
+        result = super().add_section(section)
         if copyFromSection:
             for name, value in self.items(copyFromSection):
-                super(Settings, self).set(section, name, value)
+                super().set(section, name, value)
         return result
 
     def getRawValue(self, section, option):
-        return super(Settings, self).get(section, option)
+        return super().get(section, option)
 
     def init(self, section, option, value):
-        return super(Settings, self).set(section, option, value)
+        return super().set(section, option, value)
 
     def get(self, section, option):
         try:
-            result = super(Settings, self).get(section, option)
+            result = super().get(section, option)
         except (configparser.NoOptionError, configparser.NoSectionError):
             return self.getDefault(section, option)
         result = self._fixValuesFromOldIniFiles(section, option, result)
@@ -232,7 +232,7 @@ class Settings(CachingConfigParser):
                     columns.remove("ordering")
             result = str(columns)
         if result != original:
-            super(Settings, self).set(section, option, result)
+            super().set(section, option, result)
         return result
 
     def set(self, section, option, value, new=False):  # pylint: disable=W0221
@@ -244,7 +244,7 @@ class Settings(CachingConfigParser):
         else:
             currentValue = self.get(section, option)
         if value != currentValue:
-            super(Settings, self).set(section, option, value)
+            super().set(section, option, value)
             patterns.Event("%s.%s" % (section, option), self, value).send()
             return True
         else:

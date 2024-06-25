@@ -24,7 +24,7 @@ from taskcoachlib import config
 
 class DateTimeEntryTest(test.wxTestCase):
     def setUp(self):
-        super(DateTimeEntryTest, self).setUp()
+        super().setUp()
         self.dateTimeEntry = entry.DateTimeEntry(
             self.frame, config.Settings(load=False)
         )
@@ -66,7 +66,7 @@ class DateEntryConstructorTest(test.wxTestCase):
 
 class TimeDeltaEntryTest(test.wxTestCase):
     def setUp(self):
-        super(TimeDeltaEntryTest, self).setUp()
+        super().setUp()
         self.timeDeltaEntry = entry.TimeDeltaEntry(self.frame)
 
     def testDefaultValue(self):
@@ -92,7 +92,7 @@ class TimeDeltaEntryTest(test.wxTestCase):
 
 class ReadOnlyTimeDeltaEntryTest(test.wxTestCase):
     def setUp(self):
-        super(ReadOnlyTimeDeltaEntryTest, self).setUp()
+        super().setUp()
         self.timeDeltaEntry = entry.TimeDeltaEntry(self.frame, readonly=True)
 
     def testSetNegativeValue(self):

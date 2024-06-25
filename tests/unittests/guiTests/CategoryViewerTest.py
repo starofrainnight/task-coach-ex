@@ -23,7 +23,7 @@ from taskcoachlib.domain import category
 
 class CategoryViewerTest(test.wxTestCase):
     def setUp(self):
-        super(CategoryViewerTest, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
         self.categories = self.taskFile.categories()
@@ -32,7 +32,7 @@ class CategoryViewerTest(test.wxTestCase):
         )
 
     def tearDown(self):
-        super(CategoryViewerTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

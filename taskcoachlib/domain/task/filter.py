@@ -28,7 +28,7 @@ class ViewFilter(tasklist.TaskListQueryMixin, base.Filter):
         self.__statusesToHide = set(kwargs.pop("statusesToHide", []))
         self.__hideCompositeTasks = kwargs.pop("hideCompositeTasks", False)
         self.registerObservers()
-        super(ViewFilter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def registerObservers(self):
         registerObserver = patterns.Publisher().registerObserver
@@ -51,7 +51,7 @@ class ViewFilter(tasklist.TaskListQueryMixin, base.Filter):
         date.Scheduler().schedule_interval(self.atMidnight, days=1)
 
     def detach(self):
-        super(ViewFilter, self).detach()
+        super().detach()
         patterns.Publisher().removeObserver(self.onTaskStatusChange_Deprecated)
 
     def atMidnight(self):

@@ -25,7 +25,7 @@ from taskcoachlib.persistence.icalendar import ical
 
 class TaskSource(basesource.BaseSource):
     def __init__(self, callback, taskList, categoryList, *args, **kwargs):
-        super(TaskSource, self).__init__(callback, taskList, *args, **kwargs)
+        super().__init__(callback, taskList, *args, **kwargs)
         self.categoryList = categoryList
 
     def updateItemProperties(self, item, task):
@@ -82,6 +82,6 @@ class TaskSource(basesource.BaseSource):
         for category in local.categories():
             category.addCategorizable(local)
 
-        super(TaskSource, self).doUpdateItem(task, local)
+        super().doUpdateItem(task, local)
 
         return 200  # FIXME

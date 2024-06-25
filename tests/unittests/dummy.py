@@ -27,7 +27,7 @@ class Event(object):
 
 class DummyWidget(wx.Frame):
     def __init__(self, viewer):
-        super(DummyWidget, self).__init__(viewer)
+        super().__init__(viewer)
         self.viewer = viewer
 
     def RefreshItems(self, *items):

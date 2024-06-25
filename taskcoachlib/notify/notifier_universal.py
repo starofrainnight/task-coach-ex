@@ -31,7 +31,7 @@ class AnimatedShow(wx.Timer):
     """
 
     def __init__(self, frame, show=True):
-        super(AnimatedShow, self).__init__()
+        super().__init__()
 
         if frame.CanSetTransparent():
             self.__frame = frame
@@ -78,7 +78,7 @@ class AnimatedMove(wx.Timer):
     """
 
     def __init__(self, frame, destination):
-        super(AnimatedMove, self).__init__()
+        super().__init__()
 
         self.__frame = frame
         self.__origin = frame.GetPosition()
@@ -123,11 +123,11 @@ elif operating_system.isGTK():
         def __init__(
             self, parent, id_, title, style=0
         ):  # pylint: disable=W0613,E1003
-            super(_NotifyBase, self).__init__(parent, id_)  # No style
+            super().__init__(parent, id_)  # No style
 
         def Close(self):  # pylint: disable=W0221,E1003
             # Strange...
-            super(_NotifyBase, self).Close()
+            super().Close()
             self.Destroy()
 
 else:
@@ -152,7 +152,7 @@ class NotificationFrameBase(_NotifyBase):
         style = self.Style() | (
             wx.STAY_ON_TOP if parent is None else wx.FRAME_FLOAT_ON_PARENT
         )
-        super(NotificationFrameBase, self).__init__(
+        super().__init__(
             parent, wx.ID_ANY, "", style=style
         )
         self.Populate()
@@ -262,7 +262,7 @@ class NotificationFrame(NotificationFrameBase):
     def __init__(self, message, *args, **kwargs):
         self.message = message
 
-        super(NotificationFrame, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def AddInnerContent(self, sizer, panel):
         sizer.Add(
@@ -281,7 +281,7 @@ class _NotificationCenter(wx.EvtHandler):
     framePool = []
 
     def __init__(self):
-        super(_NotificationCenter, self).__init__()
+        super().__init__()
 
         self.displayedFrames = []
         self.waitingFrames = []
@@ -472,7 +472,7 @@ if __name__ == "__main__":
 
     class TestFrame(wx.Frame):
         def __init__(self):
-            super(TestFrame, self).__init__(None, wx.ID_ANY, "Test frame")
+            super().__init__(None, wx.ID_ANY, "Test frame")
             # pylint: disable=E1101
             NotificationCenter().Notify(
                 "Sample title", "Sample content", timeout=3

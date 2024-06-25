@@ -31,7 +31,7 @@ class DirectoryWatcher(object):
     RENAMED_NEW = 5
 
     def __init__(self, path):
-        super(DirectoryWatcher, self).__init__()
+        super().__init__()
 
         self.dirHandle = CreateFile(
             path,
@@ -80,7 +80,7 @@ class DirectoryWatcher(object):
 
 class FilesystemNotifier(base.NotifierBase):
     def __init__(self):
-        super(FilesystemNotifier, self).__init__()
+        super().__init__()
 
         self.watcher = None
         self.thread = None
@@ -94,7 +94,7 @@ class FilesystemNotifier(base.NotifierBase):
                 self.thread.join()
                 self.watcher = None
                 self.thread = None
-            super(FilesystemNotifier, self).setFilename(filename)
+            super().setFilename(filename)
             if self._filename:
                 self.watcher = DirectoryWatcher(self._path)
                 self.thread = threading.Thread(target=self._run)
@@ -116,7 +116,7 @@ class FilesystemNotifier(base.NotifierBase):
 
     def saved(self):
         with self.lock:
-            super(FilesystemNotifier, self).saved()
+            super().saved()
 
     def onFileChanged(self):
         raise NotImplementedError

@@ -27,7 +27,7 @@ class NewEffortCommand(base.BaseCommand):
 
     def __init__(self, *args, **kwargs):
         self.__tasks = []
-        super(NewEffortCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__tasks = self.items
         self.items = self.efforts = [
             effort.Effort(task) for task in self.items
@@ -42,7 +42,7 @@ class NewEffortCommand(base.BaseCommand):
         return effort.task().subject()
 
     def do_command(self):
-        super(NewEffortCommand, self).do_command()
+        super().do_command()
         for effort in self.efforts:  # pylint: disable=W0621
             task = effort.task()
             if (
@@ -56,7 +56,7 @@ class NewEffortCommand(base.BaseCommand):
             task.addEffort(effort)
 
     def undo_command(self):
-        super(NewEffortCommand, self).undo_command()
+        super().undo_command()
         for effort in self.efforts:  # pylint: disable=W0621
             task = effort.task()
             task.removeEffort(effort)
@@ -84,7 +84,7 @@ class EditTaskCommand(base.BaseCommand):
     def __init__(self, *args, **kwargs):
         self.__task = kwargs.pop("newValue")
         self.__oldTasks = []
-        super(EditTaskCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__oldTasks = [item.task() for item in self.items]
         self.save_modification_datetimes()
 
@@ -92,12 +92,12 @@ class EditTaskCommand(base.BaseCommand):
         return [self.__task] + self.__oldTasks
 
     def do_command(self):
-        super(EditTaskCommand, self).do_command()
+        super().do_command()
         for item in self.items:
             item.setTask(self.__task)
 
     def undo_command(self):
-        super(EditTaskCommand, self).undo_command()
+        super().undo_command()
         for item, oldTask in zip(self.items, self.__oldTasks):
             item.setTask(oldTask)
 
@@ -111,13 +111,13 @@ class EditEffortStartDateTimeCommand(base.BaseCommand):
 
     def __init__(self, *args, **kwargs):
         self.__datetime = kwargs.pop("newValue")
-        super(EditEffortStartDateTimeCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__oldDateTimes = [item.getStart() for item in self.items]
         self.__oldActualStartDateTimes = {}
 
     def canDo(self):
         maxDateTime = date.DateTime()
-        return super(EditEffortStartDateTimeCommand, self).canDo() and all(
+        return super().canDo() and all(
             self.__datetime < (item.getStop() or maxDateTime)
             for item in self.items
         )
@@ -155,11 +155,11 @@ class EditEffortStopDateTimeCommand(base.BaseCommand):
 
     def __init__(self, *args, **kwargs):
         self.__datetime = kwargs.pop("newValue")
-        super(EditEffortStopDateTimeCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__oldDateTimes = [item.getStop() for item in self.items]
 
     def canDo(self):
-        return super(EditEffortStopDateTimeCommand, self).canDo() and all(
+        return super().canDo() and all(
             self.__datetime > item.getStart() for item in self.items
         )
 

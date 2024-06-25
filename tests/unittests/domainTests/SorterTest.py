@@ -24,7 +24,7 @@ from taskcoachlib.domain import task, effort, date, category
 class DummyTaskList(task.TaskList):
     def __init__(self, *args, **kwargs):
         self.treeMode = "not set"
-        super(DummyTaskList, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def setTreeMode(self, treeMode):
         self.treeMode = treeMode

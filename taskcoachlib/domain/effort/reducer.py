@@ -43,7 +43,7 @@ class EffortAggregator(
             date.DateTime, "startOf%s" % aggregation
         )
         self.__end_of_period = getattr(date.DateTime, "endOf%s" % aggregation)
-        super(EffortAggregator, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         pub.subscribe(
             self.onCompositeEmpty,
             composite.CompositeEffort.compositeEmptyEventType(),
@@ -71,7 +71,7 @@ class EffortAggregator(
         )
 
     def detach(self):
-        super(EffortAggregator, self).detach()
+        super().detach()
         patterns.Publisher().removeObserver(self.onChildAddedToTask)
         patterns.Publisher().removeObserver(self.onChildRemovedFromTask)
         patterns.Publisher().removeObserver(self.onTaskRemoved)
@@ -101,7 +101,7 @@ class EffortAggregator(
     @patterns.eventSource
     def __extend_self_with_composites(self, new_composites, event=None):
         """Add composites to the aggregator."""
-        super(EffortAggregator, self).extendSelf(new_composites, event=event)
+        super().extendSelf(new_composites, event=event)
         for new_composite in new_composites:
             if new_composite.isBeingTracked():
                 self.__trackedComposites.add(new_composite)
@@ -127,9 +127,7 @@ class EffortAggregator(
     def __remove_composites_from_self(self, composites_to_remove, event=None):
         """Remove composites from the aggregator."""
         self.__trackedComposites.difference_update(set(composites_to_remove))
-        super(EffortAggregator, self).removeItemsFromSelf(
-            composites_to_remove, event=event
-        )
+        super().removeItemsFromSelf(composites_to_remove, event=event)
 
     def onTaskRemoved(self, event):
         """Whenever tasks are removed, find the composites that

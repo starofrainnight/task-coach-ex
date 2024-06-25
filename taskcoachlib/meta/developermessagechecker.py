@@ -30,7 +30,7 @@ class DeveloperMessageChecker(threading.Thread):
         self.__settings = settings
         self.__urlopen = urlopen
         self.__call_after = call_after or self.__wx_call_after
-        super(DeveloperMessageChecker, self).__init__()
+        super().__init__()
 
     def _set_daemon(self):
         return True  # Don't block application exit

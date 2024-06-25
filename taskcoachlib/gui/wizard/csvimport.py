@@ -42,7 +42,7 @@ class CSVDialect(csv.Dialect):
 
 class CSVImportOptionsPage(wiz.WizardPageSimple):
     def __init__(self, filename, *args, **kwargs):
-        super(CSVImportOptionsPage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.delimiter = wx.Choice(self, wx.ID_ANY)
         self.delimiter.Append(_("Comma"))
@@ -269,7 +269,7 @@ class CSVImportOptionsPage(wiz.WizardPageSimple):
 
 class CSVImportMappingPage(wiz.WizardPageSimple):
     def __init__(self, *args, **kwargs):
-        super(CSVImportMappingPage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # (field name, multiple values allowed)
 
@@ -399,7 +399,7 @@ class CSVImportMappingPage(wiz.WizardPageSimple):
 class CSVImportWizard(wiz.Wizard):
     def __init__(self, filename, *args, **kwargs):
         kwargs["style"] = wx.RESIZE_BORDER | wx.DEFAULT_DIALOG_STYLE
-        super(CSVImportWizard, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.optionsPage = CSVImportOptionsPage(filename, self)
         self.mappingPage = CSVImportMappingPage(self)
@@ -425,7 +425,7 @@ class CSVImportWizard(wiz.Wizard):
             pass  # XXXTODO
 
     def RunWizard(self):
-        return super(CSVImportWizard, self).RunWizard(self.optionsPage)
+        return super().RunWizard(self.optionsPage)
 
     def GetOptions(self):
         return self.mappingPage.GetOptions()

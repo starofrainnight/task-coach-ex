@@ -24,9 +24,7 @@ from taskcoachlib.widgets import dialog
 class XFCE4WarningDialog(dialog.Dialog):
     def __init__(self, parent, settings):
         self.__settings = settings
-        super(XFCE4WarningDialog, self).__init__(
-            parent, _("Warning"), buttonTypes=wx.OK
-        )
+        super().__init__(parent, _("Warning"), buttonTypes=wx.OK)
 
     def createInterior(self):
         return wx.Panel(self._panel)
@@ -55,4 +53,4 @@ class XFCE4WarningDialog(dialog.Dialog):
         self.__settings.setboolean(
             "feature", "showsmwarning", not self._checkbox.GetValue()
         )
-        super(XFCE4WarningDialog, self).ok(event)
+        super().ok(event)

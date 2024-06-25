@@ -22,7 +22,7 @@ from taskcoachlib.filesystem import base
 
 class FilesystemPollerNotifier(base.NotifierBase, threading.Thread):
     def __init__(self):
-        super(FilesystemPollerNotifier, self).__init__()
+        super().__init__()
 
         self.lock = threading.RLock()
         self.cancelled = False
@@ -34,7 +34,7 @@ class FilesystemPollerNotifier(base.NotifierBase, threading.Thread):
     def setFilename(self, filename):
         self.lock.acquire()
         try:
-            super(FilesystemPollerNotifier, self).setFilename(filename)
+            super().setFilename(filename)
         finally:
             self.lock.release()
 
@@ -62,7 +62,7 @@ class FilesystemPollerNotifier(base.NotifierBase, threading.Thread):
 
     def saved(self):
         with self.lock:
-            super(FilesystemPollerNotifier, self).saved()
+            super().saved()
 
     def onFileChanged(self):
         raise NotImplementedError

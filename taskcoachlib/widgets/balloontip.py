@@ -38,7 +38,7 @@ class BalloonTip(wx.Frame):
     ):
         """Baloon tip."""
 
-        super(BalloonTip, self).__init__(
+        super().__init__(
             parent,
             style=wx.NO_BORDER
             | wx.FRAME_FLOAT_ON_PARENT
@@ -205,7 +205,7 @@ class BalloonTipManager(object):
         self.__displaying = None
         self.__kwargs = dict()
         self.__shutdown = False
-        super(BalloonTipManager, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.Bind(wx.EVT_CLOSE, self.__OnClose)
 
@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
     class Frame(wx.Frame):
         def __init__(self):
-            super(Frame, self).__init__(None, wx.ID_ANY, "Test")
+            super().__init__(None, wx.ID_ANY, "Test")
 
             self.btn = wx.Button(self, wx.ID_ANY, "Show balloon")
             self.btn.Bind(wx.EVT_BUTTON, self.OnClick)

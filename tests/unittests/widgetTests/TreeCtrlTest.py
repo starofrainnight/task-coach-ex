@@ -30,7 +30,7 @@ class TreeCtrlTestCase(test.wxTestCase):
         return self.treeCtrl.GetFirstChild(self.treeCtrl.GetRootItem())[0]
 
     def setUp(self):
-        super(TreeCtrlTestCase, self).setUp()
+        super().setUp()
         self.children = dict()
         self.collapsedItems = []
         self.frame.children = lambda item: self.children.get(item, [])
@@ -289,7 +289,7 @@ class CommonTestsMixin(object):
 
 class TreeListCtrlTest(TreeCtrlTestCase, CommonTestsMixin):
     def setUp(self):
-        super(TreeListCtrlTest, self).setUp()
+        super().setUp()
         columns = [widgets.Column("subject", "Subject")]
         self.treeCtrl = widgets.TreeListCtrl(
             self.frame,
@@ -312,7 +312,7 @@ class CheckTreeCtrlTest(TreeCtrlTestCase, CommonTestsMixin):
         self.frame.getItemParentHasExclusiveChildren = (
             lambda item: item.subject().startswith("mutual")
         )
-        super(CheckTreeCtrlTest, self).setUp()
+        super().setUp()
         columns = [widgets.Column("subject", "Subject")]
         self.treeCtrl = widgets.CheckTreeCtrl(
             self.frame,

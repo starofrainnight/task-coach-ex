@@ -23,7 +23,7 @@ from taskcoachlib.domain import date
 
 class CommonTestsMixin(object):
     def setUp(self):
-        super(CommonTestsMixin, self).setUp()
+        super().setUp()
         # LC_ALL does not work on Slackware or Arch, but LC_TIME crashes on Fedora...
         try:
             self.__oldLocale = locale.getlocale(locale.LC_ALL)
@@ -51,7 +51,7 @@ class CommonTestsMixin(object):
     def tearDown(self):
         locale.setlocale(self.__localeDomain, self.__oldLocale)
         reload(render)
-        super(CommonTestsMixin, self).tearDown()
+        super().tearDown()
 
     def _format(self, hour, minute, second):
         if self.ampm:
@@ -79,7 +79,7 @@ class DateTimeCtrlTestCase(test.wxTestCase):
     showSeconds = False
 
     def setUp(self):
-        super(DateTimeCtrlTestCase, self).setUp()
+        super().setUp()
         self.dateTimeCtrl = widgets.datectrl.DateTimeCtrl(
             self.frame,
             showSeconds=self.showSeconds,

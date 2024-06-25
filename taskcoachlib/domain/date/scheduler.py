@@ -62,7 +62,7 @@ class TwistedScheduler(object):
     """
 
     def __init__(self):
-        super(TwistedScheduler, self).__init__()
+        super().__init__()
         self.__jobs = []
         self.__nextCall = None
         self.__firing = False
@@ -146,7 +146,7 @@ class TwistedScheduler(object):
 
 class Scheduler(object, metaclass=patterns.Singleton):
     def __init__(self, *args, **kwargs):
-        super(Scheduler, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__scheduler = TwistedScheduler()
 
     def shutdown(self):

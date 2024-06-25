@@ -389,7 +389,7 @@ class BuildDEB(DistCompile):
     def __init__(self, **kwargs):
         # Avoid having the virtualenv bin directory in path, it messes up things
         kwargs["env"] = {"PATH": "/bin:/usr/bin:/usr/local/bin"}
-        super(DistCompile, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
 
 class BuildUbuntu(BuildDEB):

@@ -52,7 +52,7 @@ class DateTimeEntry(widgets.DateTimeCtrl):
         starthour = settings.getint("view", "efforthourstart")
         endhour = settings.getint("view", "efforthourend")
         interval = settings.getint("view", "effortminuteinterval")
-        super(DateTimeEntry, self).__init__(
+        super().__init__(
             parent,
             noneAllowed=noneAllowed,
             starthour=starthour,
@@ -74,11 +74,11 @@ class DateTimeEntry(widgets.DateTimeCtrl):
         self.setCallback(self.onDateTimeCtrlEdited)
 
     def SetValue(self, newValue=None):
-        super(DateTimeEntry, self).SetValue(newValue or self.defaultDateTime)
+        super().SetValue(newValue or self.defaultDateTime)
 
     def setSuggested(self, suggestedDateTime):
-        super(DateTimeEntry, self).SetValue(suggestedDateTime)
-        super(DateTimeEntry, self).SetNone()
+        super().SetValue(suggestedDateTime)
+        super().SetNone()
 
     def onDateTimeCtrlEdited(self, *args, **kwargs):  # pylint: disable=W0613
         wx.PostEvent(self, DateTimeEntryEvent())
@@ -98,7 +98,7 @@ class TimeDeltaEntry(widgets.PanelWithBoxSizer):
         *args,
         **kwargs
     ):
-        super(TimeDeltaEntry, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         hours, minutes, seconds = timeDelta.hoursMinutesSeconds()
         self._entry = widgets.masked.TimeDeltaCtrl(
             self,
@@ -131,7 +131,7 @@ class TimeDeltaEntry(widgets.PanelWithBoxSizer):
 
 class AmountEntry(widgets.PanelWithBoxSizer):
     def __init__(self, parent, amount=0.0, readonly=False, *args, **kwargs):
-        super(AmountEntry, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         self._entry = self.createEntry(amount)
         if readonly:
             self._entry.Disable()
@@ -161,7 +161,7 @@ PercentageEntryEvent, EVT_PERCENTAGEENTRY = newevent.NewEvent()
 class PercentageEntry(widgets.PanelWithBoxSizer):
     def __init__(self, parent, percentage=0, *args, **kwargs):
         kwargs["orientation"] = wx.HORIZONTAL
-        super(PercentageEntry, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         self._entry = self._createSpinCtrl(percentage)
         self._slider = self._createSlider(percentage)
         self.add(self._entry, flag=wx.ALIGN_LEFT, proportion=0)
@@ -222,7 +222,7 @@ FontEntryEvent, EVT_FONTENTRY = newevent.NewEvent()
 class FontEntry(widgets.PanelWithBoxSizer):
     def __init__(self, parent, currentFont, currentColor, *args, **kwargs):
         kwargs["orientation"] = wx.HORIZONTAL
-        super(FontEntry, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         self._fontCheckBox = self._createCheckBox(currentFont)
         self._fontPicker = self._createFontPicker(currentFont, currentColor)
         self.add(
@@ -286,7 +286,7 @@ ColorEntryEvent, EVT_COLORENTRY = newevent.NewEvent()
 class ColorEntry(widgets.PanelWithBoxSizer):
     def __init__(self, parent, currentColor, defaultColor, *args, **kwargs):
         kwargs["orientation"] = wx.HORIZONTAL
-        super(ColorEntry, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         self._colorCheckBox = self._createCheckBox(currentColor)
         self._colorPicker = self._createColorPicker(currentColor, defaultColor)
         self.add(
@@ -346,7 +346,7 @@ IconEntryEvent, EVT_ICONENTRY = newevent.NewEvent()
 class IconEntry(wx.adv.BitmapComboBox):
     def __init__(self, parent, currentIcon, *args, **kwargs):
         kwargs["style"] = wx.CB_READONLY
-        super(IconEntry, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         imageNames = sorted(artprovider.chooseableItemImages.keys())
         size = (16, 16)
         for imageName in imageNames:
@@ -376,7 +376,7 @@ ChoiceEntryEvent, EVT_CHOICEENTRY = newevent.NewEvent()
 
 class ChoiceEntry(wx.Choice):
     def __init__(self, parent, choices, currentChoiceValue, *args, **kwargs):
-        super(ChoiceEntry, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         for choiceValue, choiceText in choices:
             self.Append(choiceText, choiceValue)
             if choiceValue == currentChoiceValue:
@@ -411,7 +411,7 @@ class TaskEntry(wx.Panel):
     def __init__(self, parent, rootTasks, selectedTask):
         """Initialize the ComboTreeBox, add the root tasks recursively and
         set the selection."""
-        super(TaskEntry, self).__init__(parent)
+        super().__init__(parent)
         self._createInterior()
         self._addTasksRecursively(rootTasks)
         self.SetValue(selectedTask)
@@ -468,7 +468,7 @@ class RecurrenceEntry(wx.Panel):
     verticalSpace = (-1, 3)
 
     def __init__(self, parent, recurrence, settings, *args, **kwargs):
-        super(RecurrenceEntry, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         recurrenceFrequencyPanel = wx.Panel(self)
         self._recurrencePeriodEntry = wx.Choice(
             recurrenceFrequencyPanel,

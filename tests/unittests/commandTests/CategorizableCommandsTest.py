@@ -23,7 +23,7 @@ from .CommandTestCase import CommandTestCase
 
 class ToggleCategoryCommandTestCase(CommandTestCase):
     def setUp(self):
-        super(ToggleCategoryCommandTestCase, self).setUp()
+        super().setUp()
         self.category = category.Category("Cat")
         self.categorizable = categorizable.CategorizableCompositeObject(
             subject="Categorizable"
@@ -102,7 +102,7 @@ class ToggleCategory(ToggleCategoryCommandTestCase):
 
 class ToggleMutualExclusiveCategories(ToggleCategoryCommandTestCase):
     def setUp(self):
-        super(ToggleMutualExclusiveCategories, self).setUp()
+        super().setUp()
         self.subCategory1, self.subCategory2 = (
             self.addMutualExclusiveSubcategories(self.category)
         )

@@ -23,7 +23,7 @@ import wx, subprocess, threading, time
 
 class MailAppInfoLoader(wx.ProgressDialog):
     def __init__(self, parent):
-        super(MailAppInfoLoader, self).__init__(
+        super().__init__(
             _("Reading mail info..."),
             _("Reading mail information. Please wait."),
             parent=parent,

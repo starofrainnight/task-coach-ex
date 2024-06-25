@@ -36,14 +36,14 @@ class VCalTestCase(test.wxTestCase):
     selectionOnly = "Subclass responsibility"
 
     def setUp(self):
-        super(VCalTestCase, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.fd = UTF8StringIO()
         self.writer = persistence.iCalendarWriter(self.fd)
         self.taskFile = persistence.TaskFile()
 
     def tearDown(self):
-        super(VCalTestCase, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
@@ -82,7 +82,7 @@ class VCalendarCommonTestsMixin(object):
 
 class VCalEffortWriterTestCase(VCalTestCase):
     def setUp(self):
-        super(VCalEffortWriterTestCase, self).setUp()
+        super().setUp()
         self.task1 = task.Task("Task 1")
         self.effort1 = effort.Effort(
             self.task1,
@@ -177,7 +177,7 @@ class VCalTaskWriterTestCase(VCalTestCase):
     treeMode = "Subclass responsibility"
 
     def setUp(self):
-        super(VCalTaskWriterTestCase, self).setUp()
+        super().setUp()
         self.task1 = task.Task(
             "Task subject 1",
             description="Task description 1",
@@ -273,7 +273,7 @@ class TestNotSelectionTree(TestNotSelectionOnlyMixin, VCalTaskWriterTestCase):
 
 class FoldTest(test.TestCase):
     def setUp(self):
-        super(FoldTest, self).setUp()
+        super().setUp()
         self.fold = persistence.icalendar.ical.fold
 
     def testEmptyText(self):

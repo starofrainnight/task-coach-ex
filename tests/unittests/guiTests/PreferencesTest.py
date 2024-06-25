@@ -22,7 +22,7 @@ from taskcoachlib import gui, config, persistence
 
 class PreferencesTest(test.wxTestCase):
     def setUp(self):
-        super(PreferencesTest, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.preferences = gui.Preferences(
             parent=self.frame, title="Test", settings=self.settings

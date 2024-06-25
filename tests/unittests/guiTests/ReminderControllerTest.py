@@ -25,7 +25,7 @@ class ReminderControllerUnderTest(gui.ReminderController):
     def __init__(self, *args, **kwargs):
         self.messages = []
         self.userAttentionRequested = False
-        super(ReminderControllerUnderTest, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def showReminderMessage(self, message):  # pylint: disable=W0221
         class DummyDialog(object):
@@ -38,9 +38,7 @@ class ReminderControllerUnderTest(gui.ReminderController):
             def Show(self):
                 pass
 
-        super(ReminderControllerUnderTest, self).showReminderMessage(
-            message, DummyDialog
-        )
+        super().showReminderMessage(message, DummyDialog)
         self.messages.append(message)
 
     def requestUserAttention(self):
@@ -49,7 +47,7 @@ class ReminderControllerUnderTest(gui.ReminderController):
 
 class DummyWindow(wx.Frame):
     def __init__(self):
-        super(DummyWindow, self).__init__(None)
+        super().__init__(None)
         self.taskFile = persistence.TaskFile()
 
 
@@ -66,14 +64,14 @@ class ReminderControllerTestCase(test.TestCase):
         self.reminderDateTime = self.nowDateTime + date.ONE_HOUR
 
     def tearDown(self):
-        super(ReminderControllerTestCase, self).tearDown()
+        super().tearDown()
         self.dummyWindow.taskFile.close()
         self.dummyWindow.taskFile.stop()
 
 
 class ReminderControllerTest(ReminderControllerTestCase):
     def setUp(self):
-        super(ReminderControllerTest, self).setUp()
+        super().setUp()
         self.task = task.Task("Task")
         self.taskList.append(self.task)
 

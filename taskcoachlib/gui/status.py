@@ -22,7 +22,7 @@ from pubsub import pub
 
 class StatusBar(wx.StatusBar):
     def __init__(self, parent, viewer):
-        super(StatusBar, self).__init__(parent)
+        super().__init__(parent)
         self.SetFieldsCount(2)
         self.parent = parent
         self.viewer = viewer
@@ -64,15 +64,15 @@ class StatusBar(wx.StatusBar):
             status1, status2 = self.viewer.statusMessages()
         except AttributeError:
             return  # Viewer container contains no viewers
-        super(StatusBar, self).SetStatusText(status1, 0)
-        super(StatusBar, self).SetStatusText(status2, 1)
+        super().SetStatusText(status1, 0)
+        super().SetStatusText(status2, 1)
 
     def SetStatusText(
         self, message, pane=0, delay=3000
     ):  # pylint: disable=W0221
         if self.scheduledStatusDisplay:
             self.scheduledStatusDisplay.Stop()
-        super(StatusBar, self).SetStatusText(message, pane)
+        super().SetStatusText(message, pane)
         self.scheduledStatusDisplay = wx.CallLater(delay, self._displayStatus)
 
     def Destroy(self):  # pylint: disable=W0221
@@ -80,4 +80,4 @@ class StatusBar(wx.StatusBar):
             self.parent.Unbind(eventType)
         if self.scheduledStatusDisplay:
             self.scheduledStatusDisplay.Stop()
-        super(StatusBar, self).Destroy()
+        super().Destroy()

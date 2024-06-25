@@ -117,7 +117,7 @@ class SquareMap(wx.Panel):
             dumps, works fine on profile views as well, but the layout is less obvious wrt
             what node is "next" "previous" etc.
         """
-        super(SquareMap, self).__init__(parent, id, pos, size, style, name)
+        super().__init__(parent, id, pos, size, style, name)
         self.model = model
         self.padding = padding
         self.square_style = square_style

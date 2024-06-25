@@ -26,7 +26,7 @@ class TemplateXMLReaderTestCase(test.TestCase):
     tskversion = 33
 
     def setUp(self):
-        super(TemplateXMLReaderTestCase, self).setUp()
+        super().setUp()
         task.Task.settings = config.Settings(load=False)
 
         self.fd = io.StringIO()

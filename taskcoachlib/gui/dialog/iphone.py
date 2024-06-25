@@ -25,7 +25,7 @@ from taskcoachlib import operating_system
 
 class IPhoneSyncTypeDialog(wx.Dialog):
     def __init__(self, *args, **kwargs):
-        super(IPhoneSyncTypeDialog, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         vsz = wx.BoxSizer(wx.VERTICAL)
         vsz.Add(
@@ -77,7 +77,7 @@ would you like to use?"""
 
 class IPhoneBonjourDialog(wx.Dialog):
     def __init__(self, *args, **kwargs):
-        super(IPhoneBonjourDialog, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         vsizer = wx.BoxSizer(wx.VERTICAL)
         vsizer.Add(

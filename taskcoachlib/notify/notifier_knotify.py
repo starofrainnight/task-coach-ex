@@ -23,7 +23,7 @@ from .notifier import AbstractNotifier
 
 class KNotifyNotifier(AbstractNotifier):
     def __init__(self):
-        super(KNotifyNotifier, self).__init__()
+        super().__init__()
 
         self.__factory = None
         try:

@@ -22,13 +22,13 @@ from taskcoachlib.gui import splash, icons
 
 class SplashTest(test.wxTestCase):
     def setUp(self):
-        super(SplashTest, self).setUp()
+        super().setUp()
         self.splashScreen = splash.SplashScreen()
         self.splashScreen.Hide()
 
     def tearDown(self):
         self.splashScreen.Destroy()
-        super(SplashTest, self).tearDown()
+        super().tearDown()
 
     def assertCorrectBitmap(self):
         expectedBitmap = icons.catalog["splash"].getBitmap()

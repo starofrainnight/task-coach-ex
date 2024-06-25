@@ -45,7 +45,7 @@ def _isCloud(path):
 class TaskCoachFilesystemNotifier(FilesystemNotifier):
     def __init__(self, taskFile):
         self.__taskFile = taskFile
-        super(TaskCoachFilesystemNotifier, self).__init__()
+        super().__init__()
 
     def onFileChanged(self):
         self.__taskFile.onFileChanged()
@@ -54,7 +54,7 @@ class TaskCoachFilesystemNotifier(FilesystemNotifier):
 class TaskCoachFilesystemPollerNotifier(FilesystemPollerNotifier):
     def __init__(self, taskFile):
         self.__taskFile = taskFile
-        super(TaskCoachFilesystemPollerNotifier, self).__init__()
+        super().__init__()
 
     def onFileChanged(self):
         self.__taskFile.onFileChanged()
@@ -146,7 +146,7 @@ class TaskFile(patterns.Observer):
             attachment.MailAttachment,
         ]:
             self.__monitor.monitorClass(domainClass)
-        super(TaskFile, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         # Register for tasks, categories, efforts and notes being changed so we
         # can monitor when the task file needs saving (i.e. is 'dirty'):
         for container in self.tasks(), self.categories(), self.notes():
@@ -680,7 +680,7 @@ class LockedTaskFile(TaskFile):
     """LockedTaskFile adds cooperative locking to the TaskFile."""
 
     def __init__(self, *args, **kwargs):
-        super(LockedTaskFile, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__lock = None
 
     def __isFuse(self, path):
@@ -731,7 +731,7 @@ class LockedTaskFile(TaskFile):
         if self.filename() and os.path.exists(self.filename()):
             self.acquire_lock(self.filename())
         try:
-            super(LockedTaskFile, self).close()
+            super().close()
         finally:
             self.release_lock()
 
@@ -745,7 +745,7 @@ class LockedTaskFile(TaskFile):
                 if breakLock:
                     self.break_lock(filename)
                 self.acquire_lock(filename)
-            return super(LockedTaskFile, self).load(filename)
+            return super().load(filename)
         finally:
             self.release_lock()
 
@@ -753,13 +753,13 @@ class LockedTaskFile(TaskFile):
         """Lock the file before we save, if not already locked."""
         self.acquire_lock(self.filename())
         try:
-            return super(LockedTaskFile, self).save(**kwargs)
+            return super().save(**kwargs)
         finally:
             self.release_lock()
 
     def mergeDiskChanges(self):
         self.acquire_lock(self.filename())
         try:
-            super(LockedTaskFile, self).mergeDiskChanges()
+            super().mergeDiskChanges()
         finally:
             self.release_lock()

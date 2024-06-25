@@ -28,7 +28,7 @@ class AutoImporterExporter(object):
     the task file."""
 
     def __init__(self, settings):
-        super(AutoImporterExporter, self).__init__()
+        super().__init__()
         self.__settings = settings
         pub.subscribe(self.onTaskFileAboutToBeSaved, "taskfile.aboutToSave")
         pub.subscribe(self.onTaskFileJustRead, "taskfile.justRead")

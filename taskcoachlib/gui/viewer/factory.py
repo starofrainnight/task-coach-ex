@@ -124,14 +124,12 @@ class addOneViewer(addViewers):  # pylint: disable=C0103, R0903
     ):
         self.__viewer_class = viewer_class
         self.__kwargs = kwargs
-        super(addOneViewer, self).__init__(
-            viewer_container, task_file, settings
-        )
+        super().__init__(viewer_container, task_file, settings)
 
     def _number_of_viewers_to_add(self, viewer_class):
         return 1 if viewer_class == self.__viewer_class else 0
 
     def _viewer_kwargs(self, viewer_class):
-        kwargs = super(addOneViewer, self)._viewer_kwargs(viewer_class)
+        kwargs = super()._viewer_kwargs(viewer_class)
         kwargs.update(self.__kwargs)
         return kwargs

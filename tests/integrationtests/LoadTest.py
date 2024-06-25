@@ -41,7 +41,7 @@ class LoadTest(test.TestCase):
         if os.path.isfile(self.filename):
             os.remove(self.filename)
         mock.App.deleteInstance()
-        super(LoadTest, self).tearDown()
+        super().tearDown()
 
     def mockErrorDialog(self, *args, **kwargs):  # pylint: disable=W0613
         self.errorDialogCalled = True

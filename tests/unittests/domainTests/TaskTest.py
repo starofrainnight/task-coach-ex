@@ -1696,7 +1696,7 @@ class TwoTasksTest(TaskTestCase):
 
 class NewChildTest(TaskTestCase):
     def setUp(self):
-        super(NewChildTest, self).setUp()
+        super().setUp()
         self.child = self.task.newChild()
 
     def testNewChildHasNoDueDateTimeByDefault(self):
@@ -2650,7 +2650,7 @@ class TaskWithGrandChildTest(
         return [{}, {}, {}]
 
     def setUp(self):
-        super(TaskWithGrandChildTest, self).setUp()
+        super().setUp()
         self.task1.addChild(self.task2)
         self.task2.addChild(self.task3)
 
@@ -2739,7 +2739,7 @@ class TaskWithTwoEffortsTest(TaskTestCase, CommonTaskTestsMixin):
         ]
 
     def setUp(self):
-        super(TaskWithTwoEffortsTest, self).setUp()
+        super().setUp()
         self.totalDuration = (
             self.task1effort1.duration() + self.task1effort2.duration()
         )
@@ -2948,7 +2948,7 @@ class TaskWithBudgetTest(TaskTestCase, CommonTaskTestsMixin):
         return [{"budget": date.TWO_HOURS}]
 
     def setUp(self):
-        super(TaskWithBudgetTest, self).setUp()
+        super().setUp()
         self.oneHourEffort = effort.Effort(
             self.task,
             date.DateTime(2005, 1, 1, 13, 0),
@@ -3252,7 +3252,7 @@ class TaskWithAttachmentFixture(AttachmentTestCase):
 
 class TaskWithAttachmentAddedTestCase(AttachmentTestCase):
     def setUp(self):
-        super(TaskWithAttachmentAddedTestCase, self).setUp()
+        super().setUp()
         self.attachment = attachment.FileAttachment("./test.txt")
         self.task.addAttachments(self.attachment)
 
@@ -3267,7 +3267,7 @@ class TaskWithAttachmentAddedFixture(TaskWithAttachmentAddedTestCase):
 
 class TaskWithAttachmentRemovedFixture(TaskWithAttachmentAddedTestCase):
     def setUp(self):
-        super(TaskWithAttachmentRemovedFixture, self).setUp()
+        super().setUp()
         self.task.removeAttachments(self.attachment)
 
     def testRemoveAttachment(self):
@@ -3330,7 +3330,7 @@ class TaskWithHourlyFeeFixture(TaskTestCase, CommonTaskTestsMixin):
         return [{"subject": "Task", "hourlyFee": 100}]
 
     def setUp(self):
-        super(TaskWithHourlyFeeFixture, self).setUp()
+        super().setUp()
         self.effort = effort.Effort(
             self.task,
             date.DateTime(2005, 1, 1, 10, 0, 0),
@@ -3409,7 +3409,7 @@ class TaskWithCategoryTestCase(TaskTestCase):
         return [dict(categories=set([self.category]))]
 
     def setUp(self):
-        super(TaskWithCategoryTestCase, self).setUp()
+        super().setUp()
         self.category.addCategorizable(self.task)
 
     def testCategory(self):
@@ -3426,7 +3426,7 @@ class TaskWithCategoryTestCase(TaskTestCase):
 
 class TaskColorTest(test.TestCase):
     def setUp(self):
-        super(TaskColorTest, self).setUp()
+        super().setUp()
         self.settings = task.Task.settings = config.Settings(load=False)
         self.yesterday = date.Yesterday()
         self.tomorrow = date.Tomorrow()
@@ -3756,7 +3756,7 @@ class TaskConstructionTest(test.TestCase):
 
 class TaskScheduledTest(TaskTestCase):
     def setUp(self):
-        super(TaskScheduledTest, self).setUp([("behavior", "duesoonhours", 1)])
+        super().setUp([("behavior", "duesoonhours", 1)])
 
     def taskCreationKeywordArguments(self):
         return [
@@ -3778,9 +3778,7 @@ class TaskScheduledTest(TaskTestCase):
 
 class TaskNotScheduledTest(TaskTestCase):
     def setUp(self):
-        super(TaskNotScheduledTest, self).setUp(
-            [("behavior", "duesoonhours", 1)]
-        )
+        super().setUp([("behavior", "duesoonhours", 1)])
 
     def taskCreationKeywordArguments(self):
         return [

@@ -26,7 +26,7 @@ class LockFileTest(test.TestCase):
         self.lock = lockfile.FileLock(self.tmpfile.name)
 
     def tearDown(self):
-        super(LockFileTest, self).tearDown()
+        super().tearDown()
         self.tmpfile.close()  # Temp files are deleted when closed
 
     def testFileIsNotLockedInitially(self):

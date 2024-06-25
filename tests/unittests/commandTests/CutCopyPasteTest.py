@@ -118,7 +118,7 @@ class CutCommandWithEffortTest(CommandWithEffortTestCase):
 
 class NoteCommandTestCase(CommandTestCase, asserts.Mixin):
     def setUp(self):
-        super(NoteCommandTestCase, self).setUp()
+        super().setUp()
         self.note1 = note.Note()
         self.note2 = note.Note()
         self.list = self.noteContainer = note.NoteContainer(

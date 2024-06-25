@@ -139,7 +139,7 @@ class AutoBackup(object):
     maxNrOfBackupFilesToRemoveAtOnce = 3  # Slowly reduce the number of backups
 
     def __init__(self, settings, copyfile=compressFile):
-        super(AutoBackup, self).__init__()
+        super().__init__()
         self.__settings = settings
         self.__copyfile = copyfile
         pub.subscribe(self.onTaskFileAboutToSave, "taskfile.aboutToSave")

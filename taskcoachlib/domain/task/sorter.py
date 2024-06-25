@@ -36,7 +36,7 @@ class Sorter(base.TreeSorter):
         self.__sortByTaskStatusFirst = kwargs.pop(
             "sortByTaskStatusFirst", True
         )
-        super(Sorter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         for eventType in (
             task.Task.prerequisitesChangedEventType(),
             task.Task.dueDateTimeChangedEventType(),
@@ -65,7 +65,7 @@ class Sorter(base.TreeSorter):
 
     def createSortKeyFunction(self, sortKey):
         statusSortKey = self.__createStatusSortKey()
-        regularSortKey = super(Sorter, self).createSortKeyFunction(sortKey)
+        regularSortKey = super().createSortKeyFunction(sortKey)
         return lambda task: statusSortKey(task) + [regularSortKey(task)]
 
     def __createStatusSortKey(self):
@@ -82,9 +82,9 @@ class Sorter(base.TreeSorter):
         # sorting by status depends on those attributes. Hence we don't need
         # to subscribe to these attributes when they become the sort key.
         if attribute not in self.TaskStatusAttributes:
-            super(Sorter, self)._registerObserverForAttribute(attribute)
+            super()._registerObserverForAttribute(attribute)
 
     def _removeObserverForAttribute(self, attribute):
         # See comment at _registerObserverForAttribute.
         if attribute not in self.TaskStatusAttributes:
-            super(Sorter, self)._removeObserverForAttribute(attribute)
+            super()._removeObserverForAttribute(attribute)

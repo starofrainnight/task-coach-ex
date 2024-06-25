@@ -25,7 +25,7 @@ class BalloonTipManager(balloontip.BalloonTipManager):
         self, settings, name, target, message=None, title=None, getRect=None
     ):
         if settings.getboolean("balloontips", name):
-            super(BalloonTipManager, self).AddBalloonTip(
+            super().AddBalloonTip(
                 target,
                 message=message,
                 title=title,

@@ -24,17 +24,17 @@ from unittests import dummy
 
 class EditorUnderTest(gui.dialog.editor.EffortEditor):
     def __init__(self, *args, **kwargs):
-        super(EditorUnderTest, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.editorClosed = False
 
     def onClose(self, event):  # pragma: no cover
         self.editorClosed = True
-        super(EditorUnderTest, self).onClose(event)
+        super().onClose(event)
 
 
 class EffortEditorTest(test.wxTestCase):
     def setUp(self):
-        super(EffortEditorTest, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
         self.taskList = self.taskFile.tasks()
@@ -54,7 +54,7 @@ class EffortEditorTest(test.wxTestCase):
         )
 
     def tearDown(self):
-        super(EffortEditorTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

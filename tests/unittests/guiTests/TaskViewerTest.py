@@ -36,16 +36,16 @@ import weakref
 
 class TaskViewerUnderTest(gui.viewer.task.TaskViewer):  # pylint: disable=W0223
     def __init__(self, *args, **kwargs):
-        super(TaskViewerUnderTest, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.events = []
         self.events_deprecated = []
 
     def onAttributeChanged(self, newValue, sender):
-        super(TaskViewerUnderTest, self).onAttributeChanged(newValue, sender)
+        super().onAttributeChanged(newValue, sender)
         self.events.append((newValue, sender))
 
     def onAttributeChanged_Deprecated(self, event):
-        super(TaskViewerUnderTest, self).onAttributeChanged_Deprecated(event)
+        super().onAttributeChanged_Deprecated(event)
         self.events_deprecated.append(event)
 
 
@@ -53,7 +53,7 @@ class TaskViewerTestCase(test.wxTestCase):
     treeMode = "Subclass responsibility"
 
     def setUp(self):
-        super(TaskViewerTestCase, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.task = task.Task(subject="task", plannedStartDateTime=date.Now())
         self.child = task.Task(
@@ -84,7 +84,7 @@ class TaskViewerTestCase(test.wxTestCase):
             locale.setlocale(locale.LC_ALL, tmpLocale)
 
     def tearDown(self):
-        super(TaskViewerTestCase, self).tearDown()
+        super().tearDown()
         if not operating_system.isGTK():
             locale.setlocale(locale.LC_ALL, self.originalLocale)
         attachment.Attachment.attdir = None
@@ -1244,7 +1244,7 @@ class TaskViewerInListModeTest(CommonTestsMixin, TaskViewerTestCase):
 
 class TaskCalendarViewerTest(test.wxTestCase):
     def setUp(self):
-        super(TaskCalendarViewerTest, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
         self.frame.taskFile = self.taskFile
@@ -1257,7 +1257,7 @@ class TaskCalendarViewerTest(test.wxTestCase):
         )  # uiCommands use TopWindow to get the main window
 
     def tearDown(self):
-        super(TaskCalendarViewerTest, self).tearDown()
+        super().tearDown()
         wx.GetApp().TopWindow = self.originalTopWindow
         self.taskFile.close()
         self.taskFile.stop()
@@ -1292,7 +1292,7 @@ class TaskSquareMapViewerTest(test.wxTestCase):
         gui.viewer.task.SquareTaskViewer(self.frame, self.taskFile, settings)
 
     def tearDown(self):
-        super(TaskSquareMapViewerTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
@@ -1305,7 +1305,7 @@ class TaskTimelineViewerTest(test.wxTestCase):
         gui.viewer.task.TimelineViewer(self.frame, self.taskFile, settings)
 
     def tearDown(self):
-        super(TaskTimelineViewerTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
@@ -1317,6 +1317,6 @@ class TaskStatisticsViewerTest(test.wxTestCase):
         gui.viewer.task.TaskStatsViewer(self.frame, self.taskFile, settings)
 
     def tearDown(self):
-        super(TaskStatisticsViewerTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()

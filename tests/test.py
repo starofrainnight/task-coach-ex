@@ -103,12 +103,12 @@ class TestCase(unittest.TestCase, object):
         from pubsub import pub
 
         pub.unsubAll()
-        super(TestCase, self).tearDown()
+        super().tearDown()
 
 
 class TestCaseFrame(wx.Frame):
     def __init__(self):
-        super(TestCaseFrame, self).__init__(None, wx.ID_ANY, "Frame")
+        super().__init__(None, wx.ID_ANY, "Frame")
         self.toolbarPerspective = ""
 
     def getToolBarPerspective(self):
@@ -130,27 +130,27 @@ class wxTestCase(TestCase):
     gui.init()
 
     def tearDown(self):
-        super(wxTestCase, self).tearDown()
+        super().tearDown()
         self.frame.DestroyChildren()  # Clean up GDI objects on Windows
 
 
 class TestResultWithTimings(unittest._TextTestResult):  # pylint: disable=W0212
     def __init__(self, *args, **kwargs):
-        super(TestResultWithTimings, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._timings = {}
 
     def startTest(self, test):
-        super(TestResultWithTimings, self).startTest(test)
+        super().startTest(test)
         self._timings[test] = time.time()
 
     def stopTest(self, test):
-        super(TestResultWithTimings, self).stopTest(test)
+        super().stopTest(test)
         self._timings[test] = time.time() - self._timings[test]
 
 
 class TextTestRunnerWithTimings(unittest.TextTestRunner):
     def __init__(self, nrTestsToReport, timeTests=False, *args, **kwargs):
-        super(TextTestRunnerWithTimings, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._timeTests = timeTests
         self._nrTestsToReport = nrTestsToReport
 
@@ -160,7 +160,7 @@ class TextTestRunnerWithTimings(unittest.TextTestRunner):
         )
 
     def run(self, *args, **kwargs):  # pylint: disable=W0221
-        result = super(TextTestRunnerWithTimings, self).run(*args, **kwargs)
+        result = super().run(*args, **kwargs)
         if self._timeTests:
             sortableTimings = [
                 (timing, test)
@@ -175,7 +175,7 @@ class TextTestRunnerWithTimings(unittest.TextTestRunner):
 
 class AllTests(unittest.TestSuite):
     def __init__(self, options, testFiles=None):
-        super(AllTests, self).__init__()
+        super().__init__()
         self._options = options
         self.loadAllTests(testFiles or [])
 
@@ -255,9 +255,7 @@ from taskcoachlib import config
 
 class TestOptionParser(config.OptionParser):
     def __init__(self):
-        super(TestOptionParser, self).__init__(
-            usage="usage: %prog [options] [testfiles]"
-        )
+        super().__init__(usage="usage: %prog [options] [testfiles]")
 
     def testoutputOptionGroup(self):
         testoutput = config.OptionGroup(
@@ -399,7 +397,7 @@ class TestOptionParser(config.OptionParser):
         return testselection
 
     def parse_args(self):  # pylint: disable=W0221
-        options, args = super(TestOptionParser, self).parse_args()
+        options, args = super().parse_args()
         if options.profile_report_only:
             options.profile = True
         if not options.profile_sort:

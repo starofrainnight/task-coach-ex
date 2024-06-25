@@ -40,7 +40,7 @@ if desktop.get_desktop() in ("KDE", "GNOME"):  # pragma: no cover
 
 class UICommandTest(test.wxTestCase):
     def setUp(self):
-        super(UICommandTest, self).setUp()
+        super().setUp()
         self.uicommand = dummy.DummyUICommand(menuText="undo", bitmap="undo")
         self.menu = wx.Menu()
         self.frame = wx.Frame(None)
@@ -79,14 +79,14 @@ class wxTestCaseWithFrameAsTopLevelWindow(test.wxTestCase):
         self.taskFile = self.frame.taskFile = persistence.TaskFile()
 
     def tearDown(self):
-        super(wxTestCaseWithFrameAsTopLevelWindow, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
 
 class NewTaskWithSelectedCategoryTest(wxTestCaseWithFrameAsTopLevelWindow):
     def setUp(self):
-        super(NewTaskWithSelectedCategoryTest, self).setUp()
+        super().setUp()
         self.categories = self.taskFile.categories()
         self.categories.append(category.Category("cat"))
         self.viewer = gui.viewer.CategoryViewer(
@@ -121,7 +121,7 @@ class NewTaskWithSelectedCategoryTest(wxTestCaseWithFrameAsTopLevelWindow):
 
 class NewNoteWithSelectedCategoryTest(wxTestCaseWithFrameAsTopLevelWindow):
     def setUp(self):
-        super(NewNoteWithSelectedCategoryTest, self).setUp()
+        super().setUp()
         self.categories = self.taskFile.categories()
         self.categories.append(category.Category("cat"))
         self.viewer = gui.viewer.CategoryViewer(
@@ -586,7 +586,7 @@ class ToggleCategoryTest(test.TestCase):
 
 class EffortStopTest(test.TestCase):
     def setUp(self):
-        super(EffortStopTest, self).setUp()
+        super().setUp()
         task.Task.settings = config.Settings(load=False)
         self.taskList = task.TaskList()
         self.task = task.Task("Task")
@@ -696,7 +696,7 @@ class EffortStopTest(test.TestCase):
 
 class AttachmentTest(test.wxTestCase):
     def setUp(self):
-        super(AttachmentTest, self).setUp()
+        super().setUp()
 
         task.Task.settings = config.Settings(load=False)
         taskFile = persistence.TaskFile()

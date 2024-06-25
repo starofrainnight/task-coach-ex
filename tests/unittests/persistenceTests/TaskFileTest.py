@@ -32,7 +32,7 @@ from taskcoachlib.domain import (
 
 class FakeAttachment(base.Object):
     def __init__(self, type_, location, notes=None, data=None):
-        super(FakeAttachment, self).__init__()
+        super().__init__()
         self.type_ = type_
         self.__location = location
         self.__data = data
@@ -64,7 +64,7 @@ class TaskFileTestCase(test.TestCase):
         self.task.addEffort(self.effort)
         self.filename = "test.tsk"
         self.filename2 = "test2.tsk"
-        super(TaskFileTestCase, self).setUp()
+        super().setUp()
 
     def createTaskFiles(self):
         # pylint: disable=W0201
@@ -72,7 +72,7 @@ class TaskFileTestCase(test.TestCase):
         self.emptyTaskFile = persistence.TaskFile()
 
     def tearDown(self):
-        super(TaskFileTestCase, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
         self.emptyTaskFile.close()
@@ -216,7 +216,7 @@ class TaskFileTest(TaskFileTestCase):
 
 class DirtyTaskFileTest(TaskFileTestCase):
     def setUp(self):
-        super(DirtyTaskFileTest, self).setUp()
+        super().setUp()
         self.taskFile.setFilename(self.filename)
         self.taskFile.save()
 
@@ -716,7 +716,7 @@ class ChangingAttachmentsTestsMixin(object):
 
 class TaskFileDirtyWhenChangingAttachmentsTestCase(TaskFileTestCase):
     def setUp(self):
-        super(TaskFileDirtyWhenChangingAttachmentsTestCase, self).setUp()
+        super().setUp()
         self.attachment = FakeAttachment("file", "attachment")
 
 
@@ -724,7 +724,7 @@ class TaskFileDirtyWhenChangingTaskAttachmentsTestCase(
     TaskFileDirtyWhenChangingAttachmentsTestCase, ChangingAttachmentsTestsMixin
 ):
     def setUp(self):
-        super(TaskFileDirtyWhenChangingTaskAttachmentsTestCase, self).setUp()
+        super().setUp()
         self.item = self.task
 
 
@@ -732,7 +732,7 @@ class TaskFileDirtyWhenChangingNoteAttachmentsTestCase(
     TaskFileDirtyWhenChangingAttachmentsTestCase, ChangingAttachmentsTestsMixin
 ):
     def setUp(self):
-        super(TaskFileDirtyWhenChangingNoteAttachmentsTestCase, self).setUp()
+        super().setUp()
         self.item = self.note
 
 
@@ -748,7 +748,7 @@ class TaskFileDirtyWhenChangingCategoryAttachmentsTestCase(
 
 class TaskFileSaveAndLoadTest(TaskFileTestCase):
     def setUp(self):
-        super(TaskFileSaveAndLoadTest, self).setUp()
+        super().setUp()
         self.emptyTaskFile.setFilename(self.filename)
 
     def saveAndLoad(self, tasks, categories=None, notes=None):
@@ -817,7 +817,7 @@ class TaskFileSaveAndLoadTest(TaskFileTestCase):
 
 class TaskFileMergeTest(TaskFileTestCase):
     def setUp(self):
-        super(TaskFileMergeTest, self).setUp()
+        super().setUp()
         self.mergeFile = persistence.TaskFile()
         self.mergeFile.setFilename("merge.tsk")
 
@@ -825,7 +825,7 @@ class TaskFileMergeTest(TaskFileTestCase):
         self.mergeFile.close()
         self.mergeFile.stop()
         self.remove("merge.tsk", "merge.tsk.delta")
-        super(TaskFileMergeTest, self).tearDown()
+        super().tearDown()
 
     def merge(self):
         self.mergeFile.save()
@@ -970,7 +970,7 @@ class LockedTaskFileLockTest(TaskFileTestCase):
         self.taskFile.close()
         self.taskFile.stop()
         self.emptyTaskFile.close()
-        super(LockedTaskFileLockTest, self).tearDown()
+        super().tearDown()
 
     def testFileIsNotLockedInitially(self):
         self.assertFalse(self.taskFile.is_locked())
@@ -1028,7 +1028,7 @@ class LockedTaskFileLockTest(TaskFileTestCase):
 
 class TaskFileMonitorTestBase(TaskFileTestCase):
     def setUp(self):
-        super(TaskFileMonitorTestBase, self).setUp()
+        super().setUp()
 
         self.taskFile.saveas(self.filename)
         self.taskFile.load()
@@ -1041,7 +1041,7 @@ class TaskFileMonitorTestBase(TaskFileTestCase):
         self.otherFile.close()
         self.otherFile.stop()
         self.remove("other.tsk")
-        super(TaskFileMonitorTestBase, self).tearDown()
+        super().tearDown()
 
     def testTaskExistsAfterLoad(self):
         self.assertEqual(self.taskFile.monitor().getChanges(self.task), set())

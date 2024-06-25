@@ -29,7 +29,7 @@ class NewCategoryCommand(base.NewItemCommand):
         subject = kwargs.pop("subject", _("New category"))
         description = kwargs.pop("description", "")
         attachments = kwargs.pop("attachments", [])
-        super(NewCategoryCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.items = self.createNewCategories(
             subject=subject, description=description, attachments=attachments
         )
@@ -46,7 +46,7 @@ class NewSubCategoryCommand(base.NewSubItemCommand):
         subject = kwargs.pop("subject", _("New subcategory"))
         description = kwargs.pop("description", "")
         attachments = kwargs.pop("attachments", [])
-        super(NewSubCategoryCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.items = self.createNewCategories(
             subject=subject, description=description, attachments=attachments
         )
@@ -62,22 +62,20 @@ class EditExclusiveSubcategoriesCommand(base.BaseCommand):
 
     def __init__(self, *args, **kwargs):
         self.__newExclusivity = kwargs.pop("newValue")
-        super(EditExclusiveSubcategoriesCommand, self).__init__(
-            *args, **kwargs
-        )
+        super().__init__(*args, **kwargs)
         self.__oldExclusivities = [
             item.hasExclusiveSubcategories() for item in self.items
         ]
 
     @patterns.eventSource
     def do_command(self, event=None):
-        super(EditExclusiveSubcategoriesCommand, self).do_command()
+        super().do_command()
         for item in self.items:
             item.makeSubcategoriesExclusive(self.__newExclusivity, event=event)
 
     @patterns.eventSource
     def undo_command(self, event=None):
-        super(EditExclusiveSubcategoriesCommand, self).undo_command()
+        super().undo_command()
         for item, oldExclusivity in zip(self.items, self.__oldExclusivities):
             item.makeSubcategoriesExclusive(oldExclusivity, event=event)
 

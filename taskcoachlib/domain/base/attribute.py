@@ -25,7 +25,7 @@ class Attribute(object):
     __slots__ = ("__value", "__owner", "__setEvent")
 
     def __init__(self, value, owner, setEvent):
-        super(Attribute, self).__init__()
+        super().__init__()
         self.__value = value
         self.__owner = weakref.ref(owner)
         self.__setEvent = setEvent.__func__

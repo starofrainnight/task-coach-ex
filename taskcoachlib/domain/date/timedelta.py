@@ -85,13 +85,13 @@ class TimeDelta(datetime.timedelta):
     def __add__(self, other):
         """Make sure we return a TimeDelta instance and not a
         datetime.timedelta instance"""
-        timeDelta = super(TimeDelta, self).__add__(other)
+        timeDelta = super().__add__(other)
         return self.__class__(
             timeDelta.days, timeDelta.seconds, timeDelta.microseconds
         )
 
     def __sub__(self, other):
-        timeDelta = super(TimeDelta, self).__sub__(other)
+        timeDelta = super().__sub__(other)
         return self.__class__(
             timeDelta.days, timeDelta.seconds, timeDelta.microseconds
         )

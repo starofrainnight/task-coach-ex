@@ -59,7 +59,7 @@ class BaseItem(object):
         in subclasses to implement simple FSA."""
 
     def __init__(self):
-        super(BaseItem, self).__init__()
+        super().__init__()
 
         self.start()
 
@@ -110,7 +110,7 @@ class DataItem(BaseItem):
     """A bunch of bytes, the count being well known"""
 
     def __init__(self, count):
-        super(DataItem, self).__init__()
+        super().__init__()
 
         self.__count = count
 
@@ -160,7 +160,7 @@ class FixedSizeStringItem(StringItem):
     unicode or NoneType."""
 
     def feed(self, data):
-        super(FixedSizeStringItem, self).feed(data)
+        super().feed(data)
 
         if self.state == 2:
             if not self.value:
@@ -169,7 +169,7 @@ class FixedSizeStringItem(StringItem):
     def pack(self, value):
         if value is None:
             return struct.pack("!i", 0)
-        return super(FixedSizeStringItem, self).pack(value)
+        return super().pack(value)
 
 
 class DateItem(FixedSizeStringItem):
@@ -177,7 +177,7 @@ class DateItem(FixedSizeStringItem):
     taskcoachlib.domain.date.Date."""
 
     def feed(self, data):
-        super(DateItem, self).feed(data)
+        super().feed(data)
 
         if self.state == 2:
             self.value = (
@@ -189,14 +189,14 @@ class DateItem(FixedSizeStringItem):
             value = Date(value.year, value.month, value.day)
 
         value = None if value == Date() else value.isoformat()
-        return super(DateItem, self).pack(value)
+        return super().pack(value)
 
 
 class DateTimeItem(FixedSizeStringItem):
     """Date and time, YYYY-MM-DD HH:MM:SS"""
 
     def feed(self, data):
-        super(DateTimeItem, self).feed(data)
+        super().feed(data)
 
         if self.state == 2:
             if self.value is not None:
@@ -207,7 +207,7 @@ class DateTimeItem(FixedSizeStringItem):
             value = value.replace(microsecond=0, tzinfo=None).isoformat(
                 sep=" "
             )
-        return super(DateTimeItem, self).pack(value)
+        return super().pack(value)
 
 
 class InfiniteDateTimeItem(FixedSizeStringItem):
@@ -215,7 +215,7 @@ class InfiniteDateTimeItem(FixedSizeStringItem):
     instead of None."""
 
     def feed(self, data):
-        super(InfiniteDateTimeItem, self).feed(data)
+        super().feed(data)
 
         if self.state == 2:
             if self.value is None:
@@ -230,7 +230,7 @@ class InfiniteDateTimeItem(FixedSizeStringItem):
             value = value.replace(microsecond=0, tzinfo=None).isoformat(
                 sep=" "
             )
-        return super(InfiniteDateTimeItem, self).pack(value)
+        return super().pack(value)
 
 
 class CompositeItem(BaseItem):
@@ -241,13 +241,13 @@ class CompositeItem(BaseItem):
     def __init__(self, items, *args, **kwargs):
         self._items = items
 
-        super(CompositeItem, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def append(self, item):
         self._items.append(item)
 
     def start(self):
-        super(CompositeItem, self).start()
+        super().start()
 
         self.value = []
 
@@ -293,10 +293,10 @@ class ListItem(BaseItem):
     def __init__(self, item, *args, **kwargs):
         self._item = item
 
-        super(ListItem, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def start(self):
-        super(ListItem, self).start()
+        super().start()
 
         self.value = []
 
@@ -361,7 +361,7 @@ class ItemParser(object):
     }
 
     def __init__(self):
-        super(ItemParser, self).__init__()
+        super().__init__()
 
     @classmethod
     def registerItemType(klass, character, itemClass):
@@ -417,7 +417,7 @@ class ItemParser(object):
 
 class State(object):
     def __init__(self, disp):
-        super(State, self).__init__()
+        super().__init__()
 
         self.__disp = disp
 
@@ -600,7 +600,7 @@ class BaseState(State):  # pylint: disable=W0223
             "iphone", "synccompleted"
         )
 
-        super(BaseState, self).__init__(disp, *args, **kwargs)
+        super().__init__(disp, *args, **kwargs)
 
     def isTaskEligible(self, task):
         """Returns True if a task should be considered when syncing with an iPhone/iPod Touch
@@ -646,7 +646,7 @@ class InitialState(BaseState):
     def init(self, version):
         self.version = version
 
-        super(InitialState, self).init("i", 1)
+        super().init("i", 1)
 
         if self.version == _PROTOVERSION:
             self.ui = self.disp().window.createIPhoneProgressFrame()
@@ -675,7 +675,7 @@ class InitialState(BaseState):
 
 class PasswordState(BaseState):
     def init(self):
-        super(PasswordState, self).init("20b", 1)
+        super().init("20b", 1)
 
         self.hashData = "".join(
             [struct.pack("B", random.randint(0, 255)) for dummy in range(512)]
@@ -704,7 +704,7 @@ class PasswordState(BaseState):
 
 class DeviceNameState(BaseState):
     def init(self):
-        super(DeviceNameState, self).init("s", 1)
+        super().init("s", 1)
 
     def handleNewObject(self, name):
         self.disp().log(_("Device name: %s"), name)
@@ -716,10 +716,10 @@ class DeviceNameState(BaseState):
 class GUIDState(BaseState):
     def init(self):
         if self.version >= 4:
-            super(GUIDState, self).init("i", 1)
+            super().init("i", 1)
             self.pack("s", self.disp().window.taskFile.guid())
         else:
-            super(GUIDState, self).init("z", 1)
+            super().init("z", 1)
 
     def handleNewObject(self, guid):
         self.disp().log(_("GUID: %s"), guid)
@@ -746,7 +746,7 @@ class GUIDState(BaseState):
 
 class TaskFileNameState(BaseState):
     def init(self):
-        super(TaskFileNameState, self).init("i", 1)
+        super().init("i", 1)
 
         filename = self.disp().iocontroller.filename()
         if filename:
@@ -763,7 +763,7 @@ class TaskFileNameState(BaseState):
 
 class DayHoursState(BaseState):
     def init(self):
-        super(DayHoursState, self).init("i", 1)
+        super().init("i", 1)
 
         self.pack(
             "ii",
@@ -858,9 +858,7 @@ class FullFromDesktopState(BaseState):
 
 class FullFromDesktopCategoryState(BaseState):
     def init(self):
-        super(FullFromDesktopCategoryState, self).init(
-            "i", len(self.categories)
-        )
+        super().init("i", len(self.categories))
 
         self.disp().log(_("%d categories"), len(self.categories))
 
@@ -890,7 +888,7 @@ class FullFromDesktopCategoryState(BaseState):
 
 class FullFromDesktopTaskState(BaseState):
     def init(self):
-        super(FullFromDesktopTaskState, self).init("i", len(self.tasks))
+        super().init("i", len(self.tasks))
 
         self.disp().log(_("%d tasks"), len(self.tasks))
 
@@ -976,7 +974,7 @@ class FullFromDesktopTaskState(BaseState):
 
 class FullFromDesktopEffortState(BaseState):
     def init(self):
-        super(FullFromDesktopEffortState, self).init("i", len(self.efforts))
+        super().init("i", len(self.efforts))
 
         self.disp().log(_("%d efforts"), len(self.efforts))
 
@@ -1011,14 +1009,14 @@ class FullFromDesktopEffortState(BaseState):
 
     def handleClose(self):
         if self.version < 5:
-            super(FullFromDesktopEffortState, self).handleClose()
+            super().handleClose()
 
 
 class FullFromDeviceState(BaseState):
     def init(self):
         self.disp().window.clearTasks()
 
-        super(FullFromDeviceState, self).init("ii", 1)
+        super().init("ii", 1)
 
     def handleNewObject(self, xxx_todo_changeme):
         (categoryCount, taskCount) = xxx_todo_changeme
@@ -1038,9 +1036,7 @@ class FullFromDeviceCategoryState(BaseState):
     def init(self):
         self.categoryMap = {}
 
-        super(FullFromDeviceCategoryState, self).init(
-            "s" if self.version < 3 else "sz", self.categoryCount
-        )
+        super().init("s" if self.version < 3 else "sz", self.categoryCount)
 
     def handleNewObject(self, args):
         if self.version < 3:
@@ -1068,7 +1064,7 @@ class FullFromDeviceCategoryState(BaseState):
 
 class FullFromDeviceTaskState(BaseState):
     def init(self):
-        super(FullFromDeviceTaskState, self).init("ssddd[s]", self.taskCount)
+        super().init("ssddd[s]", self.taskCount)
 
     def handleNewObject(self, xxx_todo_changeme1):
         (
@@ -1123,11 +1119,11 @@ class TwoWayState(BaseState):
         )
 
         if self.version < 3:
-            super(TwoWayState, self).init("iiii", 1)
+            super().init("iiii", 1)
         elif self.version < 4:
-            super(TwoWayState, self).init("iiiiii", 1)
+            super().init("iiiiii", 1)
         else:
-            super(TwoWayState, self).init("iiiiiiiii", 1)
+            super().init("iiiiiiiii", 1)
 
     def handleNewObject(self, args):
         if self.version < 3:
@@ -1180,7 +1176,7 @@ class TwoWayState(BaseState):
 
 class TwoWayNewCategoriesState(BaseState):
     def init(self):
-        super(TwoWayNewCategoriesState, self).init(
+        super().init(
             ("s" if self.version < 3 else "sz"), self.newCategoriesCount
         )
 
@@ -1211,9 +1207,7 @@ class TwoWayNewCategoriesState(BaseState):
 
 class TwoWayDeletedCategoriesState(BaseState):
     def init(self):
-        super(TwoWayDeletedCategoriesState, self).init(
-            "s", self.deletedCategoriesCount
-        )
+        super().init("s", self.deletedCategoriesCount)
 
     def handleNewObject(self, catId):
         try:
@@ -1234,9 +1228,7 @@ class TwoWayDeletedCategoriesState(BaseState):
 
 class TwoWayModifiedCategoriesState(BaseState):
     def init(self):
-        super(TwoWayModifiedCategoriesState, self).init(
-            "ss", self.modifiedCategoriesCount
-        )
+        super().init("ss", self.modifiedCategoriesCount)
 
     def handleNewObject(self, xxx_todo_changeme2):
         (name, catId) = xxx_todo_changeme2
@@ -1263,7 +1255,7 @@ class TwoWayModifiedCategoriesState(BaseState):
 
 class TwoWayNewTasksState(BaseState):
     def init(self):
-        super(TwoWayNewTasksState, self).init("ssddd[s]", self.newTasksCount)
+        super().init("ssddd[s]", self.newTasksCount)
 
     def handleNewObject(self, xxx_todo_changeme3):
         (
@@ -1305,7 +1297,7 @@ class TwoWayNewTasksState(BaseState):
 
 class TwoWayNewTasksState4(BaseState):
     def init(self):
-        super(TwoWayNewTasksState4, self).init("ssddfz[s]", self.newTasksCount)
+        super().init("ssddfz[s]", self.newTasksCount)
 
     def handleNewObject(self, xxx_todo_changeme4):
         (
@@ -1376,9 +1368,7 @@ class TwoWayNewTasksState4(BaseState):
 
 class TwoWayNewTasksState5(BaseState):
     def init(self):
-        super(TwoWayNewTasksState5, self).init(
-            "ssffffiiiiiz[s]", self.newTasksCount
-        )
+        super().init("ssffffiiiiiz[s]", self.newTasksCount)
 
     def handleNewObject(self, xxx_todo_changeme5):
         (
@@ -1441,7 +1431,7 @@ class TwoWayNewTasksState5(BaseState):
 
 class TwoWayDeletedTasksState(BaseState):
     def init(self):
-        super(TwoWayDeletedTasksState, self).init("s", self.deletedTasksCount)
+        super().init("s", self.deletedTasksCount)
 
     def handleNewObject(self, taskId):
         try:
@@ -1462,17 +1452,11 @@ class TwoWayDeletedTasksState(BaseState):
 class TwoWayModifiedTasks(BaseState):
     def init(self):
         if self.version < 2:
-            super(TwoWayModifiedTasks, self).init(
-                "sssddd", self.modifiedTasksCount
-            )
+            super().init("sssddd", self.modifiedTasksCount)
         elif self.version < 5:
-            super(TwoWayModifiedTasks, self).init(
-                "sssddd[s]", self.modifiedTasksCount
-            )
+            super().init("sssddd[s]", self.modifiedTasksCount)
         else:
-            super(TwoWayModifiedTasks, self).init(
-                "sssffffiiiii[s]", self.modifiedTasksCount
-            )
+            super().init("sssffffiiiii[s]", self.modifiedTasksCount)
 
     def handleNewObject(self, args):
         reminderDateTime = None
@@ -1600,7 +1584,7 @@ class TwoWayModifiedTasks(BaseState):
 
 class TwoWayNewEffortsState(BaseState):
     def init(self):
-        super(TwoWayNewEffortsState, self).init("sztt", self.newEffortsCount)
+        super().init("sztt", self.newEffortsCount)
 
     def handleNewObject(self, xxx_todo_changeme6):
         (subject, taskId, started, ended) = xxx_todo_changeme6
@@ -1627,9 +1611,7 @@ class TwoWayNewEffortsState(BaseState):
 
 class TwoWayModifiedEffortsState(BaseState):
     def init(self):
-        super(TwoWayModifiedEffortsState, self).init(
-            "sstt", self.modifiedEffortsCount
-        )
+        super().init("sstt", self.modifiedEffortsCount)
 
     def handleNewObject(self, xxx_todo_changeme7):
         # Actually, the taskId cannot be modified on the device, which saves
@@ -1656,7 +1638,7 @@ class TwoWayModifiedEffortsState(BaseState):
 
 class SendGUIDState(BaseState):
     def init(self):
-        super(SendGUIDState, self).init("i", 1)
+        super().init("i", 1)
 
         self.disp().log(
             _("Sending GUID: %s"), self.disp().window.taskFile.guid()

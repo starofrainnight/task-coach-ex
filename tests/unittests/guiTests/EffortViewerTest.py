@@ -33,7 +33,7 @@ class EffortViewerUnderTest(gui.viewer.EffortViewer):  # pylint: disable=W0223
 
 class EffortViewerForSpecificTasksTest(test.wxTestCase):
     def setUp(self):
-        super(EffortViewerForSpecificTasksTest, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         task.Task.settings = self.settings
         self.taskFile = persistence.TaskFile()
@@ -56,7 +56,7 @@ class EffortViewerForSpecificTasksTest(test.wxTestCase):
         )
 
     def tearDown(self):
-        super(EffortViewerForSpecificTasksTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
@@ -80,7 +80,7 @@ class EffortViewerForSpecificTasksTest(test.wxTestCase):
 
 class EffortViewerStatusMessageTest(test.wxTestCase):
     def setUp(self):
-        super(EffortViewerStatusMessageTest, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
         self.task = task.Task()
@@ -96,7 +96,7 @@ class EffortViewerStatusMessageTest(test.wxTestCase):
         )
 
     def tearDown(self):
-        super(EffortViewerStatusMessageTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
@@ -171,7 +171,7 @@ class EffortViewerStatusMessageTest(test.wxTestCase):
 
 class EffortViewerTest(test.wxTestCase):
     def setUp(self):
-        super(EffortViewerTest, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
         self.task = task.Task("task")
@@ -187,7 +187,7 @@ class EffortViewerTest(test.wxTestCase):
         )
 
     def tearDown(self):
-        super(EffortViewerTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
@@ -255,7 +255,7 @@ class EffortViewerAggregationTestCase(test.wxTestCase):
         )
 
     def setUp(self):
-        super(EffortViewerAggregationTestCase, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.settings.set("effortviewer", "aggregation", self.aggregation)
 
@@ -294,7 +294,7 @@ class EffortViewerAggregationTestCase(test.wxTestCase):
         self.task2.addEffort(effort.Effort(self.task2, *mostRecentPeriod))
 
     def tearDown(self):
-        super(EffortViewerAggregationTestCase, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
@@ -318,7 +318,7 @@ class EffortViewerAggregationRoundingTestCase(test.wxTestCase):
         )
 
     def setUp(self):
-        super(EffortViewerAggregationRoundingTestCase, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.settings.set("effortviewer", "aggregation", self.aggregation)
         self.settings.setint("effortviewer", "round", self.roundingValue)
@@ -751,7 +751,7 @@ class EffortViewerRenderTestMixin(object):
         )
 
     def setUp(self):
-        super(EffortViewerRenderTestMixin, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.settings.set("effortviewer", "aggregation", self.aggregation)
 

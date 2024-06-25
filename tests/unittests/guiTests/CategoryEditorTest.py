@@ -29,7 +29,7 @@ class DummyEvent(object):
 
 class CategoryEditorTest(test.wxTestCase):
     def setUp(self):
-        super(CategoryEditorTest, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
         self.categories = self.taskFile.categories()
@@ -47,7 +47,7 @@ class CategoryEditorTest(test.wxTestCase):
         # calls are dealt with, otherwise they'll turn up in other tests
         if operating_system.isGTK():
             wx.Yield()  # pragma: no cover
-        super(CategoryEditorTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

@@ -42,7 +42,7 @@ class AutoColumnWidthMixin(object):
         self.__is_auto_resizing = False
         self.ResizeColumn = kwargs.pop("resizeableColumn", -1)
         self.ResizeColumnMinWidth = kwargs.pop("resizeableColumnMinWidth", 50)
-        super(AutoColumnWidthMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def SetResizeColumn(self, column):
         self.ResizeColumn = column
@@ -163,31 +163,25 @@ class AutoColumnWidthMixin(object):
 
     def InsertColumn(self, *args, **kwargs):
         """Insert the new column and then resize."""
-        result = super(AutoColumnWidthMixin, self).InsertColumn(
-            *args, **kwargs
-        )
+        result = super().InsertColumn(*args, **kwargs)
         self.DoResize()
         return result
 
     def DeleteColumn(self, *args, **kwargs):
         """Delete the column and then resize."""
-        result = super(AutoColumnWidthMixin, self).DeleteColumn(
-            *args, **kwargs
-        )
+        result = super().DeleteColumn(*args, **kwargs)
         self.DoResize()
         return result
 
     def RemoveColumn(self, *args, **kwargs):
         """Remove the column and then resize."""
-        result = super(AutoColumnWidthMixin, self).RemoveColumn(
-            *args, **kwargs
-        )
+        result = super().RemoveColumn(*args, **kwargs)
         self.DoResize()
         return result
 
     def AddColumn(self, *args, **kwargs):
         """Add the column and then resize."""
-        result = super(AutoColumnWidthMixin, self).AddColumn(*args, **kwargs)
+        result = super().AddColumn(*args, **kwargs)
         self.DoResize()
         return result
 

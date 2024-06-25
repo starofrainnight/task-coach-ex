@@ -46,7 +46,7 @@ class DummyTaskFile(persistence.TaskFile):
         return True
 
     def filename(self):
-        return super(DummyTaskFile, self).filename() or "whatever.tsk"
+        return super().filename() or "whatever.tsk"
 
 
 class LocalSettings(config.Settings):
@@ -55,7 +55,7 @@ class LocalSettings(config.Settings):
         if os.path.exists(self.__path):
             shutil.rmtree(self.__path)
         os.mkdir(self.__path)
-        super(LocalSettings, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def _pathToDataDir(self, *args, **kwargs):
         return self.__path, False
@@ -64,7 +64,7 @@ class LocalSettings(config.Settings):
 class AutoBackupTest(test.TestCase):
     # pylint: disable=E1101,E1002,W0232
     def setUp(self):
-        super(AutoBackupTest, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = LocalSettings(load=False)
         self.taskFile = DummyTaskFile()
         self.backup = persistence.AutoBackup(
@@ -73,7 +73,7 @@ class AutoBackupTest(test.TestCase):
         self.copyCalled = False
 
     def tearDown(self):
-        super(AutoBackupTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
         if os.path.exists("test.tsk"):

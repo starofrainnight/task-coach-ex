@@ -22,7 +22,7 @@ from taskcoachlib.i18n import _
 
 class DirectoryChooser(wx.Panel):
     def __init__(self, *args, **kwargs):
-        super(DirectoryChooser, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.chooser = wx.DirPickerCtrl(self, wx.ID_ANY, "")
         self.checkbx = wx.CheckBox(self, wx.ID_ANY, _("None"))

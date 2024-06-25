@@ -53,9 +53,7 @@ class DueDateTimeCtrl(inplace_editor.DateTimeCtrl):
     def __init__(self, parent, wxId, item, column, owner, value, **kwargs):
         kwargs["relative"] = True
         kwargs["startDateTime"] = item.GetData().plannedStartDateTime()
-        super(DueDateTimeCtrl, self).__init__(
-            parent, wxId, item, column, owner, value, **kwargs
-        )
+        super().__init__(parent, wxId, item, column, owner, value, **kwargs)
         sdtc.EVT_TIME_CHOICES_CHANGE(self._dateTimeCtrl, self.OnChoicesChange)
         self._dateTimeCtrl.LoadChoices(
             item.GetData().settings.get("feature", "sdtcspans")
@@ -72,7 +70,7 @@ class TaskViewerStatusMessages(object):
     template2 = _("Status: %d overdue, %d late, %d inactive, %d completed")
 
     def __init__(self, viewer):
-        super(TaskViewerStatusMessages, self).__init__()
+        super().__init__()
         self.__viewer = viewer
         self.__presentation = viewer.presentation()
 
@@ -100,7 +98,7 @@ class BaseTaskViewer(
     base.TreeViewer,
 ):
     def __init__(self, *args, **kwargs):
-        super(BaseTaskViewer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.statusMessages = TaskViewerStatusMessages(self)
         self.__registerForAppearanceChanges()
         wx.CallAfter(self.__DisplayBalloon)
@@ -153,7 +151,7 @@ class BaseTaskViewer(
         pub.subscribe(self.refresh, "powermgt.on")
 
     def detach(self):
-        super(BaseTaskViewer, self).detach()
+        super().detach()
         self.statusMessages = None  # Break cycle
 
     def _renderTimeSpent(self, *args, **kwargs):
@@ -177,7 +175,7 @@ class BaseTaskViewer(
 
     def createFilter(self, taskList):
         tasks = domain.base.DeletedFilter(taskList)
-        return super(BaseTaskViewer, self).createFilter(tasks)
+        return super().createFilter(tasks)
 
     def nrOfVisibleTasks(self):
         # Make this overridable for viewers where the widget does not show all
@@ -190,7 +188,7 @@ class BaseTaskTreeViewer(BaseTaskViewer):  # pylint: disable=W0223
     defaultBitmap = "led_blue_icon"
 
     def __init__(self, *args, **kwargs):
-        super(BaseTaskTreeViewer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if kwargs.get("doRefresh", True):
             self.secondRefresher = refresher.SecondRefresher(
                 self, task.Task.trackingChangedEventType()
@@ -200,7 +198,7 @@ class BaseTaskTreeViewer(BaseTaskViewer):  # pylint: disable=W0223
             self.secondRefresher = self.minuteRefresher = None
 
     def detach(self):
-        super(BaseTaskTreeViewer, self).detach()
+        super().detach()
         if hasattr(self, "secondRefresher") and self.secondRefresher:
             self.secondRefresher.stopClock()
             self.secondRefresher.removeInstance()
@@ -211,13 +209,13 @@ class BaseTaskTreeViewer(BaseTaskViewer):  # pylint: disable=W0223
 
     def newItemDialog(self, *args, **kwargs):
         kwargs["categories"] = self.taskFile.categories().filteredCategories()
-        return super(BaseTaskTreeViewer, self).newItemDialog(*args, **kwargs)
+        return super().newItemDialog(*args, **kwargs)
 
     def editItemDialog(
         self, items, bitmap, columnName="", items_are_new=False
     ):
         if isinstance(items[0], task.Task):
-            return super(BaseTaskTreeViewer, self).editItemDialog(
+            return super().editItemDialog(
                 items,
                 bitmap,
                 columnName=columnName,
@@ -319,7 +317,7 @@ class BaseTaskTreeViewer(BaseTaskViewer):  # pylint: disable=W0223
                 settings=self.settings,
                 bitmap="newtmpl",
             ),
-        ) + super(BaseTaskTreeViewer, self).createCreationToolBarUICommands()
+        ) + super().createCreationToolBarUICommands()
 
     def createActionToolBarUICommands(self):
         uiCommands = (
@@ -341,10 +339,7 @@ class BaseTaskTreeViewer(BaseTaskViewer):  # pylint: disable=W0223
                 taskList=self.taskFile.tasks(),
             ),
         )
-        return (
-            uiCommands
-            + super(BaseTaskTreeViewer, self).createActionToolBarUICommands()
-        )
+        return uiCommands + super().createActionToolBarUICommands()
 
     def createModeToolBarUICommands(self):
         hideUICommands = tuple(
@@ -391,9 +386,7 @@ class BaseTaskTreeViewer(BaseTaskViewer):  # pylint: disable=W0223
                     ),
                 )
             )
-        return result + super(BaseTaskTreeViewer, self).getItemTooltipData(
-            task
-        )
+        return result + super().getItemTooltipData(task)
 
     def label(self, task):  # pylint: disable=W0621
         return self.getItemText(task)
@@ -456,7 +449,7 @@ class SquareMapRootNode(RootNode):
 
 class TimelineRootNode(RootNode):
     def children(self, recursive=False):
-        children = super(TimelineRootNode, self).children(recursive)
+        children = super().children(recursive)
         children.sort(key=lambda task: task.plannedStartDateTime())
         return children
 
@@ -495,7 +488,7 @@ class TimelineViewer(BaseTaskTreeViewer):
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("settingsSection", "timelineviewer")
-        super(TimelineViewer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         for eventType in (
             task.Task.subjectChangedEventType(),
             task.Task.plannedStartDateTimeChangedEventType(),
@@ -602,7 +595,7 @@ class TimelineViewer(BaseTaskTreeViewer):
 
     def getItemTooltipData(self, item):
         if isinstance(item, task.Task):
-            result = super(TimelineViewer, self).getItemTooltipData(item)
+            result = super().getItemTooltipData(item)
         else:
             result = [
                 (
@@ -643,7 +636,7 @@ class SquareTaskViewer(BaseTaskTreeViewer):
             revenue=render.monetaryAmount,
             priority=render.priority,
         )
-        super(SquareTaskViewer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         sortKeys = eval(self.settings.get(self.settingsSection(), "sortby"))
         orderBy = sortKeys[0] if sortKeys else "budget"
         self.orderBy(sortKeys[0] if sortKeys else "budget")
@@ -683,9 +676,7 @@ class SquareTaskViewer(BaseTaskTreeViewer):
         self.orderUICommand = uicommand.SquareTaskViewerOrderChoice(
             viewer=self, settings=self.settings
         )  # pylint: disable=W0201
-        return super(SquareTaskViewer, self).createModeToolBarUICommands() + (
-            self.orderUICommand,
-        )
+        return super().createModeToolBarUICommands() + (self.orderUICommand,)
 
     def hasModes(self):
         return True
@@ -795,7 +786,7 @@ class SquareTaskViewer(BaseTaskTreeViewer):
         return 0
 
     def getItemText(self, task):
-        text = super(SquareTaskViewer, self).getItemText(task)
+        text = super().getItemText(task)
         value = self.render(getattr(task, self.__orderBy)(recursive=False))
         return "%s (%s)" % (text, value) if value else text
 
@@ -834,7 +825,7 @@ class HierarchicalCalendarViewer(
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("settingsSection", "hierarchicalcalendarviewer")
-        super(HierarchicalCalendarViewer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # pylint: disable=E1101
         for eventType in (
@@ -913,7 +904,7 @@ class HierarchicalCalendarViewer(
         )
 
     def detach(self):
-        super(HierarchicalCalendarViewer, self).detach()
+        super().detach()
         date.Scheduler().unschedule(self.atMidnight)
 
     def atMidnight(self):
@@ -987,7 +978,7 @@ class CalendarViewer(
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("settingsSection", "calendarviewer")
         kwargs["doRefresh"] = False
-        super(CalendarViewer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         start = self.settings.get(self.settingsSection(), "viewdate")
         if start:
@@ -1030,7 +1021,7 @@ class CalendarViewer(
         date.Scheduler().schedule_interval(self.atMidnight, days=1)
 
     def detach(self):
-        super(CalendarViewer, self).detach()
+        super().detach()
         date.Scheduler().unschedule(self.atMidnight)
 
     def isTreeViewer(self):
@@ -1108,7 +1099,7 @@ class CalendarViewer(
         return create(event=None, show=show)
 
     def createModeToolBarUICommands(self):
-        return super(CalendarViewer, self).createModeToolBarUICommands() + (
+        return super().createModeToolBarUICommands() + (
             None,
             uicommand.CalendarViewerConfigure(viewer=self),
             uicommand.CalendarViewerPreviousPeriod(viewer=self),
@@ -1204,7 +1195,7 @@ class TaskViewer(
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("settingsSection", "taskviewer")
-        super(TaskViewer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if self.isVisibleColumnByName("timeLeft"):
             self.minuteRefresher.startClock()
         pub.subscribe(
@@ -1241,7 +1232,7 @@ class TaskViewer(
                 self.minuteRefresher.startClock()
             else:
                 self.minuteRefresher.stopClock()
-        super(TaskViewer, self).showColumn(column, show, *args, **kwargs)
+        super().showColumn(column, show, *args, **kwargs)
 
     def curselectionIsInstanceOf(self, class_):
         return class_ == task.Task
@@ -1855,9 +1846,7 @@ class TaskViewer(
         treeOrListUICommand = uicommand.TaskViewerTreeOrListChoice(
             viewer=self, settings=self.settings
         )  # pylint: disable=W0201
-        return super(TaskViewer, self).createModeToolBarUICommands() + (
-            treeOrListUICommand,
-        )
+        return super().createModeToolBarUICommands() + (treeOrListUICommand,)
 
     def hasModes(self):
         return True
@@ -1882,11 +1871,11 @@ class TaskViewer(
     def setSortByTaskStatusFirst(
         self, *args, **kwargs
     ):  # pylint: disable=W0221
-        super(TaskViewer, self).setSortByTaskStatusFirst(*args, **kwargs)
+        super().setSortByTaskStatusFirst(*args, **kwargs)
         self.showSortOrder()
 
     def getSortOrderImage(self):
-        sortOrderImage = super(TaskViewer, self).getSortOrderImage()
+        sortOrderImage = super().getSortOrderImage()
         if self.isSortByTaskStatusFirst():  # pylint: disable=E1101
             sortOrderImage = sortOrderImage.rstrip("icon") + "with_status_icon"
         return sortOrderImage
@@ -1894,7 +1883,7 @@ class TaskViewer(
     def setSearchFilter(
         self, searchString, *args, **kwargs
     ):  # pylint: disable=W0221
-        super(TaskViewer, self).setSearchFilter(searchString, *args, **kwargs)
+        super().setSearchFilter(searchString, *args, **kwargs)
         if searchString:
             self.expandAll()  # pylint: disable=E1101
 
@@ -2044,27 +2033,23 @@ class TaskViewer(
                 for column in ("timeSpent", "budgetLeft", "revenue")
             ]
         ):
-            super(TaskViewer, self).onEverySecond(event)
+            super().onEverySecond(event)
 
     def getRootItems(self):
         """If the viewer is in tree mode, return the real root items. If the
         viewer is in list mode, return all items."""
         return (
-            super(TaskViewer, self).getRootItems()
+            super().getRootItems()
             if self.isTreeViewer()
             else self.presentation()
         )
 
     def getItemParent(self, item):
-        return (
-            super(TaskViewer, self).getItemParent(item)
-            if self.isTreeViewer()
-            else None
-        )
+        return super().getItemParent(item) if self.isTreeViewer() else None
 
     def children(self, item=None):
         return (
-            super(TaskViewer, self).children(item)
+            super().children(item)
             if (self.isTreeViewer() or item is None)
             else []
         )
@@ -2111,7 +2096,7 @@ class TaskStatsViewer(BaseTaskViewer):  # pylint: disable=W0223
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault("settingsSection", "taskstatsviewer")
-        super(TaskStatsViewer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         pub.subscribe(
             self.onPieChartAngleChanged,
             "settings.%s.piechartangle" % self.settingsSection(),
@@ -2229,7 +2214,7 @@ else:
             kwargs.setdefault("settingsSection", "taskinterdepsviewer")
             self._needsUpdate = False  # refresh called from parent constructor
             self._updating = False
-            super(TaskInterdepsViewer, self).__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)
 
             pub.subscribe(
                 self.onAttributeChanged,

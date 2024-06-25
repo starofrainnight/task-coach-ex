@@ -55,7 +55,7 @@ class TaskBarIconTestCase(test.TestCase):
             self.icon.Destroy()
         else:
             self.icon.RemoveIcon()
-        super(TaskBarIconTestCase, self).tearDown()
+        super().tearDown()
 
 
 class TaskBarIconTest(TaskBarIconTestCase):
@@ -137,7 +137,7 @@ class TaskBarIconTooltipTest(TaskBarIconTooltipTestCase):
 
 class TaskBarIconTooltipWithTrackedTaskTest(TaskBarIconTooltipTestCase):
     def setUp(self):
-        super(TaskBarIconTooltipWithTrackedTaskTest, self).setUp()
+        super().setUp()
         self.task = task.Task(subject="Subject")
         self.taskList.append(self.task)
         self.task.addEffort(effort.Effort(self.task))

@@ -54,9 +54,7 @@ class EffortViewer(
         self.__hiddenTotalColumns = []
         self.__columnUICommands = None
         self.__domainObjectsToView = None
-        super(EffortViewer, self).__init__(
-            parent, taskFile, settings, *args, **kwargs
-        )
+        super().__init__(parent, taskFile, settings, *args, **kwargs)
         self.secondRefresher = refresher.SecondRefresher(
             self, effort.Effort.trackingChangedEventType()
         )
@@ -160,7 +158,7 @@ class EffortViewer(
         )
 
     def detach(self):
-        super(EffortViewer, self).detach()
+        super().detach()
         self.secondRefresher.removeInstance()
 
     def isShowingEffort(self):
@@ -217,7 +215,7 @@ class EffortViewer(
         per week, or per month."""
         aggregation = self.settings.get(self.settingsSection(), "aggregation")
         deletedFilter = filter.DeletedFilter(taskList)
-        categoryFilter = super(EffortViewer, self).createFilter(deletedFilter)
+        categoryFilter = super().createFilter(deletedFilter)
         searchFilter = filter.SearchFilter(
             self.createAggregator(categoryFilter, aggregation)
         )
@@ -611,7 +609,7 @@ class EffortViewer(
         return {wx.TreeItemIcon_Normal: -1}
 
     def curselection(self):
-        selection = super(EffortViewer, self).curselection()
+        selection = super().curselection()
         if self.aggregation != "details":
             selection = [
                 anEffort
@@ -628,7 +626,7 @@ class EffortViewer(
         never in curselection(). This method is used instead. It just
         ignores the overridden version of curselection."""
 
-        return item in super(EffortViewer, self).curselection()
+        return item in super().curselection()
 
     def __sumTimeSpent(self, efforts):
         td = date.TimeDelta()
@@ -676,9 +674,7 @@ class EffortViewer(
             ]
             subjectDecoratedTaskList.sort()  # Sort by subject
             selectedTasks = [subjectDecoratedTaskList[0][1]]
-        return super(EffortViewer, self).newItemDialog(
-            selectedTasks, bitmap=bitmap
-        )
+        return super().newItemDialog(selectedTasks, bitmap=bitmap)
 
     def itemEditorClass(self):
         return dialog.editor.EffortEditor
@@ -796,7 +792,7 @@ class EffortViewer(
         )
 
     def getItemTooltipData(self, item):
-        result = super(EffortViewer, self).getItemTooltipData(item)
+        result = super().getItemTooltipData(item)
         if isinstance(item, effort.CompositeEffort) and len(item):
             details = [_("Details:")]
             for theEffort in item:
@@ -865,7 +861,7 @@ class EffortViewerForSelectedTasks(EffortViewer):
             else None
         )
         pub.subscribe(self.onTaskSelectionChanged, "all.viewer.status")
-        super(EffortViewerForSelectedTasks, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def tasksToShowEffortFor(self):
         if self.__currentTaskViewer is not None:

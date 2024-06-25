@@ -41,7 +41,7 @@ class TaskBarIcon(patterns.Observer, wx.adv.TaskBarIcon):
         *args,
         **kwargs
     ):
-        super(TaskBarIcon, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__window = mainwindow
         self.__taskList = taskList
         self.__settings = settings

@@ -37,7 +37,7 @@ class ReminderDialog(patterns.Observer, sized_controls.SizedDialog):
         kwargs["title"] = _("%(name)s reminder - %(task)s") % dict(
             name=meta.name, task=task.subject(recursive=True)
         )
-        super(ReminderDialog, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.SetIcon(
             wx.ArtProvider.GetIcon("taskcoach", wx.ART_FRAME_ICON, (16, 16))
         )

@@ -47,7 +47,7 @@ class SplashScreen(wx.adv.SplashScreen):
             bitmap = wx.BitmapFromImage(splash.GetBitmap().Mirror())
         else:
             bitmap = splash.GetBitmap()
-        super(SplashScreen, self).__init__(
+        super().__init__(
             bitmap,
             wx.adv.SPLASH_CENTRE_ON_SCREEN | wx.adv.SPLASH_TIMEOUT,
             4000,

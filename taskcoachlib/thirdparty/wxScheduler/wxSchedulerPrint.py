@@ -7,7 +7,7 @@ from .wxSchedulerCore import *
 class wxSchedulerPrint(wxSchedulerCore):
 
     def __init__(self, dc):
-        super(wxSchedulerPrint, self).__init__()
+        super().__init__()
 
         self.SetDc(dc)
 

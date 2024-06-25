@@ -22,7 +22,7 @@ import weakref
 
 class Composite(object):
     def __init__(self, children=None, parent=None):
-        super(Composite, self).__init__()
+        super().__init__()
         self.__parent = parent if parent is None else weakref.ref(parent)
         self.__children = children or []
         for child in self.__children:
@@ -40,7 +40,7 @@ class Composite(object):
     def __getcopystate__(self):
         """Return the information needed to create a copy as a dict."""
         try:
-            state = super(Composite, self).__getcopystate__()
+            state = super().__getcopystate__()
         except AttributeError:
             state = dict()
         state.update(
@@ -113,7 +113,7 @@ class ObservableComposite(Composite):
     @observer.eventSource
     def __setstate__(self, state, event=None):  # pylint: disable=W0221
         oldChildren = set(self.children())
-        super(ObservableComposite, self).__setstate__(state)
+        super().__setstate__(state)
         newChildren = set(self.children())
         childrenRemoved = oldChildren - newChildren
         # pylint: disable=W0142
@@ -125,7 +125,7 @@ class ObservableComposite(Composite):
 
     @observer.eventSource
     def addChild(self, child, event=None):  # pylint: disable=W0221
-        super(ObservableComposite, self).addChild(child)
+        super().addChild(child)
         self.addChildEvent(event, child)
 
     def addChildEvent(self, event, *children):
@@ -137,7 +137,7 @@ class ObservableComposite(Composite):
 
     @observer.eventSource
     def removeChild(self, child, event=None):  # pylint: disable=W0221
-        super(ObservableComposite, self).removeChild(child)
+        super().removeChild(child)
         self.removeChildEvent(event, child)
 
     def removeChildEvent(self, event, *children):
@@ -165,7 +165,7 @@ class ObservableComposite(Composite):
 
 class CompositeCollection(object):
     def __init__(self, initList=None, *args, **kwargs):
-        super(CompositeCollection, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.extend(initList or [])
 
     def append(self, composite, event=None):
@@ -176,9 +176,7 @@ class CompositeCollection(object):
         if not composites:
             return
         compositesAndAllChildren = self._compositesAndAllChildren(composites)
-        super(CompositeCollection, self).extend(
-            compositesAndAllChildren, event=event
-        )
+        super().extend(compositesAndAllChildren, event=event)
         self._addCompositesToParent(composites, event)
 
     def _compositesAndAllChildren(self, composites):
@@ -209,9 +207,7 @@ class CompositeCollection(object):
         if not composites:
             return
         compositesAndAllChildren = self._compositesAndAllChildren(composites)
-        super(CompositeCollection, self).removeItems(
-            compositesAndAllChildren, event=event
-        )
+        super().removeItems(compositesAndAllChildren, event=event)
         self._removeCompositesFromParent(composites, event)
 
     def _removeCompositesFromParent(self, composites, event):

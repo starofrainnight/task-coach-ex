@@ -23,7 +23,7 @@ from taskcoachlib.gui.dialog import entry
 
 class AmountEntryTest(test.wxTestCase):
     def setUp(self):
-        super(AmountEntryTest, self).setUp()
+        super().setUp()
         self.amountEntry = entry.AmountEntry(self.frame)
 
     def testCreate(self):

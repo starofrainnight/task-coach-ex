@@ -26,7 +26,7 @@ class CSVWriterTestCase(test.wxTestCase):
     treeMode = "Subclass responsibility"
 
     def setUp(self):
-        super(CSVWriterTestCase, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.fd = io.StringIO()
         self.writer = persistence.CSVWriter(self.fd)
@@ -36,7 +36,7 @@ class CSVWriterTestCase(test.wxTestCase):
         self.createViewer()
 
     def tearDown(self):
-        super(CSVWriterTestCase, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
@@ -363,7 +363,7 @@ class CSVTreeWriterTest(TaskTestsMixin, CSVWriterTestCase):
 
 class EffortWriterTest(CSVWriterTestCase):
     def setUp(self):
-        super(EffortWriterTest, self).setUp()
+        super().setUp()
         now = date.DateTime.now()
         self.effort = effort.Effort(
             self.task, start=now, stop=now + date.ONE_SECOND

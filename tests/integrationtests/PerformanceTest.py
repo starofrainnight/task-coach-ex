@@ -47,7 +47,7 @@ class PerformanceTest(test.TestCase):
 
     def tearDown(self):
         os.remove(self.taskfilename)
-        super(PerformanceTest, self).tearDown()
+        super().tearDown()
 
     def testRead(self):
         mockApp = mock.App()

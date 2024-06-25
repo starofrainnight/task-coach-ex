@@ -25,7 +25,7 @@ class IPhoneSyncFrame(NotificationFrameBase):
     def __init__(self, settings, *args, **kwargs):
         self.settings = settings
 
-        super(IPhoneSyncFrame, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def AddInnerContent(self, sizer, panel):
         self.text = wx.StaticText(panel, wx.ID_ANY, _("Synchronizing..."))

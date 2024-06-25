@@ -26,7 +26,7 @@ from taskcoachlib.i18n import _
 
 class SyncMLBasePage(SettingsPageBase):
     def __init__(self, iocontroller=None, *args, **kwargs):
-        super(SyncMLBasePage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.iocontroller = iocontroller
         self.config = iocontroller.syncMLConfig()
@@ -89,14 +89,14 @@ class SyncMLBasePage(SettingsPageBase):
                     break
 
     def ok(self):
-        super(SyncMLBasePage, self).ok()
+        super().ok()
 
         self.iocontroller.setSyncMLConfig(self.config)
 
 
 class SyncMLAccessPage(SyncMLBasePage):
     def __init__(self, *args, **kwargs):
-        super(SyncMLAccessPage, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         choice = self.addChoiceSetting(
             None,
@@ -198,9 +198,7 @@ class SyncMLAccessPage(SyncMLBasePage):
 class SyncMLPreferences(widgets.NotebookDialog):
     def __init__(self, iocontroller=None, *args, **kwargs):
         self.iocontroller = iocontroller
-        super(SyncMLPreferences, self).__init__(
-            bitmap="wrench_icon", *args, **kwargs
-        )
+        super().__init__(bitmap="wrench_icon", *args, **kwargs)
         self.SetSize((700, -1))
         if operating_system.isMac():
             self.CentreOnParent()

@@ -25,7 +25,7 @@ class _Tracker(object):
     settings."""
 
     def __init__(self, settings, section):
-        super(_Tracker, self).__init__()
+        super().__init__()
         self.__settings = settings
         self.__section = section
 
@@ -42,7 +42,7 @@ class WindowSizeAndPositionTracker(_Tracker):
     """Track the size and position of a window in the settings."""
 
     def __init__(self, window, settings, section):
-        super(WindowSizeAndPositionTracker, self).__init__(settings, section)
+        super().__init__(settings, section)
         self._window = window
         self.__set_dimensions()
         self._window.Bind(wx.EVT_SIZE, self.on_change_size)
@@ -115,9 +115,7 @@ class WindowDimensionsTracker(WindowSizeAndPositionTracker):
     """Track the dimensions of a window in the settings."""
 
     def __init__(self, window, settings):
-        super(WindowDimensionsTracker, self).__init__(
-            window, settings, "window"
-        )
+        super().__init__(window, settings, "window")
         self.__settings = settings
         if self.__start_iconized():
             if operating_system.isMac() or operating_system.isGTK():

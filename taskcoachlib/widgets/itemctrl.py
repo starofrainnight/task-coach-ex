@@ -46,7 +46,7 @@ class _CtrlWithItemsMixin(object):
     def SelectItem(self, item, *args, **kwargs):
         try:
             # Tree(List)Ctrl:
-            super(_CtrlWithItemsMixin, self).SelectItem(item, *args, **kwargs)
+            super().SelectItem(item, *args, **kwargs)
         except AttributeError:
             # ListCtrl:
             select = kwargs.get("select", True)
@@ -70,7 +70,7 @@ class _CtrlWithItemPopupMenuMixin(_CtrlWithPopupMenuMixin):
 
     def __init__(self, *args, **kwargs):
         self.__popupMenu = kwargs.pop("itemPopupMenu")
-        super(_CtrlWithItemPopupMenuMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if self.__popupMenu is not None:
             self._attachPopupMenu(
                 self,
@@ -106,7 +106,7 @@ class _CtrlWithColumnPopupMenuMixin(_CtrlWithPopupMenuMixin):
 
     def __init__(self, *args, **kwargs):
         self.__popupMenu = kwargs.pop("columnPopupMenu")
-        super(_CtrlWithColumnPopupMenuMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if self.__popupMenu is not None:
             self._attachPopupMenu(
                 self, [wx.EVT_LIST_COL_RIGHT_CLICK], self.onColumnPopupMenu
@@ -137,7 +137,7 @@ class _CtrlWithDropTargetMixin(_CtrlWithItemsMixin):
         self.__onDropURLCallback = kwargs.pop("onDropURL", None)
         self.__onDropFilesCallback = kwargs.pop("onDropFiles", None)
         self.__onDropMailCallback = kwargs.pop("onDropMail", None)
-        super(_CtrlWithDropTargetMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         if (
             self.__onDropURLCallback
             or self.__onDropFilesCallback
@@ -177,7 +177,7 @@ class _CtrlWithDropTargetMixin(_CtrlWithItemsMixin):
 
     def GetMainWindow(self):
         try:
-            return super(_CtrlWithDropTargetMixin, self).GetMainWindow()
+            return super().GetMainWindow()
         except AttributeError:
             return self
 
@@ -186,7 +186,7 @@ class CtrlWithToolTipMixin(_CtrlWithItemsMixin, tooltip.ToolTipMixin):
     """Control that has a different tooltip for each item"""
 
     def __init__(self, *args, **kwargs):
-        super(CtrlWithToolTipMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__tip = tooltip.SimpleToolTip(self)
 
     def OnBeforeShowToolTip(self, x, y):
@@ -321,7 +321,7 @@ class _BaseCtrlWithColumnsMixin(object):
 
     def __init__(self, *args, **kwargs):
         self.__allColumns = kwargs.pop("columns")
-        super(_BaseCtrlWithColumnsMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         # This  is  used to  keep  track  of  which column  has  which
         # index. The only  other way would be (and  was) find a column
         # using its header, which causes problems when several columns
@@ -411,9 +411,7 @@ class _CtrlWithHideableColumnsMixin(_BaseCtrlWithColumnsMixin):
         )._getColumnIndex(column)
         for columnIndex, visibleColumn in enumerate(self._visibleColumns()):
             if (
-                super(_CtrlWithHideableColumnsMixin, self)._getColumnIndex(
-                    visibleColumn
-                )
+                super()._getColumnIndex(visibleColumn)
                 >= columnIndexWhenAllColumnsVisible
             ):
                 return columnIndex
@@ -431,7 +429,7 @@ class _CtrlWithSortableColumnsMixin(_BaseCtrlWithColumnsMixin):
     trigger callbacks to (re)sort the contents of the control."""
 
     def __init__(self, *args, **kwargs):
-        super(_CtrlWithSortableColumnsMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.Bind(wx.EVT_LIST_COL_CLICK, self.onColumnClick)
         self.__currentSortColumn = self._getColumn(0)
         self.__currentSortImageIndex = -1
@@ -482,7 +480,7 @@ class _CtrlWithSortableColumnsMixin(_BaseCtrlWithColumnsMixin):
 
 class _CtrlWithAutoResizedColumnsMixin(autowidth.AutoColumnWidthMixin):
     def __init__(self, *args, **kwargs):
-        super(_CtrlWithAutoResizedColumnsMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.Bind(wx.EVT_LIST_COL_END_DRAG, self.onEndColumnResize)
 
     def onEndColumnResize(self, event):
@@ -503,7 +501,7 @@ class CtrlWithColumnsMixin(
     sort indicators, and column popup menu's."""
 
     def showColumn(self, column, show=True):
-        super(CtrlWithColumnsMixin, self).showColumn(column, show)
+        super().showColumn(column, show)
         # Show sort indicator if the column that was just made visible is being sorted on
         if show and column == self._currentSortColumn():
             self._showSortImage()
@@ -511,9 +509,9 @@ class CtrlWithColumnsMixin(
     def _clearSortImage(self):
         # Only clear the sort image if the column in question is visible
         if self.isColumnVisible(self._currentSortColumn()):
-            super(CtrlWithColumnsMixin, self)._clearSortImage()
+            super()._clearSortImage()
 
     def _showSortImage(self):
         # Only show the sort image if the column in question is visible
         if self.isColumnVisible(self._currentSortColumn()):
-            super(CtrlWithColumnsMixin, self)._showSortImage()
+            super()._showSortImage()

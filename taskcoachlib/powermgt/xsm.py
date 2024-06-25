@@ -236,7 +236,7 @@ class ICELoop(threading.Thread):
 
         IceAddConnectionWatch(self.watchProc, None)
 
-        super(ICELoop, self).__init__()
+        super().__init__()
 
         self.start()
 
@@ -279,7 +279,7 @@ class SessionMonitor(ICELoop):
     """
 
     def __init__(self):
-        super(SessionMonitor, self).__init__()
+        super().__init__()
 
         self.callbacks = SmcCallbacks(
             SmcSaveYourselfCallback(
@@ -332,7 +332,7 @@ class SessionMonitor(ICELoop):
         # XXXTODO: retry ? How ?
 
     def stop(self):
-        super(SessionMonitor, self).stop()
+        super().stop()
         self.join()
         if self.isValid():
             SmcCloseConnection(self.conn, 0, None)
@@ -448,7 +448,7 @@ if __name__ == "__main__":
 
     class TestMonitor(SessionMonitor):
         def __init__(self):
-            super(TestMonitor, self).__init__()
+            super().__init__()
 
             print("Version:", self.version)
             print("Revision:", self.revision)

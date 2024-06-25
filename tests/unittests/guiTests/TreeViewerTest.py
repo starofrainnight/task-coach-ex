@@ -23,7 +23,7 @@ from taskcoachlib.domain import task
 
 class TreeViewerTest(test.wxTestCase):
     def setUp(self):
-        super(TreeViewerTest, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
         self.viewer = gui.viewer.TaskViewer(
@@ -39,7 +39,7 @@ class TreeViewerTest(test.wxTestCase):
         self.widget = self.viewer.widget
 
     def tearDown(self):
-        super(TreeViewerTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

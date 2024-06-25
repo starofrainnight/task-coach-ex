@@ -21,7 +21,7 @@ from . import singleton as patterns
 
 class Command(object):
     def __init__(self, *args, **kwargs):
-        super(Command, self).__init__()  # object.__init__ takes no arguments
+        super().__init__()  # object.__init__ takes no arguments
 
     def do(self):
         CommandHistory().append(self)

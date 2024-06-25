@@ -26,7 +26,7 @@ class BaseEffort(object):
         self._task = None if task is None else weakref.ref(task)
         self._start = start
         self._stop = stop
-        super(BaseEffort, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def task(self):
         return None if self._task is None else self._task()

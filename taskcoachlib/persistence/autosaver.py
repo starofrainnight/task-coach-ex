@@ -25,7 +25,7 @@ class AutoSaver(object):
     (gets 'dirty') and auto save is on, AutoSaver saves the task file."""
 
     def __init__(self, settings, *args, **kwargs):
-        super(AutoSaver, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__settings = settings
         self.__task_files = set()
         self.__bound = False

@@ -33,7 +33,7 @@ class ReminderController(object):
         return cls.lastId
 
     def __init__(self, mainWindow, taskList, effortList, settings):
-        super(ReminderController, self).__init__()
+        super().__init__()
         pub.subscribe(self.onSetReminder, task.Task.reminderChangedEventType())
         patterns.Publisher().registerObserver(
             self.onAddTask,

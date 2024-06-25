@@ -89,7 +89,7 @@ class NewEffortCommandTest(EffortCommandTestCase):
 
 class StartAndStopEffortCommandTest(EffortCommandTestCase):
     def setUp(self):
-        super(StartAndStopEffortCommandTest, self).setUp()
+        super().setUp()
         self.start = command.StartEffortCommand(
             self.taskList, [self.originalTask]
         )

@@ -31,12 +31,12 @@ class AuiManagedFrameWithDynamicCenterPane(
 
 class Window(AuiManagedFrameWithDynamicCenterPane):
     def addPane(self, viewer, title, name="name", floating=False):
-        super(Window, self).addPane(viewer, title, name, floating)
+        super().addPane(viewer, title, name, floating)
 
 
 class ViewerTest(test.wxTestCase):
     def setUp(self):
-        super(ViewerTest, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
         self.task = task.Task("task")
@@ -49,7 +49,7 @@ class ViewerTest(test.wxTestCase):
         self.viewerContainer.addViewer(self.viewer)
 
     def tearDown(self):
-        super(ViewerTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
@@ -371,7 +371,7 @@ class FilterableViewerForTasks(test.TestCase):
         self.viewer = self.createViewer()
 
     def tearDown(self):
-        super(FilterableViewerForTasks, self).tearDown()
+        super().tearDown()
         self.viewer.taskFile.close()
         self.viewer.taskFile.stop()
 
@@ -610,7 +610,7 @@ class ViewerIteratorTestCase(test.wxTestCase):
         return gui.viewer.TaskViewer(self.window, self.taskFile, self.settings)
 
     def setUp(self):
-        super(ViewerIteratorTestCase, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         task.Task.settings = self.settings
         self.taskFile = persistence.TaskFile()
@@ -623,7 +623,7 @@ class ViewerIteratorTestCase(test.wxTestCase):
         self.viewer.sortBy("subject")
 
     def tearDown(self):
-        super(ViewerIteratorTestCase, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 
@@ -689,7 +689,7 @@ class ViewerWithColumnsTest(test.wxTestCase):
         )
 
     def tearDown(self):
-        super(ViewerWithColumnsTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

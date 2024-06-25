@@ -22,7 +22,7 @@ from taskcoachlib import meta
 
 class OptionParser(optparse.OptionParser, object):
     def __init__(self, *args, **kwargs):
-        super(OptionParser, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__addOptionGroups()
         self.__addOptions()
 
@@ -52,7 +52,7 @@ class ApplicationOptionParser(OptionParser):
     def __init__(self, *args, **kwargs):
         kwargs["usage"] = "usage: %prog [options] [.tsk file]"
         kwargs["version"] = "%s %s" % (meta.data.name, meta.data.version)
-        super(ApplicationOptionParser, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def profileOption(self):
         return optparse.Option(

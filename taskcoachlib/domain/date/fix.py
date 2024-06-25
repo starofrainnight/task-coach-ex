@@ -25,8 +25,6 @@ class StrftimeFix(object):
 
     def strftime(self, *args):
         if self.year >= 1900:
-            return operating_system.decodeSystemString(
-                super(StrftimeFix, self).strftime(*args)
-            )
+            return operating_system.decodeSystemString(super().strftime(*args))
         result = self.replace(year=self.year + 1900).strftime(*args)
         return re.sub(str(self.year + 1900), str(self.year), result)

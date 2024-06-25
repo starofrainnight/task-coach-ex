@@ -21,7 +21,7 @@ import os, atexit
 
 class NotifierBase(object):
     def __init__(self):
-        super(NotifierBase, self).__init__()
+        super().__init__()
 
         self._filename = None
         self._path = None

@@ -39,7 +39,7 @@ class VirtualListCtrl(
         *args,
         **kwargs
     ):
-        super(VirtualListCtrl, self).__init__(
+        super().__init__(
             parent,
             style=wx.LC_REPORT | wx.LC_VIRTUAL,
             columns=columns,
@@ -148,7 +148,7 @@ class VirtualListCtrl(
             self.DeleteAllItems()
         else:
             # The VirtualListCtrl makes sure only visible items are updated
-            super(VirtualListCtrl, self).RefreshItems(0, count - 1)
+            super().RefreshItems(0, count - 1)
         self.selectCommand()
 
     def RefreshItems(self, *items):
@@ -162,9 +162,7 @@ class VirtualListCtrl(
     def HitTest(self, xxx_todo_changeme, *args, **kwargs):
         """Always return a three-tuple (item, flag, column)."""
         (x, y) = xxx_todo_changeme
-        index, flags = super(VirtualListCtrl, self).HitTest(
-            (x, y), *args, **kwargs
-        )
+        index, flags = super().HitTest((x, y), *args, **kwargs)
         column = 0
         if self.InReportView():
             # Determine the column in which the user clicked

@@ -23,14 +23,14 @@ from taskcoachlib import gui, config
 
 class PrinterTest(test.TestCase):
     def setUp(self):
-        super(PrinterTest, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.margins = dict(top=1, left=2, bottom=3, right=4)
         self.printerSettings = gui.printer.PrinterSettings(self.settings)
         self.pageSetupData = wx.PageSetupDialogData()
 
     def tearDown(self):
-        super(PrinterTest, self).tearDown()
+        super().tearDown()
         self.resetPrinterSettings()
 
     def resetPrinterSettings(self):

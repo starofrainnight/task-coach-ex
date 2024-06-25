@@ -184,7 +184,7 @@ class TreeListCtrl(
         self.__columns_with_images = []
         self.__default_font = wx.NORMAL_FONT
         kwargs.setdefault("resizeableColumn", 0)
-        super(TreeListCtrl, self).__init__(
+        super().__init__(
             parent,
             style=self.__get_style(),
             agwStyle=self.__get_agw_style(),
@@ -461,7 +461,7 @@ class TreeListCtrl(
     # Override CtrlWithColumnsMixin with TreeListCtrl specific behaviour:
 
     def _setColumns(self, *args, **kwargs):
-        super(TreeListCtrl, self)._setColumns(*args, **kwargs)
+        super()._setColumns(*args, **kwargs)
         self.SetMainColumn(0)
         for column_index in range(self.GetColumnCount()):
             self.SetColumnEditable(
@@ -502,9 +502,7 @@ class TreeListCtrl(
         if column_index == self.GetColumnCount():
             self.AddColumn(column_header, *args, **kwargs)
         else:
-            super(TreeListCtrl, self).InsertColumn(
-                column_index, column_header, *args, **kwargs
-            )
+            super().InsertColumn(column_index, column_header, *args, **kwargs)
         self.SetColumnAlignment(column_index, alignment)
         self.SetColumnEditable(
             column_index, self._getColumn(column_index).isEditable()
@@ -514,7 +512,7 @@ class TreeListCtrl(
         """Stop editing before we hide or show a column to prevent problems
         redrawing the tree list control contents."""
         self.StopEditing()
-        super(TreeListCtrl, self).showColumn(*args, **kwargs)
+        super().showColumn(*args, **kwargs)
 
 
 class CheckTreeCtrl(TreeListCtrl):
@@ -531,7 +529,7 @@ class CheckTreeCtrl(TreeListCtrl):
         **kwargs
     ):
         self.__checking = False
-        super(CheckTreeCtrl, self).__init__(
+        super().__init__(
             parent,
             columns,
             selectCommand,
@@ -573,7 +571,7 @@ class CheckTreeCtrl(TreeListCtrl):
             # one item selected, which we don't want to enforce
             self.UnCheckRadioParent(item, checked)
         else:
-            super(CheckTreeCtrl, self).CheckItem(item, checked)
+            super().CheckItem(item, checked)
 
     def onMouseLeftDown(self, event):
         """By default, the HyperTreeList widget doesn't allow for unchecking
@@ -622,13 +620,11 @@ class CheckTreeCtrl(TreeListCtrl):
         self.GetEventHandler().ProcessEvent(event)
 
     def _refreshObjectCompletely(self, item, domain_object):
-        super(CheckTreeCtrl, self)._refreshObjectCompletely(
-            item, domain_object
-        )
+        super()._refreshObjectCompletely(item, domain_object)
         self._refreshCheckState(item, domain_object)
 
     def _refreshObjectMinimally(self, item, domain_object):
-        super(CheckTreeCtrl, self)._refreshObjectMinimally(item, domain_object)
+        super()._refreshObjectMinimally(item, domain_object)
         self._refreshCheckState(item, domain_object)
 
     def _refreshCheckState(self, item, domain_object):
@@ -678,7 +674,7 @@ class CheckTreeCtrl(TreeListCtrl):
     def onItemActivated(self, event):
         if self.__is_double_clicked(event):
             # Invoke super.onItemActivated to edit the item
-            super(CheckTreeCtrl, self).onItemActivated(event)
+            super().onItemActivated(event)
         else:
             # Item is activated, let another event handler deal with the event
             event.Skip()

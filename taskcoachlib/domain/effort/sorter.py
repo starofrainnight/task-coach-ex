@@ -25,4 +25,4 @@ class EffortSorter(base.Sorter):
 
     def __init__(self, *args, **kwargs):
         kwargs["sortBy"] = ["-period"]
-        super(EffortSorter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)

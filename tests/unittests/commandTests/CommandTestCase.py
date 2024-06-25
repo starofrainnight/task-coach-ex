@@ -26,11 +26,11 @@ class CommandTestCase(test.wxTestCase, asserts.CommandAssertsMixin):
     list = []
 
     def setUp(self):
-        super(CommandTestCase, self).setUp()
+        super().setUp()
         task.Task.settings = config.Settings(load=False)
 
     def tearDown(self):
-        super(CommandTestCase, self).tearDown()
+        super().tearDown()
         patterns.CommandHistory().clear()
 
     def undo(self):

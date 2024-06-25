@@ -22,7 +22,7 @@ import wx
 class PanelWithBoxSizer(wx.Panel):
     def __init__(self, *args, **kwargs):
         orientation = kwargs.pop("orientation", wx.VERTICAL)
-        super(PanelWithBoxSizer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__panelSizer = wx.BoxSizer(orientation)
 
     def fit(self):
@@ -51,7 +51,7 @@ class BoxWithFlexGridSizer(wx.Panel):
         *args,
         **kwargs
     ):
-        super(BoxWithFlexGridSizer, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         box = wx.StaticBox(self, label=label)
         self.__boxSizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         self.__entriesSizer = wx.FlexGridSizer(
@@ -87,7 +87,7 @@ class BoxWithBoxSizer(wx.Panel):
     def __init__(
         self, parent, label, orientation=wx.VERTICAL, *args, **kwargs
     ):
-        super(BoxWithBoxSizer, self).__init__(parent, *args, **kwargs)
+        super().__init__(parent, *args, **kwargs)
         box = wx.StaticBox(self, label=label)
         self.__boxSizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         self.__innerBoxSizer = wx.BoxSizer(orientation)

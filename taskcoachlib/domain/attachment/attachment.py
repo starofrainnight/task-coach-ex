@@ -71,7 +71,7 @@ class Attachment(base.Object, NoteOwner):
     def __init__(self, location, *args, **kwargs):
         if "subject" not in kwargs:
             kwargs["subject"] = location
-        super(Attachment, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__location = location
 
     def data(self):
@@ -112,7 +112,7 @@ class Attachment(base.Object, NoteOwner):
 
     def __getstate__(self):
         try:
-            state = super(Attachment, self).__getstate__()
+            state = super().__getstate__()
         except AttributeError:
             state = dict()
         state.update(dict(location=self.location()))
@@ -121,7 +121,7 @@ class Attachment(base.Object, NoteOwner):
     @patterns.eventSource
     def __setstate__(self, state, event=None):
         try:
-            super(Attachment, self).__setstate__(state, event=event)
+            super().__setstate__(state, event=event)
         except AttributeError:
             pass
         self.setLocation(state["location"])
@@ -169,7 +169,7 @@ class URIAttachment(Attachment):
                     kwargs["subject"] = subject
             else:
                 kwargs["subject"] = _("Mail.app message")
-        super(URIAttachment, self).__init__(location, *args, **kwargs)
+        super().__init__(location, *args, **kwargs)
 
     def open(self, workingDir=None):
         return openfile.openFile(self.location())
@@ -185,7 +185,7 @@ class MailAttachment(Attachment):
         kwargs.setdefault("subject", subject)
         kwargs.setdefault("description", content)
 
-        super(MailAttachment, self).__init__(location, *args, **kwargs)
+        super().__init__(location, *args, **kwargs)
 
     def open(self, workingDir=None):
         return mailer.openMail(self.location())

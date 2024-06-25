@@ -64,7 +64,7 @@ class DropTarget(wx.DropTarget):
         onDropMailCallback,
         onDragOverCallback=None,
     ):
-        super(DropTarget, self).__init__()
+        super().__init__()
         self.__onDropURLCallback = onDropURLCallback
         self.__onDropFileCallback = onDropFileCallback
         self.__onDropMailCallback = onDropMailCallback

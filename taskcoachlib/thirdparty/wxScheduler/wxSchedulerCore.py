@@ -26,7 +26,7 @@ class wxSchedulerCore(wxSchedulerPaint):
         self._currentDate = wx.DateTime.Now()
         self._weekstart = wxSCHEDULER_WEEKSTART_MONDAY
 
-        super(wxSchedulerCore, self).__init__(*args, **kwds)
+        super().__init__(*args, **kwds)
 
         self._showOnlyWorkHour = True
         self._dc = None

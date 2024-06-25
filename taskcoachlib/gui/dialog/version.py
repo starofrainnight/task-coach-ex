@@ -34,7 +34,7 @@ class VersionDialog(sized_controls.SizedDialog):  # pylint: disable=R0904,R0901
         self.settings = kwargs.pop("settings")
         self.message = kwargs.pop("message")
         version = kwargs.pop("version")
-        super(VersionDialog, self).__init__(title=self.title, *args, **kwargs)
+        super().__init__(title=self.title, *args, **kwargs)
         pane = self.GetContentsPane()
         pane.SetSizerType("vertical")
         self.messageInfo = dict(

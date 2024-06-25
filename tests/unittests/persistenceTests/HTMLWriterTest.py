@@ -27,7 +27,7 @@ class HTMLWriterTestCase(test.wxTestCase):
     filename = "Subclass responsibility"
 
     def setUp(self):
-        super(HTMLWriterTestCase, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.fd = io.StringIO()
         self.writer = persistence.HTMLWriter(self.fd, self.filename)
@@ -37,7 +37,7 @@ class HTMLWriterTestCase(test.wxTestCase):
         self.viewer = self.createViewer()
 
     def tearDown(self):
-        super(HTMLWriterTestCase, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
         cssFilename = self.filename + ".css"
@@ -284,7 +284,7 @@ class EffortWriterTestCase(CommonTestsMixin, HTMLWriterTestCase):
     filename = "filename"
 
     def setUp(self):
-        super(EffortWriterTestCase, self).setUp()
+        super().setUp()
         now = date.DateTime.now()
         self.task.addEffort(
             effort.Effort(self.task, start=now, stop=now + date.ONE_SECOND)
@@ -319,7 +319,7 @@ class CategoryWriterTestsMixin(CommonTestsMixin):
 
 class CategoryWriterTestCase(HTMLWriterTestCase):
     def setUp(self):
-        super(CategoryWriterTestCase, self).setUp()
+        super().setUp()
         self.category = category.Category("Category")
         self.taskFile.categories().append(self.category)
 

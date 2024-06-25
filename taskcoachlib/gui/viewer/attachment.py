@@ -43,13 +43,11 @@ class AttachmentViewer(
     def __init__(self, *args, **kwargs):
         self.attachments = kwargs.pop("attachmentsToShow")
         kwargs.setdefault("settingssection", "attachmentviewer")
-        super(AttachmentViewer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def _addAttachments(self, attachments, item, **itemDialogKwargs):
         # Don't try to add attachments to attachments.
-        super(AttachmentViewer, self)._addAttachments(
-            attachments, None, **itemDialogKwargs
-        )
+        super()._addAttachments(attachments, None, **itemDialogKwargs)
 
     def domainObjectsToView(self):
         return self.attachments
@@ -206,7 +204,7 @@ class AttachmentViewer(
                 settings=self.settings,
                 viewer=self,
             ),
-        ) + super(AttachmentViewer, self).createCreationToolBarUICommands()
+        ) + super().createCreationToolBarUICommands()
 
     def createActionToolBarUICommands(self):
         return (
@@ -215,7 +213,7 @@ class AttachmentViewer(
                 viewer=self,
                 settings=self.settings,
             ),
-        ) + super(AttachmentViewer, self).createActionToolBarUICommands()
+        ) + super().createActionToolBarUICommands()
 
     def typeImageIndices(
         self, anAttachment, exists=os.path.exists

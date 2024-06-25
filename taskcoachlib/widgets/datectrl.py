@@ -31,7 +31,7 @@ class _SmartDateTimeCtrl(sdtc.SmartDateTimeCtrl):
             kwargs.get("startHour", 8),
             kwargs.get("endHour", 18),
         )
-        super(_SmartDateTimeCtrl, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __shiftDown(self, event):
         if operating_system.isGTK():
@@ -39,10 +39,7 @@ class _SmartDateTimeCtrl(sdtc.SmartDateTimeCtrl):
         return event.ShiftDown()
 
     def HandleKey(self, event):
-        if (
-            not super(_SmartDateTimeCtrl, self).HandleKey(event)
-            and self.GetDateTime() is not None
-        ):
+        if not super().HandleKey(event) and self.GetDateTime() is not None:
             startHour, endHour = self.__interval
             if event.GetKeyCode() in [ord("s"), ord("S")]:
                 hour = (
@@ -84,7 +81,7 @@ class DateTimeCtrl(wx.Panel):
         units=None,
         **kwargs
     ):
-        super(DateTimeCtrl, self).__init__(parent, **kwargs)
+        super().__init__(parent, **kwargs)
 
         self.__adjust = adjustEndOfDay
         self.__callback = callback
@@ -172,7 +169,7 @@ class TimeEntry(wx.Panel):
         disabledValue=None,
         disabledMessage=None,
     ):
-        super(TimeEntry, self).__init__(parent)
+        super().__init__(parent)
 
         self.__disabledValue = disabledValue
 

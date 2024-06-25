@@ -23,7 +23,7 @@ from taskcoachlib.i18n import _
 
 class BaseSource(SyncSource):
     def __init__(self, callback, objectList, *args, **kwargs):
-        super(BaseSource, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.callback = callback
         self.objectList = objectList

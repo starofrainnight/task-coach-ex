@@ -656,7 +656,7 @@ class CategorizableViewerMixin(object):
                     else []
                 ),
             )
-        ] + super(CategorizableViewerMixin, self).getItemTooltipData(item)
+        ] + super().getItemTooltipData(item)
 
 
 class WithAttachmentsViewerMixin(object):
@@ -666,7 +666,7 @@ class WithAttachmentsViewerMixin(object):
                 "paperclip_icon",
                 sorted([str(attachment) for attachment in item.attachments()]),
             )
-        ] + super(WithAttachmentsViewerMixin, self).getItemTooltipData(item)
+        ] + super().getItemTooltipData(item)
 
 
 class ListViewer(Viewer):  # pylint: disable=W0223
@@ -691,7 +691,7 @@ class ListViewer(Viewer):  # pylint: disable=W0223
 class TreeViewer(Viewer):  # pylint: disable=W0223
     def __init__(self, *args, **kwargs):
         self.__selectionIndex = 0
-        super(TreeViewer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.widget.Bind(wx.EVT_TREE_ITEM_EXPANDED, self.onItemExpanded)
         self.widget.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self.onItemCollapsed)
 
@@ -739,7 +739,7 @@ class TreeViewer(Viewer):  # pylint: disable=W0223
         for item in items:
             self.__expandItemRecursively(item)
         self.refresh()
-        super(TreeViewer, self).select(items)
+        super().select(items)
 
     def __expandItemRecursively(self, item):
         parent = self.getItemParent(item)
@@ -763,7 +763,7 @@ class TreeViewer(Viewer):  # pylint: disable=W0223
             self.select([newSelection])
 
     def updateSelection(self, *args, **kwargs):
-        super(TreeViewer, self).updateSelection(*args, **kwargs)
+        super().updateSelection(*args, **kwargs)
         curselection = self.curselection()
         if curselection:
             siblings = self.children(self.getItemParent(curselection[0]))
@@ -825,7 +825,7 @@ class ViewerWithColumns(Viewer):  # pylint: disable=W0223
         self._columns = []
         self.__visibleColumns = []
         self.__columnUICommands = []
-        super(ViewerWithColumns, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.initColumns()
         self.__initDone = True
         self.refresh()
@@ -849,7 +849,7 @@ class ViewerWithColumns(Viewer):  # pylint: disable=W0223
 
     def refresh(self, *args, **kwargs):
         if self and self.__initDone:
-            super(ViewerWithColumns, self).refresh(*args, **kwargs)
+            super().refresh(*args, **kwargs)
 
     def initColumns(self):
         for column in self.columns():
@@ -1107,19 +1107,17 @@ class SortableViewerWithColumns(
     mixin.SortableViewerMixin, ViewerWithColumns
 ):  # pylint: disable=W0223
     def initColumn(self, column):
-        super(SortableViewerWithColumns, self).initColumn(column)
+        super().initColumn(column)
         if self.isSortedBy(column.name()):
             self.widget.showSortColumn(column)
             self.showSortOrder()
 
     def setSortOrderAscending(self, *args, **kwargs):  # pylint: disable=W0221
-        super(SortableViewerWithColumns, self).setSortOrderAscending(
-            *args, **kwargs
-        )
+        super().setSortOrderAscending(*args, **kwargs)
         self.showSortOrder()
 
     def sortBy(self, *args, **kwargs):  # pylint: disable=W0221
-        super(SortableViewerWithColumns, self).sortBy(*args, **kwargs)
+        super().sortBy(*args, **kwargs)
         self.showSortColumn()
         self.showSortOrder()
 

@@ -33,7 +33,7 @@ class AutoExporterTestCase(test.TestCase):
         self.taskFile.setFilename(self.tskFilename)
 
     def tearDown(self):
-        super(AutoExporterTestCase, self).tearDown()
+        super().tearDown()
         del self.exporter
         for filename in (
             self.tskFilename,

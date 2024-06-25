@@ -28,7 +28,7 @@ class TestLaunch(base.Win32TestCase):
 class TestWithTaskFile(base.Win32TestCase):
     def setUp(self):
         self.args = ['"%s"' % os.path.join(self.basepath, "testfile.tsk")]
-        super(TestWithTaskFile, self).setUp()
+        super().setUp()
 
     def test_launch(self):
         self.assertTrue(

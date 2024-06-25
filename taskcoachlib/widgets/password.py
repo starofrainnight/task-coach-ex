@@ -22,7 +22,7 @@ from taskcoachlib.i18n import _
 
 class KeychainPasswordWidget(wx.Dialog):
     def __init__(self, domain, username, *args, **kwargs):
-        super(KeychainPasswordWidget, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.domain = domain.encode("UTF-8")
         self.username = username.encode("UTF-8")

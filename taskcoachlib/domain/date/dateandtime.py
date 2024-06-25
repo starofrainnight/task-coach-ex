@@ -67,7 +67,7 @@ class DateTime(StrftimeFix, datetime.datetime):
     def toordinal(self):
         """Return the ordinal number of the day, plus a fraction between 0 and
         1 for parts of the day."""
-        ordinal = super(DateTime, self).toordinal()
+        ordinal = super().toordinal()
         seconds = (
             self.hour * self.secondsPerHour
             + self.minute * self.secondsPerMinute
@@ -124,7 +124,7 @@ class DateTime(StrftimeFix, datetime.datetime):
         if self == DateTime() and isinstance(other, datetime.datetime):
             max = timedelta.TimeDelta.max  # pylint: disable=W0622
             return timedelta.TimeDelta(max.days, max.seconds, max.microseconds)
-        result = super(DateTime, self).__sub__(other)
+        result = super().__sub__(other)
         if isinstance(result, datetime.timedelta):
             result = timedelta.TimeDelta(
                 result.days, result.seconds, result.microseconds
@@ -142,7 +142,7 @@ class DateTime(StrftimeFix, datetime.datetime):
         return result
 
     def __add__(self, other):
-        result = super(DateTime, self).__add__(other)
+        result = super().__add__(other)
         return self.__class__(
             result.year,
             result.month,

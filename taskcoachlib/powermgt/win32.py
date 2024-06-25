@@ -27,7 +27,7 @@ import wx
 
 class PowerStateMixin(PowerStateMixinBase):
     def __init__(self, *args, **kwargs):
-        super(PowerStateMixin, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         self.__oldProc = win32gui.SetWindowLong(
             self.GetHandle(), win32con.GWL_WNDPROC, self.__WndProc

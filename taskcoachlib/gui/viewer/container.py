@@ -38,7 +38,7 @@ class ViewerContainer(object):
         self.__bind_event_handlers()
         self._settings = settings
         self.viewers = []
-        super(ViewerContainer, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def componentsCreated(self):
         self._notifyActiveViewer = True

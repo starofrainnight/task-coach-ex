@@ -86,7 +86,7 @@ class MockViewerContainer(object):
 
 class MenuTestCase(test.wxTestCase):
     def setUp(self):
-        super(MenuTestCase, self).setUp()
+        super().setUp()
         self.frame.viewer = MockViewerContainer()
         self.menu = gui.menu.Menu(self.frame)
         menuBar = wx.MenuBar()
@@ -105,7 +105,7 @@ class MenuTest(MenuTestCase):
 
 class MenuWithBooleanMenuItemsTestCase(MenuTestCase):
     def setUp(self):
-        super(MenuWithBooleanMenuItemsTestCase, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.commands = self.createCommands()
 
@@ -172,7 +172,7 @@ class MockIOController:
 
 class RecentFilesMenuTest(test.wxTestCase):
     def setUp(self):
-        super(RecentFilesMenuTest, self).setUp()
+        super().setUp()
         self.ioController = MockIOController()
         self.settings = config.Settings(load=False)
         self.initialFileMenuLength = len(self.createFileMenu())
@@ -252,7 +252,7 @@ class RecentFilesMenuTest(test.wxTestCase):
 
 class ViewMenuTestCase(test.wxTestCase):
     def setUp(self):
-        super(ViewMenuTestCase, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.viewerContainer = MockViewerContainer()
         self.menuBar = wx.MenuBar()

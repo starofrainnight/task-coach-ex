@@ -27,7 +27,7 @@ class DeveloperMessageCheckerUnderTest(meta.DeveloperMessageChecker):
         self.message_file_contents = "Message|http://a.b\n"
         kwargs["urlopen"] = self.urlopen
         kwargs["call_after"] = self.call_after
-        super(DeveloperMessageCheckerUnderTest, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     @staticmethod
     def call_after(function, *args, **kwargs):

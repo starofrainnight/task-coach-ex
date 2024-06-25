@@ -23,7 +23,7 @@ from taskcoachlib import gui, config, operating_system
 
 class WindowDimensionsTrackerTest(test.wxTestCase):
     def setUp(self):
-        super(WindowDimensionsTrackerTest, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.section = "window"
         self.settings.setvalue(self.section, "position", (50, 50))

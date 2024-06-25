@@ -37,7 +37,7 @@ class MockWidget(object):
 
 class UpdatePerSecondViewerTestsMixin(object):
     def setUp(self):
-        super(UpdatePerSecondViewerTestsMixin, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         self.settings.set("taskviewer", "columns", "['timeSpent']")
         self.taskFile = persistence.TaskFile()
@@ -51,7 +51,7 @@ class UpdatePerSecondViewerTestsMixin(object):
         self.taskList.append(self.trackedTask)
 
     def tearDown(self):
-        super(UpdatePerSecondViewerTestsMixin, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

@@ -26,18 +26,18 @@ class Sorter(patterns.ListDecorator):
     def __init__(self, *args, **kwargs):
         self._sortKeys = kwargs.pop("sortBy", ["subject"])
         self._sortCaseSensitive = kwargs.pop("sortCaseSensitive", True)
-        super(Sorter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         for sortKey in self._sortKeys:
             self._registerObserverForAttribute(sortKey.lstrip("-"))
         self.reset()
 
     def thaw(self):
-        super(Sorter, self).thaw()
+        super().thaw()
         if not self.isFrozen():
             self.reset()
 
     def detach(self):
-        super(Sorter, self).detach()
+        super().detach()
         for sortKey in self._sortKeys:
             self._removeObserverForAttribute(sortKey.lstrip("-"))
 
@@ -47,7 +47,7 @@ class Sorter(patterns.ListDecorator):
 
     @patterns.eventSource
     def extendSelf(self, items, event=None):
-        super(Sorter, self).extendSelf(items, event)
+        super().extendSelf(items, event)
         self.reset()
 
     def isAscending(self):
@@ -161,7 +161,7 @@ class Sorter(patterns.ListDecorator):
 class TreeSorter(Sorter):
     def __init__(self, *args, **kwargs):
         self.__rootItems = None  # Cached root items
-        super(TreeSorter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def treeMode(self):
         return True
@@ -178,12 +178,12 @@ class TreeSorter(Sorter):
 
     def reset(self, *args, **kwargs):  # pylint: disable=W0221
         self.__invalidateRootItemCache()
-        return super(TreeSorter, self).reset(*args, **kwargs)
+        return super().reset(*args, **kwargs)
 
     @patterns.eventSource
     def extendSelf(self, items, event=None):
         self.__invalidateRootItemCache()
-        return super(TreeSorter, self).extendSelf(items, event=event)
+        return super().extendSelf(items, event=event)
 
     @patterns.eventSource
     def removeItemsFromSelf(self, itemsToRemove, event=None):
@@ -194,9 +194,7 @@ class TreeSorter(Sorter):
             for item in itemsToRemove.copy():
                 itemsToRemove.update(item.children(recursive=True))
         itemsToRemove = [item for item in itemsToRemove if item in self]
-        return super(TreeSorter, self).removeItemsFromSelf(
-            itemsToRemove, event=event
-        )
+        return super().removeItemsFromSelf(itemsToRemove, event=event)
 
     def rootItems(self):
         """Return the root items, i.e. items without a parent."""

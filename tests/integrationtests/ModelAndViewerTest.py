@@ -22,7 +22,7 @@ from taskcoachlib.domain import task, category
 
 class TaskViewerAndCategoryFilterIntegrationTestFixture(test.wxTestCase):
     def setUp(self):
-        super(TaskViewerAndCategoryFilterIntegrationTestFixture, self).setUp()
+        super().setUp()
         self.app = mock.App()
         parent = task.Task("parent")
         child = task.Task("child")

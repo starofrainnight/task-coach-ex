@@ -23,14 +23,14 @@ from taskcoachlib import patterns
 class CategorizableContainer(base.Collection):
     @patterns.eventSource
     def extend(self, items, event=None):
-        super(CategorizableContainer, self).extend(items, event=event)
+        super().extend(items, event=event)
         for item in self._compositesAndAllChildren(items):
             for category in item.categories():
                 category.addCategorizable(item, event=event)
 
     @patterns.eventSource
     def removeItems(self, items, event=None):
-        super(CategorizableContainer, self).removeItems(items, event=event)
+        super().removeItems(items, event=event)
         for item in self._compositesAndAllChildren(items):
             for category in item.categories():
                 category.removeCategorizable(item, event=event)

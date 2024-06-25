@@ -22,7 +22,7 @@ from taskcoachlib import gui, config
 
 class TemplatesDialogTestCase(test.wxTestCase):
     def setUp(self):
-        super(TemplatesDialogTestCase, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
 
         # Monkey-patching
@@ -37,7 +37,7 @@ class TemplatesDialogTestCase(test.wxTestCase):
         )
 
     def tearDown(self):
-        super(TemplatesDialogTestCase, self).tearDown()
+        super().tearDown()
         self.safelyRemove(self.path)
 
     def safelyRemove(self, path):

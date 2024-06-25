@@ -35,7 +35,7 @@ class AttachmentViewerTest(test.wxTestCase):
         )
 
     def tearDown(self):
-        super(AttachmentViewerTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

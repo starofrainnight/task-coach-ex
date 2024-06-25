@@ -27,7 +27,7 @@ class ToggleCategoryCommand(base.BaseCommand):
 
     def __init__(self, *args, **kwargs):
         self.category = kwargs.pop("category")
-        super(ToggleCategoryCommand, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         # Keep track of previous category per categorizable in case of mutual
         # exclusive categories:
         self.__previous_categories = dict()
@@ -42,11 +42,11 @@ class ToggleCategoryCommand(base.BaseCommand):
             self.items = items_not_in_category
 
     def do_command(self):
-        super(ToggleCategoryCommand, self).do_command()
+        super().do_command()
         self.toggle_category()
 
     def undo_command(self):
-        super(ToggleCategoryCommand, self).undo_command()
+        super().undo_command()
         self.toggle_category()
 
     redo_command = do_command

@@ -30,7 +30,7 @@ class LeakTest(test.TestCase):
         os.remove("Test.tsk")
         self.mockApp.quitApplication()
         mock.App.deleteInstance()
-        super(LeakTest, self).tearDown()
+        super().tearDown()
 
     def testClear(self):
         """taskRef = weakref.ref(self.mockApp.task)

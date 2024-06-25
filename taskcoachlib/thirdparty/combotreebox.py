@@ -145,7 +145,7 @@ class IterableTreeCtrl(wx.TreeCtrl):
     def GetSelection(self, *args, **kwargs):
         """Extend GetSelection to never return the root item if the
         root item is hidden."""
-        selection = super(IterableTreeCtrl, self).GetSelection(*args, **kwargs)
+        selection = super().GetSelection(*args, **kwargs)
         if selection == self.GetRootItem() and (
             self.GetWindowStyle() & wx.TR_HIDE_ROOT
         ):
@@ -166,7 +166,7 @@ class BasePopupFrame(wx.Frame):
     when focus is lost, the frame is hidden."""
 
     def __init__(self, parent):
-        super(BasePopupFrame, self).__init__(
+        super().__init__(
             parent,
             style=wx.DEFAULT_FRAME_STYLE
             & wx.FRAME_FLOAT_ON_PARENT
@@ -234,11 +234,11 @@ class BasePopupFrame(wx.Frame):
     def Show(self, *args, **kwargs):
         self._bindKillFocus()
         wx.CallAfter(self._tree.SetFocus)
-        super(BasePopupFrame, self).Show(*args, **kwargs)
+        super().Show(*args, **kwargs)
 
     def Hide(self, *args, **kwargs):
         self._unbindKillFocus()
-        super(BasePopupFrame, self).Hide(*args, **kwargs)
+        super().Hide(*args, **kwargs)
 
     def GetTree(self):
         return self._tree
@@ -251,7 +251,7 @@ class MSWPopupFrame(BasePopupFrame):
         # is selected.
         if not self._tree.GetSelection():
             self._tree.SelectItem(self._tree.GetFirstItem())
-        super(MSWPopupFrame, self).Show()
+        super().Show()
 
 
 class MACPopupFrame(BasePopupFrame):
@@ -273,7 +273,7 @@ class MACPopupFrame(BasePopupFrame):
 class GTKPopupFrame(BasePopupFrame):
     def _keyShouldHidePopup(self, keyEvent):
         # On wxGTK, Alt-Up also closes the popup:
-        return super(GTKPopupFrame, self)._keyShouldHidePopup(keyEvent) or (
+        return super()._keyShouldHidePopup(keyEvent) or (
             keyEvent.AltDown() and keyEvent.GetKeyCode() == wx.WXK_UP
         )
 
@@ -297,9 +297,7 @@ class BaseComboTreeBoxMixin(object):
             self._sort = True
         else:
             self._sort = False
-        super(BaseComboTreeBoxMixin, self).__init__(
-            style=style, *args, **kwargs
-        )
+        super().__init__(style=style, *args, **kwargs)
         self._createInterior()
         self._layoutInterior()
         self._bindEventHandlers()
@@ -692,7 +690,7 @@ class BaseComboTreeBoxMixin(object):
         Returns the current value in the combobox text field.
         """
         if self._text == self:
-            return super(BaseComboTreeBoxMixin, self).GetValue()
+            return super().GetValue()
         else:
             return self._text.GetValue()
 
@@ -712,7 +710,7 @@ class BaseComboTreeBoxMixin(object):
         if self._readOnly and not item:
             return
         if self._text == self:
-            super(BaseComboTreeBoxMixin, self).SetValue(value)
+            super().SetValue(value)
         else:
             self._text.SetValue(value)
         if item:
@@ -728,7 +726,7 @@ class NativeComboTreeBox(BaseComboTreeBoxMixin, wx.ComboBox):
     instead pops up a PopupFrame containing a tree of items."""
 
     def _eventsToBind(self):
-        events = super(NativeComboTreeBox, self)._eventsToBind()
+        events = super()._eventsToBind()
         # Bind all mouse click events to self.OnMouseClick so we can
         # intercept those events and prevent the native Combobox from
         # popping up its list of choices.
@@ -765,7 +763,7 @@ class MSWComboTreeBox(NativeComboTreeBox):
         return MSWPopupFrame(self)
 
     def _eventsToBind(self):
-        events = super(MSWComboTreeBox, self)._eventsToBind()
+        events = super()._eventsToBind()
         events.append(
             (
                 self._tree,
@@ -802,7 +800,7 @@ class MSWComboTreeBox(NativeComboTreeBox):
             ) and keyEvent.GetKeyCode() == wx.WXK_UP
 
         return (
-            super(MSWComboTreeBox, self)._keyShouldPopUpTree(keyEvent)
+            super()._keyShouldPopUpTree(keyEvent)
             or f4Pressed(keyEvent)
             or altUpPressed(keyEvent)
         )
@@ -810,7 +808,7 @@ class MSWComboTreeBox(NativeComboTreeBox):
     def SetValue(self, value):
         """Extend SetValue to also select the text in the
         ComboTreeBox's text field."""
-        super(MSWComboTreeBox, self).SetValue(value)
+        super().SetValue(value)
         # We select the text in the ComboTreeBox's text field.
         # There is a slight complication, however. When the control is
         # deleted, SetValue is called. But if we call SetMark at that
@@ -826,13 +824,13 @@ class MSWComboTreeBox(NativeComboTreeBox):
         because MSWComboTreeBox will change the value as the user
         browses through the items in the popped up tree."""
         self._previousValue = self.GetValue()
-        super(MSWComboTreeBox, self).Popup(*args, **kwargs)
+        super().Popup(*args, **kwargs)
 
     def NotifyNoItemSelected(self, *args, **kwargs):
         """Restore the value copied previously, because the user has
         not selected a new value."""
         self.SetValue(self._previousValue)
-        super(MSWComboTreeBox, self).NotifyNoItemSelected(*args, **kwargs)
+        super().NotifyNoItemSelected(*args, **kwargs)
 
 
 class MACComboTreeBox(NativeComboTreeBox):
@@ -854,7 +852,7 @@ class MACComboTreeBox(NativeComboTreeBox):
         ][0]
 
     def _eventsToBind(self):
-        events = super(MACComboTreeBox, self)._eventsToBind()
+        events = super()._eventsToBind()
         if self._readOnly:
             for eventType in (
                 wx.EVT_LEFT_DOWN,
@@ -872,7 +870,7 @@ class MACComboTreeBox(NativeComboTreeBox):
 
     def _keyShouldPopUpTree(self, keyEvent):
         return (
-            super(MACComboTreeBox, self)._keyShouldPopUpTree(keyEvent)
+            super()._keyShouldPopUpTree(keyEvent)
             or keyEvent.GetKeyCode() == wx.WXK_DOWN
         )
 

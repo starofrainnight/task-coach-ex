@@ -46,7 +46,7 @@ class IOControllerTest(test.TestCase):
                 shutil.rmtree(filename + ".lock")  # pragma: no cover
             if os.path.exists(filename + ".delta"):
                 os.remove(filename + ".delta")
-        super(IOControllerTest, self).tearDown()
+        super().tearDown()
 
     def doIOAndCheckRecentFiles(
         self,
@@ -326,7 +326,7 @@ class IOControllerTest(test.TestCase):
 
 class IOControllerOverwriteExistingFileTest(test.TestCase):
     def setUp(self):
-        super(IOControllerOverwriteExistingFileTest, self).setUp()
+        super().setUp()
         self.originalFileSelector = wx.FileSelector
         wx.FileSelector = (
             lambda *args, **kwargs: "filename without extension to trigger our own overwrite warning"
@@ -349,7 +349,7 @@ class IOControllerOverwriteExistingFileTest(test.TestCase):
         self.taskFile.stop()
         wx.FileSelector = self.originalFileSelector
         wx.MessageBox = self.originalMessageBox
-        super(IOControllerOverwriteExistingFileTest, self).tearDown()
+        super().tearDown()
 
     def testCancelSaveAsExistingFile(self):
         self.iocontroller.saveas(fileExists=lambda filename: True)

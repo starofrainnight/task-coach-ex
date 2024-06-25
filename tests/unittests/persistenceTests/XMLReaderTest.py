@@ -89,7 +89,7 @@ class XMLReaderTestCase(test.TestCase):
     tskversion = "Subclass responsibility"
 
     def setUp(self):
-        super(XMLReaderTestCase, self).setUp()
+        super().setUp()
         task.Task.settings = config.Settings(load=False)
 
     def writeAndRead(self, xml_contents):
@@ -145,11 +145,11 @@ class TempFileLockTest(XMLReaderTestCase):
             return handle, name
 
         tempfile.mkstemp = newMkstemp
-        super(TempFileLockTest, self).setUp()
+        super().setUp()
 
     def tearDown(self):
         tempfile.mkstemp = self.oldMkstemp
-        super(TempFileLockTest, self).tearDown()
+        super().tearDown()
 
     def testLock(self):
         if os.name == "nt":  # pragma: no cover
@@ -1761,9 +1761,7 @@ class XMLReaderVersion31Test(XMLReaderTestCase):
     tskversion = 31  # New in release 1.2.0.
 
     def writeAndReadTasks(self, *args, **kwargs):
-        tasks = super(XMLReaderVersion31Test, self).writeAndReadTasks(
-            *args, **kwargs
-        )
+        tasks = super().writeAndReadTasks(*args, **kwargs)
         tasksById = dict()
 
         def collectIds(tasks):

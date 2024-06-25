@@ -23,7 +23,7 @@ from taskcoachlib.domain import note, attachment, category
 
 class NoteViewerTest(test.wxTestCase):
     def setUp(self):
-        super(NoteViewerTest, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
         self.note = note.Note()
@@ -36,7 +36,7 @@ class NoteViewerTest(test.wxTestCase):
         )
 
     def tearDown(self):
-        super(NoteViewerTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

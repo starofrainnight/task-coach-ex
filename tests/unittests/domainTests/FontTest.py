@@ -22,7 +22,7 @@ from taskcoachlib.domain.attribute import font
 
 class MixFontsTest(test.TestCase):
     def setUp(self):
-        super(MixFontsTest, self).setUp()
+        super().setUp()
         self.mixFonts = font.FontMixer.mix
         self.font = wx.Font(
             10,

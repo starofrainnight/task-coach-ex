@@ -23,7 +23,7 @@ from taskcoachlib.widgets import masked
 
 class LocalConv(dict):
     def __init__(self, decimal_point=".", thousands_sep=",", grouping=None):
-        super(LocalConv, self).__init__()
+        super().__init__()
         self.update(
             dict(
                 decimal_point=decimal_point,
@@ -35,7 +35,7 @@ class LocalConv(dict):
 
 class AmountCtrlTest(test.wxTestCase):
     def setUp(self):
-        super(AmountCtrlTest, self).setUp()
+        super().setUp()
         self.amountCtrl = masked.AmountCtrl(self.frame)
 
     def testCreate(self):

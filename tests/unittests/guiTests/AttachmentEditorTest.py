@@ -28,7 +28,7 @@ class DummyEvent(object):
 
 class AttachmentEditorTest(test.wxTestCase):
     def setUp(self):
-        super(AttachmentEditorTest, self).setUp()
+        super().setUp()
         self.settings = config.Settings(load=False)
         self.taskFile = persistence.TaskFile()
         self.attachment = attachment.FileAttachment("Attachment")
@@ -43,7 +43,7 @@ class AttachmentEditorTest(test.wxTestCase):
         )
 
     def tearDown(self):
-        super(AttachmentEditorTest, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

@@ -57,7 +57,7 @@ class SecondRefresher(patterns.Observer, wx.EvtHandler):
     # APScheduler seems to take a lot of resources in this setup, so we use a wx.Timer
 
     def __init__(self, viewer, trackingChangedEventType):
-        super(SecondRefresher, self).__init__()
+        super().__init__()
         self.__viewer = viewer
         self.__presentation = viewer.presentation()
         self.__trackedItems = set()
@@ -79,7 +79,7 @@ class SecondRefresher(patterns.Observer, wx.EvtHandler):
 
     def removeInstance(self):
         IdProvider.put(self.__timer.GetId())
-        super(SecondRefresher, self).removeInstance()
+        super().removeInstance()
 
     def onItemAdded(self, event):
         self.addTrackedItems(self.trackedItems(list(event.values())))

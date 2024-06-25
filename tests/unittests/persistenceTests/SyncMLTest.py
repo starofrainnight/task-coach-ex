@@ -27,7 +27,7 @@ class TaskFileTestCase(test.TestCase):
         self.task = task.Task(subject="Subject")
 
     def tearDown(self):
-        super(TaskFileTestCase, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

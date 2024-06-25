@@ -27,7 +27,7 @@ class VersionChecker(threading.Thread):
     def __init__(self, settings, verbose=False):
         self.settings = settings
         self.verbose = verbose
-        super(VersionChecker, self).__init__()
+        super().__init__()
 
     def _set_daemon(self):
         return True  # Don't block application exit

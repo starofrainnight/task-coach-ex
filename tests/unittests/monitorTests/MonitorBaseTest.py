@@ -145,7 +145,7 @@ class MonitorCompositeObjectTest(MonitorObjectTest):
     klass = CompositeObject
 
     def setUp(self):
-        super(MonitorCompositeObjectTest, self).setUp()
+        super().setUp()
 
         self.child = self.klass(subject="Child")
         self.obj.addChild(self.child)

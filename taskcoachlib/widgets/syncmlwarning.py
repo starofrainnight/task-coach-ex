@@ -23,9 +23,7 @@ from taskcoachlib.i18n import _
 
 class SyncMLWarningDialog(wx.Dialog):
     def __init__(self, parent):
-        super(SyncMLWarningDialog, self).__init__(
-            parent, wx.ID_ANY, _("Compatibility warning")
-        )
+        super().__init__(parent, wx.ID_ANY, _("Compatibility warning"))
 
         textWidget = wx.StaticText(
             self,

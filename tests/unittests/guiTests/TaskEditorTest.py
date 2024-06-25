@@ -76,9 +76,7 @@ class TaskEditorSetterMixin(object):
 
 class TaskEditorBySettingFocusMixin(TaskEditorSetterMixin):
     def setSubject(self, newSubject):
-        page = super(TaskEditorBySettingFocusMixin, self).setSubject(
-            newSubject
-        )
+        page = super().setSubject(newSubject)
         if operating_system.isGTK():
             page._subjectSync.onAttributeEdited(
                 dummy.Event()
@@ -87,9 +85,7 @@ class TaskEditorBySettingFocusMixin(TaskEditorSetterMixin):
             page._descriptionEntry.SetFocus()  # pragma: no cover
 
     def setDescription(self, newDescription):
-        page = super(TaskEditorBySettingFocusMixin, self).setDescription(
-            newDescription
-        )
+        page = super().setDescription(newDescription)
         if operating_system.isGTK():
             page._descriptionSync.onAttributeEdited(
                 dummy.Event()
@@ -114,7 +110,7 @@ class TaskEditorTestCase(test.wxTestCase):
     editorClass = gui.dialog.editor.TaskEditor
 
     def setUp(self):
-        super(TaskEditorTestCase, self).setUp()
+        super().setUp()
         task.Task.settings = self.settings = config.Settings(load=False)
         for section, name, value in self.extraSettings:
             self.settings.set(section, name, value)
@@ -138,7 +134,7 @@ class TaskEditorTestCase(test.wxTestCase):
         # calls are dealt with, otherwise they'll turn up in other tests
         if operating_system.isGTK():
             wx.Yield()  # pragma: no cover
-        super(TaskEditorTestCase, self).tearDown()
+        super().tearDown()
         self.taskFile.close()
         self.taskFile.stop()
 

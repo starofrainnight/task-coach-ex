@@ -30,7 +30,7 @@ class SearchCtrl(tooltip.ToolTipMixin, wx.SearchCtrl):
         self.__regularExpression = kwargs.pop("regularExpression", False)
         self.__bitmapSize = kwargs.pop("size", (16, 16))
         value = kwargs.pop("value", "")
-        super(SearchCtrl, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.SetSearchMenuBitmap(
             self.getBitmap("magnifier_glass_dropdown_icon")
         )
@@ -90,7 +90,7 @@ class SearchCtrl(tooltip.ToolTipMixin, wx.SearchCtrl):
     def PopupMenu(self):  # pylint: disable=W0221
         rect = self.GetClientRect()
         x, y = rect[0], rect[1] + rect[3] + 3
-        super(SearchCtrl, self).PopupMenu(self.Getmenu(), wx.Point(x, y))
+        super().PopupMenu(self.Getmenu(), wx.Point(x, y))
 
     def bindEventHandlers(self):
         # pylint: disable=W0142,W0612,W0201
@@ -258,7 +258,7 @@ class SearchCtrl(tooltip.ToolTipMixin, wx.SearchCtrl):
         """When wx.SearchCtrl is disabled it doesn't grey out the buttons,
         so we remove those."""
         self.SetValue("" if enable else _("Viewer not searchable"))
-        super(SearchCtrl, self).Enable(enable)
+        super().Enable(enable)
         self.ShowCancelButton(enable and bool(self.GetValue()))
         self.ShowSearchButton(enable)
 

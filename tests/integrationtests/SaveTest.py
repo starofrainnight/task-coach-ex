@@ -34,7 +34,7 @@ class SaveTest(test.TestCase):
             if os.path.isfile(filename):
                 os.remove(filename)
         mock.App.deleteInstance()
-        super(SaveTest, self).tearDown()
+        super().tearDown()
 
     def assertTasksLoaded(self, nrTasks):
         self.assertEqual(nrTasks, len(self.mockApp.taskFile.tasks()))

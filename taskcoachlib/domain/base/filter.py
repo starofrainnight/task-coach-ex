@@ -25,11 +25,11 @@ from taskcoachlib.domain.base import object as domainobject
 class Filter(patterns.SetDecorator):
     def __init__(self, *args, **kwargs):
         self.__treeMode = kwargs.pop("treeMode", False)
-        super(Filter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.reset()
 
     def thaw(self):
-        super(Filter, self).thaw()
+        super().thaw()
         if not self.isFrozen():
             self.reset()
 
@@ -78,11 +78,11 @@ class SelectedItemsFilter(Filter):
     def __init__(self, *args, **kwargs):
         self.__selectedItems = set(kwargs.pop("selectedItems", []))
         self.__includeSubItems = kwargs.pop("includeSubItems", True)
-        super(SelectedItemsFilter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     @patterns.eventSource
     def removeItemsFromSelf(self, items, event=None):
-        super(SelectedItemsFilter, self).removeItemsFromSelf(items, event)
+        super().removeItemsFromSelf(items, event)
         self.__selectedItems.difference_update(set(items))
         if not self.__selectedItems:
             self.extendSelf(self.observable(), event)
@@ -127,7 +127,7 @@ class SearchFilter(Filter):
             doReset=False,
         )
 
-        super(SearchFilter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def setSearchFilter(
         self,
@@ -205,7 +205,7 @@ class SearchFilter(Filter):
 
 class DeletedFilter(Filter):
     def __init__(self, *args, **kwargs):
-        super(DeletedFilter, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         for eventType in [
             domainobject.Object.markDeletedEventType(),
@@ -217,7 +217,7 @@ class DeletedFilter(Filter):
 
     def detach(self):
         patterns.Publisher().removeObserver(self.onObjectMarkedDeletedOrNot)
-        super(DeletedFilter, self).detach()
+        super().detach()
 
     def onObjectMarkedDeletedOrNot(self, event):  # pylint: disable=W0613
         self.reset()
