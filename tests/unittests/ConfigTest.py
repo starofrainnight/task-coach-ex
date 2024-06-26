@@ -214,58 +214,6 @@ class SettingsObservableTest(SettingsTestCase):
         self.assertFalse(self.events)
 
 
-class UnicodeAwareConfigParserTest(test.TestCase):
-    """The default Python ConfigParser does not deal with unicode. So we
-    build a wrapper around ConfigParser that does. These are the unittests
-    for UnicodeAwareConfigParser."""
-
-    def setUp(self):
-        self.parser = config.settings.UnicodeAwareConfigParser()
-        self.parser.add_section("section")
-        self.iniFile = io.StringIO()
-        self.asciiValue = "ascii"
-        self.unicodeValue = (
-            "√ÉÔøΩ√¢‚Ç¨¬¶√É≈Ω√Ç¬Ω√É≈Ω√Ç¬π√É≈Ω√Ç¬≥√É≈Ω√Ç¬ø√É≈Ω√Ç¬¥√É≈Ω√Ç¬∑"
-        )
-
-    def testWriteAsciiValue(self):
-        self.parser.set("section", "setting", self.asciiValue)
-        self.parser.write(self.iniFile)
-        fileContents = self.iniFile.getvalue()
-        self.assertEqual(
-            "[section]\nsetting = %s\n\n" % self.asciiValue, fileContents
-        )
-
-    def testWriteUnicodeValue(self):
-        self.parser.set("section", "setting", self.unicodeValue)
-        self.parser.write(self.iniFile)
-        fileContents = self.iniFile.getvalue()
-        self.assertEqual(
-            "[section]\nsetting = %s\n\n" % self.unicodeValue.encode("utf-8"),
-            fileContents,
-        )
-
-    def testReadAsciiValue(self):
-        iniFileContents = "[section]\nsetting = %s\n\n" % self.asciiValue
-        self.iniFile.write(iniFileContents)
-        self.iniFile.seek(0)
-        self.parser.readfp(self.iniFile)
-        self.assertEqual(
-            self.asciiValue, self.parser.get("section", "setting")
-        )
-
-    def testReadUnicodeValue(self):
-        iniFileContents = (
-            "[section]\nsetting = %s\n\n" % self.unicodeValue.encode("utf-8")
-        )
-        self.iniFile.write(iniFileContents)
-        self.iniFile.seek(0)
-        self.parser.readfp(self.iniFile)
-        self.assertEqual(
-            self.unicodeValue, self.parser.get("section", "setting")
-        )
-
-
 class SpecificSettingsTest(SettingsTestCase):
     def testDefaultWindowPosition(self):
         self.assertEqual("(-1, -1)", self.settings.get("window", "position"))
