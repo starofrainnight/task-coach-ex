@@ -367,10 +367,10 @@ class TreeCtrlDragAndDropMixin(TreeHelperMixin):
         self.selectDraggedItems()
 
     def SetCursorToDragging(self):
-        self.GetMainWindow().SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+        self.GetMainWindow().SetCursor(wx.Cursor(wx.CURSOR_HAND))
 
     def SetCursorToDroppingImpossible(self):
-        self.GetMainWindow().SetCursor(wx.StockCursor(wx.CURSOR_NO_ENTRY))
+        self.GetMainWindow().SetCursor(wx.Cursor(wx.CURSOR_NO_ENTRY))
 
     def ResetCursor(self):
         self.GetMainWindow().SetCursor(wx.NullCursor)

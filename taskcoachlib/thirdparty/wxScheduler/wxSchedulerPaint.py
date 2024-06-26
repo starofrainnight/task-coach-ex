@@ -156,7 +156,7 @@ class wxSchedulerPaint(object):
                     if point.x > pointMin.x and point.x < pointMax.x:
                         if abs(point.y - pointMin.y) < 4:
                             self._scheduleDraggingState = 3
-                            self.SetCursor(wx.StockCursor(wx.CURSOR_SIZENS))
+                            self.SetCursor(wx.Cursor(wx.CURSOR_SIZENS))
                             self._scheduleDragged = (
                                 pointMin,
                                 pointMax,
@@ -165,7 +165,7 @@ class wxSchedulerPaint(object):
                             return
                         if abs(point.y - pointMax.y) < 4:
                             self._scheduleDraggingState = 4
-                            self.SetCursor(wx.StockCursor(wx.CURSOR_SIZENS))
+                            self.SetCursor(wx.Cursor(wx.CURSOR_SIZENS))
                             self._scheduleDragged = (
                                 pointMin,
                                 pointMax,
@@ -176,7 +176,7 @@ class wxSchedulerPaint(object):
                     if point.y > pointMin.y and point.y < pointMax.y:
                         if abs(point.x - pointMin.x) < 4:
                             self._scheduleDraggingState = 3
-                            self.SetCursor(wx.StockCursor(wx.CURSOR_SIZEWE))
+                            self.SetCursor(wx.Cursor(wx.CURSOR_SIZEWE))
                             self._scheduleDragged = (
                                 pointMin,
                                 pointMax,
@@ -185,7 +185,7 @@ class wxSchedulerPaint(object):
                             return
                         if abs(point.x - pointMax.x) < 4:
                             self._scheduleDraggingState = 4
-                            self.SetCursor(wx.StockCursor(wx.CURSOR_SIZEWE))
+                            self.SetCursor(wx.Cursor(wx.CURSOR_SIZEWE))
                             self._scheduleDragged = (
                                 pointMin,
                                 pointMax,
@@ -1469,7 +1469,7 @@ class wxSchedulerPaint(object):
                     if self._headerCursorState == 0:
                         self._headerCursorState = 1
                         self._headerPanel.SetCursor(
-                            wx.StockCursor(wx.CURSOR_SIZEWE)
+                            wx.Cursor(wx.CURSOR_SIZEWE)
                         )
                     break
             else:

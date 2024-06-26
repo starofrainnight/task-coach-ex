@@ -771,7 +771,7 @@ class CalendarCanvas(wx.Panel):
                         if result.position == result.HIT_START
                         else self.MS_HOVER_RIGHT
                     )
-                    wx.SetCursor(wx.StockCursor(wx.CURSOR_SIZEWE))
+                    wx.SetCursor(wx.Cursor(wx.CURSOR_SIZEWE))
             elif self._mouseState in [self.MS_HOVER_LEFT, self.MS_HOVER_RIGHT]:
                 if result.event is None or result.position not in [
                     result.HIT_START,
@@ -828,7 +828,7 @@ class CalendarCanvas(wx.Panel):
                     or dy > wx.SystemSettings.GetMetric(wx.SYS_DRAG_Y) / 2
                 ):
                     self.CaptureMouse()
-                    wx.SetCursor(wx.StockCursor(wx.CURSOR_HAND))
+                    wx.SetCursor(wx.Cursor(wx.CURSOR_HAND))
                     self._mouseState = self.MS_DRAGGING
                     self.Refresh()
         elif self._mouseState == self.MS_DRAGGING:
