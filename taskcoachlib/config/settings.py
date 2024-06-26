@@ -28,12 +28,8 @@ import shutil
 from . import defaults
 
 
-class UnicodeAwareConfigParser(configparser.RawConfigParser):
-    def set(self, section, setting, value):  # pylint: disable=W0222
-        configparser.RawConfigParser.set(self, section, setting, value)
-
-    def get(self, section, setting):  # pylint: disable=W0221
-        return configparser.RawConfigParser.get(self, section, setting)
+class UnicodeAwareConfigParser(configparser.ConfigParser):
+    pass
 
 
 class CachingConfigParser(UnicodeAwareConfigParser):
@@ -41,22 +37,20 @@ class CachingConfigParser(UnicodeAwareConfigParser):
 
     def __init__(self, *args, **kwargs):
         self.__cachedValues = dict()
-        UnicodeAwareConfigParser.__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def read(self, *args, **kwargs):
         self.__cachedValues = dict()
-        return UnicodeAwareConfigParser.read(self, *args, **kwargs)
+        return super().read(*args, **kwargs)
 
-    def set(self, section, setting, value):
-        self.__cachedValues[(section, setting)] = value
-        UnicodeAwareConfigParser.set(self, section, setting, value)
+    def set(self, section, option, value=None):
+        self.__cachedValues[(section, option)] = value
+        super().set(section, option, value)
 
-    def get(self, section, setting):
-        cache, key = self.__cachedValues, (section, setting)
+    def get(self, section, option, **kwargs):
+        cache, key = self.__cachedValues, (section, option)
         if key not in cache:
-            cache[key] = UnicodeAwareConfigParser.get(
-                self, *key
-            )  # pylint: disable=W0142
+            cache[key] = super().get(*key, **kwargs)  # pylint: disable=W0142
         return cache[key]
 
 
@@ -74,8 +68,10 @@ class Settings(CachingConfigParser):
             # First, try to load the settings file from the program directory,
             # if that fails, load the settings file from the settings directory
             try:
-                if not self.read(self.filename(forceProgramDir=True)):
-                    self.read(self.filename())
+                if not self.read(
+                    self.filename(forceProgramDir=True), encoding="utf-8"
+                ):
+                    self.read(self.filename(), encoding="utf-8")
                 errorMessage = ""
             except configparser.ParsingError as errorMessage:
                 # Ignore exceptions and simply use default values.
@@ -136,9 +132,9 @@ class Settings(CachingConfigParser):
     def init(self, section, option, value):
         return super().set(section, option, value)
 
-    def get(self, section, option):
+    def get(self, section, option, **kwargs):
         try:
-            result = super().get(section, option)
+            result = super().get(section, option, **kwargs)
         except (configparser.NoOptionError, configparser.NoSectionError):
             return self.getDefault(section, option)
         result = self._fixValuesFromOldIniFiles(section, option, result)
@@ -329,7 +325,7 @@ class Settings(CachingConfigParser):
             path = self.path()
             if not os.path.exists(path):
                 os.mkdir(path)
-            tmpFile = open(self.filename() + ".tmp", "w")
+            tmpFile = open(self.filename() + ".tmp", "w", encoding="utf-8")
             self.write(tmpFile)
             tmpFile.close()
             if os.path.exists(self.filename()):
