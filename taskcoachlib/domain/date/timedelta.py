@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import datetime, math
+from typing import Tuple
 
 
 class TimeDelta(datetime.timedelta):
@@ -24,7 +25,7 @@ class TimeDelta(datetime.timedelta):
     millisecondsPerDay = 24 * 60 * 60 * millisecondsPerSecond
     millisecondsPerMicroSecond = 1 / 1000.0
 
-    def hoursMinutesSeconds(self):
+    def hoursMinutesSeconds(self) -> Tuple[int, int, int]:
         """Return a tuple (hours, minutes, seconds). Note that the caller
         is responsible for checking whether the TimeDelta instance is
         positive or negative."""
@@ -34,8 +35,8 @@ class TimeDelta(datetime.timedelta):
         else:
             seconds = self.seconds
             days = self.days
-        hours, seconds = seconds / 3600, seconds % 3600
-        minutes, seconds = seconds / 60, seconds % 60
+        hours, seconds = seconds // 3600, seconds % 3600
+        minutes, seconds = seconds // 60, seconds % 60
         hours += days * 24
         return hours, minutes, seconds
 

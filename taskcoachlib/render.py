@@ -59,7 +59,9 @@ def timeLeft(time_left, completed_task):
     return sign + days + hours_and_minutes
 
 
-def timeSpent(timeSpent, showSeconds=True, decimal=False):
+def timeSpent(
+    timeSpent: datemodule.TimeDelta, showSeconds=True, decimal=False
+):
     """Render time spent (of type date.TimeDelta) as
     "<hours>:<minutes>:<seconds>" or "<hours>:<minutes>" """
     if decimal:
@@ -78,7 +80,7 @@ def timeSpent(timeSpent, showSeconds=True, decimal=False):
         )
 
 
-def timeSpentDecimal(timeSpent):
+def timeSpentDecimal(timeSpent: datemodule.TimeDelta):
     """Render time spent (of type date.TimeDelta) as
     "<hours>.<fractional hours>"""
     zero = datemodule.TimeDelta()
