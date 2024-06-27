@@ -450,7 +450,7 @@ class ObservableSet(ObservableCollection, Set):
         if isinstance(other, self.__class__):
             result = self is other
         else:
-            result = list(self) == other
+            result = set(self) == set(other)
         return result
 
     # FIXME: Only for satisfying registerObserver()
