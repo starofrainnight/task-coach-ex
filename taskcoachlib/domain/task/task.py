@@ -1134,7 +1134,7 @@ class Task(
                     for child in self.children()
                 ]
             )
-            return sum(percentages) / len(percentages) if percentages else 0
+            return sum(percentages) // len(percentages) if percentages else 0
         else:
             return self.__percentageComplete
 
