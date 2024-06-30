@@ -23,6 +23,7 @@ from taskcoachlib.domain import base
 from taskcoachlib.tools import openfile
 from pubsub import pub
 from taskcoachlib.domain.note.noteowner import NoteOwner
+from functools import total_ordering
 
 
 def getRelativePath(path, basePath=os.getcwd()):
@@ -63,6 +64,7 @@ def getRelativePath(path, basePath=os.getcwd()):
     return os.path.join(*path1).replace("\\", "/")  # pylint: disable=W0142
 
 
+@total_ordering
 class Attachment(base.Object, NoteOwner):
     """Abstract base class for attachments."""
 
@@ -104,11 +106,17 @@ class Attachment(base.Object, NoteOwner):
     def open(self, workingDir=None):
         raise NotImplementedError
 
-    def __cmp__(self, other):
+    def __eq__(self, other):
         try:
-            return cmp(self.location(), other.location())
+            return self.location() == other.location()
         except AttributeError:
-            return 1
+            return False
+
+    def __lt__(self, other):
+        try:
+            return self.location() < other.location()
+        except AttributeError:
+            return False
 
     def __getstate__(self):
         try:

@@ -53,14 +53,6 @@ class Set(set):
     def __new__(class_, iterable=None, *args, **kwargs):
         return set.__new__(class_, iterable)
 
-    def __cmp__(self, other):
-        # If set.__cmp__ is called we get a TypeError in Python 2.5, so
-        # call set.__eq__ instead
-        if self == other:
-            return 0
-        else:
-            return -1
-
 
 class Event(object):
     """Event represents notification events. Events can notify about a single

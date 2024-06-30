@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library.  If not, see <http://www.gnu.org/licenses/> or <http://www.gnu.org/licenses/lgpl.txt>.
 
+from functools import total_ordering
+
 C = 0x1000000000
 
 
@@ -21,6 +23,7 @@ def norm(n):
     return n & 0xFFFFFFFF
 
 
+@total_ordering
 class U32:
     v = 0
 
@@ -112,13 +115,11 @@ class U32:
     def truth(self):
         return norm(self.v)
 
-    def __cmp__(self, b):
-        if norm(self.v) > norm(b.v):
-            return 1
-        elif norm(self.v) < norm(b.v):
-            return -1
-        else:
-            return 0
+    def __eq__(self, other):
+        return norm(self.v) == norm(other.v)
+
+    def __lt__(self, other):
+        return norm(self.v) < norm(other.v)
 
     def __nonzero__(self):
         return norm(self.v)
