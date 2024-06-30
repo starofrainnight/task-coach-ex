@@ -5,37 +5,39 @@
 # modify it under the terms of the GNU Lesser General Public
 # License as published by the Free Software Foundation, either
 # version 3 of the License, or (at your option) any later version.
- 
+
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # Lesser General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU Lesser General Public
 # License along with this library.  If not, see <http://www.gnu.org/licenses/> or <http://www.gnu.org/licenses/lgpl.txt>.
 
+C = 0x1000000000
 
-C = 0x1000000000L
 
 def norm(n):
-    return n & 0xFFFFFFFFL
+    return n & 0xFFFFFFFF
 
 
 class U32:
-    v = 0L
+    v = 0
 
-    def __init__(self, value = 0):
-        self.v = C + norm(abs(long(value)))
+    def __init__(self, value=0):
+        self.v = C + norm(abs(int(value)))
 
-    def set(self, value = 0):
-        self.v = C + norm(abs(long(value)))
+    def set(self, value=0):
+        self.v = C + norm(abs(int(value)))
 
     def __repr__(self):
         return hex(norm(self.v))
 
-    def __long__(self): return long(norm(self.v))
-    def __int__(self): return int(norm(self.v))
-    def __chr__(self): return chr(norm(self.v))
+    def __int__(self):
+        return int(norm(self.v))
+
+    def __chr__(self):
+        return chr(norm(self.v))
 
     def __add__(self, b):
         r = U32()
@@ -45,8 +47,9 @@ class U32:
     def __sub__(self, b):
         r = U32()
         if self.v < b.v:
-            r.v = C + norm(0x100000000L - (b.v - self.v))
-        else: r.v = C + norm(self.v - b.v)
+            r.v = C + norm(0x100000000 - (b.v - self.v))
+        else:
+            r.v = C + norm(self.v - b.v)
         return r
 
     def __mul__(self, b):
@@ -64,9 +67,14 @@ class U32:
         r.v = C + (norm(self.v) % norm(b.v))
         return r
 
-    def __neg__(self): return U32(self.v)
-    def __pos__(self): return U32(self.v)
-    def __abs__(self): return U32(self.v)
+    def __neg__(self):
+        return U32(self.v)
+
+    def __pos__(self):
+        return U32(self.v)
+
+    def __abs__(self):
+        return U32(self.v)
 
     def __invert__(self):
         r = U32()
@@ -105,9 +113,12 @@ class U32:
         return norm(self.v)
 
     def __cmp__(self, b):
-        if norm(self.v) > norm(b.v): return 1
-        elif norm(self.v) < norm(b.v): return -1
-        else: return 0
+        if norm(self.v) > norm(b.v):
+            return 1
+        elif norm(self.v) < norm(b.v):
+            return -1
+        else:
+            return 0
 
     def __nonzero__(self):
         return norm(self.v)
