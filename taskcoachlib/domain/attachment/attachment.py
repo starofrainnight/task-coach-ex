@@ -106,6 +106,9 @@ class Attachment(base.Object, NoteOwner):
     def open(self, workingDir=None):
         raise NotImplementedError
 
+    def __hash__(self) -> int:
+        return hash(self.location())
+
     def __eq__(self, other):
         try:
             return self.location() == other.location()
