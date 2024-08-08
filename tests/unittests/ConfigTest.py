@@ -150,7 +150,7 @@ class SettingsIOTest(SettingsTestCase):
     def testRead(self):
         self.fakeFile.write("[testing]\n")
         self.fakeFile.seek(0)
-        self.settings.readfp(self.fakeFile)
+        self.settings.read_file(self.fakeFile)
         self.assertTrue(self.settings.has_section("testing"))
 
     def testIOErrorWhileSaving(self):
@@ -183,7 +183,7 @@ class SettingsIOTest(SettingsTestCase):
             % section
         )
         self.fakeFile.seek(0)
-        self.settings.readfp(self.fakeFile)
+        self.settings.read_file(self.fakeFile)
         self.assertTrue(
             ["dueDateTime"], self.settings.getlist(section, "columns")
         )
