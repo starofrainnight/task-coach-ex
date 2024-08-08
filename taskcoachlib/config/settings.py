@@ -77,7 +77,7 @@ class Settings(CachingConfigParser):
                 # Ignore exceptions and simply use default values.
                 # Also record the failure in the settings:
                 self.initializeWithDefaults()
-            self.setLoadStatus(ExceptionAsUnicode(errorMessage))
+                self.setLoadStatus(ExceptionAsUnicode(errorMessage))
         else:
             # Assume that if the settings are not to be loaded, we also
             # should be quiet (i.e. we are probably in test mode):
