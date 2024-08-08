@@ -99,6 +99,10 @@ has a bunch of options as well, enter:
 
 for more information.
 
+If you want to run single one unit test, enter(use unittests.ConfigTest.SettingsIOTest as sample):
+
+    cd tests; python -m unittest unittests.ConfigTest.SettingsIOTest
+
 ## Test coverage
 
 To create test coverage reports, you need to install coverage.py
