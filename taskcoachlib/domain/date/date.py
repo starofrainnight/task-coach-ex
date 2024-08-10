@@ -79,7 +79,7 @@ class InfiniteDate(datetime.date, metaclass=patterns.Singleton):
 
 def parseDate(dateString, default=None):
     try:
-        return Date(*[string.atoi(part) for part in dateString.split("-")])
+        return Date(*[int(part) for part in dateString.split("-")])
     except ValueError:
         if default:
             return default
