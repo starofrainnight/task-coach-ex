@@ -29,7 +29,10 @@ from . import defaults
 
 
 class UnicodeAwareConfigParser(configparser.ConfigParser):
-    pass
+    def __init__(self, *args, **kwargs):
+        if "interpolation" not in kwargs:
+            kwargs["interpolation"] = None
+        super().__init__(*args, **kwargs)
 
 
 class CachingConfigParser(UnicodeAwareConfigParser):
