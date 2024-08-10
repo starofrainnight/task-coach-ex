@@ -17,10 +17,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import time, string, datetime, re  # pylint: disable=W0402
-from datetime import timedelta
 from taskcoachlib import patterns
 from .fix import StrftimeFix
-
+from . import timedelta
 
 infinite = datetime.date.max
 
