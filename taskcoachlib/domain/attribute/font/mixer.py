@@ -39,7 +39,7 @@ class FontMixer(object):
         size = 0
         for font in fonts:
             size += font.GetPointSize()
-        return size / len(fonts)
+        return size // len(fonts)
 
     allFamilies = (
         wx.FONTFAMILY_SWISS,
