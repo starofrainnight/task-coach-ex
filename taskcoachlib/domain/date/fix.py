@@ -28,3 +28,8 @@ class StrftimeFix(object):
             return operating_system.decodeSystemString(super().strftime(*args))
         result = self.replace(year=self.year + 1900).strftime(*args)
         return re.sub(str(self.year + 1900), str(self.year), result)
+
+
+def round_fix(number, ndigits=None):
+    # Fixed the "round(0.5) < 1" problem (float value storage problem)
+    return round(number + 1e-12, ndigits)

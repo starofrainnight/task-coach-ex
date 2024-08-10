@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime, math
 from typing import Tuple
+from .fix import round_fix
 
 
 class TimeDelta(datetime.timedelta):
@@ -61,12 +62,10 @@ class TimeDelta(datetime.timedelta):
     def milliseconds(self):
         """Timedelta expressed in number of milliseconds."""
         # No need to use self.sign() since self.days is negative for negative values
-        return int(
-            round(
-                (self.days * self.millisecondsPerDay)
-                + (self.seconds * self.millisecondsPerSecond)
-                + (self.microseconds * self.millisecondsPerMicroSecond)
-            )
+        return round_fix(
+            (self.days * self.millisecondsPerDay)
+            + (self.seconds * self.millisecondsPerSecond)
+            + (self.microseconds * self.millisecondsPerMicroSecond)
         )
 
     def round(self, hours=0, minutes=0, seconds=0, alwaysUp=False):
@@ -74,7 +73,7 @@ class TimeDelta(datetime.timedelta):
         assert [hours, minutes, seconds].count(0) >= 2
         roundingUnit = hours * 3600 + minutes * 60 + seconds
         if roundingUnit:
-            round_ = math.ceil if alwaysUp else round
+            round_ = math.ceil if alwaysUp else round_fix
             roundedSeconds = (
                 round_(self.totalSeconds() / float(roundingUnit))
                 * roundingUnit
